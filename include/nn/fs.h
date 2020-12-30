@@ -121,5 +121,10 @@ Result MountHostRoot();
 Result UnmountHostRoot();
 
 Result Unmount(char const* mount);
+
+// BCAT
+Result MountBcatSaveData(char const*, ApplicationId);
+Result CreateBcatSaveData(ApplicationId, s64);
+
 };  // namespace fs
 };  // namespace nn
