@@ -70,9 +70,11 @@ struct WriteOption {
 };
 
 // ROM
-Result QueryMountRomCacheSize(u64* size);
-Result QueryMountRomCacheSize(u64* size, nn::ApplicationId);
-Result MountRom(char const* name, void* buffer, u64 bufferSize);
+Result QueryMountRomCacheSize(size_t* size);
+Result QueryMountRomCacheSize(size_t* size, nn::ApplicationId);
+Result QueryMountAddOnContentCacheSize(size_t* size, int id);
+Result MountRom(char const* name, void* cache, size_t cache_size);
+Result MountAddOnContent(char const* name, int id, void* cache, size_t cache_size);
 bool CanMountRomForDebug();
 Result CanMountRom(nn::ApplicationId);
 Result QueryMountRomOnFileCacheSize(u64*, nn::fs::FileHandle);
