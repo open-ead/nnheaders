@@ -12,6 +12,7 @@ add_library(NintendoSDK OBJECT
   include/nn/vfx/System.h
   include/nn/vfx/Heap.h
   include/nn/socket.h
+  include/nn/aoc.h
   include/nn/fs.h
   include/nn/ro.h
   include/nn/oe.h
