@@ -8,7 +8,7 @@
 #include "BindFuncTable.h"
 #include "ResFogAnim.h"
 #include "ResLightAnim.h"
-#include "types.h"
+#include <nn/types.h>
 
 namespace nn {
 namespace g3d {

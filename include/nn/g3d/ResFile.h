@@ -9,7 +9,7 @@
 #include "nn/gfx/device.h"
 #include "nn/gfx/memory.h"
 #include "nn/util.h"
-#include "types.h"
+#include <nn/types.h>
 
 #include "ResMaterialAnim.h"
 #include "ResModel.h"

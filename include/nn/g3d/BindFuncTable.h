@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include <nn/types.h>
 
 namespace nn {
 namespace g3d {
@@ -11,5 +11,12 @@ struct DDLDeclarations {
     u64 _10;
     u64 _18;
 };
+
+class BindFuncTable { //FIXME is that really its structure?
+private:
+    void* a1;
+    void* a2;
+};
+
 };  // namespace g3d
 };  // namespace nn
