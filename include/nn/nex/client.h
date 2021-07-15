@@ -4,7 +4,7 @@
  */
 #pragma once
 
-#include "system.h"
+#include <nn/nex/system.h>
 
 namespace nn {
 namespace nex {

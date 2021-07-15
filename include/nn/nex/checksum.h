@@ -5,12 +5,12 @@
 
 #pragma once
 
-#include "RootObject.h"
-#include "buffer.h"
-#include "types.h"
+#include <nn/nex/RootObject.h>
 
 namespace nn {
 namespace nex {
+class Buffer;
+
 class ChecksumAlgorithm : public nn::nex::RootObject {
 public:
     ChecksumAlgorithm();

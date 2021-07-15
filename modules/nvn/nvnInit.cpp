@@ -1,4 +1,4 @@
-#include "nvn/nvn.h"
+#include <nvn/nvn.h>
 
 extern "C" {
 void nvnLoadCProcs(const NVNdevice* device, nvnDeviceGetProcAddressFunction deviceGetProcAddress) {

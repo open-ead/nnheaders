@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "account.h"
-#include "os.h"
+#include <nn/account.h>
+#include <nn/os.h>
 
 namespace nn {
 namespace friends {

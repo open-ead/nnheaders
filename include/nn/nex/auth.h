@@ -5,8 +5,7 @@
 
 #pragma once
 
-#include "ddl.h"
-#include "types.h"
+#include <nn/nex/ddl.h>
 
 namespace nn {
 namespace nex {

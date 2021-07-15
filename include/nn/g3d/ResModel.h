@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include "nn/gfx/api.h"
-#include "nn/gfx/device.h"
 #include <nn/types.h>
 
 namespace nn {

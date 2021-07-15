@@ -5,11 +5,12 @@
 
 #pragma once
 
-#include "reference.h"
-#include "string.h"
+#include <nn/nex/reference.h>
 
 namespace nn {
 namespace nex {
+class String;
+
 class SystemComponent : public nn::nex::RefCountedObject {
 public:
     enum _State {

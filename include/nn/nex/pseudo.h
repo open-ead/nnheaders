@@ -5,9 +5,8 @@
 
 #pragma once
 
-#include "RootObject.h"
-#include "instance.h"
-#include "types.h"
+#include <nn/nex/RootObject.h>
+#include <nn/nex/instance.h>
 
 namespace nn {
 namespace nex {

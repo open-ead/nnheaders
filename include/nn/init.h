@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "mem.h"
-#include "types.h"
+#include <nn/mem.h>
+#include <nn/types.h>
 
 namespace nn {
 namespace init {

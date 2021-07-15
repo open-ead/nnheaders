@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "types.h"
+#include <nn/types.h>
 
 namespace nn {
 typedef u64 ApplicationId;

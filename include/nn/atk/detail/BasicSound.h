@@ -5,8 +5,7 @@
 
 #pragma once
 
-#include "nn/atk/SoundPlayer.h"
-#include "types.h"
+#include <nn/types.h>
 
 namespace nn {
 namespace atk {

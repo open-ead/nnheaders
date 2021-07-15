@@ -6,7 +6,7 @@
 #pragma once
 
 #include <sys/socket.h>
-#include "types.h"
+#include <nn/types.h>
 
 namespace nn {
 namespace socket {

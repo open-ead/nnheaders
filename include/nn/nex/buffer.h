@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "string.h"
-#include "types.h"
+#include <nn/types.h>
 
 namespace nn {
 namespace nex {
+class String;
 // todo
 class Buffer {
 public:
