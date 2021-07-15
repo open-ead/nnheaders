@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "nn/gfx/device.h"
-
 namespace nn {
 namespace gfx {
+class DeviceInfo;
+
 namespace detail {
 template <typename T>
 class DeviceImpl {

@@ -1,9 +1,8 @@
 #pragma once
 
-#include <arpa/inet.h>
+#include <arpa/inet.h>  //FIXME requires proper musl-setup
 #include <sys/socket.h>
 #include "RootObject.h"
-#include "types.h"
 
 namespace nn {
 namespace nex {

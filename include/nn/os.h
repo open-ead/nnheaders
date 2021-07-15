@@ -7,8 +7,8 @@
 
 #include <type_traits>
 
-#include "time.h"
-#include "types.h"
+#include <nn/time.h>
+#include <nn/types.h>
 
 namespace nn {
 namespace os {

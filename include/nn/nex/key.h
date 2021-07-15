@@ -5,11 +5,12 @@
 
 #pragma once
 
-#include "RootObject.h"
-#include "string.h"
+#include <nn/nex/RootObject.h>
 
 namespace nn {
 namespace nex {
+class String;
+
 class Key : public nn::nex::RootObject {
 public:
     Key();

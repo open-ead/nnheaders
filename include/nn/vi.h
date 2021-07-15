@@ -5,10 +5,14 @@
 
 #pragma once
 
-#include "os.h"
-#include "types.h"
+#include <nn/types.h>
 
 namespace nn {
+
+namespace os {
+struct SystemEventType;
+}
+
 namespace vi {
 class Display;
 class Layer;
@@ -17,7 +21,7 @@ struct DisplayInfo {
     static const int maxNameLen = 64;
     char name[maxNameLen];
     bool hasLayerLimit;
-    __aligned(8) int64_t maxLayers;
+    int64_t maxLayers;
     int64_t maxWidth;
     int64_t maxHeight;
 };

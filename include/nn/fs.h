@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "account.h"
-#include "types.h"
+#include <nn/account.h>
+#include <nn/types.h>
 
 namespace nn {
 typedef u64 ApplicationId;

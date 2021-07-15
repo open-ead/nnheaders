@@ -5,19 +5,23 @@
 
 #pragma once
 
-#include "nn/gfx/api.h"
-#include "nn/gfx/device.h"
-#include "nn/gfx/memory.h"
-#include "nn/util.h"
-#include "types.h"
-
-#include "ResMaterialAnim.h"
-#include "ResModel.h"
-#include "ResSceneAnim.h"
-#include "ResShapeAnim.h"
+#include <nn/gfx/api.h>
+#include <nn/gfx/memory.h>
+#include <nn/types.h>
+#include <nn/util.h>
 
 namespace nn {
+
+namespace gfx {
+template <typename T>
+class TDevice;
+}
+
 namespace g3d {
+class ResModel;
+class ResMaterialAnim;
+class ResShapeAnim;
+class ResSceneAnim;
 typedef void* TextureRef;
 
 class ResFile : public nn::util::BinaryFileHeader {

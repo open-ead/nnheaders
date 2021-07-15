@@ -5,13 +5,14 @@
 
 #pragma once
 
-#include "BindFuncTable.h"
-#include "ResFogAnim.h"
-#include "ResLightAnim.h"
-#include "types.h"
+#include <nn/types.h>
 
 namespace nn {
 namespace g3d {
+class ResLightAnim;
+class ResFogAnim;
+struct BindFuncTable;
+
 class ResSceneAnim {
 public:
     s32 Bind(nn::g3d::BindFuncTable const&);
