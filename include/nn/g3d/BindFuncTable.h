@@ -12,10 +12,22 @@ struct DDLDeclarations {
     u64 _18;
 };
 
-class BindFuncTable { //FIXME is that really its structure?
+struct nn::g3d::BindFuncTable::EntryPointer
+{
+  _QWORD something_0;
+  nn::g3d::BindFuncTable::StringLength *string;
+};
+struct nn::g3d::BindFuncTable::StringLength
+{
+  size_t length;
+  const char *content;
+};
+
+
+class BindFuncTable {
 private:
-    void* a1;
-    void* a2;
+    int lengths[4];
+    nn::g3d::BindFuncTable::EntryPointer strings[4];
 };
 
 };  // namespace g3d
