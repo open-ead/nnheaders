@@ -5,11 +5,16 @@
 
 #pragma once
 
-#include "ModuleObject.hpp"
-#include "types.h"
+#include <nn/types.h>
 
 namespace nn {
 namespace ro {
+
+namespace rtld {
+struct ModuleObject;  // TODO find this object and implement it. Original `#include` name:
+                      // ModuleObject.hpp, full path name: nn::ro::rtld::ModuleObject
+}
+
 class Module {
 public:
     rtld::ModuleObject* ModuleObject;
@@ -103,7 +108,7 @@ Result UnloadModule(Module*);
 Result GetBufferSize(size_t*, const void*);
 
 Result RegisterModuleInfo(RegistrationInfo*, void const*);
-Result RegisterModuleInfo(RegistrationInfo*, void const*, uint);
+Result RegisterModuleInfo(RegistrationInfo*, void const*, u32);
 Result UnregisterModuleInfo(RegistrationInfo*, void const*);
 };  // namespace ro
 

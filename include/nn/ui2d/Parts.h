@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "Pane.h"
+#include <nn/ui2d/Pane.h>
 
 namespace nn {
 namespace ui2d {

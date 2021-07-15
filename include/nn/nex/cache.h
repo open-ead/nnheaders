@@ -5,10 +5,11 @@
 
 #pragma once
 
-#include "string.h"
+#include <nn/types.h>
 
 namespace nn {
 namespace nex {
+class String;
 class BasicCache;
 
 class CacheManager {

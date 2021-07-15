@@ -5,14 +5,17 @@
 
 #pragma once
 
-#include "nn/gfx/api.h"
-#include "nn/gfx/buffer.h"
-
 namespace nn {
 namespace gfx {
 class GpuAddress;
+class BufferInfo;
 
 namespace detail {
+template <typename T>
+class MemoryPoolImpl;
+template <typename T>
+class DeviceImpl;
+
 template <typename T>
 class BufferImpl {
 public:

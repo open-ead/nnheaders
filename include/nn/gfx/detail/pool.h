@@ -1,10 +1,12 @@
 #pragma once
 
-#include "deviceimpl.h"
+#include <nn/types.h>
 
 namespace nn {
 namespace gfx {
 struct MemoryPoolInfo;
+template <typename T>
+struct DeviceImpl;
 
 namespace detail {
 class MemoryPoolData {

@@ -5,10 +5,14 @@
 
 #pragma once
 
-#include "../util/Float2.h"
-#include "types.h"
+#include <nn/types.h>
 
 namespace nn {
+
+namespace util {
+struct Float2;
+}
+
 namespace ui2d {
 class Layout;
 

@@ -5,488 +5,642 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
-#include <stddef.h>
 #include <nvn/nvn_types.h>
+#include <stddef.h>
+#include <stdint.h>
 
 // Function definitions
-typedef void (*nvnDeviceBuilderSetDefaultsFunction)(NVNdeviceBuilder *);
-typedef void (*nvnDeviceBuilderSetFlagsFunction)(NVNdeviceBuilder *, NVNdeviceFlagBits);
-typedef bool (*nvnDeviceInitializeFunction)(NVNdevice *, const NVNdeviceBuilder *);
-typedef void (*nvnDeviceFinalizeFunction)(NVNdevice *);
-typedef void (*nvnDeviceSetDebugLabelFunction)(NVNdevice *, const char *);
-typedef NVNdummyProc (*nvnDeviceGetProcAddressFunction)(const NVNdevice *, const char *);
-typedef void (*nvnDeviceGetIntegerFunction)(const NVNdevice *, NVNdeviceInfo, int *);
-typedef uint64_t (*nvnDeviceGetCurrentTimestampInNanosecondsFunction)(const NVNdevice *);
-typedef void (*nvnDeviceSetIntermediateShaderCacheFunction)(NVNdevice *, int);
-typedef NVNtextureHandle (*nvnDeviceGetTextureHandleFunction)(const NVNdevice *, int, int);
-typedef NVNtextureHandle (*nvnDeviceGetTexelFetchHandleFunction)(const NVNdevice *, int);
-typedef NVNimageHandle (*nvnDeviceGetImageHandleFunction)(const NVNdevice *, int);
-typedef void (*nvnDeviceInstallDebugCallbackFunction)(NVNdevice *, const NVNdebugCallback, void *, bool);
-typedef NVNdebugDomainId (*nvnDeviceGenerateDebugDomainIdFunction)(const NVNdevice *, const char *);
-typedef void (*nvnDeviceSetWindowOriginModeFunction)(NVNdevice *, NVNwindowOriginMode);
-typedef void (*nvnDeviceSetDepthModeFunction)(NVNdevice *, NVNdepthMode);
-typedef bool (*nvnDeviceRegisterFastClearColorFunction)(NVNdevice *, const float *, NVNformat);
-typedef bool (*nvnDeviceRegisterFastClearColoriFunction)(NVNdevice *, const int *, NVNformat);
-typedef bool (*nvnDeviceRegisterFastClearColoruiFunction)(NVNdevice *, const uint32_t *, NVNformat);
-typedef bool (*nvnDeviceRegisterFastClearDepthFunction)(NVNdevice *, float);
-typedef NVNwindowOriginMode (*nvnDeviceGetWindowOriginModeFunction)(const NVNdevice *);
-typedef NVNdepthMode (*nvnDeviceGetDepthModeFunction)(const NVNdevice *);
-typedef uint64_t (*nvnDeviceGetTimestampInNanosecondsFunction)(const NVNdevice *, const NVNcounterData *);
-typedef void (*nvnDeviceApplyDeferredFinalizesFunction)(NVNdevice *, int);
-typedef void (*nvnDeviceFinalizeCommandHandleFunction)(NVNdevice *, NVNcommandHandle);
-typedef void (*nvnDeviceWalkDebugDatabaseFunction)(const NVNdevice *, NVNdebugObjectType, NVNwalkDebugDatabaseCallback, void *);
-typedef NVNseparateTextureHandle (*nvnDeviceGetSeparateTextureHandleFunction)(const NVNdevice *, int);
-typedef NVNseparateSamplerHandle (*nvnDeviceGetSeparateSamplerHandleFunction)(const NVNdevice *, int);
-typedef bool (*nvnDeviceIsExternalDebuggerAttachedFunction)(const NVNdevice *);
-typedef NVNqueueGetErrorResult (*nvnQueueGetErrorFunction)(NVNqueue *, NVNqueueErrorInfo *);
-typedef size_t (*nvnQueueGetTotalCommandMemoryUsedFunction)(NVNqueue *);
-typedef size_t (*nvnQueueGetTotalControlMemoryUsedFunction)(NVNqueue *);
-typedef size_t (*nvnQueueGetTotalComputeMemoryUsedFunction)(NVNqueue *);
-typedef void (*nvnQueueResetMemoryUsageCountsFunction)(NVNqueue *);
-typedef void (*nvnQueueBuilderSetDeviceFunction)(NVNqueueBuilder *, NVNdevice *);
-typedef void (*nvnQueueBuilderSetDefaultsFunction)(NVNqueueBuilder *);
-typedef void (*nvnQueueBuilderSetFlagsFunction)(NVNqueueBuilder *, int);
-typedef void (*nvnQueueBuilderSetCommandMemorySizeFunction)(NVNqueueBuilder *, size_t);
-typedef void (*nvnQueueBuilderSetComputeMemorySizeFunction)(NVNqueueBuilder *, size_t);
-typedef void (*nvnQueueBuilderSetControlMemorySizeFunction)(NVNqueueBuilder *, size_t);
-typedef size_t (*nvnQueueBuilderGetQueueMemorySizeFunction)(const NVNqueueBuilder *);
-typedef void (*nvnQueueBuilderSetQueueMemoryFunction)(NVNqueueBuilder *, void *, size_t);
-typedef void (*nvnQueueBuilderSetCommandFlushThresholdFunction)(NVNqueueBuilder *, size_t);
-typedef bool (*nvnQueueInitializeFunction)(NVNqueue *, const NVNqueueBuilder *);
-typedef void (*nvnQueueFinalizeFunction)(NVNqueue *);
-typedef void (*nvnQueueSetDebugLabelFunction)(NVNqueue *, const char *);
-typedef void (*nvnQueueSubmitCommandsFunction)(NVNqueue *, int, const NVNcommandHandle *);
-typedef void (*nvnQueueFlushFunction)(NVNqueue *);
-typedef void (*nvnQueueFinishFunction)(NVNqueue *);
-typedef void (*nvnQueuePresentTextureFunction)(NVNqueue *, NVNwindow *, int);
-typedef NVNqueueAcquireTextureResult (*nvnQueueAcquireTextureFunction)(NVNqueue *, NVNwindow *, int *);
-typedef void (*nvnWindowBuilderSetDeviceFunction)(NVNwindowBuilder *, NVNdevice *);
-typedef void (*nvnWindowBuilderSetDefaultsFunction)(NVNwindowBuilder *);
-typedef void (*nvnWindowBuilderSetNativeWindowFunction)(NVNwindowBuilder *, NVNnativeWindow);
-typedef void (*nvnWindowBuilderSetTexturesFunction)(NVNwindowBuilder *, int, NVNtexture *const *);
-typedef void (*nvnWindowBuilderSetPresentIntervalFunction)(NVNwindowBuilder *, int);
-typedef NVNnativeWindow (*nvnWindowBuilderGetNativeWindowFunction)(const NVNwindowBuilder *);
-typedef int (*nvnWindowBuilderGetPresentIntervalFunction)(const NVNwindowBuilder *);
-typedef bool (*nvnWindowInitializeFunction)(NVNwindow *, const NVNwindowBuilder *);
-typedef void (*nvnWindowFinalizeFunction)(NVNwindow *);
-typedef void (*nvnWindowSetDebugLabelFunction)(NVNwindow *, const char *);
-typedef NVNwindowAcquireTextureResult (*nvnWindowAcquireTextureFunction)(NVNwindow *, NVNsync *, int *);
-typedef NVNnativeWindow (*nvnWindowGetNativeWindowFunction)(const NVNwindow *);
-typedef int (*nvnWindowGetPresentIntervalFunction)(const NVNwindow *);
-typedef void (*nvnWindowSetPresentIntervalFunction)(NVNwindow *, int);
-typedef void (*nvnWindowSetCropFunction)(NVNwindow *, int, int, int, int);
-typedef void (*nvnWindowGetCropFunction)(const NVNwindow *, NVNrectangle *);
-typedef bool (*nvnProgramInitializeFunction)(NVNprogram *, NVNdevice *);
-typedef void (*nvnProgramFinalizeFunction)(NVNprogram *);
-typedef void (*nvnProgramSetDebugLabelFunction)(NVNprogram *, const char *);
-typedef bool (*nvnProgramSetShadersFunction)(NVNprogram *, int, const NVNshaderData *);
-typedef void (*nvnMemoryPoolBuilderSetDeviceFunction)(NVNmemoryPoolBuilder *, NVNdevice *);
-typedef void (*nvnMemoryPoolBuilderSetDefaultsFunction)(NVNmemoryPoolBuilder *);
-typedef void (*nvnMemoryPoolBuilderSetStorageFunction)(NVNmemoryPoolBuilder *, void *, size_t);
-typedef void (*nvnMemoryPoolBuilderSetFlagsFunction)(NVNmemoryPoolBuilder *, int);
-typedef void (*nvnMemoryPoolBuilderGetMemoryFunction)(const NVNmemoryPoolBuilder *);
-typedef size_t (*nvnMemoryPoolBuilderGetSizeFunction)(const NVNmemoryPoolBuilder *);
-typedef NVNmemoryPoolFlags (*nvnMemoryPoolBuilderGetFlagsFunction)(const NVNmemoryPoolBuilder *);
-typedef bool (*nvnMemoryPoolInitializeFunction)(NVNmemoryPool *, const NVNmemoryPoolBuilder *);
-typedef void (*nvnMemoryPoolSetDebugLabelFunction)(NVNmemoryPool *, const char *);
-typedef void (*nvnMemoryPoolFinalizeFunction)(NVNmemoryPool *);
-typedef void (*nvnMemoryPoolMapFunction)(const NVNmemoryPool *);
-typedef void (*nvnMemoryPoolFlushMappedRangeFunction)(const NVNmemoryPool *, ptrdiff_t, size_t);
-typedef void (*nvnMemoryPoolInvalidateMappedRangeFunction)(const NVNmemoryPool *, ptrdiff_t, size_t);
-typedef NVNbufferAddress (*nvnMemoryPoolGetBufferAddressFunction)(const NVNmemoryPool *);
-typedef bool (*nvnMemoryPoolMapVirtualFunction)(NVNmemoryPool *, int, const NVNmappingRequest *);
-typedef size_t (*nvnMemoryPoolGetSizeFunction)(const NVNmemoryPool *);
-typedef NVNmemoryPoolFlags (*nvnMemoryPoolGetFlagsFunction)(const NVNmemoryPool *);
-typedef bool (*nvnTexturePoolInitializeFunction)(NVNtexturePool *, const NVNmemoryPool *, ptrdiff_t, int);
-typedef void (*nvnTexturePoolSetDebugLabelFunction)(NVNtexturePool *, const char *);
-typedef void (*nvnTexturePoolFinalizeFunction)(NVNtexturePool *);
-typedef void (*nvnTexturePoolRegisterTextureFunction)(const NVNtexturePool *, int, const NVNtexture *, const NVNtextureView *);
-typedef void (*nvnTexturePoolRegisterImageFunction)(const NVNtexturePool *, int, const NVNtexture *, const NVNtextureView *);
-typedef const NVNmemoryPool * (*nvnTexturePoolGetMemoryPoolFunction)(const NVNtexturePool *);
-typedef ptrdiff_t (*nvnTexturePoolGetMemoryOffsetFunction)(const NVNtexturePool *);
-typedef int (*nvnTexturePoolGetSizeFunction)(const NVNtexturePool *);
-typedef bool (*nvnSamplerPoolInitializeFunction)(NVNsamplerPool *, const NVNmemoryPool *, ptrdiff_t, int);
-typedef void (*nvnSamplerPoolSetDebugLabelFunction)(NVNsamplerPool *, const char *);
-typedef void (*nvnSamplerPoolFinalizeFunction)(NVNsamplerPool *);
-typedef void (*nvnSamplerPoolRegisterSamplerFunction)(const NVNsamplerPool *, int, const NVNsampler *);
-typedef void (*nvnSamplerPoolRegisterSamplerBuilderFunction)(const NVNsamplerPool *, int, const NVNsamplerBuilder *);
-typedef const NVNmemoryPool* (*nvnSamplerPoolGetMemoryPoolFunction)(const NVNsamplerPool *);
-typedef ptrdiff_t (*nvnSamplerPoolGetMemoryOffsetFunction)(const NVNsamplerPool *);
-typedef int (*nvnSamplerPoolGetSizeFunction)(const NVNsamplerPool *);
-typedef void (*nvnBufferBuilderSetDeviceFunction)(NVNbufferBuilder *, NVNdevice *);
-typedef void (*nvnBufferBuilderSetDefaultsFunction)(NVNbufferBuilder *);
-typedef void (*nvnBufferBuilderSetStorageFunction)(NVNbufferBuilder *, NVNmemoryPool *, ptrdiff_t, size_t);
-typedef NVNmemoryPool (*nvnBufferBuilderGetMemoryPoolFunction)(const NVNbufferBuilder *);
-typedef ptrdiff_t (*nvnBufferBuilderGetMemoryOffsetFunction)(const NVNbufferBuilder *);
-typedef size_t (*nvnBufferBuilderGetSizeFunction)(const NVNbufferBuilder *);
-typedef bool (*nvnBufferInitializeFunction)(NVNbuffer *, const NVNbufferBuilder *);
-typedef void (*nvnBufferSetDebugLabelFunction)(NVNbuffer *, const char *);
-typedef void (*nvnBufferFinalizeFunction)(NVNbuffer *);
-typedef void (*nvnBufferMapFunction)(const NVNbuffer *);
-typedef NVNbufferAddress (*nvnBufferGetAddressFunction)(const NVNbuffer *);
-typedef void (*nvnBufferFlushMappedRangeFunction)(const NVNbuffer *, ptrdiff_t, size_t);
-typedef void (*nvnBufferInvalidateMappedRangeFunction)(const NVNbuffer *, ptrdiff_t, size_t);
-typedef NVNmemoryPool (*nvnBufferGetMemoryPoolFunction)(const NVNbuffer *);
-typedef ptrdiff_t (*nvnBufferGetMemoryOffsetFunction)(const NVNbuffer *);
-typedef size_t (*nvnBufferGetSizeFunction)(const NVNbuffer *);
-typedef uint64_t (*nvnBufferGetDebugIDFunction)(const NVNbuffer *);
-typedef void (*nvnTextureBuilderSetDeviceFunction)(NVNtextureBuilder *, NVNdevice *);
-typedef void (*nvnTextureBuilderSetDefaultsFunction)(NVNtextureBuilder *);
-typedef void (*nvnTextureBuilderSetFlagsFunction)(NVNtextureBuilder *, int);
-typedef void (*nvnTextureBuilderSetTargetFunction)(NVNtextureBuilder *, NVNtextureTarget);
-typedef void (*nvnTextureBuilderSetWidthFunction)(NVNtextureBuilder *, int);
-typedef void (*nvnTextureBuilderSetHeightFunction)(NVNtextureBuilder *, int);
-typedef void (*nvnTextureBuilderSetDepthFunction)(NVNtextureBuilder *, int);
-typedef void (*nvnTextureBuilderSetSize1DFunction)(NVNtextureBuilder *, int);
-typedef void (*nvnTextureBuilderSetSize2DFunction)(NVNtextureBuilder *, int, int);
-typedef void (*nvnTextureBuilderSetSize3DFunction)(NVNtextureBuilder *, int, int, int);
-typedef void (*nvnTextureBuilderSetLevelsFunction)(NVNtextureBuilder *, int);
-typedef void (*nvnTextureBuilderSetFormatFunction)(NVNtextureBuilder *, NVNformat);
-typedef void (*nvnTextureBuilderSetSamplesFunction)(NVNtextureBuilder *, int);
-typedef void (*nvnTextureBuilderSetSwizzleFunction)(NVNtextureBuilder *, NVNtextureSwizzle, NVNtextureSwizzle, NVNtextureSwizzle, NVNtextureSwizzle);
-typedef void (*nvnTextureBuilderSetDepthStencilModeFunction)(NVNtextureBuilder *, NVNtextureDepthStencilMode);
-typedef size_t (*nvnTextureBuilderGetStorageSizeFunction)(const NVNtextureBuilder *);
-typedef size_t (*nvnTextureBuilderGetStorageAlignmentFunction)(const NVNtextureBuilder *);
-typedef void (*nvnTextureBuilderSetStorageFunction)(NVNtextureBuilder *, NVNmemoryPool *, ptrdiff_t);
-typedef void (*nvnTextureBuilderSetPackagedTextureDataFunction)(NVNtextureBuilder *, const void *);
-typedef void (*nvnTextureBuilderSetPackagedTextureLayoutFunction)(NVNtextureBuilder *, const NVNpackagedTextureLayout *);
-typedef void (*nvnTextureBuilderSetStrideFunction)(NVNtextureBuilder *, ptrdiff_t);
-typedef void (*nvnTextureBuilderSetGLTextureNameFunction)(NVNtextureBuilder *, uint32_t);
-typedef NVNstorageClass (*nvnTextureBuilderGetStorageClassFunction)(const NVNtextureBuilder *);
-typedef NVNtextureFlags (*nvnTextureBuilderGetFlagsFunction)(const NVNtextureBuilder *);
-typedef NVNtextureTarget (*nvnTextureBuilderGetTargetFunction)(const NVNtextureBuilder *);
-typedef int (*nvnTextureBuilderGetWidthFunction)(const NVNtextureBuilder *);
-typedef int (*nvnTextureBuilderGetHeightFunction)(const NVNtextureBuilder *);
-typedef int (*nvnTextureBuilderGetDepthFunction)(const NVNtextureBuilder *);
-typedef int (*nvnTextureBuilderGetLevelsFunction)(const NVNtextureBuilder *);
-typedef NVNformat (*nvnTextureBuilderGetFormatFunction)(const NVNtextureBuilder *);
-typedef int (*nvnTextureBuilderGetSamplesFunction)(const NVNtextureBuilder *);
-typedef void (*nvnTextureBuilderGetSwizzleFunction)(const NVNtextureBuilder *, NVNtextureSwizzle *, NVNtextureSwizzle *, NVNtextureSwizzle *, NVNtextureSwizzle *);
-typedef NVNtextureDepthStencilMode (*nvnTextureBuilderGetDepthStencilModeFunction)(const NVNtextureBuilder *);
-typedef const void * (*nvnTextureBuilderGetPackagedTextureDataFunction)(const NVNtextureBuilder *);
-typedef ptrdiff_t (*nvnTextureBuilderGetStrideFunction)(const NVNtextureBuilder *);
-typedef void (*nvnTextureBuilderGetSparseTileLayoutFunction)(const NVNtextureBuilder *, NVNtextureSparseTileLayout *);
-typedef uint32_t (*nvnTextureBuilderGetGLTextureNameFunction)(const NVNtextureBuilder *);
-typedef size_t (*nvnTextureBuilderGetZCullStorageSizeFunction)(const NVNtextureBuilder *);
-typedef NVNmemoryPool (*nvnTextureBuilderGetMemoryPoolFunction)(const NVNtextureBuilder *);
-typedef ptrdiff_t (*nvnTextureBuilderGetMemoryOffsetFunction)(const NVNtextureBuilder *);
-typedef void (*nvnTextureViewSetDefaultsFunction)(NVNtextureView *);
-typedef void (*nvnTextureViewSetLevelsFunction)(NVNtextureView *, int, int);
-typedef void (*nvnTextureViewSetLayersFunction)(NVNtextureView *, int, int);
-typedef void (*nvnTextureViewSetFormatFunction)(NVNtextureView *, NVNformat);
-typedef void (*nvnTextureViewSetSwizzleFunction)(NVNtextureView *, NVNtextureSwizzle, NVNtextureSwizzle, NVNtextureSwizzle, NVNtextureSwizzle);
-typedef void (*nvnTextureViewSetDepthStencilModeFunction)(NVNtextureView *, NVNtextureDepthStencilMode);
-typedef void (*nvnTextureViewSetTargetFunction)(NVNtextureView *, NVNtextureTarget);
-typedef bool (*nvnTextureViewGetLevelsFunction)(const NVNtextureView *, int *, int *);
-typedef bool (*nvnTextureViewGetLayersFunction)(const NVNtextureView *, int *, int *);
-typedef bool (*nvnTextureViewGetFormatFunction)(const NVNtextureView *, NVNformat *);
-typedef bool (*nvnTextureViewGetSwizzleFunction)(const NVNtextureView *, NVNtextureSwizzle *, NVNtextureSwizzle *, NVNtextureSwizzle *, NVNtextureSwizzle *);
-typedef bool (*nvnTextureViewGetDepthStencilModeFunction)(const NVNtextureView *, NVNtextureDepthStencilMode *);
-typedef bool (*nvnTextureViewGetTargetFunction)(const NVNtextureView *, NVNtextureTarget *);
-typedef bool (*nvnTextureViewCompareFunction)(const NVNtextureView *, const NVNtextureView *);
-typedef bool (*nvnTextureInitializeFunction)(NVNtexture *, const NVNtextureBuilder *);
-typedef size_t (*nvnTextureGetZCullStorageSizeFunction)(const NVNtexture *);
-typedef void (*nvnTextureFinalizeFunction)(NVNtexture *);
-typedef void (*nvnTextureSetDebugLabelFunction)(NVNtexture *, const char *);
-typedef NVNstorageClass (*nvnTextureGetStorageClassFunction)(const NVNtexture *);
-typedef ptrdiff_t (*nvnTextureGetViewOffsetFunction)(const NVNtexture *, const NVNtextureView *);
-typedef NVNtextureFlags (*nvnTextureGetFlagsFunction)(const NVNtexture *);
-typedef NVNtextureTarget (*nvnTextureGetTargetFunction)(const NVNtexture *);
-typedef int (*nvnTextureGetWidthFunction)(const NVNtexture *);
-typedef int (*nvnTextureGetHeightFunction)(const NVNtexture *);
-typedef int (*nvnTextureGetDepthFunction)(const NVNtexture *);
-typedef int (*nvnTextureGetLevelsFunction)(const NVNtexture *);
-typedef NVNformat (*nvnTextureGetFormatFunction)(const NVNtexture *);
-typedef int (*nvnTextureGetSamplesFunction)(const NVNtexture *);
-typedef void (*nvnTextureGetSwizzleFunction)(const NVNtexture *, NVNtextureSwizzle *, NVNtextureSwizzle *, NVNtextureSwizzle *, NVNtextureSwizzle *);
-typedef NVNtextureDepthStencilMode (*nvnTextureGetDepthStencilModeFunction)(const NVNtexture *);
-typedef ptrdiff_t (*nvnTextureGetStrideFunction)(const NVNtexture *);
-typedef NVNtextureAddress (*nvnTextureGetTextureAddressFunction)(const NVNtexture *);
-typedef void (*nvnTextureGetSparseTileLayoutFunction)(const NVNtexture *, NVNtextureSparseTileLayout *);
-typedef void (*nvnTextureWriteTexelsFunction)(const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, const void *);
-typedef void (*nvnTextureWriteTexelsStridedFunction)(const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, const void *, ptrdiff_t, ptrdiff_t);
-typedef void (*nvnTextureReadTexelsFunction)(const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, void *);
-typedef void (*nvnTextureReadTexelsStridedFunction)(const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, void *, ptrdiff_t, ptrdiff_t);
-typedef void (*nvnTextureFlushTexelsFunction)(const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *);
-typedef void (*nvnTextureInvalidateTexelsFunction)(const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *);
-typedef NVNmemoryPool (*nvnTextureGetMemoryPoolFunction)(const NVNtexture *);
-typedef ptrdiff_t (*nvnTextureGetMemoryOffsetFunction)(const NVNtexture *);
-typedef int (*nvnTextureGetStorageSizeFunction)(const NVNtexture *);
-typedef bool (*nvnTextureCompareFunction)(const NVNtexture *, const NVNtexture *);
-typedef uint64_t (*nvnTextureGetDebugIDFunction)(const NVNtexture *);
-typedef void (*nvnSamplerBuilderSetDeviceFunction)(NVNsamplerBuilder *, NVNdevice *);
-typedef void (*nvnSamplerBuilderSetDefaultsFunction)(NVNsamplerBuilder *);
-typedef void (*nvnSamplerBuilderSetMinMagFilterFunction)(NVNsamplerBuilder *, NVNminFilter, NVNmagFilter);
-typedef void (*nvnSamplerBuilderSetWrapModeFunction)(NVNsamplerBuilder *, NVNwrapMode, NVNwrapMode, NVNwrapMode);
-typedef void (*nvnSamplerBuilderSetLodClampFunction)(NVNsamplerBuilder *, float, float);
-typedef void (*nvnSamplerBuilderSetLodBiasFunction)(NVNsamplerBuilder *, float);
-typedef void (*nvnSamplerBuilderSetCompareFunction)(NVNsamplerBuilder *, NVNcompareMode, NVNcompareFunc);
-typedef void (*nvnSamplerBuilderSetBorderColorFunction)(NVNsamplerBuilder *, const float *);
-typedef void (*nvnSamplerBuilderSetBorderColoriFunction)(NVNsamplerBuilder *, const int *);
-typedef void (*nvnSamplerBuilderSetBorderColoruiFunction)(NVNsamplerBuilder *, const uint32_t *);
-typedef void (*nvnSamplerBuilderSetMaxAnisotropyFunction)(NVNsamplerBuilder *, float);
-typedef void (*nvnSamplerBuilderSetReductionFilterFunction)(NVNsamplerBuilder *, NVNsamplerReduction);
-typedef void (*nvnSamplerBuilderSetLodSnapFunction)(NVNsamplerBuilder *, float);
-typedef void (*nvnSamplerBuilderGetMinMagFilterFunction)(const NVNsamplerBuilder *, NVNminFilter *, NVNmagFilter *);
-typedef void (*nvnSamplerBuilderGetWrapModeFunction)(const NVNsamplerBuilder *, NVNwrapMode *, NVNwrapMode *, NVNwrapMode *);
-typedef void (*nvnSamplerBuilderGetLodClampFunction)(const NVNsamplerBuilder *, float *, float *);
-typedef float (*nvnSamplerBuilderGetLodBiasFunction)(const NVNsamplerBuilder *);
-typedef void (*nvnSamplerBuilderGetCompareFunction)(const NVNsamplerBuilder *, NVNcompareMode *, NVNcompareFunc *);
-typedef void (*nvnSamplerBuilderGetBorderColorFunction)(const NVNsamplerBuilder *, float *);
-typedef void (*nvnSamplerBuilderGetBorderColoriFunction)(const NVNsamplerBuilder *, int *);
-typedef void (*nvnSamplerBuilderGetBorderColoruiFunction)(const NVNsamplerBuilder *, uint32_t *);
-typedef float (*nvnSamplerBuilderGetMaxAnisotropyFunction)(const NVNsamplerBuilder *);
-typedef NVNsamplerReduction (*nvnSamplerBuilderGetReductionFilterFunction)(const NVNsamplerBuilder *);
-typedef float (*nvnSamplerBuilderGetLodSnapFunction)(const NVNsamplerBuilder *);
-typedef bool (*nvnSamplerInitializeFunction)(NVNsampler *, const NVNsamplerBuilder *);
-typedef void (*nvnSamplerFinalizeFunction)(NVNsampler *);
-typedef void (*nvnSamplerSetDebugLabelFunction)(NVNsampler *, const char *);
-typedef void (*nvnSamplerGetMinMagFilterFunction)(const NVNsampler *, NVNminFilter *, NVNmagFilter *);
-typedef void (*nvnSamplerGetWrapModeFunction)(const NVNsampler *, NVNwrapMode *, NVNwrapMode *, NVNwrapMode *);
-typedef void (*nvnSamplerGetLodClampFunction)(const NVNsampler *, float *, float *);
-typedef float (*nvnSamplerGetLodBiasFunction)(const NVNsampler *);
-typedef void (*nvnSamplerGetCompareFunction)(const NVNsampler *, NVNcompareMode *, NVNcompareFunc *);
-typedef void (*nvnSamplerGetBorderColorFunction)(const NVNsampler *, float *);
-typedef void (*nvnSamplerGetBorderColoriFunction)(const NVNsampler *, int *);
-typedef void (*nvnSamplerGetBorderColoruiFunction)(const NVNsampler *, uint32_t *);
-typedef float (*nvnSamplerGetMaxAnisotropyFunction)(const NVNsampler *);
-typedef NVNsamplerReduction (*nvnSamplerGetReductionFilterFunction)(const NVNsampler *);
-typedef bool (*nvnSamplerCompareFunction)(const NVNsampler *, const NVNsampler *);
-typedef uint64_t (*nvnSamplerGetDebugIDFunction)(const NVNsampler *);
-typedef void (*nvnBlendStateSetDefaultsFunction)(NVNblendState *);
-typedef void (*nvnBlendStateSetBlendTargetFunction)(NVNblendState *, int);
-typedef void (*nvnBlendStateSetBlendFuncFunction)(NVNblendState *, NVNblendFunc, NVNblendFunc, NVNblendFunc, NVNblendFunc);
-typedef void (*nvnBlendStateSetBlendEquationFunction)(NVNblendState *, NVNblendEquation, NVNblendEquation);
-typedef void (*nvnBlendStateSetAdvancedModeFunction)(NVNblendState *, NVNblendAdvancedMode);
-typedef void (*nvnBlendStateSetAdvancedOverlapFunction)(NVNblendState *, NVNblendAdvancedOverlap);
-typedef void (*nvnBlendStateSetAdvancedPremultipliedSrcFunction)(NVNblendState *, bool);
-typedef void (*nvnBlendStateSetAdvancedNormalizedDstFunction)(NVNblendState *, bool);
-typedef int (*nvnBlendStateGetBlendTargetFunction)(const NVNblendState *);
-typedef void (*nvnBlendStateGetBlendFuncFunction)(const NVNblendState *, NVNblendFunc *, NVNblendFunc *, NVNblendFunc *, NVNblendFunc *);
-typedef void (*nvnBlendStateGetBlendEquationFunction)(const NVNblendState *, NVNblendEquation *, NVNblendEquation *);
-typedef NVNblendAdvancedMode (*nvnBlendStateGetAdvancedModeFunction)(const NVNblendState *);
-typedef NVNblendAdvancedOverlap (*nvnBlendStateGetAdvancedOverlapFunction)(const NVNblendState *);
-typedef bool (*nvnBlendStateGetAdvancedPremultipliedSrcFunction)(const NVNblendState *);
-typedef bool (*nvnBlendStateGetAdvancedNormalizedDstFunction)(const NVNblendState *);
-typedef void (*nvnColorStateSetDefaultsFunction)(NVNcolorState *);
-typedef void (*nvnColorStateSetBlendEnableFunction)(NVNcolorState *, int, bool);
-typedef void (*nvnColorStateSetLogicOpFunction)(NVNcolorState *, NVNlogicOp);
-typedef void (*nvnColorStateSetAlphaTestFunction)(NVNcolorState *, NVNalphaFunc);
-typedef bool (*nvnColorStateGetBlendEnableFunction)(const NVNcolorState *, int);
-typedef NVNlogicOp (*nvnColorStateGetLogicOpFunction)(const NVNcolorState *);
-typedef NVNalphaFunc (*nvnColorStateGetAlphaTestFunction)(const NVNcolorState *);
-typedef void (*nvnChannelMaskStateSetDefaultsFunction)(NVNchannelMaskState *);
-typedef void (*nvnChannelMaskStateSetChannelMaskFunction)(NVNchannelMaskState *, int, bool, bool, bool, bool);
-typedef void (*nvnChannelMaskStateGetChannelMaskFunction)(const NVNchannelMaskState *, int, bool *, bool *, bool *, bool *);
-typedef void (*nvnMultisampleStateSetDefaultsFunction)(NVNmultisampleState *);
-typedef void (*nvnMultisampleStateSetMultisampleEnableFunction)(NVNmultisampleState *, bool);
-typedef void (*nvnMultisampleStateSetSamplesFunction)(NVNmultisampleState *, int);
-typedef void (*nvnMultisampleStateSetAlphaToCoverageEnableFunction)(NVNmultisampleState *, bool);
-typedef void (*nvnMultisampleStateSetAlphaToCoverageDitherFunction)(NVNmultisampleState *, bool);
-typedef bool (*nvnMultisampleStateGetMultisampleEnableFunction)(const NVNmultisampleState *);
-typedef int (*nvnMultisampleStateGetSamplesFunction)(const NVNmultisampleState *);
-typedef bool (*nvnMultisampleStateGetAlphaToCoverageEnableFunction)(const NVNmultisampleState *);
-typedef bool (*nvnMultisampleStateGetAlphaToCoverageDitherFunction)(const NVNmultisampleState *);
-typedef void (*nvnMultisampleStateSetRasterSamplesFunction)(NVNmultisampleState *, int);
-typedef int (*nvnMultisampleStateGetRasterSamplesFunction)(NVNmultisampleState *);
-typedef void (*nvnMultisampleStateSetCoverageModulationModeFunction)(NVNmultisampleState *, NVNcoverageModulationMode);
-typedef NVNcoverageModulationMode (*nvnMultisampleStateGetCoverageModulationModeFunction)(const NVNmultisampleState *);
-typedef void (*nvnMultisampleStateSetCoverageToColorEnableFunction)(NVNmultisampleState *, bool);
-typedef bool (*nvnMultisampleStateGetCoverageToColorEnableFunction)(const NVNmultisampleState *);
-typedef void (*nvnMultisampleStateSetCoverageToColorOutputFunction)(NVNmultisampleState *, int);
-typedef int (*nvnMultisampleStateGetCoverageToColorOutputFunction)(const NVNmultisampleState *);
-typedef void (*nvnMultisampleStateSetSampleLocationsEnableFunction)(NVNmultisampleState *, bool);
-typedef bool (*nvnMultisampleStateGetSampleLocationsEnableFunction)(const NVNmultisampleState *);
-typedef void (*nvnMultisampleStateGetSampleLocationsGridFunction)(NVNmultisampleState *, int *, int *);
-typedef void (*nvnMultisampleStateSetSampleLocationsGridEnableFunction)(NVNmultisampleState *, bool);
-typedef bool (*nvnMultisampleStateGetSampleLocationsGridEnableFunction)(const NVNmultisampleState *);
-typedef void (*nvnMultisampleStateSetSampleLocationsFunction)(NVNmultisampleState *, bool);
-typedef void (*nvnPolygonStateSetDefaultsFunction)(NVNpolygonState *);
-typedef void (*nvnPolygonStateSetCullFaceFunction)(NVNpolygonState *, NVNface);
-typedef void (*nvnPolygonStateSetFrontFaceFunction)(NVNpolygonState *, NVNfrontFace);
-typedef void (*nvnPolygonStateSetPolygonModeFunction)(NVNpolygonState *, NVNpolygonMode);
-typedef void (*nvnPolygonStateSetPolygonOffsetEnablesFunction)(NVNpolygonState *, int);
-typedef NVNface (*nvnPolygonStateGetCullFaceFunction)(const NVNpolygonState *);
-typedef NVNfrontFace (*nvnPolygonStateGetFrontFaceFunction)(const NVNpolygonState *);
-typedef NVNpolygonMode (*nvnPolygonStateGetPolygonModeFunction)(const NVNpolygonState *);
-typedef NVNpolygonOffsetEnable (*nvnPolygonStateGetPolygonOffsetEnablesFunction)(const NVNpolygonState *);
-typedef void (*nvnDepthStencilStateSetDefaultsFunction)(NVNdepthStencilState *);
-typedef void (*nvnDepthStencilStateSetDepthTestEnableFunction)(NVNdepthStencilState *, bool);
-typedef void (*nvnDepthStencilStateSetDepthWriteEnableFunction)(NVNdepthStencilState *, bool);
-typedef void (*nvnDepthStencilStateSetDepthFuncFunction)(NVNdepthStencilState *, NVNdepthFunc);
-typedef void (*nvnDepthStencilStateSetStencilTestEnableFunction)(NVNdepthStencilState *, bool);
-typedef void (*nvnDepthStencilStateSetStencilFuncFunction)(NVNdepthStencilState *, NVNface, NVNstencilFunc);
-typedef void (*nvnDepthStencilStateSetStencilOpFunction)(NVNdepthStencilState *, NVNface, NVNstencilOp, NVNstencilOp, NVNstencilOp);
-typedef bool (*nvnDepthStencilStateGetDepthTestEnableFunction)(const NVNdepthStencilState *);
-typedef bool (*nvnDepthStencilStateGetDepthWriteEnableFunction)(const NVNdepthStencilState *);
-typedef NVNdepthFunc (*nvnDepthStencilStateGetDepthFuncFunction)(const NVNdepthStencilState *);
-typedef bool (*nvnDepthStencilStateGetStencilTestEnableFunction)(const NVNdepthStencilState *);
-typedef NVNstencilFunc (*nvnDepthStencilStateGetStencilFuncFunction)(const NVNdepthStencilState *, NVNface);
-typedef void (*nvnDepthStencilStateGetStencilOpFunction)(const NVNdepthStencilState *, NVNface, NVNstencilOp *, NVNstencilOp *, NVNstencilOp *);
-typedef void (*nvnVertexAttribStateSetDefaultsFunction)(NVNvertexAttribState *);
-typedef void (*nvnVertexAttribStateSetFormatFunction)(NVNvertexAttribState *, NVNformat, ptrdiff_t);
-typedef void (*nvnVertexAttribStateSetStreamIndexFunction)(NVNvertexAttribState *, int);
-typedef void (*nvnVertexAttribStateGetFormatFunction)(const NVNvertexAttribState *, NVNformat *, ptrdiff_t *);
-typedef int (*nvnVertexAttribStateGetStreamIndexFunction)(const NVNvertexAttribState *);
-typedef void (*nvnVertexStreamStateSetDefaultsFunction)(NVNvertexStreamState *);
-typedef void (*nvnVertexStreamStateSetStrideFunction)(NVNvertexStreamState *, ptrdiff_t);
-typedef void (*nvnVertexStreamStateSetDivisorFunction)(NVNvertexStreamState *, int);
-typedef ptrdiff_t (*nvnVertexStreamStateGetStrideFunction)(const NVNvertexStreamState *);
-typedef int (*nvnVertexStreamStateGetDivisorFunction)(const NVNvertexStreamState *);
-typedef bool (*nvnCommandBufferInitializeFunction)(NVNcommandBuffer *, NVNdevice *);
-typedef void (*nvnCommandBufferFinalizeFunction)(NVNcommandBuffer *);
-typedef void (*nvnCommandBufferSetDebugLabelFunction)(NVNcommandBuffer *, const char *);
-typedef void (*nvnCommandBufferSetMemoryCallbackFunction)(NVNcommandBuffer *, NVNcommandBufferMemoryCallback);
-typedef void (*nvnCommandBufferSetMemoryCallbackDataFunction)(NVNcommandBuffer *, void *);
-typedef void (*nvnCommandBufferAddCommandMemoryFunction)(NVNcommandBuffer *, const NVNmemoryPool *, ptrdiff_t, size_t);
-typedef void (*nvnCommandBufferAddControlMemoryFunction)(NVNcommandBuffer *, void *, size_t);
-typedef size_t (*nvnCommandBufferGetCommandMemorySizeFunction)(const NVNcommandBuffer *);
-typedef size_t (*nvnCommandBufferGetCommandMemoryUsedFunction)(const NVNcommandBuffer *);
-typedef size_t (*nvnCommandBufferGetCommandMemoryFreeFunction)(const NVNcommandBuffer *);
-typedef size_t (*nvnCommandBufferGetControlMemorySizeFunction)(const NVNcommandBuffer *);
-typedef size_t (*nvnCommandBufferGetControlMemoryUsedFunction)(const NVNcommandBuffer *);
-typedef size_t (*nvnCommandBufferGetControlMemoryFreeFunction)(const NVNcommandBuffer *);
-typedef void (*nvnCommandBufferBeginRecordingFunction)(NVNcommandBuffer *);
-typedef NVNcommandHandle (*nvnCommandBufferEndRecordingFunction)(NVNcommandBuffer *);
-typedef void (*nvnCommandBufferCallCommandsFunction)(NVNcommandBuffer *, int, const NVNcommandHandle *);
-typedef void (*nvnCommandBufferCopyCommandsFunction)(NVNcommandBuffer *, int, const NVNcommandHandle *);
-typedef void (*nvnCommandBufferBindBlendStateFunction)(NVNcommandBuffer *, const NVNblendState *);
-typedef void (*nvnCommandBufferBindChannelMaskStateFunction)(NVNcommandBuffer *, const NVNchannelMaskState *);
-typedef void (*nvnCommandBufferBindColorStateFunction)(NVNcommandBuffer *, const NVNcolorState *);
-typedef void (*nvnCommandBufferBindMultisampleStateFunction)(NVNcommandBuffer *, const NVNmultisampleState *);
-typedef void (*nvnCommandBufferBindPolygonStateFunction)(NVNcommandBuffer *, const NVNpolygonState *);
-typedef void (*nvnCommandBufferBindDepthStencilStateFunction)(NVNcommandBuffer *, const NVNdepthStencilState *);
-typedef void (*nvnCommandBufferBindVertexAttribStateFunction)(NVNcommandBuffer *, int, const NVNvertexAttribState *);
-typedef void (*nvnCommandBufferBindVertexStreamStateFunction)(NVNcommandBuffer *, int, const NVNvertexStreamState *);
-typedef void (*nvnCommandBufferBindProgramFunction)(NVNcommandBuffer *, const NVNprogram *, int);
-typedef void (*nvnCommandBufferBindVertexBufferFunction)(NVNcommandBuffer *, int, NVNbufferAddress, size_t);
-typedef void (*nvnCommandBufferBindVertexBuffersFunction)(NVNcommandBuffer *, int, int, const NVNbufferRange *);
-typedef void (*nvnCommandBufferBindUniformBufferFunction)(NVNcommandBuffer *, NVNshaderStage, int, NVNbufferAddress, size_t);
-typedef void (*nvnCommandBufferBindUniformBuffersFunction)(NVNcommandBuffer *, NVNshaderStage, int, int, const NVNbufferRange *);
-typedef void (*nvnCommandBufferBindTransformFeedbackBufferFunction)(NVNcommandBuffer *, int, NVNbufferAddress, size_t);
-typedef void (*nvnCommandBufferBindTransformFeedbackBuffersFunction)(NVNcommandBuffer *, int, int, const NVNbufferRange *);
-typedef void (*nvnCommandBufferBindStorageBufferFunction)(NVNcommandBuffer *, NVNshaderStage, int, NVNbufferAddress, size_t);
-typedef void (*nvnCommandBufferBindStorageBuffersFunction)(NVNcommandBuffer *, NVNshaderStage, int, int, const NVNbufferRange *);
-typedef void (*nvnCommandBufferBindTextureFunction)(NVNcommandBuffer *, NVNshaderStage, int, NVNtextureHandle);
-typedef void (*nvnCommandBufferBindTexturesFunction)(NVNcommandBuffer *, NVNshaderStage, int, int, const NVNtextureHandle *);
-typedef void (*nvnCommandBufferBindImageFunction)(NVNcommandBuffer *, NVNshaderStage, int, NVNimageHandle);
-typedef void (*nvnCommandBufferBindImagesFunction)(NVNcommandBuffer *, NVNshaderStage, int, int, const NVNimageHandle *);
-typedef void (*nvnCommandBufferSetPatchSizeFunction)(NVNcommandBuffer *, int);
-typedef void (*nvnCommandBufferSetInnerTessellationLevelsFunction)(NVNcommandBuffer *, const float *);
-typedef void (*nvnCommandBufferSetOuterTessellationLevelsFunction)(NVNcommandBuffer *, const float *);
-typedef void (*nvnCommandBufferSetPrimitiveRestartFunction)(NVNcommandBuffer *, bool, int);
-typedef void (*nvnCommandBufferBeginTransformFeedbackFunction)(NVNcommandBuffer *, NVNbufferAddress);
-typedef void (*nvnCommandBufferEndTransformFeedbackFunction)(NVNcommandBuffer *, NVNbufferAddress);
-typedef void (*nvnCommandBufferPauseTransformFeedbackFunction)(NVNcommandBuffer *, NVNbufferAddress);
-typedef void (*nvnCommandBufferResumeTransformFeedbackFunction)(NVNcommandBuffer *, NVNbufferAddress);
-typedef void (*nvnCommandBufferDrawTransformFeedbackFunction)(NVNcommandBuffer *, NVNdrawPrimitive, NVNbufferAddress);
-typedef void (*nvnCommandBufferDrawArraysFunction)(NVNcommandBuffer *, NVNdrawPrimitive, int, int);
-typedef void (*nvnCommandBufferDrawElementsFunction)(NVNcommandBuffer *, NVNdrawPrimitive, NVNindexType, int, NVNbufferAddress);
-typedef void (*nvnCommandBufferDrawElementsBaseVertexFunction)(NVNcommandBuffer *, NVNdrawPrimitive, NVNindexType, int, NVNbufferAddress, int);
-typedef void (*nvnCommandBufferDrawArraysInstancedFunction)(NVNcommandBuffer *, NVNdrawPrimitive, int, int, int, int);
-typedef void (*nvnCommandBufferDrawElementsInstancedFunction)(NVNcommandBuffer *, NVNdrawPrimitive, NVNindexType, int, NVNbufferAddress, int, int, int);
-typedef void (*nvnCommandBufferDrawArraysIndirectFunction)(NVNcommandBuffer *, NVNdrawPrimitive, NVNbufferAddress);
-typedef void (*nvnCommandBufferDrawElementsIndirectFunction)(NVNcommandBuffer *, NVNdrawPrimitive, NVNindexType, NVNbufferAddress, NVNbufferAddress);
-typedef void (*nvnCommandBufferMultiDrawArraysIndirectCountFunction)(NVNcommandBuffer *, NVNdrawPrimitive, NVNbufferAddress, NVNbufferAddress, int, ptrdiff_t);
-typedef void (*nvnCommandBufferMultiDrawElementsIndirectCountFunction)(NVNcommandBuffer *, NVNdrawPrimitive, NVNindexType, NVNbufferAddress, NVNbufferAddress, NVNbufferAddress, int, ptrdiff_t);
-typedef void (*nvnCommandBufferClearColorFunction)(NVNcommandBuffer *, int, const float *, int);
-typedef void (*nvnCommandBufferClearColoriFunction)(NVNcommandBuffer *, int, const int *, int);
-typedef void (*nvnCommandBufferClearColoruiFunction)(NVNcommandBuffer *, int, const uint32_t *, int);
-typedef void (*nvnCommandBufferClearDepthStencilFunction)(NVNcommandBuffer *, float, bool, int, int);
-typedef void (*nvnCommandBufferDispatchComputeFunction)(NVNcommandBuffer *, int, int, int);
-typedef void (*nvnCommandBufferDispatchComputeIndirectFunction)(NVNcommandBuffer *, NVNbufferAddress);
-typedef void (*nvnCommandBufferSetViewportFunction)(NVNcommandBuffer *, int, int, int, int);
-typedef void (*nvnCommandBufferSetViewportsFunction)(NVNcommandBuffer *, int, int, const float *);
-typedef void (*nvnCommandBufferSetViewportSwizzlesFunction)(NVNcommandBuffer *, int, int, const NVNviewportSwizzle *);
-typedef void (*nvnCommandBufferSetScissorFunction)(NVNcommandBuffer *, int, int, int, int);
-typedef void (*nvnCommandBufferSetScissorsFunction)(NVNcommandBuffer *, int, int, const int *);
-typedef void (*nvnCommandBufferSetDepthRangeFunction)(NVNcommandBuffer *, float, float);
-typedef void (*nvnCommandBufferSetDepthBoundsFunction)(NVNcommandBuffer *, bool, float, float);
-typedef void (*nvnCommandBufferSetDepthRangesFunction)(NVNcommandBuffer *, int, int, const float *);
-typedef void (*nvnCommandBufferSetTiledCacheActionFunction)(NVNcommandBuffer *, NVNtiledCacheAction);
-typedef void (*nvnCommandBufferSetTiledCacheTileSizeFunction)(NVNcommandBuffer *, int, int);
-typedef void (*nvnCommandBufferBindSeparateTextureFunction)(NVNcommandBuffer *, NVNshaderStage, int, NVNseparateTextureHandle);
-typedef void (*nvnCommandBufferBindSeparateSamplerFunction)(NVNcommandBuffer *, NVNshaderStage, int, NVNseparateSamplerHandle);
-typedef void (*nvnCommandBufferBindSeparateTexturesFunction)(NVNcommandBuffer *, NVNshaderStage, int, int, const NVNseparateTextureHandle *);
-typedef void (*nvnCommandBufferBindSeparateSamplersFunction)(NVNcommandBuffer *, NVNshaderStage, int, int, const NVNseparateSamplerHandle *);
-typedef void (*nvnCommandBufferSetStencilValueMaskFunction)(NVNcommandBuffer *, NVNface, int);
-typedef void (*nvnCommandBufferSetStencilMaskFunction)(NVNcommandBuffer *, NVNface, int);
-typedef void (*nvnCommandBufferSetStencilRefFunction)(NVNcommandBuffer *, NVNface, int);
-typedef void (*nvnCommandBufferSetBlendColorFunction)(NVNcommandBuffer *, const float *);
-typedef void (*nvnCommandBufferSetPointSizeFunction)(NVNcommandBuffer *, float);
-typedef void (*nvnCommandBufferSetLineWidthFunction)(NVNcommandBuffer *, float);
-typedef void (*nvnCommandBufferSetPolygonOffsetClampFunction)(NVNcommandBuffer *, float, float, float);
-typedef void (*nvnCommandBufferSetAlphaRefFunction)(NVNcommandBuffer *, float);
-typedef void (*nvnCommandBufferSetSampleMaskFunction)(NVNcommandBuffer *, int);
-typedef void (*nvnCommandBufferSetRasterizerDiscardFunction)(NVNcommandBuffer *, bool);
-typedef void (*nvnCommandBufferSetDepthClampFunction)(NVNcommandBuffer *, bool);
-typedef void (*nvnCommandBufferSetConservativeRasterEnableFunction)(NVNcommandBuffer *, bool);
-typedef void (*nvnCommandBufferSetConservativeRasterDilateFunction)(NVNcommandBuffer *, float);
-typedef void (*nvnCommandBufferSetSubpixelPrecisionBiasFunction)(NVNcommandBuffer *, int, int);
-typedef void (*nvnCommandBufferCopyBufferToTextureFunction)(NVNcommandBuffer *, NVNbufferAddress, const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, int);
-typedef void (*nvnCommandBufferCopyTextureToBufferFunction)(NVNcommandBuffer *, const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, NVNbufferAddress, int);
-typedef void (*nvnCommandBufferCopyTextureToTextureFunction)(NVNcommandBuffer *, const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, int);
-typedef void (*nvnCommandBufferCopyBufferToBufferFunction)(NVNcommandBuffer *, NVNbufferAddress, NVNbufferAddress, size_t, int);
-typedef void (*nvnCommandBufferClearBufferFunction)(NVNcommandBuffer *, NVNbufferAddress, size_t, uint32_t);
-typedef void (*nvnCommandBufferClearTextureFunction)(NVNcommandBuffer *, const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, const float *, int);
-typedef void (*nvnCommandBufferClearTextureiFunction)(NVNcommandBuffer *, const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, const int *, int);
-typedef void (*nvnCommandBufferClearTextureuiFunction)(NVNcommandBuffer *, const NVNtexture *, const NVNtextureView *, const NVNcopyRegion *, const uint32_t *, int);
-typedef void (*nvnCommandBufferUpdateUniformBufferFunction)(NVNcommandBuffer *, NVNbufferAddress, size_t, ptrdiff_t, size_t, const void *);
-typedef void (*nvnCommandBufferReportCounterFunction)(NVNcommandBuffer *, NVNcounterType, NVNbufferAddress);
-typedef void (*nvnCommandBufferResetCounterFunction)(NVNcommandBuffer *, NVNcounterType);
-typedef void (*nvnCommandBufferReportValueFunction)(NVNcommandBuffer *, uint32_t, NVNbufferAddress);
-typedef void (*nvnCommandBufferSetRenderEnableFunction)(NVNcommandBuffer *, bool);
-typedef void (*nvnCommandBufferSetRenderEnableConditionalFunction)(NVNcommandBuffer *, NVNconditionalRenderMode, NVNbufferAddress);
-typedef void (*nvnCommandBufferSetRenderTargetsFunction)(NVNcommandBuffer *, int, const NVNtexture *const *, const NVNtextureView *const *, const NVNtexture *, const NVNtextureView *);
-typedef void (*nvnCommandBufferDiscardColorFunction)(NVNcommandBuffer *, int);
-typedef void (*nvnCommandBufferDiscardDepthStencilFunction)(NVNcommandBuffer *);
-typedef void (*nvnCommandBufferDownsampleFunction)(NVNcommandBuffer *, const NVNtexture *, const NVNtexture *);
-typedef void (*nvnCommandBufferTiledDownsampleFunction)(NVNcommandBuffer *, const NVNtexture *, const NVNtexture *);
-typedef void (*nvnCommandBufferDownsampleTextureViewFunction)(NVNcommandBuffer *, const NVNtexture *, const NVNtextureView *, const NVNtexture *, const NVNtextureView *);
-typedef void (*nvnCommandBufferTiledDownsampleTextureViewFunction)(NVNcommandBuffer *, const NVNtexture *, const NVNtextureView *, const NVNtexture *, const NVNtextureView *);
-typedef void (*nvnCommandBufferBarrierFunction)(NVNcommandBuffer *, int);
-typedef void (*nvnCommandBufferWaitSyncFunction)(NVNcommandBuffer *, const NVNsync *);
-typedef void (*nvnCommandBufferFenceSyncFunction)(NVNcommandBuffer *, NVNsync *, NVNsyncCondition, int);
-typedef void (*nvnCommandBufferSetTexturePoolFunction)(NVNcommandBuffer *, const NVNtexturePool *);
-typedef void (*nvnCommandBufferSetSamplerPoolFunction)(NVNcommandBuffer *, const NVNsamplerPool *);
-typedef void (*nvnCommandBufferSetShaderScratchMemoryFunction)(NVNcommandBuffer *, const NVNmemoryPool *, ptrdiff_t, size_t);
-typedef void (*nvnCommandBufferSaveZCullDataFunction)(NVNcommandBuffer *, NVNbufferAddress, size_t);
-typedef void (*nvnCommandBufferRestoreZCullDataFunction)(NVNcommandBuffer *, NVNbufferAddress, size_t);
-typedef void (*nvnCommandBufferSetCopyRowStrideFunction)(NVNcommandBuffer *, ptrdiff_t);
-typedef void (*nvnCommandBufferSetCopyImageStrideFunction)(NVNcommandBuffer *, ptrdiff_t);
-typedef ptrdiff_t (*nvnCommandBufferGetCopyRowStrideFunction)(const NVNcommandBuffer *);
-typedef ptrdiff_t (*nvnCommandBufferGetCopyImageStrideFunction)(const NVNcommandBuffer *);
-typedef void (*nvnCommandBufferDrawTextureFunction)(NVNcommandBuffer *, NVNtextureHandle, const NVNdrawTextureRegion *, const NVNdrawTextureRegion *);
-typedef bool (*nvnProgramSetSubroutineLinkageFunction)(NVNprogram *, int, const NVNsubroutineLinkageMapPtr *);
-typedef void (*nvnCommandBufferSetProgramSubroutinesFunction)(NVNcommandBuffer *, NVNprogram *, NVNshaderStage, const int, const int, const int *);
-typedef void (*nvnCommandBufferBindCoverageModulationTableFunction)(NVNcommandBuffer *, const float *);
-typedef void (*nvnCommandBufferResolveDepthBufferFunction)(NVNcommandBuffer *);
-typedef void (*nvnCommandBufferPushDebugGroupStaticFunction)(NVNcommandBuffer *, uint32_t, const char *);
-typedef void (*nvnCommandBufferPushDebugGroupDynamicFunction)(NVNcommandBuffer *, uint32_t, const char *);
-typedef void (*nvnCommandBufferPushDebugGroupFunction)(NVNcommandBuffer *, uint32_t, const char *);
-typedef void (*nvnCommandBufferPopDebugGroupFunction)(NVNcommandBuffer *);
-typedef void (*nvnCommandBufferPopDebugGroupIdFunction)(NVNcommandBuffer *, uint32_t);
-typedef void (*nvnCommandBufferInsertDebugMarkerStaticFunction)(NVNcommandBuffer *, uint32_t, const char *);
-typedef void (*nvnCommandBufferInsertDebugMarkerDynamicFunction)(NVNcommandBuffer *, uint32_t, const char *);
-typedef void (*nvnCommandBufferInsertDebugMarkerFunction)(NVNcommandBuffer *, uint32_t, const char *);
-typedef NVNcommandBufferMemoryCallback (*nvnCommandBufferGetMemoryCallbackFunction)(const NVNcommandBuffer *);
-typedef void (*nvnCommandBufferGetMemoryCallbackDataFunction)(const NVNcommandBuffer *);
-typedef bool (*nvnCommandBufferIsRecordingFunction)(const NVNcommandBuffer *);
-typedef bool (*nvnSyncInitializeFunction)(NVNsync *, NVNdevice *);
-typedef void (*nvnSyncFinalizeFunction)(NVNsync *);
-typedef void (*nvnSyncSetDebugLabelFunction)(NVNsync *, const char *);
-typedef void (*nvnQueueFenceSyncFunction)(NVNqueue *, NVNsync *, NVNsyncCondition, int);
-typedef NVNsyncWaitResult (*nvnSyncWaitFunction)(const NVNsync *, uint64_t);
-typedef bool (*nvnQueueWaitSyncFunction)(NVNqueue *, const NVNsync *);
-typedef void (*nvnEventBuilderSetDefaultsFunction)(NVNeventBuilder *);
-typedef void (*nvnEventBuilderSetStorageFunction)(NVNeventBuilder *, const NVNmemoryPool *, int64_t);
-typedef bool (*nvnEventInitializeFunction)(NVNevent *, const NVNeventBuilder *);
-typedef void (*nvnEventFinalizeFunction)(NVNevent *);
-typedef uint32_t (*nvnEventGetValueFunction)(const NVNevent *);
-typedef void (*nvnEventSignalFunction)(NVNevent *, NVNeventSignalMode, uint32_t);
-typedef void (*nvnCommandBufferWaitEventFunction)(NVNcommandBuffer *, const NVNevent *, NVNeventWaitMode, uint32_t);
-typedef void (*nvnCommandBufferSignalEventFunction)(NVNcommandBuffer *, const NVNevent *, NVNeventSignalMode, NVNeventSignalLocation, int, uint32_t);
+typedef void (*nvnDeviceBuilderSetDefaultsFunction)(NVNdeviceBuilder*);
+typedef void (*nvnDeviceBuilderSetFlagsFunction)(NVNdeviceBuilder*, NVNdeviceFlagBits);
+typedef bool (*nvnDeviceInitializeFunction)(NVNdevice*, const NVNdeviceBuilder*);
+typedef void (*nvnDeviceFinalizeFunction)(NVNdevice*);
+typedef void (*nvnDeviceSetDebugLabelFunction)(NVNdevice*, const char*);
+typedef NVNdummyProc (*nvnDeviceGetProcAddressFunction)(const NVNdevice*, const char*);
+typedef void (*nvnDeviceGetIntegerFunction)(const NVNdevice*, NVNdeviceInfo, int*);
+typedef uint64_t (*nvnDeviceGetCurrentTimestampInNanosecondsFunction)(const NVNdevice*);
+typedef void (*nvnDeviceSetIntermediateShaderCacheFunction)(NVNdevice*, int);
+typedef NVNtextureHandle (*nvnDeviceGetTextureHandleFunction)(const NVNdevice*, int, int);
+typedef NVNtextureHandle (*nvnDeviceGetTexelFetchHandleFunction)(const NVNdevice*, int);
+typedef NVNimageHandle (*nvnDeviceGetImageHandleFunction)(const NVNdevice*, int);
+typedef void (*nvnDeviceInstallDebugCallbackFunction)(NVNdevice*, const NVNdebugCallback, void*,
+                                                      bool);
+typedef NVNdebugDomainId (*nvnDeviceGenerateDebugDomainIdFunction)(const NVNdevice*, const char*);
+typedef void (*nvnDeviceSetWindowOriginModeFunction)(NVNdevice*, NVNwindowOriginMode);
+typedef void (*nvnDeviceSetDepthModeFunction)(NVNdevice*, NVNdepthMode);
+typedef bool (*nvnDeviceRegisterFastClearColorFunction)(NVNdevice*, const float*, NVNformat);
+typedef bool (*nvnDeviceRegisterFastClearColoriFunction)(NVNdevice*, const int*, NVNformat);
+typedef bool (*nvnDeviceRegisterFastClearColoruiFunction)(NVNdevice*, const uint32_t*, NVNformat);
+typedef bool (*nvnDeviceRegisterFastClearDepthFunction)(NVNdevice*, float);
+typedef NVNwindowOriginMode (*nvnDeviceGetWindowOriginModeFunction)(const NVNdevice*);
+typedef NVNdepthMode (*nvnDeviceGetDepthModeFunction)(const NVNdevice*);
+typedef uint64_t (*nvnDeviceGetTimestampInNanosecondsFunction)(const NVNdevice*,
+                                                               const NVNcounterData*);
+typedef void (*nvnDeviceApplyDeferredFinalizesFunction)(NVNdevice*, int);
+typedef void (*nvnDeviceFinalizeCommandHandleFunction)(NVNdevice*, NVNcommandHandle);
+typedef void (*nvnDeviceWalkDebugDatabaseFunction)(const NVNdevice*, NVNdebugObjectType,
+                                                   NVNwalkDebugDatabaseCallback, void*);
+typedef NVNseparateTextureHandle (*nvnDeviceGetSeparateTextureHandleFunction)(const NVNdevice*,
+                                                                              int);
+typedef NVNseparateSamplerHandle (*nvnDeviceGetSeparateSamplerHandleFunction)(const NVNdevice*,
+                                                                              int);
+typedef bool (*nvnDeviceIsExternalDebuggerAttachedFunction)(const NVNdevice*);
+typedef NVNqueueGetErrorResult (*nvnQueueGetErrorFunction)(NVNqueue*, NVNqueueErrorInfo*);
+typedef size_t (*nvnQueueGetTotalCommandMemoryUsedFunction)(NVNqueue*);
+typedef size_t (*nvnQueueGetTotalControlMemoryUsedFunction)(NVNqueue*);
+typedef size_t (*nvnQueueGetTotalComputeMemoryUsedFunction)(NVNqueue*);
+typedef void (*nvnQueueResetMemoryUsageCountsFunction)(NVNqueue*);
+typedef void (*nvnQueueBuilderSetDeviceFunction)(NVNqueueBuilder*, NVNdevice*);
+typedef void (*nvnQueueBuilderSetDefaultsFunction)(NVNqueueBuilder*);
+typedef void (*nvnQueueBuilderSetFlagsFunction)(NVNqueueBuilder*, int);
+typedef void (*nvnQueueBuilderSetCommandMemorySizeFunction)(NVNqueueBuilder*, size_t);
+typedef void (*nvnQueueBuilderSetComputeMemorySizeFunction)(NVNqueueBuilder*, size_t);
+typedef void (*nvnQueueBuilderSetControlMemorySizeFunction)(NVNqueueBuilder*, size_t);
+typedef size_t (*nvnQueueBuilderGetQueueMemorySizeFunction)(const NVNqueueBuilder*);
+typedef void (*nvnQueueBuilderSetQueueMemoryFunction)(NVNqueueBuilder*, void*, size_t);
+typedef void (*nvnQueueBuilderSetCommandFlushThresholdFunction)(NVNqueueBuilder*, size_t);
+typedef bool (*nvnQueueInitializeFunction)(NVNqueue*, const NVNqueueBuilder*);
+typedef void (*nvnQueueFinalizeFunction)(NVNqueue*);
+typedef void (*nvnQueueSetDebugLabelFunction)(NVNqueue*, const char*);
+typedef void (*nvnQueueSubmitCommandsFunction)(NVNqueue*, int, const NVNcommandHandle*);
+typedef void (*nvnQueueFlushFunction)(NVNqueue*);
+typedef void (*nvnQueueFinishFunction)(NVNqueue*);
+typedef void (*nvnQueuePresentTextureFunction)(NVNqueue*, NVNwindow*, int);
+typedef NVNqueueAcquireTextureResult (*nvnQueueAcquireTextureFunction)(NVNqueue*, NVNwindow*, int*);
+typedef void (*nvnWindowBuilderSetDeviceFunction)(NVNwindowBuilder*, NVNdevice*);
+typedef void (*nvnWindowBuilderSetDefaultsFunction)(NVNwindowBuilder*);
+typedef void (*nvnWindowBuilderSetNativeWindowFunction)(NVNwindowBuilder*, NVNnativeWindow);
+typedef void (*nvnWindowBuilderSetTexturesFunction)(NVNwindowBuilder*, int, NVNtexture* const*);
+typedef void (*nvnWindowBuilderSetPresentIntervalFunction)(NVNwindowBuilder*, int);
+typedef NVNnativeWindow (*nvnWindowBuilderGetNativeWindowFunction)(const NVNwindowBuilder*);
+typedef int (*nvnWindowBuilderGetPresentIntervalFunction)(const NVNwindowBuilder*);
+typedef bool (*nvnWindowInitializeFunction)(NVNwindow*, const NVNwindowBuilder*);
+typedef void (*nvnWindowFinalizeFunction)(NVNwindow*);
+typedef void (*nvnWindowSetDebugLabelFunction)(NVNwindow*, const char*);
+typedef NVNwindowAcquireTextureResult (*nvnWindowAcquireTextureFunction)(NVNwindow*, NVNsync*,
+                                                                         int*);
+typedef NVNnativeWindow (*nvnWindowGetNativeWindowFunction)(const NVNwindow*);
+typedef int (*nvnWindowGetPresentIntervalFunction)(const NVNwindow*);
+typedef void (*nvnWindowSetPresentIntervalFunction)(NVNwindow*, int);
+typedef void (*nvnWindowSetCropFunction)(NVNwindow*, int, int, int, int);
+typedef void (*nvnWindowGetCropFunction)(const NVNwindow*, NVNrectangle*);
+typedef bool (*nvnProgramInitializeFunction)(NVNprogram*, NVNdevice*);
+typedef void (*nvnProgramFinalizeFunction)(NVNprogram*);
+typedef void (*nvnProgramSetDebugLabelFunction)(NVNprogram*, const char*);
+typedef bool (*nvnProgramSetShadersFunction)(NVNprogram*, int, const NVNshaderData*);
+typedef void (*nvnMemoryPoolBuilderSetDeviceFunction)(NVNmemoryPoolBuilder*, NVNdevice*);
+typedef void (*nvnMemoryPoolBuilderSetDefaultsFunction)(NVNmemoryPoolBuilder*);
+typedef void (*nvnMemoryPoolBuilderSetStorageFunction)(NVNmemoryPoolBuilder*, void*, size_t);
+typedef void (*nvnMemoryPoolBuilderSetFlagsFunction)(NVNmemoryPoolBuilder*, int);
+typedef void (*nvnMemoryPoolBuilderGetMemoryFunction)(const NVNmemoryPoolBuilder*);
+typedef size_t (*nvnMemoryPoolBuilderGetSizeFunction)(const NVNmemoryPoolBuilder*);
+typedef NVNmemoryPoolFlags (*nvnMemoryPoolBuilderGetFlagsFunction)(const NVNmemoryPoolBuilder*);
+typedef bool (*nvnMemoryPoolInitializeFunction)(NVNmemoryPool*, const NVNmemoryPoolBuilder*);
+typedef void (*nvnMemoryPoolSetDebugLabelFunction)(NVNmemoryPool*, const char*);
+typedef void (*nvnMemoryPoolFinalizeFunction)(NVNmemoryPool*);
+typedef void (*nvnMemoryPoolMapFunction)(const NVNmemoryPool*);
+typedef void (*nvnMemoryPoolFlushMappedRangeFunction)(const NVNmemoryPool*, ptrdiff_t, size_t);
+typedef void (*nvnMemoryPoolInvalidateMappedRangeFunction)(const NVNmemoryPool*, ptrdiff_t, size_t);
+typedef NVNbufferAddress (*nvnMemoryPoolGetBufferAddressFunction)(const NVNmemoryPool*);
+typedef bool (*nvnMemoryPoolMapVirtualFunction)(NVNmemoryPool*, int, const NVNmappingRequest*);
+typedef size_t (*nvnMemoryPoolGetSizeFunction)(const NVNmemoryPool*);
+typedef NVNmemoryPoolFlags (*nvnMemoryPoolGetFlagsFunction)(const NVNmemoryPool*);
+typedef bool (*nvnTexturePoolInitializeFunction)(NVNtexturePool*, const NVNmemoryPool*, ptrdiff_t,
+                                                 int);
+typedef void (*nvnTexturePoolSetDebugLabelFunction)(NVNtexturePool*, const char*);
+typedef void (*nvnTexturePoolFinalizeFunction)(NVNtexturePool*);
+typedef void (*nvnTexturePoolRegisterTextureFunction)(const NVNtexturePool*, int, const NVNtexture*,
+                                                      const NVNtextureView*);
+typedef void (*nvnTexturePoolRegisterImageFunction)(const NVNtexturePool*, int, const NVNtexture*,
+                                                    const NVNtextureView*);
+typedef const NVNmemoryPool* (*nvnTexturePoolGetMemoryPoolFunction)(const NVNtexturePool*);
+typedef ptrdiff_t (*nvnTexturePoolGetMemoryOffsetFunction)(const NVNtexturePool*);
+typedef int (*nvnTexturePoolGetSizeFunction)(const NVNtexturePool*);
+typedef bool (*nvnSamplerPoolInitializeFunction)(NVNsamplerPool*, const NVNmemoryPool*, ptrdiff_t,
+                                                 int);
+typedef void (*nvnSamplerPoolSetDebugLabelFunction)(NVNsamplerPool*, const char*);
+typedef void (*nvnSamplerPoolFinalizeFunction)(NVNsamplerPool*);
+typedef void (*nvnSamplerPoolRegisterSamplerFunction)(const NVNsamplerPool*, int,
+                                                      const NVNsampler*);
+typedef void (*nvnSamplerPoolRegisterSamplerBuilderFunction)(const NVNsamplerPool*, int,
+                                                             const NVNsamplerBuilder*);
+typedef const NVNmemoryPool* (*nvnSamplerPoolGetMemoryPoolFunction)(const NVNsamplerPool*);
+typedef ptrdiff_t (*nvnSamplerPoolGetMemoryOffsetFunction)(const NVNsamplerPool*);
+typedef int (*nvnSamplerPoolGetSizeFunction)(const NVNsamplerPool*);
+typedef void (*nvnBufferBuilderSetDeviceFunction)(NVNbufferBuilder*, NVNdevice*);
+typedef void (*nvnBufferBuilderSetDefaultsFunction)(NVNbufferBuilder*);
+typedef void (*nvnBufferBuilderSetStorageFunction)(NVNbufferBuilder*, NVNmemoryPool*, ptrdiff_t,
+                                                   size_t);
+typedef NVNmemoryPool (*nvnBufferBuilderGetMemoryPoolFunction)(const NVNbufferBuilder*);
+typedef ptrdiff_t (*nvnBufferBuilderGetMemoryOffsetFunction)(const NVNbufferBuilder*);
+typedef size_t (*nvnBufferBuilderGetSizeFunction)(const NVNbufferBuilder*);
+typedef bool (*nvnBufferInitializeFunction)(NVNbuffer*, const NVNbufferBuilder*);
+typedef void (*nvnBufferSetDebugLabelFunction)(NVNbuffer*, const char*);
+typedef void (*nvnBufferFinalizeFunction)(NVNbuffer*);
+typedef void (*nvnBufferMapFunction)(const NVNbuffer*);
+typedef NVNbufferAddress (*nvnBufferGetAddressFunction)(const NVNbuffer*);
+typedef void (*nvnBufferFlushMappedRangeFunction)(const NVNbuffer*, ptrdiff_t, size_t);
+typedef void (*nvnBufferInvalidateMappedRangeFunction)(const NVNbuffer*, ptrdiff_t, size_t);
+typedef NVNmemoryPool (*nvnBufferGetMemoryPoolFunction)(const NVNbuffer*);
+typedef ptrdiff_t (*nvnBufferGetMemoryOffsetFunction)(const NVNbuffer*);
+typedef size_t (*nvnBufferGetSizeFunction)(const NVNbuffer*);
+typedef uint64_t (*nvnBufferGetDebugIDFunction)(const NVNbuffer*);
+typedef void (*nvnTextureBuilderSetDeviceFunction)(NVNtextureBuilder*, NVNdevice*);
+typedef void (*nvnTextureBuilderSetDefaultsFunction)(NVNtextureBuilder*);
+typedef void (*nvnTextureBuilderSetFlagsFunction)(NVNtextureBuilder*, int);
+typedef void (*nvnTextureBuilderSetTargetFunction)(NVNtextureBuilder*, NVNtextureTarget);
+typedef void (*nvnTextureBuilderSetWidthFunction)(NVNtextureBuilder*, int);
+typedef void (*nvnTextureBuilderSetHeightFunction)(NVNtextureBuilder*, int);
+typedef void (*nvnTextureBuilderSetDepthFunction)(NVNtextureBuilder*, int);
+typedef void (*nvnTextureBuilderSetSize1DFunction)(NVNtextureBuilder*, int);
+typedef void (*nvnTextureBuilderSetSize2DFunction)(NVNtextureBuilder*, int, int);
+typedef void (*nvnTextureBuilderSetSize3DFunction)(NVNtextureBuilder*, int, int, int);
+typedef void (*nvnTextureBuilderSetLevelsFunction)(NVNtextureBuilder*, int);
+typedef void (*nvnTextureBuilderSetFormatFunction)(NVNtextureBuilder*, NVNformat);
+typedef void (*nvnTextureBuilderSetSamplesFunction)(NVNtextureBuilder*, int);
+typedef void (*nvnTextureBuilderSetSwizzleFunction)(NVNtextureBuilder*, NVNtextureSwizzle,
+                                                    NVNtextureSwizzle, NVNtextureSwizzle,
+                                                    NVNtextureSwizzle);
+typedef void (*nvnTextureBuilderSetDepthStencilModeFunction)(NVNtextureBuilder*,
+                                                             NVNtextureDepthStencilMode);
+typedef size_t (*nvnTextureBuilderGetStorageSizeFunction)(const NVNtextureBuilder*);
+typedef size_t (*nvnTextureBuilderGetStorageAlignmentFunction)(const NVNtextureBuilder*);
+typedef void (*nvnTextureBuilderSetStorageFunction)(NVNtextureBuilder*, NVNmemoryPool*, ptrdiff_t);
+typedef void (*nvnTextureBuilderSetPackagedTextureDataFunction)(NVNtextureBuilder*, const void*);
+typedef void (*nvnTextureBuilderSetPackagedTextureLayoutFunction)(NVNtextureBuilder*,
+                                                                  const NVNpackagedTextureLayout*);
+typedef void (*nvnTextureBuilderSetStrideFunction)(NVNtextureBuilder*, ptrdiff_t);
+typedef void (*nvnTextureBuilderSetGLTextureNameFunction)(NVNtextureBuilder*, uint32_t);
+typedef NVNstorageClass (*nvnTextureBuilderGetStorageClassFunction)(const NVNtextureBuilder*);
+typedef NVNtextureFlags (*nvnTextureBuilderGetFlagsFunction)(const NVNtextureBuilder*);
+typedef NVNtextureTarget (*nvnTextureBuilderGetTargetFunction)(const NVNtextureBuilder*);
+typedef int (*nvnTextureBuilderGetWidthFunction)(const NVNtextureBuilder*);
+typedef int (*nvnTextureBuilderGetHeightFunction)(const NVNtextureBuilder*);
+typedef int (*nvnTextureBuilderGetDepthFunction)(const NVNtextureBuilder*);
+typedef int (*nvnTextureBuilderGetLevelsFunction)(const NVNtextureBuilder*);
+typedef NVNformat (*nvnTextureBuilderGetFormatFunction)(const NVNtextureBuilder*);
+typedef int (*nvnTextureBuilderGetSamplesFunction)(const NVNtextureBuilder*);
+typedef void (*nvnTextureBuilderGetSwizzleFunction)(const NVNtextureBuilder*, NVNtextureSwizzle*,
+                                                    NVNtextureSwizzle*, NVNtextureSwizzle*,
+                                                    NVNtextureSwizzle*);
+typedef NVNtextureDepthStencilMode (*nvnTextureBuilderGetDepthStencilModeFunction)(
+    const NVNtextureBuilder*);
+typedef const void* (*nvnTextureBuilderGetPackagedTextureDataFunction)(const NVNtextureBuilder*);
+typedef ptrdiff_t (*nvnTextureBuilderGetStrideFunction)(const NVNtextureBuilder*);
+typedef void (*nvnTextureBuilderGetSparseTileLayoutFunction)(const NVNtextureBuilder*,
+                                                             NVNtextureSparseTileLayout*);
+typedef uint32_t (*nvnTextureBuilderGetGLTextureNameFunction)(const NVNtextureBuilder*);
+typedef size_t (*nvnTextureBuilderGetZCullStorageSizeFunction)(const NVNtextureBuilder*);
+typedef NVNmemoryPool (*nvnTextureBuilderGetMemoryPoolFunction)(const NVNtextureBuilder*);
+typedef ptrdiff_t (*nvnTextureBuilderGetMemoryOffsetFunction)(const NVNtextureBuilder*);
+typedef void (*nvnTextureViewSetDefaultsFunction)(NVNtextureView*);
+typedef void (*nvnTextureViewSetLevelsFunction)(NVNtextureView*, int, int);
+typedef void (*nvnTextureViewSetLayersFunction)(NVNtextureView*, int, int);
+typedef void (*nvnTextureViewSetFormatFunction)(NVNtextureView*, NVNformat);
+typedef void (*nvnTextureViewSetSwizzleFunction)(NVNtextureView*, NVNtextureSwizzle,
+                                                 NVNtextureSwizzle, NVNtextureSwizzle,
+                                                 NVNtextureSwizzle);
+typedef void (*nvnTextureViewSetDepthStencilModeFunction)(NVNtextureView*,
+                                                          NVNtextureDepthStencilMode);
+typedef void (*nvnTextureViewSetTargetFunction)(NVNtextureView*, NVNtextureTarget);
+typedef bool (*nvnTextureViewGetLevelsFunction)(const NVNtextureView*, int*, int*);
+typedef bool (*nvnTextureViewGetLayersFunction)(const NVNtextureView*, int*, int*);
+typedef bool (*nvnTextureViewGetFormatFunction)(const NVNtextureView*, NVNformat*);
+typedef bool (*nvnTextureViewGetSwizzleFunction)(const NVNtextureView*, NVNtextureSwizzle*,
+                                                 NVNtextureSwizzle*, NVNtextureSwizzle*,
+                                                 NVNtextureSwizzle*);
+typedef bool (*nvnTextureViewGetDepthStencilModeFunction)(const NVNtextureView*,
+                                                          NVNtextureDepthStencilMode*);
+typedef bool (*nvnTextureViewGetTargetFunction)(const NVNtextureView*, NVNtextureTarget*);
+typedef bool (*nvnTextureViewCompareFunction)(const NVNtextureView*, const NVNtextureView*);
+typedef bool (*nvnTextureInitializeFunction)(NVNtexture*, const NVNtextureBuilder*);
+typedef size_t (*nvnTextureGetZCullStorageSizeFunction)(const NVNtexture*);
+typedef void (*nvnTextureFinalizeFunction)(NVNtexture*);
+typedef void (*nvnTextureSetDebugLabelFunction)(NVNtexture*, const char*);
+typedef NVNstorageClass (*nvnTextureGetStorageClassFunction)(const NVNtexture*);
+typedef ptrdiff_t (*nvnTextureGetViewOffsetFunction)(const NVNtexture*, const NVNtextureView*);
+typedef NVNtextureFlags (*nvnTextureGetFlagsFunction)(const NVNtexture*);
+typedef NVNtextureTarget (*nvnTextureGetTargetFunction)(const NVNtexture*);
+typedef int (*nvnTextureGetWidthFunction)(const NVNtexture*);
+typedef int (*nvnTextureGetHeightFunction)(const NVNtexture*);
+typedef int (*nvnTextureGetDepthFunction)(const NVNtexture*);
+typedef int (*nvnTextureGetLevelsFunction)(const NVNtexture*);
+typedef NVNformat (*nvnTextureGetFormatFunction)(const NVNtexture*);
+typedef int (*nvnTextureGetSamplesFunction)(const NVNtexture*);
+typedef void (*nvnTextureGetSwizzleFunction)(const NVNtexture*, NVNtextureSwizzle*,
+                                             NVNtextureSwizzle*, NVNtextureSwizzle*,
+                                             NVNtextureSwizzle*);
+typedef NVNtextureDepthStencilMode (*nvnTextureGetDepthStencilModeFunction)(const NVNtexture*);
+typedef ptrdiff_t (*nvnTextureGetStrideFunction)(const NVNtexture*);
+typedef NVNtextureAddress (*nvnTextureGetTextureAddressFunction)(const NVNtexture*);
+typedef void (*nvnTextureGetSparseTileLayoutFunction)(const NVNtexture*,
+                                                      NVNtextureSparseTileLayout*);
+typedef void (*nvnTextureWriteTexelsFunction)(const NVNtexture*, const NVNtextureView*,
+                                              const NVNcopyRegion*, const void*);
+typedef void (*nvnTextureWriteTexelsStridedFunction)(const NVNtexture*, const NVNtextureView*,
+                                                     const NVNcopyRegion*, const void*, ptrdiff_t,
+                                                     ptrdiff_t);
+typedef void (*nvnTextureReadTexelsFunction)(const NVNtexture*, const NVNtextureView*,
+                                             const NVNcopyRegion*, void*);
+typedef void (*nvnTextureReadTexelsStridedFunction)(const NVNtexture*, const NVNtextureView*,
+                                                    const NVNcopyRegion*, void*, ptrdiff_t,
+                                                    ptrdiff_t);
+typedef void (*nvnTextureFlushTexelsFunction)(const NVNtexture*, const NVNtextureView*,
+                                              const NVNcopyRegion*);
+typedef void (*nvnTextureInvalidateTexelsFunction)(const NVNtexture*, const NVNtextureView*,
+                                                   const NVNcopyRegion*);
+typedef NVNmemoryPool (*nvnTextureGetMemoryPoolFunction)(const NVNtexture*);
+typedef ptrdiff_t (*nvnTextureGetMemoryOffsetFunction)(const NVNtexture*);
+typedef int (*nvnTextureGetStorageSizeFunction)(const NVNtexture*);
+typedef bool (*nvnTextureCompareFunction)(const NVNtexture*, const NVNtexture*);
+typedef uint64_t (*nvnTextureGetDebugIDFunction)(const NVNtexture*);
+typedef void (*nvnSamplerBuilderSetDeviceFunction)(NVNsamplerBuilder*, NVNdevice*);
+typedef void (*nvnSamplerBuilderSetDefaultsFunction)(NVNsamplerBuilder*);
+typedef void (*nvnSamplerBuilderSetMinMagFilterFunction)(NVNsamplerBuilder*, NVNminFilter,
+                                                         NVNmagFilter);
+typedef void (*nvnSamplerBuilderSetWrapModeFunction)(NVNsamplerBuilder*, NVNwrapMode, NVNwrapMode,
+                                                     NVNwrapMode);
+typedef void (*nvnSamplerBuilderSetLodClampFunction)(NVNsamplerBuilder*, float, float);
+typedef void (*nvnSamplerBuilderSetLodBiasFunction)(NVNsamplerBuilder*, float);
+typedef void (*nvnSamplerBuilderSetCompareFunction)(NVNsamplerBuilder*, NVNcompareMode,
+                                                    NVNcompareFunc);
+typedef void (*nvnSamplerBuilderSetBorderColorFunction)(NVNsamplerBuilder*, const float*);
+typedef void (*nvnSamplerBuilderSetBorderColoriFunction)(NVNsamplerBuilder*, const int*);
+typedef void (*nvnSamplerBuilderSetBorderColoruiFunction)(NVNsamplerBuilder*, const uint32_t*);
+typedef void (*nvnSamplerBuilderSetMaxAnisotropyFunction)(NVNsamplerBuilder*, float);
+typedef void (*nvnSamplerBuilderSetReductionFilterFunction)(NVNsamplerBuilder*,
+                                                            NVNsamplerReduction);
+typedef void (*nvnSamplerBuilderSetLodSnapFunction)(NVNsamplerBuilder*, float);
+typedef void (*nvnSamplerBuilderGetMinMagFilterFunction)(const NVNsamplerBuilder*, NVNminFilter*,
+                                                         NVNmagFilter*);
+typedef void (*nvnSamplerBuilderGetWrapModeFunction)(const NVNsamplerBuilder*, NVNwrapMode*,
+                                                     NVNwrapMode*, NVNwrapMode*);
+typedef void (*nvnSamplerBuilderGetLodClampFunction)(const NVNsamplerBuilder*, float*, float*);
+typedef float (*nvnSamplerBuilderGetLodBiasFunction)(const NVNsamplerBuilder*);
+typedef void (*nvnSamplerBuilderGetCompareFunction)(const NVNsamplerBuilder*, NVNcompareMode*,
+                                                    NVNcompareFunc*);
+typedef void (*nvnSamplerBuilderGetBorderColorFunction)(const NVNsamplerBuilder*, float*);
+typedef void (*nvnSamplerBuilderGetBorderColoriFunction)(const NVNsamplerBuilder*, int*);
+typedef void (*nvnSamplerBuilderGetBorderColoruiFunction)(const NVNsamplerBuilder*, uint32_t*);
+typedef float (*nvnSamplerBuilderGetMaxAnisotropyFunction)(const NVNsamplerBuilder*);
+typedef NVNsamplerReduction (*nvnSamplerBuilderGetReductionFilterFunction)(
+    const NVNsamplerBuilder*);
+typedef float (*nvnSamplerBuilderGetLodSnapFunction)(const NVNsamplerBuilder*);
+typedef bool (*nvnSamplerInitializeFunction)(NVNsampler*, const NVNsamplerBuilder*);
+typedef void (*nvnSamplerFinalizeFunction)(NVNsampler*);
+typedef void (*nvnSamplerSetDebugLabelFunction)(NVNsampler*, const char*);
+typedef void (*nvnSamplerGetMinMagFilterFunction)(const NVNsampler*, NVNminFilter*, NVNmagFilter*);
+typedef void (*nvnSamplerGetWrapModeFunction)(const NVNsampler*, NVNwrapMode*, NVNwrapMode*,
+                                              NVNwrapMode*);
+typedef void (*nvnSamplerGetLodClampFunction)(const NVNsampler*, float*, float*);
+typedef float (*nvnSamplerGetLodBiasFunction)(const NVNsampler*);
+typedef void (*nvnSamplerGetCompareFunction)(const NVNsampler*, NVNcompareMode*, NVNcompareFunc*);
+typedef void (*nvnSamplerGetBorderColorFunction)(const NVNsampler*, float*);
+typedef void (*nvnSamplerGetBorderColoriFunction)(const NVNsampler*, int*);
+typedef void (*nvnSamplerGetBorderColoruiFunction)(const NVNsampler*, uint32_t*);
+typedef float (*nvnSamplerGetMaxAnisotropyFunction)(const NVNsampler*);
+typedef NVNsamplerReduction (*nvnSamplerGetReductionFilterFunction)(const NVNsampler*);
+typedef bool (*nvnSamplerCompareFunction)(const NVNsampler*, const NVNsampler*);
+typedef uint64_t (*nvnSamplerGetDebugIDFunction)(const NVNsampler*);
+typedef void (*nvnBlendStateSetDefaultsFunction)(NVNblendState*);
+typedef void (*nvnBlendStateSetBlendTargetFunction)(NVNblendState*, int);
+typedef void (*nvnBlendStateSetBlendFuncFunction)(NVNblendState*, NVNblendFunc, NVNblendFunc,
+                                                  NVNblendFunc, NVNblendFunc);
+typedef void (*nvnBlendStateSetBlendEquationFunction)(NVNblendState*, NVNblendEquation,
+                                                      NVNblendEquation);
+typedef void (*nvnBlendStateSetAdvancedModeFunction)(NVNblendState*, NVNblendAdvancedMode);
+typedef void (*nvnBlendStateSetAdvancedOverlapFunction)(NVNblendState*, NVNblendAdvancedOverlap);
+typedef void (*nvnBlendStateSetAdvancedPremultipliedSrcFunction)(NVNblendState*, bool);
+typedef void (*nvnBlendStateSetAdvancedNormalizedDstFunction)(NVNblendState*, bool);
+typedef int (*nvnBlendStateGetBlendTargetFunction)(const NVNblendState*);
+typedef void (*nvnBlendStateGetBlendFuncFunction)(const NVNblendState*, NVNblendFunc*,
+                                                  NVNblendFunc*, NVNblendFunc*, NVNblendFunc*);
+typedef void (*nvnBlendStateGetBlendEquationFunction)(const NVNblendState*, NVNblendEquation*,
+                                                      NVNblendEquation*);
+typedef NVNblendAdvancedMode (*nvnBlendStateGetAdvancedModeFunction)(const NVNblendState*);
+typedef NVNblendAdvancedOverlap (*nvnBlendStateGetAdvancedOverlapFunction)(const NVNblendState*);
+typedef bool (*nvnBlendStateGetAdvancedPremultipliedSrcFunction)(const NVNblendState*);
+typedef bool (*nvnBlendStateGetAdvancedNormalizedDstFunction)(const NVNblendState*);
+typedef void (*nvnColorStateSetDefaultsFunction)(NVNcolorState*);
+typedef void (*nvnColorStateSetBlendEnableFunction)(NVNcolorState*, int, bool);
+typedef void (*nvnColorStateSetLogicOpFunction)(NVNcolorState*, NVNlogicOp);
+typedef void (*nvnColorStateSetAlphaTestFunction)(NVNcolorState*, NVNalphaFunc);
+typedef bool (*nvnColorStateGetBlendEnableFunction)(const NVNcolorState*, int);
+typedef NVNlogicOp (*nvnColorStateGetLogicOpFunction)(const NVNcolorState*);
+typedef NVNalphaFunc (*nvnColorStateGetAlphaTestFunction)(const NVNcolorState*);
+typedef void (*nvnChannelMaskStateSetDefaultsFunction)(NVNchannelMaskState*);
+typedef void (*nvnChannelMaskStateSetChannelMaskFunction)(NVNchannelMaskState*, int, bool, bool,
+                                                          bool, bool);
+typedef void (*nvnChannelMaskStateGetChannelMaskFunction)(const NVNchannelMaskState*, int, bool*,
+                                                          bool*, bool*, bool*);
+typedef void (*nvnMultisampleStateSetDefaultsFunction)(NVNmultisampleState*);
+typedef void (*nvnMultisampleStateSetMultisampleEnableFunction)(NVNmultisampleState*, bool);
+typedef void (*nvnMultisampleStateSetSamplesFunction)(NVNmultisampleState*, int);
+typedef void (*nvnMultisampleStateSetAlphaToCoverageEnableFunction)(NVNmultisampleState*, bool);
+typedef void (*nvnMultisampleStateSetAlphaToCoverageDitherFunction)(NVNmultisampleState*, bool);
+typedef bool (*nvnMultisampleStateGetMultisampleEnableFunction)(const NVNmultisampleState*);
+typedef int (*nvnMultisampleStateGetSamplesFunction)(const NVNmultisampleState*);
+typedef bool (*nvnMultisampleStateGetAlphaToCoverageEnableFunction)(const NVNmultisampleState*);
+typedef bool (*nvnMultisampleStateGetAlphaToCoverageDitherFunction)(const NVNmultisampleState*);
+typedef void (*nvnMultisampleStateSetRasterSamplesFunction)(NVNmultisampleState*, int);
+typedef int (*nvnMultisampleStateGetRasterSamplesFunction)(NVNmultisampleState*);
+typedef void (*nvnMultisampleStateSetCoverageModulationModeFunction)(NVNmultisampleState*,
+                                                                     NVNcoverageModulationMode);
+typedef NVNcoverageModulationMode (*nvnMultisampleStateGetCoverageModulationModeFunction)(
+    const NVNmultisampleState*);
+typedef void (*nvnMultisampleStateSetCoverageToColorEnableFunction)(NVNmultisampleState*, bool);
+typedef bool (*nvnMultisampleStateGetCoverageToColorEnableFunction)(const NVNmultisampleState*);
+typedef void (*nvnMultisampleStateSetCoverageToColorOutputFunction)(NVNmultisampleState*, int);
+typedef int (*nvnMultisampleStateGetCoverageToColorOutputFunction)(const NVNmultisampleState*);
+typedef void (*nvnMultisampleStateSetSampleLocationsEnableFunction)(NVNmultisampleState*, bool);
+typedef bool (*nvnMultisampleStateGetSampleLocationsEnableFunction)(const NVNmultisampleState*);
+typedef void (*nvnMultisampleStateGetSampleLocationsGridFunction)(NVNmultisampleState*, int*, int*);
+typedef void (*nvnMultisampleStateSetSampleLocationsGridEnableFunction)(NVNmultisampleState*, bool);
+typedef bool (*nvnMultisampleStateGetSampleLocationsGridEnableFunction)(const NVNmultisampleState*);
+typedef void (*nvnMultisampleStateSetSampleLocationsFunction)(NVNmultisampleState*, bool);
+typedef void (*nvnPolygonStateSetDefaultsFunction)(NVNpolygonState*);
+typedef void (*nvnPolygonStateSetCullFaceFunction)(NVNpolygonState*, NVNface);
+typedef void (*nvnPolygonStateSetFrontFaceFunction)(NVNpolygonState*, NVNfrontFace);
+typedef void (*nvnPolygonStateSetPolygonModeFunction)(NVNpolygonState*, NVNpolygonMode);
+typedef void (*nvnPolygonStateSetPolygonOffsetEnablesFunction)(NVNpolygonState*, int);
+typedef NVNface (*nvnPolygonStateGetCullFaceFunction)(const NVNpolygonState*);
+typedef NVNfrontFace (*nvnPolygonStateGetFrontFaceFunction)(const NVNpolygonState*);
+typedef NVNpolygonMode (*nvnPolygonStateGetPolygonModeFunction)(const NVNpolygonState*);
+typedef NVNpolygonOffsetEnable (*nvnPolygonStateGetPolygonOffsetEnablesFunction)(
+    const NVNpolygonState*);
+typedef void (*nvnDepthStencilStateSetDefaultsFunction)(NVNdepthStencilState*);
+typedef void (*nvnDepthStencilStateSetDepthTestEnableFunction)(NVNdepthStencilState*, bool);
+typedef void (*nvnDepthStencilStateSetDepthWriteEnableFunction)(NVNdepthStencilState*, bool);
+typedef void (*nvnDepthStencilStateSetDepthFuncFunction)(NVNdepthStencilState*, NVNdepthFunc);
+typedef void (*nvnDepthStencilStateSetStencilTestEnableFunction)(NVNdepthStencilState*, bool);
+typedef void (*nvnDepthStencilStateSetStencilFuncFunction)(NVNdepthStencilState*, NVNface,
+                                                           NVNstencilFunc);
+typedef void (*nvnDepthStencilStateSetStencilOpFunction)(NVNdepthStencilState*, NVNface,
+                                                         NVNstencilOp, NVNstencilOp, NVNstencilOp);
+typedef bool (*nvnDepthStencilStateGetDepthTestEnableFunction)(const NVNdepthStencilState*);
+typedef bool (*nvnDepthStencilStateGetDepthWriteEnableFunction)(const NVNdepthStencilState*);
+typedef NVNdepthFunc (*nvnDepthStencilStateGetDepthFuncFunction)(const NVNdepthStencilState*);
+typedef bool (*nvnDepthStencilStateGetStencilTestEnableFunction)(const NVNdepthStencilState*);
+typedef NVNstencilFunc (*nvnDepthStencilStateGetStencilFuncFunction)(const NVNdepthStencilState*,
+                                                                     NVNface);
+typedef void (*nvnDepthStencilStateGetStencilOpFunction)(const NVNdepthStencilState*, NVNface,
+                                                         NVNstencilOp*, NVNstencilOp*,
+                                                         NVNstencilOp*);
+typedef void (*nvnVertexAttribStateSetDefaultsFunction)(NVNvertexAttribState*);
+typedef void (*nvnVertexAttribStateSetFormatFunction)(NVNvertexAttribState*, NVNformat, ptrdiff_t);
+typedef void (*nvnVertexAttribStateSetStreamIndexFunction)(NVNvertexAttribState*, int);
+typedef void (*nvnVertexAttribStateGetFormatFunction)(const NVNvertexAttribState*, NVNformat*,
+                                                      ptrdiff_t*);
+typedef int (*nvnVertexAttribStateGetStreamIndexFunction)(const NVNvertexAttribState*);
+typedef void (*nvnVertexStreamStateSetDefaultsFunction)(NVNvertexStreamState*);
+typedef void (*nvnVertexStreamStateSetStrideFunction)(NVNvertexStreamState*, ptrdiff_t);
+typedef void (*nvnVertexStreamStateSetDivisorFunction)(NVNvertexStreamState*, int);
+typedef ptrdiff_t (*nvnVertexStreamStateGetStrideFunction)(const NVNvertexStreamState*);
+typedef int (*nvnVertexStreamStateGetDivisorFunction)(const NVNvertexStreamState*);
+typedef bool (*nvnCommandBufferInitializeFunction)(NVNcommandBuffer*, NVNdevice*);
+typedef void (*nvnCommandBufferFinalizeFunction)(NVNcommandBuffer*);
+typedef void (*nvnCommandBufferSetDebugLabelFunction)(NVNcommandBuffer*, const char*);
+typedef void (*nvnCommandBufferSetMemoryCallbackFunction)(NVNcommandBuffer*,
+                                                          NVNcommandBufferMemoryCallback);
+typedef void (*nvnCommandBufferSetMemoryCallbackDataFunction)(NVNcommandBuffer*, void*);
+typedef void (*nvnCommandBufferAddCommandMemoryFunction)(NVNcommandBuffer*, const NVNmemoryPool*,
+                                                         ptrdiff_t, size_t);
+typedef void (*nvnCommandBufferAddControlMemoryFunction)(NVNcommandBuffer*, void*, size_t);
+typedef size_t (*nvnCommandBufferGetCommandMemorySizeFunction)(const NVNcommandBuffer*);
+typedef size_t (*nvnCommandBufferGetCommandMemoryUsedFunction)(const NVNcommandBuffer*);
+typedef size_t (*nvnCommandBufferGetCommandMemoryFreeFunction)(const NVNcommandBuffer*);
+typedef size_t (*nvnCommandBufferGetControlMemorySizeFunction)(const NVNcommandBuffer*);
+typedef size_t (*nvnCommandBufferGetControlMemoryUsedFunction)(const NVNcommandBuffer*);
+typedef size_t (*nvnCommandBufferGetControlMemoryFreeFunction)(const NVNcommandBuffer*);
+typedef void (*nvnCommandBufferBeginRecordingFunction)(NVNcommandBuffer*);
+typedef NVNcommandHandle (*nvnCommandBufferEndRecordingFunction)(NVNcommandBuffer*);
+typedef void (*nvnCommandBufferCallCommandsFunction)(NVNcommandBuffer*, int,
+                                                     const NVNcommandHandle*);
+typedef void (*nvnCommandBufferCopyCommandsFunction)(NVNcommandBuffer*, int,
+                                                     const NVNcommandHandle*);
+typedef void (*nvnCommandBufferBindBlendStateFunction)(NVNcommandBuffer*, const NVNblendState*);
+typedef void (*nvnCommandBufferBindChannelMaskStateFunction)(NVNcommandBuffer*,
+                                                             const NVNchannelMaskState*);
+typedef void (*nvnCommandBufferBindColorStateFunction)(NVNcommandBuffer*, const NVNcolorState*);
+typedef void (*nvnCommandBufferBindMultisampleStateFunction)(NVNcommandBuffer*,
+                                                             const NVNmultisampleState*);
+typedef void (*nvnCommandBufferBindPolygonStateFunction)(NVNcommandBuffer*, const NVNpolygonState*);
+typedef void (*nvnCommandBufferBindDepthStencilStateFunction)(NVNcommandBuffer*,
+                                                              const NVNdepthStencilState*);
+typedef void (*nvnCommandBufferBindVertexAttribStateFunction)(NVNcommandBuffer*, int,
+                                                              const NVNvertexAttribState*);
+typedef void (*nvnCommandBufferBindVertexStreamStateFunction)(NVNcommandBuffer*, int,
+                                                              const NVNvertexStreamState*);
+typedef void (*nvnCommandBufferBindProgramFunction)(NVNcommandBuffer*, const NVNprogram*, int);
+typedef void (*nvnCommandBufferBindVertexBufferFunction)(NVNcommandBuffer*, int, NVNbufferAddress,
+                                                         size_t);
+typedef void (*nvnCommandBufferBindVertexBuffersFunction)(NVNcommandBuffer*, int, int,
+                                                          const NVNbufferRange*);
+typedef void (*nvnCommandBufferBindUniformBufferFunction)(NVNcommandBuffer*, NVNshaderStage, int,
+                                                          NVNbufferAddress, size_t);
+typedef void (*nvnCommandBufferBindUniformBuffersFunction)(NVNcommandBuffer*, NVNshaderStage, int,
+                                                           int, const NVNbufferRange*);
+typedef void (*nvnCommandBufferBindTransformFeedbackBufferFunction)(NVNcommandBuffer*, int,
+                                                                    NVNbufferAddress, size_t);
+typedef void (*nvnCommandBufferBindTransformFeedbackBuffersFunction)(NVNcommandBuffer*, int, int,
+                                                                     const NVNbufferRange*);
+typedef void (*nvnCommandBufferBindStorageBufferFunction)(NVNcommandBuffer*, NVNshaderStage, int,
+                                                          NVNbufferAddress, size_t);
+typedef void (*nvnCommandBufferBindStorageBuffersFunction)(NVNcommandBuffer*, NVNshaderStage, int,
+                                                           int, const NVNbufferRange*);
+typedef void (*nvnCommandBufferBindTextureFunction)(NVNcommandBuffer*, NVNshaderStage, int,
+                                                    NVNtextureHandle);
+typedef void (*nvnCommandBufferBindTexturesFunction)(NVNcommandBuffer*, NVNshaderStage, int, int,
+                                                     const NVNtextureHandle*);
+typedef void (*nvnCommandBufferBindImageFunction)(NVNcommandBuffer*, NVNshaderStage, int,
+                                                  NVNimageHandle);
+typedef void (*nvnCommandBufferBindImagesFunction)(NVNcommandBuffer*, NVNshaderStage, int, int,
+                                                   const NVNimageHandle*);
+typedef void (*nvnCommandBufferSetPatchSizeFunction)(NVNcommandBuffer*, int);
+typedef void (*nvnCommandBufferSetInnerTessellationLevelsFunction)(NVNcommandBuffer*, const float*);
+typedef void (*nvnCommandBufferSetOuterTessellationLevelsFunction)(NVNcommandBuffer*, const float*);
+typedef void (*nvnCommandBufferSetPrimitiveRestartFunction)(NVNcommandBuffer*, bool, int);
+typedef void (*nvnCommandBufferBeginTransformFeedbackFunction)(NVNcommandBuffer*, NVNbufferAddress);
+typedef void (*nvnCommandBufferEndTransformFeedbackFunction)(NVNcommandBuffer*, NVNbufferAddress);
+typedef void (*nvnCommandBufferPauseTransformFeedbackFunction)(NVNcommandBuffer*, NVNbufferAddress);
+typedef void (*nvnCommandBufferResumeTransformFeedbackFunction)(NVNcommandBuffer*,
+                                                                NVNbufferAddress);
+typedef void (*nvnCommandBufferDrawTransformFeedbackFunction)(NVNcommandBuffer*, NVNdrawPrimitive,
+                                                              NVNbufferAddress);
+typedef void (*nvnCommandBufferDrawArraysFunction)(NVNcommandBuffer*, NVNdrawPrimitive, int, int);
+typedef void (*nvnCommandBufferDrawElementsFunction)(NVNcommandBuffer*, NVNdrawPrimitive,
+                                                     NVNindexType, int, NVNbufferAddress);
+typedef void (*nvnCommandBufferDrawElementsBaseVertexFunction)(NVNcommandBuffer*, NVNdrawPrimitive,
+                                                               NVNindexType, int, NVNbufferAddress,
+                                                               int);
+typedef void (*nvnCommandBufferDrawArraysInstancedFunction)(NVNcommandBuffer*, NVNdrawPrimitive,
+                                                            int, int, int, int);
+typedef void (*nvnCommandBufferDrawElementsInstancedFunction)(NVNcommandBuffer*, NVNdrawPrimitive,
+                                                              NVNindexType, int, NVNbufferAddress,
+                                                              int, int, int);
+typedef void (*nvnCommandBufferDrawArraysIndirectFunction)(NVNcommandBuffer*, NVNdrawPrimitive,
+                                                           NVNbufferAddress);
+typedef void (*nvnCommandBufferDrawElementsIndirectFunction)(NVNcommandBuffer*, NVNdrawPrimitive,
+                                                             NVNindexType, NVNbufferAddress,
+                                                             NVNbufferAddress);
+typedef void (*nvnCommandBufferMultiDrawArraysIndirectCountFunction)(
+    NVNcommandBuffer*, NVNdrawPrimitive, NVNbufferAddress, NVNbufferAddress, int, ptrdiff_t);
+typedef void (*nvnCommandBufferMultiDrawElementsIndirectCountFunction)(
+    NVNcommandBuffer*, NVNdrawPrimitive, NVNindexType, NVNbufferAddress, NVNbufferAddress,
+    NVNbufferAddress, int, ptrdiff_t);
+typedef void (*nvnCommandBufferClearColorFunction)(NVNcommandBuffer*, int, const float*, int);
+typedef void (*nvnCommandBufferClearColoriFunction)(NVNcommandBuffer*, int, const int*, int);
+typedef void (*nvnCommandBufferClearColoruiFunction)(NVNcommandBuffer*, int, const uint32_t*, int);
+typedef void (*nvnCommandBufferClearDepthStencilFunction)(NVNcommandBuffer*, float, bool, int, int);
+typedef void (*nvnCommandBufferDispatchComputeFunction)(NVNcommandBuffer*, int, int, int);
+typedef void (*nvnCommandBufferDispatchComputeIndirectFunction)(NVNcommandBuffer*,
+                                                                NVNbufferAddress);
+typedef void (*nvnCommandBufferSetViewportFunction)(NVNcommandBuffer*, int, int, int, int);
+typedef void (*nvnCommandBufferSetViewportsFunction)(NVNcommandBuffer*, int, int, const float*);
+typedef void (*nvnCommandBufferSetViewportSwizzlesFunction)(NVNcommandBuffer*, int, int,
+                                                            const NVNviewportSwizzle*);
+typedef void (*nvnCommandBufferSetScissorFunction)(NVNcommandBuffer*, int, int, int, int);
+typedef void (*nvnCommandBufferSetScissorsFunction)(NVNcommandBuffer*, int, int, const int*);
+typedef void (*nvnCommandBufferSetDepthRangeFunction)(NVNcommandBuffer*, float, float);
+typedef void (*nvnCommandBufferSetDepthBoundsFunction)(NVNcommandBuffer*, bool, float, float);
+typedef void (*nvnCommandBufferSetDepthRangesFunction)(NVNcommandBuffer*, int, int, const float*);
+typedef void (*nvnCommandBufferSetTiledCacheActionFunction)(NVNcommandBuffer*, NVNtiledCacheAction);
+typedef void (*nvnCommandBufferSetTiledCacheTileSizeFunction)(NVNcommandBuffer*, int, int);
+typedef void (*nvnCommandBufferBindSeparateTextureFunction)(NVNcommandBuffer*, NVNshaderStage, int,
+                                                            NVNseparateTextureHandle);
+typedef void (*nvnCommandBufferBindSeparateSamplerFunction)(NVNcommandBuffer*, NVNshaderStage, int,
+                                                            NVNseparateSamplerHandle);
+typedef void (*nvnCommandBufferBindSeparateTexturesFunction)(NVNcommandBuffer*, NVNshaderStage, int,
+                                                             int, const NVNseparateTextureHandle*);
+typedef void (*nvnCommandBufferBindSeparateSamplersFunction)(NVNcommandBuffer*, NVNshaderStage, int,
+                                                             int, const NVNseparateSamplerHandle*);
+typedef void (*nvnCommandBufferSetStencilValueMaskFunction)(NVNcommandBuffer*, NVNface, int);
+typedef void (*nvnCommandBufferSetStencilMaskFunction)(NVNcommandBuffer*, NVNface, int);
+typedef void (*nvnCommandBufferSetStencilRefFunction)(NVNcommandBuffer*, NVNface, int);
+typedef void (*nvnCommandBufferSetBlendColorFunction)(NVNcommandBuffer*, const float*);
+typedef void (*nvnCommandBufferSetPointSizeFunction)(NVNcommandBuffer*, float);
+typedef void (*nvnCommandBufferSetLineWidthFunction)(NVNcommandBuffer*, float);
+typedef void (*nvnCommandBufferSetPolygonOffsetClampFunction)(NVNcommandBuffer*, float, float,
+                                                              float);
+typedef void (*nvnCommandBufferSetAlphaRefFunction)(NVNcommandBuffer*, float);
+typedef void (*nvnCommandBufferSetSampleMaskFunction)(NVNcommandBuffer*, int);
+typedef void (*nvnCommandBufferSetRasterizerDiscardFunction)(NVNcommandBuffer*, bool);
+typedef void (*nvnCommandBufferSetDepthClampFunction)(NVNcommandBuffer*, bool);
+typedef void (*nvnCommandBufferSetConservativeRasterEnableFunction)(NVNcommandBuffer*, bool);
+typedef void (*nvnCommandBufferSetConservativeRasterDilateFunction)(NVNcommandBuffer*, float);
+typedef void (*nvnCommandBufferSetSubpixelPrecisionBiasFunction)(NVNcommandBuffer*, int, int);
+typedef void (*nvnCommandBufferCopyBufferToTextureFunction)(NVNcommandBuffer*, NVNbufferAddress,
+                                                            const NVNtexture*,
+                                                            const NVNtextureView*,
+                                                            const NVNcopyRegion*, int);
+typedef void (*nvnCommandBufferCopyTextureToBufferFunction)(NVNcommandBuffer*, const NVNtexture*,
+                                                            const NVNtextureView*,
+                                                            const NVNcopyRegion*, NVNbufferAddress,
+                                                            int);
+typedef void (*nvnCommandBufferCopyTextureToTextureFunction)(
+    NVNcommandBuffer*, const NVNtexture*, const NVNtextureView*, const NVNcopyRegion*,
+    const NVNtexture*, const NVNtextureView*, const NVNcopyRegion*, int);
+typedef void (*nvnCommandBufferCopyBufferToBufferFunction)(NVNcommandBuffer*, NVNbufferAddress,
+                                                           NVNbufferAddress, size_t, int);
+typedef void (*nvnCommandBufferClearBufferFunction)(NVNcommandBuffer*, NVNbufferAddress, size_t,
+                                                    uint32_t);
+typedef void (*nvnCommandBufferClearTextureFunction)(NVNcommandBuffer*, const NVNtexture*,
+                                                     const NVNtextureView*, const NVNcopyRegion*,
+                                                     const float*, int);
+typedef void (*nvnCommandBufferClearTextureiFunction)(NVNcommandBuffer*, const NVNtexture*,
+                                                      const NVNtextureView*, const NVNcopyRegion*,
+                                                      const int*, int);
+typedef void (*nvnCommandBufferClearTextureuiFunction)(NVNcommandBuffer*, const NVNtexture*,
+                                                       const NVNtextureView*, const NVNcopyRegion*,
+                                                       const uint32_t*, int);
+typedef void (*nvnCommandBufferUpdateUniformBufferFunction)(NVNcommandBuffer*, NVNbufferAddress,
+                                                            size_t, ptrdiff_t, size_t, const void*);
+typedef void (*nvnCommandBufferReportCounterFunction)(NVNcommandBuffer*, NVNcounterType,
+                                                      NVNbufferAddress);
+typedef void (*nvnCommandBufferResetCounterFunction)(NVNcommandBuffer*, NVNcounterType);
+typedef void (*nvnCommandBufferReportValueFunction)(NVNcommandBuffer*, uint32_t, NVNbufferAddress);
+typedef void (*nvnCommandBufferSetRenderEnableFunction)(NVNcommandBuffer*, bool);
+typedef void (*nvnCommandBufferSetRenderEnableConditionalFunction)(NVNcommandBuffer*,
+                                                                   NVNconditionalRenderMode,
+                                                                   NVNbufferAddress);
+typedef void (*nvnCommandBufferSetRenderTargetsFunction)(NVNcommandBuffer*, int,
+                                                         const NVNtexture* const*,
+                                                         const NVNtextureView* const*,
+                                                         const NVNtexture*, const NVNtextureView*);
+typedef void (*nvnCommandBufferDiscardColorFunction)(NVNcommandBuffer*, int);
+typedef void (*nvnCommandBufferDiscardDepthStencilFunction)(NVNcommandBuffer*);
+typedef void (*nvnCommandBufferDownsampleFunction)(NVNcommandBuffer*, const NVNtexture*,
+                                                   const NVNtexture*);
+typedef void (*nvnCommandBufferTiledDownsampleFunction)(NVNcommandBuffer*, const NVNtexture*,
+                                                        const NVNtexture*);
+typedef void (*nvnCommandBufferDownsampleTextureViewFunction)(NVNcommandBuffer*, const NVNtexture*,
+                                                              const NVNtextureView*,
+                                                              const NVNtexture*,
+                                                              const NVNtextureView*);
+typedef void (*nvnCommandBufferTiledDownsampleTextureViewFunction)(NVNcommandBuffer*,
+                                                                   const NVNtexture*,
+                                                                   const NVNtextureView*,
+                                                                   const NVNtexture*,
+                                                                   const NVNtextureView*);
+typedef void (*nvnCommandBufferBarrierFunction)(NVNcommandBuffer*, int);
+typedef void (*nvnCommandBufferWaitSyncFunction)(NVNcommandBuffer*, const NVNsync*);
+typedef void (*nvnCommandBufferFenceSyncFunction)(NVNcommandBuffer*, NVNsync*, NVNsyncCondition,
+                                                  int);
+typedef void (*nvnCommandBufferSetTexturePoolFunction)(NVNcommandBuffer*, const NVNtexturePool*);
+typedef void (*nvnCommandBufferSetSamplerPoolFunction)(NVNcommandBuffer*, const NVNsamplerPool*);
+typedef void (*nvnCommandBufferSetShaderScratchMemoryFunction)(NVNcommandBuffer*,
+                                                               const NVNmemoryPool*, ptrdiff_t,
+                                                               size_t);
+typedef void (*nvnCommandBufferSaveZCullDataFunction)(NVNcommandBuffer*, NVNbufferAddress, size_t);
+typedef void (*nvnCommandBufferRestoreZCullDataFunction)(NVNcommandBuffer*, NVNbufferAddress,
+                                                         size_t);
+typedef void (*nvnCommandBufferSetCopyRowStrideFunction)(NVNcommandBuffer*, ptrdiff_t);
+typedef void (*nvnCommandBufferSetCopyImageStrideFunction)(NVNcommandBuffer*, ptrdiff_t);
+typedef ptrdiff_t (*nvnCommandBufferGetCopyRowStrideFunction)(const NVNcommandBuffer*);
+typedef ptrdiff_t (*nvnCommandBufferGetCopyImageStrideFunction)(const NVNcommandBuffer*);
+typedef void (*nvnCommandBufferDrawTextureFunction)(NVNcommandBuffer*, NVNtextureHandle,
+                                                    const NVNdrawTextureRegion*,
+                                                    const NVNdrawTextureRegion*);
+typedef bool (*nvnProgramSetSubroutineLinkageFunction)(NVNprogram*, int,
+                                                       const NVNsubroutineLinkageMapPtr*);
+typedef void (*nvnCommandBufferSetProgramSubroutinesFunction)(NVNcommandBuffer*, NVNprogram*,
+                                                              NVNshaderStage, const int, const int,
+                                                              const int*);
+typedef void (*nvnCommandBufferBindCoverageModulationTableFunction)(NVNcommandBuffer*,
+                                                                    const float*);
+typedef void (*nvnCommandBufferResolveDepthBufferFunction)(NVNcommandBuffer*);
+typedef void (*nvnCommandBufferPushDebugGroupStaticFunction)(NVNcommandBuffer*, uint32_t,
+                                                             const char*);
+typedef void (*nvnCommandBufferPushDebugGroupDynamicFunction)(NVNcommandBuffer*, uint32_t,
+                                                              const char*);
+typedef void (*nvnCommandBufferPushDebugGroupFunction)(NVNcommandBuffer*, uint32_t, const char*);
+typedef void (*nvnCommandBufferPopDebugGroupFunction)(NVNcommandBuffer*);
+typedef void (*nvnCommandBufferPopDebugGroupIdFunction)(NVNcommandBuffer*, uint32_t);
+typedef void (*nvnCommandBufferInsertDebugMarkerStaticFunction)(NVNcommandBuffer*, uint32_t,
+                                                                const char*);
+typedef void (*nvnCommandBufferInsertDebugMarkerDynamicFunction)(NVNcommandBuffer*, uint32_t,
+                                                                 const char*);
+typedef void (*nvnCommandBufferInsertDebugMarkerFunction)(NVNcommandBuffer*, uint32_t, const char*);
+typedef NVNcommandBufferMemoryCallback (*nvnCommandBufferGetMemoryCallbackFunction)(
+    const NVNcommandBuffer*);
+typedef void (*nvnCommandBufferGetMemoryCallbackDataFunction)(const NVNcommandBuffer*);
+typedef bool (*nvnCommandBufferIsRecordingFunction)(const NVNcommandBuffer*);
+typedef bool (*nvnSyncInitializeFunction)(NVNsync*, NVNdevice*);
+typedef void (*nvnSyncFinalizeFunction)(NVNsync*);
+typedef void (*nvnSyncSetDebugLabelFunction)(NVNsync*, const char*);
+typedef void (*nvnQueueFenceSyncFunction)(NVNqueue*, NVNsync*, NVNsyncCondition, int);
+typedef NVNsyncWaitResult (*nvnSyncWaitFunction)(const NVNsync*, uint64_t);
+typedef bool (*nvnQueueWaitSyncFunction)(NVNqueue*, const NVNsync*);
+typedef void (*nvnEventBuilderSetDefaultsFunction)(NVNeventBuilder*);
+typedef void (*nvnEventBuilderSetStorageFunction)(NVNeventBuilder*, const NVNmemoryPool*, int64_t);
+typedef bool (*nvnEventInitializeFunction)(NVNevent*, const NVNeventBuilder*);
+typedef void (*nvnEventFinalizeFunction)(NVNevent*);
+typedef uint32_t (*nvnEventGetValueFunction)(const NVNevent*);
+typedef void (*nvnEventSignalFunction)(NVNevent*, NVNeventSignalMode, uint32_t);
+typedef void (*nvnCommandBufferWaitEventFunction)(NVNcommandBuffer*, const NVNevent*,
+                                                  NVNeventWaitMode, uint32_t);
+typedef void (*nvnCommandBufferSignalEventFunction)(NVNcommandBuffer*, const NVNevent*,
+                                                    NVNeventSignalMode, NVNeventSignalLocation, int,
+                                                    uint32_t);
 
 // Function pointer definitions
 extern nvnDeviceBuilderSetDefaultsFunction pfnc_nvnDeviceBuilderSetDefaults;
@@ -496,7 +650,8 @@ extern nvnDeviceFinalizeFunction pfnc_nvnDeviceFinalize;
 extern nvnDeviceSetDebugLabelFunction pfnc_nvnDeviceSetDebugLabel;
 extern nvnDeviceGetProcAddressFunction pfnc_nvnDeviceGetProcAddress;
 extern nvnDeviceGetIntegerFunction pfnc_nvnDeviceGetInteger;
-extern nvnDeviceGetCurrentTimestampInNanosecondsFunction pfnc_nvnDeviceGetCurrentTimestampInNanoseconds;
+extern nvnDeviceGetCurrentTimestampInNanosecondsFunction
+    pfnc_nvnDeviceGetCurrentTimestampInNanoseconds;
 extern nvnDeviceSetIntermediateShaderCacheFunction pfnc_nvnDeviceSetIntermediateShaderCache;
 extern nvnDeviceGetTextureHandleFunction pfnc_nvnDeviceGetTextureHandle;
 extern nvnDeviceGetTexelFetchHandleFunction pfnc_nvnDeviceGetTexelFetchHandle;
@@ -629,7 +784,8 @@ extern nvnTextureBuilderGetStorageSizeFunction pfnc_nvnTextureBuilderGetStorageS
 extern nvnTextureBuilderGetStorageAlignmentFunction pfnc_nvnTextureBuilderGetStorageAlignment;
 extern nvnTextureBuilderSetStorageFunction pfnc_nvnTextureBuilderSetStorage;
 extern nvnTextureBuilderSetPackagedTextureDataFunction pfnc_nvnTextureBuilderSetPackagedTextureData;
-extern nvnTextureBuilderSetPackagedTextureLayoutFunction pfnc_nvnTextureBuilderSetPackagedTextureLayout;
+extern nvnTextureBuilderSetPackagedTextureLayoutFunction
+    pfnc_nvnTextureBuilderSetPackagedTextureLayout;
 extern nvnTextureBuilderSetStrideFunction pfnc_nvnTextureBuilderSetStride;
 extern nvnTextureBuilderSetGLTextureNameFunction pfnc_nvnTextureBuilderSetGLTextureName;
 extern nvnTextureBuilderGetStorageClassFunction pfnc_nvnTextureBuilderGetStorageClass;
@@ -739,14 +895,16 @@ extern nvnBlendStateSetBlendFuncFunction pfnc_nvnBlendStateSetBlendFunc;
 extern nvnBlendStateSetBlendEquationFunction pfnc_nvnBlendStateSetBlendEquation;
 extern nvnBlendStateSetAdvancedModeFunction pfnc_nvnBlendStateSetAdvancedMode;
 extern nvnBlendStateSetAdvancedOverlapFunction pfnc_nvnBlendStateSetAdvancedOverlap;
-extern nvnBlendStateSetAdvancedPremultipliedSrcFunction pfnc_nvnBlendStateSetAdvancedPremultipliedSrc;
+extern nvnBlendStateSetAdvancedPremultipliedSrcFunction
+    pfnc_nvnBlendStateSetAdvancedPremultipliedSrc;
 extern nvnBlendStateSetAdvancedNormalizedDstFunction pfnc_nvnBlendStateSetAdvancedNormalizedDst;
 extern nvnBlendStateGetBlendTargetFunction pfnc_nvnBlendStateGetBlendTarget;
 extern nvnBlendStateGetBlendFuncFunction pfnc_nvnBlendStateGetBlendFunc;
 extern nvnBlendStateGetBlendEquationFunction pfnc_nvnBlendStateGetBlendEquation;
 extern nvnBlendStateGetAdvancedModeFunction pfnc_nvnBlendStateGetAdvancedMode;
 extern nvnBlendStateGetAdvancedOverlapFunction pfnc_nvnBlendStateGetAdvancedOverlap;
-extern nvnBlendStateGetAdvancedPremultipliedSrcFunction pfnc_nvnBlendStateGetAdvancedPremultipliedSrc;
+extern nvnBlendStateGetAdvancedPremultipliedSrcFunction
+    pfnc_nvnBlendStateGetAdvancedPremultipliedSrc;
 extern nvnBlendStateGetAdvancedNormalizedDstFunction pfnc_nvnBlendStateGetAdvancedNormalizedDst;
 extern nvnColorStateSetDefaultsFunction pfnc_nvnColorStateSetDefaults;
 extern nvnColorStateSetBlendEnableFunction pfnc_nvnColorStateSetBlendEnable;
@@ -761,25 +919,40 @@ extern nvnChannelMaskStateGetChannelMaskFunction pfnc_nvnChannelMaskStateGetChan
 extern nvnMultisampleStateSetDefaultsFunction pfnc_nvnMultisampleStateSetDefaults;
 extern nvnMultisampleStateSetMultisampleEnableFunction pfnc_nvnMultisampleStateSetMultisampleEnable;
 extern nvnMultisampleStateSetSamplesFunction pfnc_nvnMultisampleStateSetSamples;
-extern nvnMultisampleStateSetAlphaToCoverageEnableFunction pfnc_nvnMultisampleStateSetAlphaToCoverageEnable;
-extern nvnMultisampleStateSetAlphaToCoverageDitherFunction pfnc_nvnMultisampleStateSetAlphaToCoverageDither;
+extern nvnMultisampleStateSetAlphaToCoverageEnableFunction
+    pfnc_nvnMultisampleStateSetAlphaToCoverageEnable;
+extern nvnMultisampleStateSetAlphaToCoverageDitherFunction
+    pfnc_nvnMultisampleStateSetAlphaToCoverageDither;
 extern nvnMultisampleStateGetMultisampleEnableFunction pfnc_nvnMultisampleStateGetMultisampleEnable;
 extern nvnMultisampleStateGetSamplesFunction pfnc_nvnMultisampleStateGetSamples;
-extern nvnMultisampleStateGetAlphaToCoverageEnableFunction pfnc_nvnMultisampleStateGetAlphaToCoverageEnable;
-extern nvnMultisampleStateGetAlphaToCoverageDitherFunction pfnc_nvnMultisampleStateGetAlphaToCoverageDither;
+extern nvnMultisampleStateGetAlphaToCoverageEnableFunction
+    pfnc_nvnMultisampleStateGetAlphaToCoverageEnable;
+extern nvnMultisampleStateGetAlphaToCoverageDitherFunction
+    pfnc_nvnMultisampleStateGetAlphaToCoverageDither;
 extern nvnMultisampleStateSetRasterSamplesFunction pfnc_nvnMultisampleStateSetRasterSamples;
 extern nvnMultisampleStateGetRasterSamplesFunction pfnc_nvnMultisampleStateGetRasterSamples;
-extern nvnMultisampleStateSetCoverageModulationModeFunction pfnc_nvnMultisampleStateSetCoverageModulationMode;
-extern nvnMultisampleStateGetCoverageModulationModeFunction pfnc_nvnMultisampleStateGetCoverageModulationMode;
-extern nvnMultisampleStateSetCoverageToColorEnableFunction pfnc_nvnMultisampleStateSetCoverageToColorEnable;
-extern nvnMultisampleStateGetCoverageToColorEnableFunction pfnc_nvnMultisampleStateGetCoverageToColorEnable;
-extern nvnMultisampleStateSetCoverageToColorOutputFunction pfnc_nvnMultisampleStateSetCoverageToColorOutput;
-extern nvnMultisampleStateGetCoverageToColorOutputFunction pfnc_nvnMultisampleStateGetCoverageToColorOutput;
-extern nvnMultisampleStateSetSampleLocationsEnableFunction pfnc_nvnMultisampleStateSetSampleLocationsEnable;
-extern nvnMultisampleStateGetSampleLocationsEnableFunction pfnc_nvnMultisampleStateGetSampleLocationsEnable;
-extern nvnMultisampleStateGetSampleLocationsGridFunction pfnc_nvnMultisampleStateGetSampleLocationsGrid;
-extern nvnMultisampleStateSetSampleLocationsGridEnableFunction pfnc_nvnMultisampleStateSetSampleLocationsGridEnable;
-extern nvnMultisampleStateGetSampleLocationsGridEnableFunction pfnc_nvnMultisampleStateGetSampleLocationsGridEnable;
+extern nvnMultisampleStateSetCoverageModulationModeFunction
+    pfnc_nvnMultisampleStateSetCoverageModulationMode;
+extern nvnMultisampleStateGetCoverageModulationModeFunction
+    pfnc_nvnMultisampleStateGetCoverageModulationMode;
+extern nvnMultisampleStateSetCoverageToColorEnableFunction
+    pfnc_nvnMultisampleStateSetCoverageToColorEnable;
+extern nvnMultisampleStateGetCoverageToColorEnableFunction
+    pfnc_nvnMultisampleStateGetCoverageToColorEnable;
+extern nvnMultisampleStateSetCoverageToColorOutputFunction
+    pfnc_nvnMultisampleStateSetCoverageToColorOutput;
+extern nvnMultisampleStateGetCoverageToColorOutputFunction
+    pfnc_nvnMultisampleStateGetCoverageToColorOutput;
+extern nvnMultisampleStateSetSampleLocationsEnableFunction
+    pfnc_nvnMultisampleStateSetSampleLocationsEnable;
+extern nvnMultisampleStateGetSampleLocationsEnableFunction
+    pfnc_nvnMultisampleStateGetSampleLocationsEnable;
+extern nvnMultisampleStateGetSampleLocationsGridFunction
+    pfnc_nvnMultisampleStateGetSampleLocationsGrid;
+extern nvnMultisampleStateSetSampleLocationsGridEnableFunction
+    pfnc_nvnMultisampleStateSetSampleLocationsGridEnable;
+extern nvnMultisampleStateGetSampleLocationsGridEnableFunction
+    pfnc_nvnMultisampleStateGetSampleLocationsGridEnable;
 extern nvnMultisampleStateSetSampleLocationsFunction pfnc_nvnMultisampleStateSetSampleLocations;
 extern nvnPolygonStateSetDefaultsFunction pfnc_nvnPolygonStateSetDefaults;
 extern nvnPolygonStateSetCullFaceFunction pfnc_nvnPolygonStateSetCullFace;
@@ -794,13 +967,15 @@ extern nvnDepthStencilStateSetDefaultsFunction pfnc_nvnDepthStencilStateSetDefau
 extern nvnDepthStencilStateSetDepthTestEnableFunction pfnc_nvnDepthStencilStateSetDepthTestEnable;
 extern nvnDepthStencilStateSetDepthWriteEnableFunction pfnc_nvnDepthStencilStateSetDepthWriteEnable;
 extern nvnDepthStencilStateSetDepthFuncFunction pfnc_nvnDepthStencilStateSetDepthFunc;
-extern nvnDepthStencilStateSetStencilTestEnableFunction pfnc_nvnDepthStencilStateSetStencilTestEnable;
+extern nvnDepthStencilStateSetStencilTestEnableFunction
+    pfnc_nvnDepthStencilStateSetStencilTestEnable;
 extern nvnDepthStencilStateSetStencilFuncFunction pfnc_nvnDepthStencilStateSetStencilFunc;
 extern nvnDepthStencilStateSetStencilOpFunction pfnc_nvnDepthStencilStateSetStencilOp;
 extern nvnDepthStencilStateGetDepthTestEnableFunction pfnc_nvnDepthStencilStateGetDepthTestEnable;
 extern nvnDepthStencilStateGetDepthWriteEnableFunction pfnc_nvnDepthStencilStateGetDepthWriteEnable;
 extern nvnDepthStencilStateGetDepthFuncFunction pfnc_nvnDepthStencilStateGetDepthFunc;
-extern nvnDepthStencilStateGetStencilTestEnableFunction pfnc_nvnDepthStencilStateGetStencilTestEnable;
+extern nvnDepthStencilStateGetStencilTestEnableFunction
+    pfnc_nvnDepthStencilStateGetStencilTestEnable;
 extern nvnDepthStencilStateGetStencilFuncFunction pfnc_nvnDepthStencilStateGetStencilFunc;
 extern nvnDepthStencilStateGetStencilOpFunction pfnc_nvnDepthStencilStateGetStencilOp;
 extern nvnVertexAttribStateSetDefaultsFunction pfnc_nvnVertexAttribStateSetDefaults;
@@ -843,8 +1018,10 @@ extern nvnCommandBufferBindVertexBufferFunction pfnc_nvnCommandBufferBindVertexB
 extern nvnCommandBufferBindVertexBuffersFunction pfnc_nvnCommandBufferBindVertexBuffers;
 extern nvnCommandBufferBindUniformBufferFunction pfnc_nvnCommandBufferBindUniformBuffer;
 extern nvnCommandBufferBindUniformBuffersFunction pfnc_nvnCommandBufferBindUniformBuffers;
-extern nvnCommandBufferBindTransformFeedbackBufferFunction pfnc_nvnCommandBufferBindTransformFeedbackBuffer;
-extern nvnCommandBufferBindTransformFeedbackBuffersFunction pfnc_nvnCommandBufferBindTransformFeedbackBuffers;
+extern nvnCommandBufferBindTransformFeedbackBufferFunction
+    pfnc_nvnCommandBufferBindTransformFeedbackBuffer;
+extern nvnCommandBufferBindTransformFeedbackBuffersFunction
+    pfnc_nvnCommandBufferBindTransformFeedbackBuffers;
 extern nvnCommandBufferBindStorageBufferFunction pfnc_nvnCommandBufferBindStorageBuffer;
 extern nvnCommandBufferBindStorageBuffersFunction pfnc_nvnCommandBufferBindStorageBuffers;
 extern nvnCommandBufferBindTextureFunction pfnc_nvnCommandBufferBindTexture;
@@ -852,8 +1029,10 @@ extern nvnCommandBufferBindTexturesFunction pfnc_nvnCommandBufferBindTextures;
 extern nvnCommandBufferBindImageFunction pfnc_nvnCommandBufferBindImage;
 extern nvnCommandBufferBindImagesFunction pfnc_nvnCommandBufferBindImages;
 extern nvnCommandBufferSetPatchSizeFunction pfnc_nvnCommandBufferSetPatchSize;
-extern nvnCommandBufferSetInnerTessellationLevelsFunction pfnc_nvnCommandBufferSetInnerTessellationLevels;
-extern nvnCommandBufferSetOuterTessellationLevelsFunction pfnc_nvnCommandBufferSetOuterTessellationLevels;
+extern nvnCommandBufferSetInnerTessellationLevelsFunction
+    pfnc_nvnCommandBufferSetInnerTessellationLevels;
+extern nvnCommandBufferSetOuterTessellationLevelsFunction
+    pfnc_nvnCommandBufferSetOuterTessellationLevels;
 extern nvnCommandBufferSetPrimitiveRestartFunction pfnc_nvnCommandBufferSetPrimitiveRestart;
 extern nvnCommandBufferBeginTransformFeedbackFunction pfnc_nvnCommandBufferBeginTransformFeedback;
 extern nvnCommandBufferEndTransformFeedbackFunction pfnc_nvnCommandBufferEndTransformFeedback;
@@ -867,8 +1046,10 @@ extern nvnCommandBufferDrawArraysInstancedFunction pfnc_nvnCommandBufferDrawArra
 extern nvnCommandBufferDrawElementsInstancedFunction pfnc_nvnCommandBufferDrawElementsInstanced;
 extern nvnCommandBufferDrawArraysIndirectFunction pfnc_nvnCommandBufferDrawArraysIndirect;
 extern nvnCommandBufferDrawElementsIndirectFunction pfnc_nvnCommandBufferDrawElementsIndirect;
-extern nvnCommandBufferMultiDrawArraysIndirectCountFunction pfnc_nvnCommandBufferMultiDrawArraysIndirectCount;
-extern nvnCommandBufferMultiDrawElementsIndirectCountFunction pfnc_nvnCommandBufferMultiDrawElementsIndirectCount;
+extern nvnCommandBufferMultiDrawArraysIndirectCountFunction
+    pfnc_nvnCommandBufferMultiDrawArraysIndirectCount;
+extern nvnCommandBufferMultiDrawElementsIndirectCountFunction
+    pfnc_nvnCommandBufferMultiDrawElementsIndirectCount;
 extern nvnCommandBufferClearColorFunction pfnc_nvnCommandBufferClearColor;
 extern nvnCommandBufferClearColoriFunction pfnc_nvnCommandBufferClearColori;
 extern nvnCommandBufferClearColoruiFunction pfnc_nvnCommandBufferClearColorui;
@@ -900,9 +1081,12 @@ extern nvnCommandBufferSetAlphaRefFunction pfnc_nvnCommandBufferSetAlphaRef;
 extern nvnCommandBufferSetSampleMaskFunction pfnc_nvnCommandBufferSetSampleMask;
 extern nvnCommandBufferSetRasterizerDiscardFunction pfnc_nvnCommandBufferSetRasterizerDiscard;
 extern nvnCommandBufferSetDepthClampFunction pfnc_nvnCommandBufferSetDepthClamp;
-extern nvnCommandBufferSetConservativeRasterEnableFunction pfnc_nvnCommandBufferSetConservativeRasterEnable;
-extern nvnCommandBufferSetConservativeRasterDilateFunction pfnc_nvnCommandBufferSetConservativeRasterDilate;
-extern nvnCommandBufferSetSubpixelPrecisionBiasFunction pfnc_nvnCommandBufferSetSubpixelPrecisionBias;
+extern nvnCommandBufferSetConservativeRasterEnableFunction
+    pfnc_nvnCommandBufferSetConservativeRasterEnable;
+extern nvnCommandBufferSetConservativeRasterDilateFunction
+    pfnc_nvnCommandBufferSetConservativeRasterDilate;
+extern nvnCommandBufferSetSubpixelPrecisionBiasFunction
+    pfnc_nvnCommandBufferSetSubpixelPrecisionBias;
 extern nvnCommandBufferCopyBufferToTextureFunction pfnc_nvnCommandBufferCopyBufferToTexture;
 extern nvnCommandBufferCopyTextureToBufferFunction pfnc_nvnCommandBufferCopyTextureToBuffer;
 extern nvnCommandBufferCopyTextureToTextureFunction pfnc_nvnCommandBufferCopyTextureToTexture;
@@ -916,14 +1100,16 @@ extern nvnCommandBufferReportCounterFunction pfnc_nvnCommandBufferReportCounter;
 extern nvnCommandBufferResetCounterFunction pfnc_nvnCommandBufferResetCounter;
 extern nvnCommandBufferReportValueFunction pfnc_nvnCommandBufferReportValue;
 extern nvnCommandBufferSetRenderEnableFunction pfnc_nvnCommandBufferSetRenderEnable;
-extern nvnCommandBufferSetRenderEnableConditionalFunction pfnc_nvnCommandBufferSetRenderEnableConditional;
+extern nvnCommandBufferSetRenderEnableConditionalFunction
+    pfnc_nvnCommandBufferSetRenderEnableConditional;
 extern nvnCommandBufferSetRenderTargetsFunction pfnc_nvnCommandBufferSetRenderTargets;
 extern nvnCommandBufferDiscardColorFunction pfnc_nvnCommandBufferDiscardColor;
 extern nvnCommandBufferDiscardDepthStencilFunction pfnc_nvnCommandBufferDiscardDepthStencil;
 extern nvnCommandBufferDownsampleFunction pfnc_nvnCommandBufferDownsample;
 extern nvnCommandBufferTiledDownsampleFunction pfnc_nvnCommandBufferTiledDownsample;
 extern nvnCommandBufferDownsampleTextureViewFunction pfnc_nvnCommandBufferDownsampleTextureView;
-extern nvnCommandBufferTiledDownsampleTextureViewFunction pfnc_nvnCommandBufferTiledDownsampleTextureView;
+extern nvnCommandBufferTiledDownsampleTextureViewFunction
+    pfnc_nvnCommandBufferTiledDownsampleTextureView;
 extern nvnCommandBufferBarrierFunction pfnc_nvnCommandBufferBarrier;
 extern nvnCommandBufferWaitSyncFunction pfnc_nvnCommandBufferWaitSync;
 extern nvnCommandBufferFenceSyncFunction pfnc_nvnCommandBufferFenceSync;
@@ -939,7 +1125,8 @@ extern nvnCommandBufferGetCopyImageStrideFunction pfnc_nvnCommandBufferGetCopyIm
 extern nvnCommandBufferDrawTextureFunction pfnc_nvnCommandBufferDrawTexture;
 extern nvnProgramSetSubroutineLinkageFunction pfnc_nvnProgramSetSubroutineLinkage;
 extern nvnCommandBufferSetProgramSubroutinesFunction pfnc_nvnCommandBufferSetProgramSubroutines;
-extern nvnCommandBufferBindCoverageModulationTableFunction pfnc_nvnCommandBufferBindCoverageModulationTable;
+extern nvnCommandBufferBindCoverageModulationTableFunction
+    pfnc_nvnCommandBufferBindCoverageModulationTable;
 extern nvnCommandBufferResolveDepthBufferFunction pfnc_nvnCommandBufferResolveDepthBuffer;
 extern nvnCommandBufferPushDebugGroupStaticFunction pfnc_nvnCommandBufferPushDebugGroupStatic;
 extern nvnCommandBufferPushDebugGroupDynamicFunction pfnc_nvnCommandBufferPushDebugGroupDynamic;
@@ -947,7 +1134,8 @@ extern nvnCommandBufferPushDebugGroupFunction pfnc_nvnCommandBufferPushDebugGrou
 extern nvnCommandBufferPopDebugGroupFunction pfnc_nvnCommandBufferPopDebugGroup;
 extern nvnCommandBufferPopDebugGroupIdFunction pfnc_nvnCommandBufferPopDebugGroupId;
 extern nvnCommandBufferInsertDebugMarkerStaticFunction pfnc_nvnCommandBufferInsertDebugMarkerStatic;
-extern nvnCommandBufferInsertDebugMarkerDynamicFunction pfnc_nvnCommandBufferInsertDebugMarkerDynamic;
+extern nvnCommandBufferInsertDebugMarkerDynamicFunction
+    pfnc_nvnCommandBufferInsertDebugMarkerDynamic;
 extern nvnCommandBufferInsertDebugMarkerFunction pfnc_nvnCommandBufferInsertDebugMarker;
 extern nvnCommandBufferGetMemoryCallbackFunction pfnc_nvnCommandBufferGetMemoryCallback;
 extern nvnCommandBufferGetMemoryCallbackDataFunction pfnc_nvnCommandBufferGetMemoryCallbackData;
@@ -1248,8 +1436,10 @@ extern nvnCommandBufferSignalEventFunction pfnc_nvnCommandBufferSignalEvent;
 #define nvnMultisampleStateGetAlphaToCoverageDither pfnc_nvnMultisampleStateGetAlphaToCoverageDither
 #define nvnMultisampleStateSetRasterSamples pfnc_nvnMultisampleStateSetRasterSamples
 #define nvnMultisampleStateGetRasterSamples pfnc_nvnMultisampleStateGetRasterSamples
-#define nvnMultisampleStateSetCoverageModulationMode pfnc_nvnMultisampleStateSetCoverageModulationMode
-#define nvnMultisampleStateGetCoverageModulationMode pfnc_nvnMultisampleStateGetCoverageModulationMode
+#define nvnMultisampleStateSetCoverageModulationMode                                               \
+    pfnc_nvnMultisampleStateSetCoverageModulationMode
+#define nvnMultisampleStateGetCoverageModulationMode                                               \
+    pfnc_nvnMultisampleStateGetCoverageModulationMode
 #define nvnMultisampleStateSetCoverageToColorEnable pfnc_nvnMultisampleStateSetCoverageToColorEnable
 #define nvnMultisampleStateGetCoverageToColorEnable pfnc_nvnMultisampleStateGetCoverageToColorEnable
 #define nvnMultisampleStateSetCoverageToColorOutput pfnc_nvnMultisampleStateSetCoverageToColorOutput
@@ -1257,8 +1447,10 @@ extern nvnCommandBufferSignalEventFunction pfnc_nvnCommandBufferSignalEvent;
 #define nvnMultisampleStateSetSampleLocationsEnable pfnc_nvnMultisampleStateSetSampleLocationsEnable
 #define nvnMultisampleStateGetSampleLocationsEnable pfnc_nvnMultisampleStateGetSampleLocationsEnable
 #define nvnMultisampleStateGetSampleLocationsGrid pfnc_nvnMultisampleStateGetSampleLocationsGrid
-#define nvnMultisampleStateSetSampleLocationsGridEnable pfnc_nvnMultisampleStateSetSampleLocationsGridEnable
-#define nvnMultisampleStateGetSampleLocationsGridEnable pfnc_nvnMultisampleStateGetSampleLocationsGridEnable
+#define nvnMultisampleStateSetSampleLocationsGridEnable                                            \
+    pfnc_nvnMultisampleStateSetSampleLocationsGridEnable
+#define nvnMultisampleStateGetSampleLocationsGridEnable                                            \
+    pfnc_nvnMultisampleStateGetSampleLocationsGridEnable
 #define nvnMultisampleStateSetSampleLocations pfnc_nvnMultisampleStateSetSampleLocations
 #define nvnPolygonStateSetDefaults pfnc_nvnPolygonStateSetDefaults
 #define nvnPolygonStateSetCullFace pfnc_nvnPolygonStateSetCullFace
@@ -1323,7 +1515,8 @@ extern nvnCommandBufferSignalEventFunction pfnc_nvnCommandBufferSignalEvent;
 #define nvnCommandBufferBindUniformBuffer pfnc_nvnCommandBufferBindUniformBuffer
 #define nvnCommandBufferBindUniformBuffers pfnc_nvnCommandBufferBindUniformBuffers
 #define nvnCommandBufferBindTransformFeedbackBuffer pfnc_nvnCommandBufferBindTransformFeedbackBuffer
-#define nvnCommandBufferBindTransformFeedbackBuffers pfnc_nvnCommandBufferBindTransformFeedbackBuffers
+#define nvnCommandBufferBindTransformFeedbackBuffers                                               \
+    pfnc_nvnCommandBufferBindTransformFeedbackBuffers
 #define nvnCommandBufferBindStorageBuffer pfnc_nvnCommandBufferBindStorageBuffer
 #define nvnCommandBufferBindStorageBuffers pfnc_nvnCommandBufferBindStorageBuffers
 #define nvnCommandBufferBindTexture pfnc_nvnCommandBufferBindTexture
@@ -1346,8 +1539,10 @@ extern nvnCommandBufferSignalEventFunction pfnc_nvnCommandBufferSignalEvent;
 #define nvnCommandBufferDrawElementsInstanced pfnc_nvnCommandBufferDrawElementsInstanced
 #define nvnCommandBufferDrawArraysIndirect pfnc_nvnCommandBufferDrawArraysIndirect
 #define nvnCommandBufferDrawElementsIndirect pfnc_nvnCommandBufferDrawElementsIndirect
-#define nvnCommandBufferMultiDrawArraysIndirectCount pfnc_nvnCommandBufferMultiDrawArraysIndirectCount
-#define nvnCommandBufferMultiDrawElementsIndirectCount pfnc_nvnCommandBufferMultiDrawElementsIndirectCount
+#define nvnCommandBufferMultiDrawArraysIndirectCount                                               \
+    pfnc_nvnCommandBufferMultiDrawArraysIndirectCount
+#define nvnCommandBufferMultiDrawElementsIndirectCount                                             \
+    pfnc_nvnCommandBufferMultiDrawElementsIndirectCount
 #define nvnCommandBufferClearColor pfnc_nvnCommandBufferClearColor
 #define nvnCommandBufferClearColori pfnc_nvnCommandBufferClearColori
 #define nvnCommandBufferClearColorui pfnc_nvnCommandBufferClearColorui

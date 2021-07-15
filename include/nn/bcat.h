@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "os.h"
-#include "types.h"
+#include <nn/os.h>
+#include <nn/types.h>
 
 namespace nn {
 

@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "types.h"
-#include "util.h"
+#include <nn/types.h>
+#include <nn/util.h>
 
 namespace nn {
 namespace hid {

@@ -5,13 +5,13 @@
 
 #pragma once
 
-#include "RootObject.h"
-#include "buffer.h"
-#include "key.h"
-#include "sead/critical.h"
+#include <nn/nex/RootObject.h>
 
 namespace nn {
 namespace nex {
+class Buffer;
+class Key;
+
 class EncryptionAlgorithm : public nn::nex::RootObject {
 public:
     EncryptionAlgorithm(u32, u32);

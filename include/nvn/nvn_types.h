@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,7 +21,8 @@
  */
 
 // NVN types reconstructed from Darksiders II DWARF information.
-// NOTE: This only includes enums and structs used for NVN 53.105 but might contain more elements than expected (as Darksiders II uses a newer version of NVN).
+// NOTE: This only includes enums and structs used for NVN 53.105 but might contain more elements
+// than expected (as Darksiders II uses a newer version of NVN).
 // TODO: Include the extra information from the version used on Darksiders II for completeness.
 
 #pragma once
@@ -30,8 +31,8 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 typedef uint64_t NVNtextureHandle;
 typedef uint64_t NVNimageHandle;

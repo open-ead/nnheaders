@@ -5,12 +5,15 @@
 
 #pragma once
 
-#include "Config.h"
-#include "Heap.h"
+#include <nn/types.h>
+#include <nn/vfx/Config.h>
 
 // this class is massive
 namespace nn {
 namespace vfx {
+
+struct Heap;
+
 class System {
 public:
     System(nn::vfx::Config const&);
