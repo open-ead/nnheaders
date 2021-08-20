@@ -54,10 +54,12 @@ typedef struct {
 
 typedef struct {
     // TODO: reverse and define this as it looks like it's not an opaque type.
+    char dummy[1];
 } NVNtextureSparseTileLayout;
 
 typedef struct {
     // TODO: reverse and define this as it looks like it's not an opaque type.
+    char dummy[1];
 } NVNdrawTextureRegion;
 
 typedef struct {
@@ -104,6 +106,7 @@ typedef struct {
 
 typedef struct {
     // TODO: reverse and define this as it looks like it's not an opaque type.
+    char dummy[1];
 } NVNqueueErrorInfo;
 
 typedef struct {
@@ -176,6 +179,7 @@ typedef struct {
 
 typedef struct {
     // TODO: reverse and define this as it looks like it's not an opaque type.
+    char dummy[1];
 } NVNmappingRequest;
 
 typedef struct {
