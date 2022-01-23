@@ -43,6 +43,8 @@ struct EventType {
 };
 typedef EventType Event;
 
+enum EventClearMode { EventClearMode_ManualClear, EventClearMode_AutoClear };
+
 // https://github.com/misson20000/nn-types/blob/master/nn_os.h
 struct ThreadType {
     u64 field_8;
@@ -183,7 +185,7 @@ void WaitThread(nn::os::ThreadType*);
 void SetThreadCoreMask(nn::os::ThreadType*, int, u64 mask);
 
 // EVENTS
-void InitializeEvent(EventType*, bool initiallySignaled, bool autoclear);
+void InitializeEvent(EventType*, bool initiallySignaled, EventClearMode eventClearMode);
 void FinalizeEvent(EventType*);
 void SignalEvent(EventType*);
 void WaitEvent(EventType*);
@@ -192,7 +194,7 @@ bool TimedWaitEvent(EventType*, nn::TimeSpan);
 void ClearEvent(EventType*);
 
 // LIGHT EVENTS
-void InitializeLightEvent(LightEventType*, bool initiallySignaled, bool autoclear);
+void InitializeLightEvent(LightEventType*, bool initiallySignaled, EventClearMode eventClearMode);
 void FinalizeLightEvent(LightEventType*);
 void SignalLightEvent(LightEventType*);
 void WaitLightEvent(LightEventType*);
