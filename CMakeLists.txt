@@ -83,6 +83,7 @@ add_library(NintendoSDK OBJECT
   include/nn/audio.h
   include/nn/friends.h
   include/nn/mem.h
+  include/nv.h
   include/vapours/results.hpp
   include/vapours/results/sf_results.hpp
   include/vapours/results/capsrv_results.hpp
