@@ -128,5 +128,5 @@ Result Unmount(char const* mount);
 Result MountBcatSaveData(char const*, ApplicationId);
 Result CreateBcatSaveData(ApplicationId, s64);
 
-};  // namespace fs
-};  // namespace nn
+}  // namespace fs
+}  // namespace nn

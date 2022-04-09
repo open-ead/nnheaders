@@ -36,5 +36,5 @@ public:
 
     static nn::nex::DDLDeclarations* s_pFirstDDLDecl;
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

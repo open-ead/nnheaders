@@ -17,5 +17,5 @@ Result HandleNetworkRequestResult();
 void SubmitNetworkRequest();
 bool IsNetworkRequestOnHold();
 Result GetCurrentPrimaryIpAddress(u64* inAddr);
-};  // namespace nifm
-};  // namespace nn
+}  // namespace nifm
+}  // namespace nn

@@ -17,5 +17,5 @@ public:
 
     u64* GetInstance();
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

@@ -19,6 +19,6 @@ public:
     void Initialize(nn::gfx::DeviceInfo const& deviceInfo);
     void Finalize();
 };
-};  // namespace detail
-};  // namespace gfx
-};  // namespace nn
+}  // namespace detail
+}  // namespace gfx
+}  // namespace nn

@@ -107,5 +107,5 @@ public:
                                                          bool*, int*, nn::nex::EndPoint*);
     virtual bool UseAttemptCountMethod();
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

@@ -17,6 +17,6 @@ public:
 
     u8 _0[0xB0];
 };
-};  // namespace detail
-};  // namespace atk
-};  // namespace nn
+}  // namespace detail
+}  // namespace atk
+}  // namespace nn

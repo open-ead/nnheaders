@@ -10,5 +10,5 @@ namespace gfx {
 // todo: finish me!
 template <typename T>
 class TMemoryPool {};
-};  // namespace gfx
-};  // namespace nn
+}  // namespace gfx
+}  // namespace nn

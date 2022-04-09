@@ -29,5 +29,5 @@ public:
 
     static nn::nex::Plugin* s_pInstance;
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

@@ -11,5 +11,5 @@ class Config {
 public:
     virtual ~Config();
 };
-};  // namespace vfx
-};  // namespace nn
+}  // namespace vfx
+}  // namespace nn

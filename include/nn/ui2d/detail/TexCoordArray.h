@@ -33,6 +33,6 @@ public:
     u32 _4;                     // padding?
     nn::ui2d::Layout* mLayout;  // _8
 };
-};  // namespace detail
-};  // namespace ui2d
-};  // namespace nn
+}  // namespace detail
+}  // namespace ui2d
+}  // namespace nn

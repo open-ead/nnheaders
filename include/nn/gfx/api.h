@@ -18,5 +18,5 @@ class ApiType {};
 // usually passed as just a 8
 template <int T>
 class ApiVersion {};
-};  // namespace gfx
-};  // namespace nn
+}  // namespace gfx
+}  // namespace nn

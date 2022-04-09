@@ -25,5 +25,5 @@ public:
 
     u8 _0[0xB4];
 };
-};  // namespace g3d
-};  // namespace nn
+}  // namespace g3d
+}  // namespace nn

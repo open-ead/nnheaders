@@ -78,5 +78,5 @@ Result ToCalendarTime(nn::time::CalendarTime*, nn::time::CalendarAdditionalInfo*
 Result ToPosixTime(int*, PosixTime*, int, const CalendarTime&);
 CalendarTime ToCalendarTimeInUtc(const PosixTime&);
 PosixTime ToPosixTimeFromUtc(const CalendarTime&);
-};  // namespace time
-};  // namespace nn
+}  // namespace time
+}  // namespace nn

@@ -71,5 +71,5 @@ public:
     u16 mExternalFileCount;               // _C8
     u8 mPad[0x6];                         // _CA
 };
-};  // namespace g3d
-};  // namespace nn
+}  // namespace g3d
+}  // namespace nn

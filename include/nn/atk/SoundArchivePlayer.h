@@ -33,5 +33,5 @@ public:
     u32 _298;
     u8 _29C[0x2E8 - 0x29C];
 };
-};  // namespace atk
-};  // namespace nn
+}  // namespace atk
+}  // namespace nn

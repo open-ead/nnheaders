@@ -17,5 +17,5 @@ public:
     u64 mNameOffset;          // _14
     u64 mFuncNameOffset;      // _1C
 };
-};  // namespace g3d
-};  // namespace nn
+}  // namespace g3d
+}  // namespace nn

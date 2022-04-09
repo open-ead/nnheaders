@@ -45,5 +45,5 @@ public:
     u64 _58;
     u64 _60;
 };
-};  // namespace ui2d
-};  // namespace nn
+}  // namespace ui2d
+}  // namespace nn

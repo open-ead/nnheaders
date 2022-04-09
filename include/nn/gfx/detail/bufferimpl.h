@@ -50,6 +50,6 @@ public:
     void End();
     void Dispatch(s32, s32, s32);
 };
-};  // namespace detail
-};  // namespace gfx
-};  // namespace nn
+}  // namespace detail
+}  // namespace gfx
+}  // namespace nn

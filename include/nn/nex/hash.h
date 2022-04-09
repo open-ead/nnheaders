@@ -31,5 +31,5 @@ public:
 
     u32 _68;
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

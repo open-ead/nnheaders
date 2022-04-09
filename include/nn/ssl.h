@@ -22,5 +22,5 @@ public:
 
 Result Initialize();
 Result Finalize();
-};  // namespace ssl
-};  // namespace nn
+}  // namespace ssl
+}  // namespace nn

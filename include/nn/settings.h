@@ -27,5 +27,5 @@ struct LanguageCode {
 };
 
 bool operator==(nn::settings::LanguageCode const&, nn::settings::LanguageCode const&);
-};  // namespace settings
-};  // namespace nn
+}  // namespace settings
+}  // namespace nn

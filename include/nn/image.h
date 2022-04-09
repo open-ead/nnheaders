@@ -46,5 +46,5 @@ public:
     s64 _28;
     // rest is related to EXIF processing
 };
-};  // namespace image
-};  // namespace nn
+}  // namespace image
+}  // namespace nn

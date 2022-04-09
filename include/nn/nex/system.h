@@ -62,5 +62,5 @@ public:
     u32 _3C;
     u64 _40;
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

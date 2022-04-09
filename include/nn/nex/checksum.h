@@ -57,5 +57,5 @@ class HMACChecksum : public nn::nex::ChecksumAlgorithm
 
 };
 */
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

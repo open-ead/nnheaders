@@ -36,5 +36,5 @@ Result GetDisplayVsyncEvent(nn::os::SystemEventType*, nn::vi::Display*);
 Result GetNativeWindow(void** window, nn::vi::Layer*);
 Result GetLatestFrameNumber(u64* pOutFrameNumber, const Layer* pLayer);
 int ListDisplays(DisplayInfo* outDisplays, int count);
-};  // namespace vi
-};  // namespace nn
+}  // namespace vi
+}  // namespace nn

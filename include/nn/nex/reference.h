@@ -14,5 +14,5 @@ public:
 
     u32 _8;
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

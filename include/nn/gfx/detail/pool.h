@@ -36,6 +36,6 @@ public:
 
     u8 _0[0x120];  // pool data
 };
-};  // namespace detail
-};  // namespace gfx
-};  // namespace nn
+}  // namespace detail
+}  // namespace gfx
+}  // namespace nn

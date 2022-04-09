@@ -25,5 +25,5 @@ public:
     u64 _E8;
     u32 _F0;
 };
-};  // namespace ui2d
-};  // namespace nn
+}  // namespace ui2d
+}  // namespace nn

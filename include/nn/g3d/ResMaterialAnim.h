@@ -15,5 +15,5 @@ public:
     s32 BindTexture(nn::g3d::TextureRef (*)(char const*, void*), void*);
     void Reset();
 };
-};  // namespace g3d
-};  // namespace nn
+}  // namespace g3d
+}  // namespace nn

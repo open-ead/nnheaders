@@ -132,6 +132,6 @@ public:
 
     static u64 g_LastInstanceId;
 };
-};  // namespace detail
-};  // namespace atk
-};  // namespace nn
+}  // namespace detail
+}  // namespace atk
+}  // namespace nn

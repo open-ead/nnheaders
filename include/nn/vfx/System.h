@@ -23,5 +23,5 @@ public:
 
     u8 _0[0x1700];
 };
-};  // namespace vfx
-};  // namespace nn
+}  // namespace vfx
+}  // namespace nn

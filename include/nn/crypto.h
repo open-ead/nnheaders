@@ -81,6 +81,6 @@ public:
     u64 _x68;
     u32 _x70;
 };
-};  // namespace detail
-};  // namespace crypto
-};  // namespace nn
+}  // namespace detail
+}  // namespace crypto
+}  // namespace nn

@@ -340,5 +340,5 @@ u64 GetVoicePlayedSampleCount(nn::audio::VoiceType const* voice);
 u32 GetVoiceNodeId(nn::audio::VoiceType const* voice);
 bool AppendWaveBuffer(nn::audio::VoiceType* voice, nn::audio::WaveBuffer const* waveBuffer);
 nn::audio::WaveBuffer* GetReleasedWaveBuffer(nn::audio::VoiceType* voice);
-};  // namespace audio
-};  // namespace nn
+}  // namespace audio
+}  // namespace nn

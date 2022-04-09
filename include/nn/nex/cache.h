@@ -29,5 +29,5 @@ public:
     u64 _8;
     u8 _10;
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

@@ -15,5 +15,5 @@ struct Float2 {
     u64 _10;
     u64 _18;
 };
-};  // namespace util
-};  // namespace nn
+}  // namespace util
+}  // namespace nn

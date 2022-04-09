@@ -37,5 +37,5 @@ public:
     u16 mLightAnimCount;                 // _64
     u16 mFogAnimCount;                   // _66
 };
-};  // namespace g3d
-};  // namespace nn
+}  // namespace g3d
+}  // namespace nn

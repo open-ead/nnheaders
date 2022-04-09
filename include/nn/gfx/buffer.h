@@ -24,5 +24,5 @@ public:
     u64 _8;
     u64 _10;
 };
-};  // namespace gfx
-};  // namespace nn
+}  // namespace gfx
+}  // namespace nn

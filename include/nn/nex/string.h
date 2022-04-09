@@ -43,5 +43,5 @@ public:
     template <typename T>
     void Assign(T const*);
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

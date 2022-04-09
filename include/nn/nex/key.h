@@ -35,5 +35,5 @@ public:
     u64* mContentPtrStart;  // _10
     u64* mContentPtrEnd;    // _18
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

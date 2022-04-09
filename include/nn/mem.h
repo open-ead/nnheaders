@@ -26,5 +26,5 @@ public:
     u16 _2;
     u64* mAllocAddr;  // _4
 };
-};  // namespace mem
-};  // namespace nn
+}  // namespace mem
+}  // namespace nn

@@ -16,5 +16,5 @@ public:
 
     void Register();
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

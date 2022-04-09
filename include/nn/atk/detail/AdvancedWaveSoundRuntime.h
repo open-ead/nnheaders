@@ -23,6 +23,6 @@ public:
 
     u8 _0[0x30];
 };
-};  // namespace detail
-};  // namespace atk
-};  // namespace nn
+}  // namespace detail
+}  // namespace atk
+}  // namespace nn

@@ -16,6 +16,6 @@ nn::mem::StandardAllocator* GetAllocator();
 namespace detail {
 void* DefaultAllocatorForThreadLocal(u64, u64);
 void* DefaultDeallocatorForThreadLocal(void*, u64);
-};  // namespace detail
+}  // namespace detail
 }  // namespace init
-};  // namespace nn
+}  // namespace nn

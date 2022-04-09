@@ -21,5 +21,5 @@ public:
 
     virtual ~Buffer();
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

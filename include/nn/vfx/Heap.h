@@ -13,5 +13,5 @@ class Heap {
 public:
     virtual ~Heap();
 };
-};  // namespace vfx
-};  // namespace nn
+}  // namespace vfx
+}  // namespace nn

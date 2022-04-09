@@ -11,5 +11,5 @@ class ResSkeletalAnim {
 public:
     void Reset();
 };
-};  // namespace g3d
-};  // namespace nn
+}  // namespace g3d
+}  // namespace nn

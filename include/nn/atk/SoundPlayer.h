@@ -52,5 +52,5 @@ public:
     u64 _64;
     u64 _6C;
 };
-};  // namespace atk
-};  // namespace nn
+}  // namespace atk
+}  // namespace nn

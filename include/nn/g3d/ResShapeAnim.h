@@ -11,5 +11,5 @@ class ResShapeAnim {
 public:
     void Reset();
 };
-};  // namespace g3d
-};  // namespace nn
+}  // namespace g3d
+}  // namespace nn

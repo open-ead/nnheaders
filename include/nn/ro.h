@@ -110,6 +110,6 @@ Result GetBufferSize(size_t*, const void*);
 Result RegisterModuleInfo(RegistrationInfo*, void const*);
 Result RegisterModuleInfo(RegistrationInfo*, void const*, u32);
 Result UnregisterModuleInfo(RegistrationInfo*, void const*);
-};  // namespace ro
+}  // namespace ro
 
-};  // namespace nn
+}  // namespace nn

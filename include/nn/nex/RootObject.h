@@ -26,5 +26,5 @@ public:
     void* operator new(u64, nn::nex::RootObject::TargetPool);
     void* operator new(u64, nn::nex::RootObject::TargetPool, char const*, u32);
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

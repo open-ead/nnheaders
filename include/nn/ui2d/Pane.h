@@ -71,5 +71,5 @@ public:
     u16 _DA;
     u32 _DC;
 };
-};  // namespace ui2d
-};  // namespace nn
+}  // namespace ui2d
+}  // namespace nn

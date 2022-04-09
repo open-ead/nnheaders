@@ -42,5 +42,5 @@ public:
 
     u8 _0[0x94];
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

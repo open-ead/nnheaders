@@ -39,5 +39,5 @@ void GetNpadStates(nn::hid::NpadHandheldState*, s32, u32 const&);
 static int ShowControllerSupport(nn::hid::ControllerSupportResultInfo*,
                                  ControllerSupportArg const&);
 
-};  // namespace hid
-};  // namespace nn
+}  // namespace hid
+}  // namespace nn

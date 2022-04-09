@@ -37,6 +37,6 @@ public:
     u64 _38;
     u64 _40;
 };
-};  // namespace detail
-};  // namespace atk
-};  // namespace nn
+}  // namespace detail
+}  // namespace atk
+}  // namespace nn

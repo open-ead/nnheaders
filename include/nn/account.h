@@ -53,5 +53,5 @@ public:
     Result Cancel();
     Result GetSystemEvent(nn::os::SystemEvent*);
 };
-};  // namespace account
-};  // namespace nn
+}  // namespace account
+}  // namespace nn

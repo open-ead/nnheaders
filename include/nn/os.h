@@ -267,6 +267,6 @@ u32 GetCurrentCoreNumber();
 namespace detail {
 extern s32 g_CommandLineParameter;
 extern char** g_CommandLineParameterArgv;
-};  // namespace detail
-};  // namespace os
-};  // namespace nn
+}  // namespace detail
+}  // namespace os
+}  // namespace nn

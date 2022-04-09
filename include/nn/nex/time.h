@@ -45,5 +45,5 @@ public:
     static bool s_needCorrection;
     static bool s_tiCorrection;
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

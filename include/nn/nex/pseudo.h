@@ -76,5 +76,5 @@ public:
 
     static bool s_bUseInstantiationContext;
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

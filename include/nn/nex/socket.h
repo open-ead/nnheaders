@@ -69,5 +69,5 @@ class BerkeleySocketDriver
 class ClientWebSocketDriver : SocketDriver {
     class ClientWebSocket : Socket {};
 };
-};  // namespace nex
-};  // namespace nn
+}  // namespace nex
+}  // namespace nn

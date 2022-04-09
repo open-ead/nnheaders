@@ -38,5 +38,5 @@ public:
     Result GetSystemEvent(nn::os::SystemEvent*);
     Result GetResult() const;
 };
-};  // namespace friends
-};  // namespace nn
+}  // namespace friends
+}  // namespace nn

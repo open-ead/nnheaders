@@ -33,5 +33,5 @@ void SetUserInactivityDetectionTimeExtended(bool);
 void FinishStartupLogo();
 nn::settings::LanguageCode GetDesiredLanguage();
 void GetDisplayVersion(DisplayVersion*);
-};  // namespace oe
-};  // namespace nn
+}  // namespace oe
+}  // namespace nn

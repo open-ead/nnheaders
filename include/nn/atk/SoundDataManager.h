@@ -21,5 +21,5 @@ public:
 
     u8 _0[0x240];
 };
-};  // namespace atk
-};  // namespace nn
+}  // namespace atk
+}  // namespace nn

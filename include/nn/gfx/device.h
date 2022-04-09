@@ -16,5 +16,5 @@ public:
 
 template <typename T>
 class TDevice {};
-};  // namespace gfx
-};  // namespace nn
+}  // namespace gfx
+}  // namespace nn

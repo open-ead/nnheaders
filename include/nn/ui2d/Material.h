@@ -25,5 +25,5 @@ public:
     virtual void BindAnimation(nn::ui2d::AnimTransform*);
     virtual void UnbindAnimation(nn::ui2d::AnimTransform*);
 };
-};  // namespace ui2d
-};  // namespace nn
+}  // namespace ui2d
+}  // namespace nn
