@@ -5,18 +5,17 @@
 
 #pragma once
 
-namespace nn {
-namespace gfx {
-// passes both ApiType<4> and ApiVersion<8>
-template <typename T, typename T2>
+namespace nn::gfx {
+
+template <typename Type, typename Version>
 class ApiVariation {};
 
-// usually passed as just a 4
 template <int T>
 class ApiType {};
 
-// usually passed as just a 8
 template <int T>
 class ApiVersion {};
-}  // namespace gfx
-}  // namespace nn
+
+using DefaultApi = ApiVariation<ApiType<4>, ApiVersion<8>>;
+
+}  // namespace nn::gfx

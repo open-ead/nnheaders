@@ -5,10 +5,15 @@
 
 #pragma once
 
-namespace nn {
-namespace gfx {
+#include <nn/gfx/api.h>
+#include <nn/gfx/detail/pool.h>
+
+namespace nn::gfx {
+
 // todo: finish me!
-template <typename T>
-class TMemoryPool {};
-}  // namespace gfx
-}  // namespace nn
+template <typename Api>
+class TMemoryPool : public detail::MemoryPoolImpl<Api> {};
+
+using MemoryPool = TMemoryPool<DefaultApi>;
+
+}  // namespace nn::gfx

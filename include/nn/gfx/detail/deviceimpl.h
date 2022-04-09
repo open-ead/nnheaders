@@ -5,12 +5,13 @@
 
 #pragma once
 
-namespace nn {
-namespace gfx {
+namespace nn::gfx {
+
 class DeviceInfo;
 
 namespace detail {
-template <typename T>
+
+template <typename Api>
 class DeviceImpl {
 public:
     DeviceImpl();
@@ -19,6 +20,7 @@ public:
     void Initialize(nn::gfx::DeviceInfo const& deviceInfo);
     void Finalize();
 };
+
 }  // namespace detail
-}  // namespace gfx
-}  // namespace nn
+
+}  // namespace nn::gfx

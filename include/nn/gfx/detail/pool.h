@@ -2,13 +2,15 @@
 
 #include <nn/types.h>
 
-namespace nn {
-namespace gfx {
+namespace nn::gfx {
+
 struct MemoryPoolInfo;
+
+namespace detail {
+
 template <typename T>
 struct DeviceImpl;
 
-namespace detail {
 class MemoryPoolData {
 public:
     void SetDefault();
@@ -18,17 +20,16 @@ public:
     u64 _8;
 };
 
-template <typename T>
+template <typename Api>
 class MemoryPoolImpl {
 public:
+    using Device = DeviceImpl<Api>;
+
     MemoryPoolImpl();
     ~MemoryPoolImpl();
 
-    void Initialize(nn::gfx::detail::DeviceImpl<
-                        nn::gfx::ApiVariation<nn::gfx::ApiType<4>, nn::gfx::ApiVersion<8>>>*,
-                    nn::gfx::MemoryPoolInfo const&);
-    void Finalize(nn::gfx::detail::DeviceImpl<
-                  nn::gfx::ApiVariation<nn::gfx::ApiType<4>, nn::gfx::ApiVersion<8>>>*);
+    void Initialize(Device*, MemoryPoolInfo const&);
+    void Finalize(Device*);
     void* Map() const;
     void Unmap() const;
     void FlushMappedRange(s64, u64) const;
@@ -36,6 +37,7 @@ public:
 
     u8 _0[0x120];  // pool data
 };
+
 }  // namespace detail
-}  // namespace gfx
-}  // namespace nn
+
+}  // namespace nn::gfx

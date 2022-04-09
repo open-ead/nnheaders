@@ -5,38 +5,38 @@
 
 #pragma once
 
-namespace nn {
-namespace gfx {
+#include <nn/types.h>
+
+namespace nn::gfx {
+
 class GpuAddress;
 class BufferInfo;
 
 namespace detail {
-template <typename T>
+
+template <typename Api>
 class MemoryPoolImpl;
-template <typename T>
+template <typename Api>
 class DeviceImpl;
 
-template <typename T>
+template <typename Api>
 class BufferImpl {
 public:
+    using Device = DeviceImpl<Api>;
+    using MemoryPool = MemoryPoolImpl<Api>;
+
     BufferImpl();
     ~BufferImpl();
 
-    void Initialize(nn::gfx::detail::DeviceImpl<
-                        nn::gfx::ApiVariation<nn::gfx::ApiType<4>, nn::gfx::ApiVersion<8>>>*,
-                    nn::gfx::BufferInfo const&,
-                    nn::gfx::detail::MemoryPoolImpl<
-                        nn::gfx::ApiVariation<nn::gfx::ApiType<4>, nn::gfx::ApiVersion<8>>>*,
-                    s64, u64);
-    void Finalize(nn::gfx::detail::DeviceImpl<
-                  nn::gfx::ApiVariation<nn::gfx::ApiType<4>, nn::gfx::ApiVersion<8>>>*);
+    void Initialize(Device*, BufferInfo const&, MemoryPool*, s64, u64);
+    void Finalize(Device*);
     void* Map() const;
     void Unmap() const;
     void FlushMappedRange(s64, u64) const;
     void InvalidateMappedRange(s64, u64) const;
-    void GetGpuAddress(nn::gfx::GpuAddress*) const;
+    void GetGpuAddress(GpuAddress*) const;
 
-    T* mBuff;  // _0
+    void* mBuff;  // _0
 };
 
 template <typename T>
@@ -50,6 +50,7 @@ public:
     void End();
     void Dispatch(s32, s32, s32);
 };
+
 }  // namespace detail
-}  // namespace gfx
-}  // namespace nn
+
+}  // namespace nn::gfx
