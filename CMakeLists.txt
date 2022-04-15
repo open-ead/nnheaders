@@ -18,7 +18,12 @@ add_library(NintendoSDK OBJECT
   include/nn/oe.h
   include/nn/util.h
   include/nn/image.h
-  include/nn/util/Float2.h
+  include/nn/util/AccessorBase.h
+  include/nn/util/BinaryTypes.h
+  include/nn/util/BytePtr.h
+  include/nn/util/MathTypes.h
+  include/nn/util/ResDic.h
+  include/nn/util/StringView.h
   include/nn/ui2d/detail/TexCoordArray.h
   include/nn/ui2d/Layout.h
   include/nn/ui2d/Parts.h
@@ -35,6 +40,7 @@ add_library(NintendoSDK OBJECT
   include/nn/g3d/ResMaterial.h
   include/nn/g3d/ResFogAnim.h
   include/nn/g3d/ResModel.h
+  include/nn/g3d/ResSkeleton.h
   include/nn/g3d/World.h
   include/nn/nn.h
   include/nn/settings.h
@@ -80,6 +86,8 @@ add_library(NintendoSDK OBJECT
   include/nn/gfx/memory.h
   include/nn/gfx/buffer.h
   include/nn/gfx/api.h
+  include/nn/gfx/ResUserData.h
+  include/nn/gfx/ResUserDataData.h
   include/nn/vi.h
   include/nn/account.h
   include/nn/audio.h

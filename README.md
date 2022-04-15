@@ -1,7 +1,7 @@
 # nnheaders
 Repository of user created nnsdk headers.
 
-The header files contained herewithin are entirely user created via Reverse Engineering or publicly available sources (non stripped binaries containing symbols).
+The header files contained herewithin are entirely user created via Reverse Engineering or publicly available sources (non stripped binaries containing symbols and/or debug info), such as *Splatoon 2* and *Pokémon Sword and Shield*.
 
 Do not ask for or PR any copyrighted material to this repo. You will be ignored.
 
