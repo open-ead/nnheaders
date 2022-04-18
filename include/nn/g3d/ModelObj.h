@@ -12,6 +12,8 @@ class SkeletonObj;
 // TODO
 class ModelObj {
 public:
+    SkeletonObj* GetSkeleton() const { return m_Skeleton; }
+
 private:
     struct InitializeArgument;
 
