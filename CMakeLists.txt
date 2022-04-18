@@ -41,6 +41,7 @@ add_library(NintendoSDK OBJECT
   include/nn/g3d/ResFogAnim.h
   include/nn/g3d/ResModel.h
   include/nn/g3d/ResSkeleton.h
+  include/nn/g3d/SkeletonObj.h
   include/nn/g3d/World.h
   include/nn/nn.h
   include/nn/settings.h
