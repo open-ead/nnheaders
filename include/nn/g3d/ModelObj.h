@@ -13,6 +13,10 @@ class SkeletonObj;
 class ModelObj {
 public:
 private:
+    struct InitializeArgument;
+
+    bool Initialize(const InitializeArgument& arg, void* buffer, size_t bufferSize);
+
     const ResModel* m_ResModel;
     void* _8;
     void* _10;
