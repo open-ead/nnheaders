@@ -7,7 +7,7 @@
 namespace nn::util {
 
 constexpr uint32_t MakeSignature(u8 a, u8 b, u8 c, u8 d) {
-    return a | (b << 8) | (c << 16) | (c << 24);
+    return a | (b << 8) | (c << 16) | (d << 24);
 }
 
 struct BinBlockSignature {
