@@ -8,10 +8,20 @@
 #include <nn/settings.h>
 #include <nn/types.h>
 
-namespace nn {
-namespace oe {
+namespace nn::oe {
+
+enum OperationMode {
+    OperationMode_Handheld,
+    OperationMode_Docked,
+};
+
+enum PerformanceMode {
+    PerformanceMode_Normal = 0,
+    PerformanceMode_Boost = 1,
+    PerformanceMode_Invalid = -1,
+};
+
 typedef s32 FocusHandlingMode;
-typedef s32 PerformanceMode;
 
 struct DisplayVersion {
     char name[16];
@@ -19,8 +29,8 @@ struct DisplayVersion {
 
 void Initialize();
 void SetPerformanceConfiguration(nn::oe::PerformanceMode, s32);
-s32 GetOperationMode();
-s32 GetPerformanceMode();
+OperationMode GetOperationMode();
+PerformanceMode GetPerformanceMode();
 void SetResumeNotificationEnabled(bool);
 void SetOperationModeChangedNotificationEnabled(bool);
 void SetPerformanceModeChangedNotificationEnabled(bool);
@@ -33,5 +43,5 @@ void SetUserInactivityDetectionTimeExtended(bool);
 void FinishStartupLogo();
 nn::settings::LanguageCode GetDesiredLanguage();
 void GetDisplayVersion(DisplayVersion*);
-}  // namespace oe
-}  // namespace nn
+
+}  // namespace nn::oe
