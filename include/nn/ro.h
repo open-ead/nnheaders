@@ -6,18 +6,66 @@
 #pragma once
 
 #include <nn/types.h>
+#include <nn/util/BinaryTypes.h>
+#include <elf.h>
 
 namespace nn {
 namespace ro {
 
-namespace rtld {
-struct ModuleObject;  // TODO find this object and implement it. Original `#include` name:
-                      // ModuleObject.hpp, full path name: nn::ro::rtld::ModuleObject
+namespace detail {
+    class RoModule {
+    public:
+        RoModule* next;
+        RoModule* prev;
+        union {
+            Elf64_Rel* rel_plt;
+            Elf64_Rela* rela_plt;
+            void* rel_rela_plt;
+        };
+        union {
+            Elf64_Rel* rel;
+            Elf64_Rela* rela;
+            void* rel_rela;
+        };
+        u8* moduleBaseAddr;
+        Elf64_Dyn* dynamic;
+        bool is_rela;
+        u8 pad_x31[7];
+        Elf64_Xword plt_size;
+        void (*initFunc)(void);
+        void (*finiFunc)(void);
+        Elf64_Word* hashBucket;
+        Elf64_Word* hashChain;
+        char* dynstrTable;
+        Elf64_Sym* dynsymTable;
+        Elf64_Xword dynstrTable_size;
+        void** got_plt;
+        Elf64_Xword rela_dyn_size;
+        Elf64_Xword rel_dyn_size;
+        Elf64_Xword relEnt_count;
+        Elf64_Xword relaEnt_count;
+        Elf64_Xword nchain;
+        Elf64_Xword nbucket;
+        Elf64_Xword off_soname;
+        u64 unk_xB8;
+        bool unk_xC0;
+        u8 pad_xC1[7];
+        Elf64_Xword ArchitectureData;
+
+        void Initialize(u8* moduleBaseAddr, u64 arg1_0, Elf64_Dyn* dynamic, bool arg4_0);
+        Elf64_Sym* Lookup(const char* symbol);
+        void Relocation(bool lazyGotPlt);
+        void CallInit();
+        void CallFini();
+        bool ResolveSym(Elf64_Addr* symbolAddr, Elf64_Sym* symbol);
+    };
+
+    static_assert(sizeof(RoModule) == 0xD0, "RoModule definition!");
 }
 
 class Module {
 public:
-    rtld::ModuleObject* ModuleObject;
+    detail::RoModule* ModuleObject;
     u32 State;
     void* NroPtr;
     void* BssPtr;
@@ -34,13 +82,15 @@ struct ModuleId {
 };
 
 struct NroHeader {
+    static constexpr u32 NroMagic = util::MakeSignature('N', 'R', 'O', '0');
+
     u32 entrypoint_insn;
     u32 mod_offset;
     u8 _x8[0x8];
     u32 magic;
     u8 _x14[0x4];
     u32 size;
-    u8 reserved_1C[0x4];
+    u8 _x1C[0x4];
     u32 text_offset;
     u32 text_size;
     u32 ro_offset;
@@ -60,18 +110,32 @@ struct ProgramId {
     inline explicit operator u64() const { return this->value; }
 };
 
+struct NrrCertification {
+    u64 programID_Mask;
+    u64 programID_Pattern;
+    u8 reserved_x10[0x10];
+
+    u8 modulus[0x100];
+    u8 signature[0x100];
+};
+static_assert(sizeof(NrrCertification) == 0x220, "NrrCertification definition!");
+
+enum NrrKind : u8 {
+    NrrKind_User = 0,
+    NrrKind_JitPlugin = 1,
+    NrrKind_Count,
+};
+
 struct NrrHeader {
+    static constexpr u32 NrrMagic = util::MakeSignature('N', 'R', 'R', '0');
+
     u32 magic;
     u8 _x4[0xC];
-    u64 program_id_mask;
-    u64 program_id_pattern;
-    u8 _x20[0x10];
-    u8 modulus[0x100];
-    u8 fixed_key_signature[0x100];
+    NrrCertification certiicate;
     u8 nrr_signature[0x100];
     ProgramId program_id;
     u32 size;
-    u8 type; /* 7.0.0+ */
+    NrrKind type; /* 7.0.0+ */
     u8 _x33D[3];
     u32 hashes_offset;
     u32 num_hashes;
@@ -95,21 +159,23 @@ enum BindFlag {
     BindFlag_Lazy = BIT(1),
 };
 
-Result Initialize();
+Result Initialize(void);                              // Calls InitializeWithPortName with "ldr:ro"
+Result InitializeWithPortName(const char* portname);  // "ldr:ro" or "ro:1"
+Result Finalize(void);
 
-Result LookupSymbol(uintptr_t* pOutAddress, const char* name);
+Result GetBufferSize(u64* size, const void* nro);  // Gets Bss size from nro+0x38
 
-Result LookupModuleSymbol(uintptr_t* pOutAddress, const Module* pModule, const char* name);
-Result LoadModule(Module* pOutModule, const void* pImage, void* buffer, size_t bufferSize,
-                  int flag);
-// Result LoadModule(Module *pOutModule, const void *pImage, void *buffer, size_t bufferSize,int
-// flag, bool isNotReferenced);
-Result UnloadModule(Module*);
-Result GetBufferSize(size_t*, const void*);
+Result RegisterModuleInfo(nn::ro::RegistrationInfo* regInfo, const void* Nrr);
+Result RegisterModuleInfo(nn::ro::RegistrationInfo* regInfo, const void* Nrr, u32);
+Result UnregisterModuleInfo(nn::ro::RegistrationInfo* regInfo);
 
-Result RegisterModuleInfo(RegistrationInfo*, void const*);
-Result RegisterModuleInfo(RegistrationInfo*, void const*, u32);
-Result UnregisterModuleInfo(RegistrationInfo*, void const*);
+Result LoadModule(Module* outModule, const void* Nro, void* NroBss, u64 NroBssSize, s32 flags);
+Result LoadModule(Module* outModule, const void* Nro, void* NroBss, u64 NroBssSize, s32 flags,
+                  bool);
+Result UnloadModule(Module* module);
+
+Result LookupSymbol(u64* funcAddress, const char* symbolName);
+Result LookupModuleSymbol(u64* funcAddress, const Module* module, const char* symbolName);
 }  // namespace ro
 
 }  // namespace nn
