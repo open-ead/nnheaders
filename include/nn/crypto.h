@@ -13,10 +13,119 @@ void GenerateSha256Hash(void*, ulong, void const*, ulong);
 
 class Sha256Context;
 
-void DecryptAes128Cbc(void*, u64, void const*, u64, void const*, u64, void const*, u64);
-void EncryptAes128Cbc(void*, u64, void const*, u64, void const*, u64, void const*, u64);
-void DecryptAes128Ccm(void*, u64, void*, u64, void const*, u64, void const*, u64, void const*, u64,
-                      void const*, u64, u64);
+// Util Functions
+bool IsSameBytes(const void* data1, const void* data2, u64 size);
+Result GenerateCryptographicallyRandomBytes(void* dstBuffer, u64 dstBufferSize); // dstBufferSize max size is 0x38
+
+// MD5 Hash
+void GenerateMd5Hash(void* dstBuffer, u64 dstBufferSize, const void* srcBuffer, u64 srcBufferSize);
+
+// SHA-1 Hash
+void GenerateSha1Hash(void* dstBuffer, u64 dstBufferSize, const void* srcBuffer, u64 srcBufferSize);
+
+// SHA-256 Hash
+void GenerateSha256Hash(void* dstBuffer, u64 dstBufferSize, const void* srcBuffer,
+                        u64 srcBufferSize);
+
+// SHA-512 Hash
+void GenerateSha512Hash(void* dstBuffer, u64 dstBufferSize, const void* srcBuffer,
+                        u64 srcBufferSize);
+
+// HMAC-SHA1
+void GenerateHmacSha1Mac(void* dstBuffer, u64 dstBufferSize, const void* srcBuffer,
+                         u64 srcBufferSize, const void* hmacKey, u64 hmacKeySize);
+
+// HMAC-SHA256
+void GenerateHmacSha256Mac(void* dstBuffer, u64 dstBufferSize, const void* srcBuffer,
+                           u64 srcBufferSize, const void* hmacKey, u64 hmacKeySize);
+
+// AES-128 CBC Decrypt
+u64 DecryptAes128Cbc(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                     const void* iv, u64 ivSize, const void* srcBuffer,
+                     u64 srcBufferSize);  // returns srcBufferSize
+
+// AES-128 CBC Encrypt
+u64 EncryptAes128Cbc(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                     const void* iv, u64 ivSize, const void* srcBuffer,
+                     u64 srcBufferSize);  // returns srcBufferSize
+
+// AES-128 CTR Decrypt
+u64 DecryptAes128Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                     const void* ctr, u64 ctrSize, const void* srcBuffer,
+                     u64 srcBufferSize);  // returns srcBufferSize
+
+u64 DecryptAes128CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
+                            u64 srcBufferSize);  // returns srcBufferSize
+
+// AES-128 CTR Encrypt
+u64 EncryptAes128Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                     const void* ctr, u64 ctrSize, const void* srcBuffer,
+                     u64 srcBufferSize);  // returns srcBufferSize
+
+u64 EncryptAes128CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
+                            u64 srcBufferSize);  // returns srcBufferSize
+
+// AES-192 CTR Decrypt
+u64 DecryptAes192Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                     const void* ctr, u64 ctrSize, const void* srcBuffer,
+                     u64 srcBufferSize);  // returns srcBufferSize
+
+u64 DecryptAes192CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
+                            u64 srcBufferSize);  // returns srcBufferSize
+
+// AES-192 CTR Encrypt
+u64 EncryptAes192Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                     const void* ctr, u64 ctrSize, const void* srcBuffer,
+                     u64 srcBufferSize);  // returns srcBufferSize
+
+u64 EncryptAes192CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
+                            u64 srcBufferSize);  // returns srcBufferSize
+
+// AES-256 CTR Decrypt
+u64 DecryptAes256Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                     const void* ctr, u64 ctrSize, const void* srcBuffer,
+                     u64 srcBufferSize);  // returns srcBufferSize
+
+u64 DecryptAes256CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
+                            u64 srcBufferSize);  // returns srcBufferSize
+
+// AES-256 CTR Encrypt
+u64 EncryptAes256Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                     const void* ctr, u64 ctrSize, const void* srcBuffer,
+                     u64 srcBufferSize);  // returns srcBufferSize
+
+u64 EncryptAes256CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
+                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
+                            u64 srcBufferSize);  // returns srcBufferSize
+
+// AES-128 CCM Decrypt
+u64 DecryptAes128Ccm(void*, u64, void*, u64, const void*, u64, const void*, u64, const void*, u64,
+                     const void*, u64, u64);
+
+// AES-128 CCM Encrypt
+u64 EncryptAes128Ccm(void*, u64, void*, u64, const void*, u64, const void*, u64, const void*, u64,
+                     const void*, u64, u64);
+
+// AES-128 GCM Decrypt
+u64 DecryptAes128Gcm(void*, u64, void*, u64, const void*, u64, const void*, u64, const void*, u64,
+                     const void*, u64);
+
+// AES-128 GCM Encrypt
+u64 EncryptAes128Gcm(void*, u64, void*, u64, const void*, u64, const void*, u64, const void*, u64,
+                     const void*, u64);
+
+// AES-256 GCM Decrypt
+u64 DecryptAes256Gcm(void* dstBuffer, u64 dstBufferSize, void*, u64, const void*, u64, const void*,
+                     u64, const void*, u64, const void*, u64);
+
+// AES-256 GCM Encrypt
+u64 EncryptAes256Gcm(void* dstBuffer, u64 dstBufferSize, void*, u64, const void*, u64, const void*,
+                     u64, const void*, u64, const void*, u64);
 
 namespace detail {
 class Md5Impl {
