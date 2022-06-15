@@ -155,8 +155,8 @@ struct RegistrationInfo {
 };
 
 enum BindFlag {
-    BindFlag_Now = BIT(0),
-    BindFlag_Lazy = BIT(1),
+    BindFlag_Now = 1,
+    BindFlag_Lazy = 2,
 };
 
 Result Initialize(void);                              // Calls InitializeWithPortName with "ldr:ro"
