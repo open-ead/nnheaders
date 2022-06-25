@@ -5,63 +5,63 @@
 
 #pragma once
 
+#include <elf.h>
 #include <nn/types.h>
 #include <nn/util/BinaryTypes.h>
-#include <elf.h>
 
 namespace nn {
 namespace ro {
 
 namespace detail {
-    class RoModule {
-    public:
-        RoModule* next;
-        RoModule* prev;
-        union {
-            Elf64_Rel* rel_plt;
-            Elf64_Rela* rela_plt;
-            void* rel_rela_plt;
-        };
-        union {
-            Elf64_Rel* rel;
-            Elf64_Rela* rela;
-            void* rel_rela;
-        };
-        u8* moduleBaseAddr;
-        Elf64_Dyn* dynamic;
-        bool is_rela;
-        u8 pad_x31[7];
-        Elf64_Xword plt_size;
-        void (*initFunc)(void);
-        void (*finiFunc)(void);
-        Elf64_Word* hashBucket;
-        Elf64_Word* hashChain;
-        char* dynstrTable;
-        Elf64_Sym* dynsymTable;
-        Elf64_Xword dynstrTable_size;
-        void** got_plt;
-        Elf64_Xword rela_dyn_size;
-        Elf64_Xword rel_dyn_size;
-        Elf64_Xword relEnt_count;
-        Elf64_Xword relaEnt_count;
-        Elf64_Xword nchain;
-        Elf64_Xword nbucket;
-        Elf64_Xword off_soname;
-        u64 unk_xB8;
-        bool unk_xC0;
-        u8 pad_xC1[7];
-        Elf64_Xword ArchitectureData;
-
-        void Initialize(u8* moduleBaseAddr, u64 arg1_0, Elf64_Dyn* dynamic, bool arg4_0);
-        Elf64_Sym* Lookup(const char* symbol);
-        void Relocation(bool lazyGotPlt);
-        void CallInit();
-        void CallFini();
-        bool ResolveSym(Elf64_Addr* symbolAddr, Elf64_Sym* symbol);
+class RoModule {
+public:
+    RoModule* next;
+    RoModule* prev;
+    union {
+        Elf64_Rel* rel_plt;
+        Elf64_Rela* rela_plt;
+        void* rel_rela_plt;
     };
+    union {
+        Elf64_Rel* rel;
+        Elf64_Rela* rela;
+        void* rel_rela;
+    };
+    u8* moduleBaseAddr;
+    Elf64_Dyn* dynamic;
+    bool is_rela;
+    u8 pad_x31[7];
+    Elf64_Xword plt_size;
+    void (*initFunc)();
+    void (*finiFunc)();
+    Elf64_Word* hashBucket;
+    Elf64_Word* hashChain;
+    char* dynstrTable;
+    Elf64_Sym* dynsymTable;
+    Elf64_Xword dynstrTable_size;
+    void** got_plt;
+    Elf64_Xword rela_dyn_size;
+    Elf64_Xword rel_dyn_size;
+    Elf64_Xword relEnt_count;
+    Elf64_Xword relaEnt_count;
+    Elf64_Xword nchain;
+    Elf64_Xword nbucket;
+    Elf64_Xword off_soname;
+    u64 unk_xb8;
+    bool unk_xc0;
+    u8 pad_xc1[7];
+    Elf64_Xword ArchitectureData;
 
-    static_assert(sizeof(RoModule) == 0xD0, "RoModule definition!");
-}
+    void Initialize(u8* moduleBaseAddr, u64 arg1_0, Elf64_Dyn* dynamic, bool arg4_0);
+    Elf64_Sym* Lookup(const char* symbol);
+    void Relocation(bool lazyGotPlt);
+    void CallInit();
+    void CallFini();
+    bool ResolveSym(Elf64_Addr* symbolAddr, Elf64_Sym* symbol);
+};
+
+static_assert(sizeof(RoModule) == 0xD0, "RoModule definition!");
+}  // namespace detail
 
 class Module {
 public:
@@ -90,7 +90,7 @@ struct NroHeader {
     u32 magic;
     u8 _x14[0x4];
     u32 size;
-    u8 _x1C[0x4];
+    u8 _x1c[0x4];
     u32 text_offset;
     u32 text_size;
     u32 ro_offset;
@@ -98,7 +98,7 @@ struct NroHeader {
     u32 rw_offset;
     u32 rw_size;
     u32 bss_size;
-    u8 _x3C[0x4];
+    u8 _x3c[0x4];
     ModuleId module_id;
     u8 _x60[0x20];
 };
@@ -136,7 +136,7 @@ struct NrrHeader {
     ProgramId program_id;
     u32 size;
     NrrKind type; /* 7.0.0+ */
-    u8 _x33D[3];
+    u8 _x33d[3];
     u32 hashes_offset;
     u32 num_hashes;
     u8 _x348[8];
@@ -159,18 +159,18 @@ enum BindFlag {
     BindFlag_Lazy = 2,
 };
 
-Result Initialize(void);                              // Calls InitializeWithPortName with "ldr:ro"
+Result Initialize();
 Result InitializeWithPortName(const char* portname);  // "ldr:ro" or "ro:1"
-Result Finalize(void);
+Result Finalize();
 
 Result GetBufferSize(u64* size, const void* nro);  // Gets Bss size from nro+0x38
 
-Result RegisterModuleInfo(nn::ro::RegistrationInfo* regInfo, const void* Nrr);
-Result RegisterModuleInfo(nn::ro::RegistrationInfo* regInfo, const void* Nrr, u32);
+Result RegisterModuleInfo(nn::ro::RegistrationInfo* regInfo, const void* nrr);
+Result RegisterModuleInfo(nn::ro::RegistrationInfo* regInfo, const void* nrr, u32);
 Result UnregisterModuleInfo(nn::ro::RegistrationInfo* regInfo);
 
-Result LoadModule(Module* outModule, const void* Nro, void* NroBss, u64 NroBssSize, s32 flags);
-Result LoadModule(Module* outModule, const void* Nro, void* NroBss, u64 NroBssSize, s32 flags,
+Result LoadModule(Module* outModule, const void* nro, void* nroBss, u64 nroBssSize, s32 flags);
+Result LoadModule(Module* outModule, const void* nro, void* nroBss, u64 nroBssSize, s32 flags,
                   bool);
 Result UnloadModule(Module* module);
 

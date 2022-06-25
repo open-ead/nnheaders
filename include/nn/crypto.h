@@ -9,13 +9,12 @@
 
 namespace nn {
 namespace crypto {
-void GenerateSha256Hash(void*, ulong, void const*, ulong);
 
 class Sha256Context;
 
-// Util Functions
+// dstBufferSize max size is 0x38
+Result GenerateCryptographicallyRandomBytes(void* dstBuffer, u64 dstBufferSize);
 bool IsSameBytes(const void* data1, const void* data2, u64 size);
-Result GenerateCryptographicallyRandomBytes(void* dstBuffer, u64 dstBufferSize); // dstBufferSize max size is 0x38
 
 // MD5 Hash
 void GenerateMd5Hash(void* dstBuffer, u64 dstBufferSize, const void* srcBuffer, u64 srcBufferSize);
@@ -39,69 +38,61 @@ void GenerateHmacSha1Mac(void* dstBuffer, u64 dstBufferSize, const void* srcBuff
 void GenerateHmacSha256Mac(void* dstBuffer, u64 dstBufferSize, const void* srcBuffer,
                            u64 srcBufferSize, const void* hmacKey, u64 hmacKeySize);
 
-// AES-128 CBC Decrypt
+// AES-128 CBC Decrypt - returns srcBufferSize
 u64 DecryptAes128Cbc(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                     const void* iv, u64 ivSize, const void* srcBuffer,
-                     u64 srcBufferSize);  // returns srcBufferSize
+                     const void* iv, u64 ivSize, const void* srcBuffer, u64 srcBufferSize);
 
-// AES-128 CBC Encrypt
+// AES-128 CBC Encrypt - returns srcBufferSize
 u64 EncryptAes128Cbc(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                     const void* iv, u64 ivSize, const void* srcBuffer,
-                     u64 srcBufferSize);  // returns srcBufferSize
+                     const void* iv, u64 ivSize, const void* srcBuffer, u64 srcBufferSize);
 
-// AES-128 CTR Decrypt
+// AES-128 CTR Decrypt - returns srcBufferSize
 u64 DecryptAes128Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                     const void* ctr, u64 ctrSize, const void* srcBuffer,
-                     u64 srcBufferSize);  // returns srcBufferSize
+                     const void* ctr, u64 ctrSize, const void* srcBuffer, u64 srcBufferSize);
 
 u64 DecryptAes128CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
-                            u64 srcBufferSize);  // returns srcBufferSize
+                            const void* ctr, u64 ctrSize, s64 partialSize, const void* srcBuffer,
+                            u64 srcBufferSize);
 
-// AES-128 CTR Encrypt
+// AES-128 CTR Encrypt - returns srcBufferSize
 u64 EncryptAes128Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                     const void* ctr, u64 ctrSize, const void* srcBuffer,
-                     u64 srcBufferSize);  // returns srcBufferSize
+                     const void* ctr, u64 ctrSize, const void* srcBuffer, u64 srcBufferSize);
 
 u64 EncryptAes128CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
-                            u64 srcBufferSize);  // returns srcBufferSize
+                            const void* ctr, u64 ctrSize, s64 partialSize, const void* srcBuffer,
+                            u64 srcBufferSize);
 
-// AES-192 CTR Decrypt
+// AES-192 CTR Decrypt - returns srcBufferSize
 u64 DecryptAes192Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                     const void* ctr, u64 ctrSize, const void* srcBuffer,
-                     u64 srcBufferSize);  // returns srcBufferSize
+                     const void* ctr, u64 ctrSize, const void* srcBuffer, u64 srcBufferSize);
 
 u64 DecryptAes192CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
                             const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
-                            u64 srcBufferSize);  // returns srcBufferSize
+                            u64 srcBufferSize);
 
-// AES-192 CTR Encrypt
+// AES-192 CTR Encrypt - returns srcBufferSize
 u64 EncryptAes192Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                     const void* ctr, u64 ctrSize, const void* srcBuffer,
-                     u64 srcBufferSize);  // returns srcBufferSize
+                     const void* ctr, u64 ctrSize, const void* srcBuffer, u64 srcBufferSize);
 
 u64 EncryptAes192CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
-                            u64 srcBufferSize);  // returns srcBufferSize
+                            const void* ctr, u64 ctrSize, s64 partialSize, const void* srcBuffer,
+                            u64 srcBufferSize);
 
-// AES-256 CTR Decrypt
+// AES-256 CTR Decrypt - returns srcBufferSize
 u64 DecryptAes256Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                     const void* ctr, u64 ctrSize, const void* srcBuffer,
-                     u64 srcBufferSize);  // returns srcBufferSize
+                     const void* ctr, u64 ctrSize, const void* srcBuffer, u64 srcBufferSize);
 
 u64 DecryptAes256CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
-                            u64 srcBufferSize);  // returns srcBufferSize
+                            const void* ctr, u64 ctrSize, s64 partialSize, const void* srcBuffer,
+                            u64 srcBufferSize);
 
-// AES-256 CTR Encrypt
+// AES-256 CTR Encrypt - returns srcBufferSize
 u64 EncryptAes256Ctr(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                     const void* ctr, u64 ctrSize, const void* srcBuffer,
-                     u64 srcBufferSize);  // returns srcBufferSize
+                     const void* ctr, u64 ctrSize, const void* srcBuffer, u64 srcBufferSize);
 
 u64 EncryptAes256CtrPartial(void* dstBuffer, u64 dstBufferSize, const void* key, u64 keySize,
-                            const void* ctr, u64 ctrSize, s64 partialSize__, const void* srcBuffer,
-                            u64 srcBufferSize);  // returns srcBufferSize
+                            const void* ctr, u64 ctrSize, s64 partialSize, const void* srcBuffer,
+                            u64 srcBufferSize);
 
 // AES-128 CCM Decrypt
 u64 DecryptAes128Ccm(void*, u64, void*, u64, const void*, u64, const void*, u64, const void*, u64,
