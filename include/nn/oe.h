@@ -43,5 +43,6 @@ void SetUserInactivityDetectionTimeExtended(bool);
 void FinishStartupLogo();
 nn::settings::LanguageCode GetDesiredLanguage();
 void GetDisplayVersion(DisplayVersion*);
+bool TryPopLaunchParameter(size_t* ,void*, size_t);
 
 }  // namespace nn::oe
