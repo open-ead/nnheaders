@@ -5,22 +5,22 @@
 
 #pragma once
 
-#include "sead/runtime.h"  //FIXME this definitely is wrong
-#include "types.h"
+#include <nn/font/font_Util.h>
+#include <nn/types.h>
 
-namespace nn {
-namespace ui2d {
+namespace nn::ui2d {
 class AnimTransform;
 class Layout;
 
 class Pane {
 public:
+    NN_RUNTIME_TYPEINFO_BASE();
+
     Pane();
-    Pane(nn::ui2d::Pane const&);
+    Pane(const Pane&);
 
     virtual ~Pane();
 
-    virtual sead::RuntimeTypeInfo::Interface* GetRuntimeTypeInfo() const;
     virtual s32 GetVertexColor(s32);
     virtual u8 GetColorElement(s32);
     virtual void SetColorElement(u32, u8);
@@ -29,47 +29,51 @@ public:
     virtual u32 GetMaterialCount() const;
     virtual u64* GetMaterial(s32) const;
 
-    virtual void BindAnimation(nn::ui2d::AnimTransform*, bool, bool);
-    virtual void UnbindAnimation(nn::ui2d::AnimTransform*, bool);
+    virtual void BindAnimation(AnimTransform*, bool, bool);
+    virtual void UnbindAnimation(AnimTransform*, bool);
 
     void Initialize();
-    void SetName(char const*);
-    void SetUserData(char const*);
-    void AppendChild(nn::ui2d::Pane*);
-    void PrependChild(nn::ui2d::Pane*);
-    void InsertChild(nn::ui2d::Pane*, nn::ui2d::Pane*);
-    void RemoveChild(nn::ui2d::Pane*);
+    void SetName(const char*);
+    void SetUserData(const char*);
+    void AppendChild(Pane*);
+    void PrependChild(Pane*);
+    void InsertChild(Pane*, Pane*);
+    void RemoveChild(Pane*);
     void GetVertexPos() const;
 
-    u64 _8;
+    Pane* mParent;
     u64 _10;
     u64 _18;
     u64 _20;
     u64 _28;
-    u64 _30;
-    u64 _38;
-    u64 _40;
-    u32 _48;
-    u32 _4C;
-    u64 _50;
-    u16 _58;
-    u16 _5A;
+    float mPositionX;
+    float mPositionY;
+    float mPositionZ;
+    float mRotationX;
+    float mRotationY;
+    float mRotationZ;
+    float mScaleX;
+    float mScaleY;
+    float mSizeX;
+    float mSizeY;
+    u8 mFlags;
+    u8 mAlpha;
+    u8 mAlphaInfluence;
+    u8 mOriginFlags;
     u32 _5C;
     u64 _60;
-    nn::ui2d::Layout* mLayout;  // _68
+    Layout* mLayout;
     u128 _70;
     u128 _80;
     u128 _90;
     u64 _A0;
     u64 _A8;
-    u64 _B0;
-    u64 _B8;
-    u64 _C0;
-    u64 _C8;
-    u64 _D0;
-    u16 _D8;
+    void* mAnimExtUserData;
+    char mPanelName[0x18];
+    u8 _D0;
+    char mUserData[8];
+    u8 _D9;
     u16 _DA;
     u32 _DC;
 };
-}  // namespace ui2d
-}  // namespace nn
+}  // namespace nn::ui2d
