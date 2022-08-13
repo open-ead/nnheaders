@@ -106,7 +106,6 @@ Result MountDeliveryCacheStorage();
 Result UnmountDeliveryCacheStorage();
 Result EnumerateDeliveryCacheDirectory(int*, nn::bcat::DirectoryName*, int);
 Result RequestSyncDeliveryCache(nn::bcat::DeliveryCacheProgress*);
-Result EnumerateDeliveryCacheDirectory(int*, nn::bcat::DirectoryName*, int);
 
 }  // namespace bcat
 }  // namespace nn

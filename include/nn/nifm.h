@@ -12,6 +12,7 @@ namespace nifm {
 Result Initialize();
 void SetLocalNetworkMode(bool);
 void SubmitNetworkRequestAndWait();
+void CancelNetworkRequest();
 bool IsNetworkAvailable();
 Result HandleNetworkRequestResult();
 void SubmitNetworkRequest();
