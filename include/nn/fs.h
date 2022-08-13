@@ -16,8 +16,10 @@ using namespace ams::fs;
 
 typedef u64 UserId;
 
+const s32 PathLengthMax = 0x300;
+
 struct DirectoryEntry {
-    char name[0x300 + 1];
+    char name[PathLengthMax + 1];
     char _x302[3];
     u8 type;
     char _x304;
@@ -73,59 +75,67 @@ struct WriteOption {
 Result QueryMountRomCacheSize(size_t* size);
 Result QueryMountRomCacheSize(size_t* size, nn::ApplicationId);
 Result QueryMountAddOnContentCacheSize(size_t* size, int id);
-Result MountRom(char const* name, void* cache, size_t cache_size);
-Result MountAddOnContent(char const* name, int id, void* cache, size_t cache_size);
+Result MountRom(const char* name, void* cache, size_t cache_size);
+Result MountAddOnContent(const char* name, int id, void* cache, size_t cache_size);
 bool CanMountRomForDebug();
 Result CanMountRom(nn::ApplicationId);
-Result QueryMountRomOnFileCacheSize(u64*, nn::fs::FileHandle);
-Result MountRomOnFile(char const*, nn::fs::FileHandle, void*, u64);
+Result QueryMountRomOnFileCacheSize(u64*, FileHandle);
+Result MountRomOnFile(const char*, FileHandle, void*, u64);
 
 // SAVE
-Result EnsureSaveData(nn::account::Uid const&);
-Result MountSaveData(char const*, nn::fs::UserId);
-Result MountSaveDataForDebug(char const*);
+Result EnsureSaveData(const nn::account::Uid&);
+Result MountSaveData(const char*, UserId);
+Result MountSaveDataForDebug(const char*);
 Result CommitSaveData(const char* path);
 
 // FILE
-Result GetEntryType(nn::fs::DirectoryEntryType* type, char const* path);
-Result CreateFile(char const* filepath, s64 size);
-Result OpenFile(nn::fs::FileHandle*, char const* path, s32);
+Result GetEntryType(DirectoryEntryType* type, const char* path);
+Result CreateFile(const char* filepath, s64 size);
+Result OpenFile(FileHandle* out, const char* path, s32 mode);
 Result SetFileSize(FileHandle fileHandle, s64 filesize);
 void CloseFile(FileHandle fileHandle);
 Result FlushFile(FileHandle fileHandle);
-Result DeleteFile(char const* filepath);
-Result ReadFile(u64* outSize, nn::fs::FileHandle handle, s64 offset, void* buffer, u64 bufferSize,
+Result DeleteFile(const char* filepath);
+Result RenameFile(const char* filepath, const char* newPath);
+Result ReadFile(u64* outSize, FileHandle handle, s64 offset, void* buffer, u64 bufferSize,
                 const ReadOption& option);
-Result ReadFile(u64* outSize, nn::fs::FileHandle handle, s64 offset, void* buffer, u64 bufferSize);
-Result ReadFile(nn::fs::FileHandle handle, s64 offset, void* buffer, u64 bufferSize);
-Result WriteFile(FileHandle handle, s64 fileOffset, void const* buff, u64 size,
-                 WriteOption const& option);
+Result ReadFile(u64* outSize, FileHandle handle, s64 offset, void* buffer, u64 bufferSize);
+Result ReadFile(FileHandle handle, s64 offset, void* buffer, u64 bufferSize);
+Result ReadFile(FileHandle handle, s64 offset, void* buffer, u64 bufferSize,
+                const ReadOption& option);
+Result WriteFile(FileHandle handle, s64 fileOffset, const void* buff, u64 size,
+                 const WriteOption& option);
 Result GetFileSize(s64* size, FileHandle fileHandle);
 
 // DIRECTORY
 // there are three open modes; dir, file, all
-Result OpenDirectory(DirectoryHandle* handle, char const* path, s32 openMode);
+Result OpenDirectory(DirectoryHandle* handle, const char* path, s32 openMode);
 void CloseDirectory(DirectoryHandle directoryHandle);
-Result ReadDirectory(s64*, DirectoryEntry*, DirectoryHandle directoryHandle, s64);
-Result CreateDirectory(char const* directorypath);
-Result GetDirectoryEntryCount(s64*, DirectoryHandle);
+Result ReadDirectory(s64* out, DirectoryEntry* entries, DirectoryHandle directoryHandle,
+                     s64 maxEntryCount);
+Result GetDirectoryEntryCount(s64* out, DirectoryHandle directoryHandle);
+
+Result CreateDirectory(const char* directorypath);
+Result DeleteDirectory(const char* path);
+Result DeleteDirectoryRecursively(const char* path);
+Result RenameDirectory(const char* path, const char* newPath);
 
 // SD
-Result MountSdCard(char const*);
-Result MountSdCardForDebug(char const*);
+Result MountSdCard(const char* mountPoint);
+Result MountSdCardForDebug(const char*);
 bool IsSdCardInserted();
 Result FormatSdCard();
 Result FormatSdCardDryRun();
 bool IsExFatSupported();
 
-Result MountHost(char const* mount, char const* path);
+Result MountHost(const char* mount, const char* path);
 Result MountHostRoot();
 Result UnmountHostRoot();
 
-Result Unmount(char const* mount);
+Result Unmount(const char* mountPoint);
 
 // BCAT
-Result MountBcatSaveData(char const*, ApplicationId);
+Result MountBcatSaveData(const char*, ApplicationId);
 Result CreateBcatSaveData(ApplicationId, s64);
 
 }  // namespace fs

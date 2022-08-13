@@ -28,9 +28,9 @@ public:
     virtual void UpdateAnimFrame(f32 frame);
     virtual void AnimateAndUpdateAnimFrame(f32 frame);
 
-    void SetAllocator(void* (*)(u64, u64, void*), void (*)(void*, void*), void*);
-    void AllocateMemory(u64, u64);
-    void AllocateMemory(u64);
+    static void SetAllocator(void* (*)(u64, u64, void*), void (*)(void*, void*), void*);
+    static void AllocateMemory(u64, u64);
+    static void AllocateMemory(u64);
     void FreeMemory(void* src);
 
     u64 _10;
@@ -44,6 +44,9 @@ public:
     u64 _50;
     u64 _58;
     u64 _60;
+
+    static void* g_pAllocateFunction;
+    static void* g_pFreeFunction;
 };
 }  // namespace ui2d
 }  // namespace nn
