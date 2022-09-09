@@ -10,9 +10,6 @@
 
 namespace nn {
 namespace util {
-struct Unorm8x4 {
-    u8 elements[0x4];
-};
 
 enum CharacterEncodingResult { Success, BadLength, InvalidFormat };
 
@@ -20,9 +17,6 @@ CharacterEncodingResult PickOutCharacterFromUtf8String(char*, char const** str);
 CharacterEncodingResult ConvertCharacterUtf8ToUtf32(u32* dest, char const* src);
 CharacterEncodingResult ConvertStringUtf16NativeToUtf8(char*, s32, u16 const*, s32);
 CharacterEncodingResult ConvertStringUtf8ToUtf16Native(u16*, s32, char const*, s32);
-
-template <s32 size, typename T>
-struct BitFlagSet {};
 
 s32 SNPrintf(char* s, ulong n, const char* format, ...);
 s32 VSNPrintf(char* s, ulong n, const char* format, va_list arg);
