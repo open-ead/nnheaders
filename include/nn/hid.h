@@ -31,13 +31,33 @@ struct ControllerSupportResultInfo {
     int mSelectedId;
 };
 
+struct NpadBaseState {
+    long mSamplingNumber;
+    long mButtons;
+    long mAnalogStickL;
+    long mAnalogStickR;
+    int mAttributes;
+    int RESERVED;
+};
+
+struct NpadHandheldState : NpadBaseState {};
+struct NpadJoyDualState : NpadBaseState {};
+struct NpadFullKeyState : NpadBaseState {};
+struct NpadJoyLeftState : NpadBaseState {};
+struct NpadJoyRightState : NpadBaseState {};
+
 void InitializeNpad();
 void SetSupportedNpadIdType(u32 const*, u64);
 void SetSupportedNpadStyleSet(nn::util::BitFlagSet<32, nn::hid::NpadStyleTag>);
 void GetNpadStyleSet(u32 const&);
-void GetNpadStates(nn::hid::NpadHandheldState*, s32, u32 const&);
 static int ShowControllerSupport(nn::hid::ControllerSupportResultInfo*,
                                  ControllerSupportArg const&);
+
+void GetNpadStates(NpadHandheldState*, int, const u32&);
+void GetNpadStates(NpadJoyDualState*, int, const u32&);
+void GetNpadStates(NpadFullKeyState*, int, const u32&);
+void GetNpadStates(NpadJoyLeftState*, int, const u32&);
+void GetNpadStates(NpadJoyRightState*, int, const u32&);
 
 }  // namespace hid
 }  // namespace nn
