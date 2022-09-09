@@ -20,9 +20,6 @@ CharacterEncodingResult ConvertCharacterUtf8ToUtf32(u32* dest, char const* src);
 CharacterEncodingResult ConvertStringUtf16NativeToUtf8(char*, s32, u16 const*, s32);
 CharacterEncodingResult ConvertStringUtf8ToUtf16Native(u16*, s32, char const*, s32);
 
-template <s32 size, typename T>
-struct BitFlagSet {};
-
 void ReferSymbol(const void*);
 }  // namespace util
 }  // namespace nn
