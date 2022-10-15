@@ -56,5 +56,5 @@ template <s32 size, typename T>
 struct BitFlagSet {};
 }  // namespace util
 
-void ReferSymbol(void const*);
+void ReferSymbol(const void*);
 }  // namespace nn

@@ -81,6 +81,7 @@ add_library(NintendoSDK OBJECT
   include/nn/init.h
   include/nn/crypto.h
   include/nn/ssl.h
+  include/nn/gfx/detail/fwd.h
   include/nn/gfx/detail/pool.h
   include/nn/gfx/detail/deviceimpl.h
   include/nn/gfx/detail/bufferimpl.h
@@ -130,6 +131,7 @@ add_library(NintendoSDK OBJECT
   include/vapours/results/sm_results.hpp
   include/vapours/results/psc_results.hpp
 
+  src/NintendoSDK/nnSdk/util.cpp
   src/NintendoSDK/nvn/nvnInit.cpp
 )
 

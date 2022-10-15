@@ -16,6 +16,7 @@ class ApiType {};
 template <int T>
 class ApiVersion {};
 
-using DefaultApi = ApiVariation<ApiType<4>, ApiVersion<8>>;
+using NvnApi = ApiVariation<ApiType<4>, ApiVersion<8>>;
+using DefaultApi = NvnApi;
 
 }  // namespace nn::gfx
