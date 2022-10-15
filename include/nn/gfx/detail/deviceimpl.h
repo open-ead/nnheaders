@@ -19,11 +19,12 @@ namespace detail {
 template <>
 class DeviceImpl<NvnApi> {
 public:
+	// todo: switch to enum class with bitflag class
 	enum DeviceFeatures {
 		_1 = 1,
 		_2 = 2,
 		_4 = 4,
-		SupportsConservativeRaster = 8,
+		Feature_SupportsConservativeRaster = 8,
 	};
 
     DeviceImpl();

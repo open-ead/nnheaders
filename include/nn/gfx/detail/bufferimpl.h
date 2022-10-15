@@ -8,18 +8,19 @@
 #include <nn/types.h>
 #include <nn/gfx/api.h>
 #include <nn/gfx/buffer.h>
-#include <nn/gfx/detail/fwd.h>
 #include <nn/gfx/detail/deviceimpl.h>
+#include <nn/gfx/detail/fwd.h>
+#include <nn/gfx/detail/nvn.h>
 #include <nn/gfx/detail/pool.h>
+#include <nn/gfx/detail/stateimpl.h>
 #include <nvn/nvn_api.h>
 #include <nvn/nvn_types.h>
 
 namespace nn::gfx {
 
-class GpuAddress;
 class BufferInfo;
 
-// todo: move this somewhere else?
+// todo: move these somewhere else?
 struct OutOfMemoryEventArg {
 	size_t size;
 };
@@ -51,6 +52,8 @@ class CommandBufferImpl<NvnApi> {
 public:
     using Device = DeviceImpl<NvnApi>;
     using MemoryPool = MemoryPoolImpl<NvnApi>;
+	using Pipeline = PipelineImpl<NvnApi>;
+	using Raster = RasterizerStateImpl<NvnApi>;
 	
 	using OutOfMemCallback = void (*)(TCommandBuffer<NvnApi>*, const OutOfMemoryEventArg&); 
 
@@ -109,8 +112,8 @@ public:
 
 		cmdHandle = 0;
 
-		// enum flag shennanigans?
-		field_1 = ((device->deviceFeatures & 8) ? (field_1 | 2) : (field_1 & 0xFC)) & 0xFE;
+		// conditionally sets flag_2 and clears flag_1
+		flag = (Flag)(((device->deviceFeatures & Device::Feature_SupportsConservativeRaster) ? (flag | ConservativeRaster) : (flag & 0xFC)) & 0xFE);
 
 		initialized = 1;
 	}
@@ -164,9 +167,65 @@ public:
 		nvnCommandBufferDispatchCompute(pnCmdBuf, a, b, c);
 	}
 
+	void Draw(PrimitiveTopology top, int a, int b) {
+		nvnCommandBufferDrawArrays(pnCmdBuf, Nvn::GetDrawPrimitive(top), a, b);
+	}
+
+	void Draw(PrimitiveTopology top, int a, int b, int c, int d) {
+		nvnCommandBufferDrawArraysInstanced(pnCmdBuf, Nvn::GetDrawPrimitive(top), a, b, c, d);
+	}
+
+	void DrawIndexed(PrimitiveTopology top, IndexFormat index, const GpuAddress& addr, int a, int b) {
+		nvnCommandBufferDrawElementsBaseVertex(pnCmdBuf, Nvn::GetDrawPrimitive(top), Nvn::GetIndexFormat(index), a, Nvn::GetBufferAddress(addr), b);
+	}
+
+	void DrawIndexed(PrimitiveTopology top, IndexFormat index, const GpuAddress& addr, int a, int b, int c, int d) {
+		nvnCommandBufferDrawElementsInstanced(pnCmdBuf, Nvn::GetDrawPrimitive(top), Nvn::GetIndexFormat(index), a, Nvn::GetBufferAddress(addr), b, c, d);
+	}
+
+	void DispatchIndirect(const GpuAddress& addr) {
+		nvnCommandBufferDispatchComputeIndirect(pnCmdBuf, Nvn::GetBufferAddress(addr));
+	}
+
+	void DrawIndirect(PrimitiveTopology top, const GpuAddress& addr) {
+		nvnCommandBufferDrawArraysIndirect(pnCmdBuf, Nvn::GetDrawPrimitive(top), Nvn::GetBufferAddress(addr));
+	}
+
+	void DrawIndexedIndirect(PrimitiveTopology top, IndexFormat index, const GpuAddress& addr1, const GpuAddress& addr2) {
+		nvnCommandBufferDrawElementsIndirect(pnCmdBuf, Nvn::GetDrawPrimitive(top), Nvn::GetIndexFormat(index), Nvn::GetBufferAddress(addr1), Nvn::GetBufferAddress(addr2));
+	}
+
+	// todo: figure out the PipelineImpl struct
+	void SetPipeline(const Pipeline*);
+
+	// todo: rewrite
+	void SetRasterizerState(const Raster* rast) {
+		nvnCommandBufferBindPolygonState(pnCmdBuf, &rast->nPolygonState);
+		nvnCommandBufferSetPolygonOffsetClamp(pnCmdBuf, rast->nFactor, rast->nUnits, rast->nClamp);
+		nvnCommandBufferBindMultisampleState(pnCmdBuf, &rast->nMultisampleState);
+
+		// todo: switch to bitflag
+		if ((rast->flag & Raster::Flag_Multisample) == Raster::Flag_Multisample) {
+			nvnCommandBufferSetSampleMask(pnCmdBuf, rast->nSampleMask);
+		}
+
+		nvnCommandBufferSetDepthClamp(pnCmdBuf, (rast->flag & Raster::Flag_Depth) != Raster::Flag_Depth);
+		nvnCommandBufferSetRasterizerDiscard(pnCmdBuf, (rast->flag & Raster::Flag_Raster) != Raster::Flag_Raster);
+		
+		if ((flag & ConservativeRaster) == ConservativeRaster) {
+			nvnCommandBufferSetConservativeRasterEnable(pnCmdBuf, rast->flag & Raster::Flag_ConservativeRaster);
+		}
+	}
+
 	u8 initialized; // 2 is set in Begin (maybe some sort of staging enum?)
-	u8 field_1; // 2 bit enum?
-	DeviceImpl<NvnApi>* pDevice;
+
+	enum Flag {
+		Flag_1 = 1,
+		ConservativeRaster = 2
+	};
+	Flag flag;
+
+	Device* pDevice;
 	char _10[8];
 	NVNcommandBuffer nCmdBuf;
 	NVNcommandBuffer* pnCmdBuf;
