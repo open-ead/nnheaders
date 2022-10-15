@@ -1,6 +1,9 @@
 #pragma once
 
 #include <nn/types.h>
+#include <nn/gfx/api.h>
+#include <nn/gfx/detail/fwd.h>
+#include <nvn/nvn_types.h>
 
 namespace nn::gfx {
 
@@ -20,10 +23,10 @@ public:
     u64 _8;
 };
 
-template <typename Api>
-class MemoryPoolImpl {
+template <>
+class MemoryPoolImpl<NvnApi> {
 public:
-    using Device = DeviceImpl<Api>;
+    using Device = DeviceImpl<NvnApi>;
 
     MemoryPoolImpl();
     ~MemoryPoolImpl();
@@ -35,7 +38,10 @@ public:
     void FlushMappedRange(s64, u64) const;
     void InvalidateMappedRange(s64, u64) const;
 
-    u8 _0[0x120];  // pool data
+	NVNmemoryPool* pnPool;
+	void* field_8;
+	NVNmemoryPool nPool;
+    u8 _110[0x10];  // pool data
 };
 
 }  // namespace detail

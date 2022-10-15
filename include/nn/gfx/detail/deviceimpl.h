@@ -19,14 +19,21 @@ namespace detail {
 template <>
 class DeviceImpl<NvnApi> {
 public:
+	enum DeviceFeatures {
+		_1 = 1,
+		_2 = 2,
+		_4 = 4,
+		SupportsConservativeRaster = 8,
+	};
+
     DeviceImpl();
     ~DeviceImpl();
 
     void Initialize(const DeviceInfo& deviceInfo);
     void Finalize();
 
-	NVNdevice* field_0;
-	NVNdevice field_8;
+	NVNdevice* pnDevice;
+	NVNdevice nDevice;
 	bool initialized; // might be a u8
 	u8 field_3009;
 	int deviceFeatures;
