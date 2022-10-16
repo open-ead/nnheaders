@@ -217,9 +217,21 @@ public:
 		}
 	}
 
+	void SetBlendState(const BlendStateImpl<NvnApi>* blend) {
+		auto pnBlendState = reinterpret_cast<NVNblendState*>(blend->memory);
+
+		for (int i = 0; i < blend->count; ++i) {
+			nvnCommandBufferBindBlendState(pnCmdBuf, &pnBlendState[i]);
+		}
+
+		nvnCommandBufferBindChannelMaskState(pnCmdBuf, reinterpret_cast<NVNchannelMaskState*>(blend->nChannelMaskState));
+		nvnCommandBufferBindColorState(pnCmdBuf, reinterpret_cast<NVNcolorState*>(blend->nColorState));
+		nvnCommandBufferSetBlendColor(pnCmdBuf, blend->blendColor);
+	}
+
 	u8 initialized; // 2 is set in Begin (maybe some sort of staging enum?)
 
-	enum Flag {
+	enum Flag : u8 {
 		Flag_1 = 1,
 		ConservativeRaster = 2
 	};

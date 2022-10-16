@@ -20,8 +20,55 @@ enum class ImageDimension;
 enum class ComparisonFunction;
 enum class StencilOperation;
 enum class ComparisonFunction;
-enum class BlendFunction;
-enum class BlendFactor;
+
+enum class BlendFunction : u8 {
+	Add,
+	Sub,
+	ReverseSub,
+	Min,
+	Max
+};
+
+enum class BlendFactor : u8 {
+	Zero,
+	One,
+	SrcColor,
+	OneMinusSrcColor,
+	DstColor,
+	OneMinusDstColor,
+	SrcAlpha,
+	OneMinusSrcAlpha,
+	DstAlpha,
+	OneMinusDstAlpha,
+	ConstantColor,
+	OneMinusConstantColor,
+	ConstantAlpha,
+	OneMinusConstantAlpha,
+	SrcAlphaSaturate,
+	Src1Color,
+	OneMinusSrc1Color,
+	Src1Alpha,
+	OneMinusSrc1Alpha
+};
+
+enum class LogicOperation : u8 {
+	Clear,
+	And,
+	AndReverse,
+	Copy,
+	AndInverted,
+	Noop,
+	Xor,
+	Or,
+	Nor,
+	Equiv,
+	Invert,
+	OrReverse,
+	CopyInverted,
+	OrInverted,
+	Nand,
+	Set
+};
 
 enum class FrontFace : u8 {
 	CCW,
@@ -77,8 +124,67 @@ public:
 	static void GetDepthFunction(ComparisonFunction);
 	static void GetStencilOperation(StencilOperation);
 	static void GetStencilFunction(ComparisonFunction);
-	static void GetBlendEquation(BlendFunction);
-	static void GetBlendFunction(BlendFactor);
+
+	static NVNblendEquation GetBlendEquation(BlendFunction a) {
+		static const NVNblendEquation eqs[] = {
+			NVN_BLEND_EQUATION_ADD,
+			NVN_BLEND_EQUATION_SUB,
+			NVN_BLEND_EQUATION_REVERSE_SUB,
+			NVN_BLEND_EQUATION_MIN,
+			NVN_BLEND_EQUATION_MAX
+		};
+
+		return eqs[static_cast<u8>(a)];
+	}
+
+	static NVNblendFunc GetBlendFunction(BlendFactor a) {
+		static const NVNblendFunc funcs[] = {
+			NVN_BLEND_FUNC_ZERO,
+			NVN_BLEND_FUNC_ONE,
+			NVN_BLEND_FUNC_SRC_COLOR,
+			NVN_BLEND_FUNC_ONE_MINUS_SRC_COLOR,
+			NVN_BLEND_FUNC_DST_COLOR,
+			NVN_BLEND_FUNC_ONE_MINUS_DST_COLOR,
+			NVN_BLEND_FUNC_SRC_ALPHA,
+			NVN_BLEND_FUNC_ONE_MINUS_SRC_ALPHA,
+			NVN_BLEND_FUNC_DST_ALPHA,
+			NVN_BLEND_FUNC_ONE_MINUS_DST_ALPHA,
+			NVN_BLEND_FUNC_CONSTANT_COLOR,
+			NVN_BLEND_FUNC_ONE_MINUS_CONSTANT_COLOR,
+			NVN_BLEND_FUNC_CONSTANT_ALPHA,
+			NVN_BLEND_FUNC_ONE_MINUS_CONSTANT_ALPHA,
+			NVN_BLEND_FUNC_SRC_ALPHA_SATURATE,
+			NVN_BLEND_FUNC_SRC1_COLOR,
+			NVN_BLEND_FUNC_ONE_MINUS_SRC1_COLOR,
+			NVN_BLEND_FUNC_SRC1_ALPHA,
+			NVN_BLEND_FUNC_ONE_MINUS_SRC1_ALPHA,
+		};
+
+		return funcs[static_cast<u8>(a)];
+	}
+
+	static NVNlogicOp GetLogicOperation(LogicOperation a) {
+		static const NVNlogicOp ops[] = {
+			NVN_LOGIC_OP_CLEAR,
+			NVN_LOGIC_OP_AND,
+			NVN_LOGIC_OP_AND_REVERSE,
+			NVN_LOGIC_OP_COPY,
+			NVN_LOGIC_OP_AND_INVERTED,
+			NVN_LOGIC_OP_NOOP,
+			NVN_LOGIC_OP_XOR,
+			NVN_LOGIC_OP_OR,
+			NVN_LOGIC_OP_NOR,
+			NVN_LOGIC_OP_EQUIV,
+			NVN_LOGIC_OP_INVERT,
+			NVN_LOGIC_OP_OR_REVERSE,
+			NVN_LOGIC_OP_COPY_INVERTED,
+			NVN_LOGIC_OP_OR_INVERTED,
+			NVN_LOGIC_OP_NAND,
+			NVN_LOGIC_OP_SET
+		};
+
+		return ops[static_cast<u8>(a)];
+	}
 	
 	static NVNfrontFace GetFrontFace(FrontFace a) {
 		static const NVNfrontFace faces[] = {
