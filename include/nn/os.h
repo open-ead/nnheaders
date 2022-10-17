@@ -12,6 +12,7 @@
 
 namespace nn {
 namespace os {
+
 namespace detail {
 struct InternalCriticalSection {
     u32 Image;
@@ -19,6 +20,22 @@ struct InternalCriticalSection {
 
 struct InternalConditionVariable {
     u32 Image;
+};
+
+struct InterProcessEventType {
+    enum State {
+        State_NotInitialized = 0,
+        State_Initialized = 1,
+    };
+
+    nn::os::detail::InterProcessEventType* _x0;
+    nn::os::detail::InterProcessEventType* _x8;
+    bool shouldAutoClear;
+    u8 state;
+    bool isReadableHandleManaged;
+    bool isWritableHandleManaged;
+    u32 readableHandle;
+    u32 writableHandle;
 };
 }  // namespace detail
 
@@ -96,7 +113,19 @@ struct SemaphoreType {
 };
 
 struct SystemEvent;
-struct SystemEventType;
+struct SystemEventType {
+    enum State {
+        State_NotInitialized = 0,
+        State_InitializedAsEvent = 1,
+        State_InitializedAsInterProcessEvent = 2,
+    };
+
+    union {
+        nn::os::EventType event;
+        nn::os::detail::InterProcessEventType interProcessEvent;
+    };
+    u8 state;
+};
 
 // ARG
 void SetHostArgc(s32);
