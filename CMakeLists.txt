@@ -129,7 +129,7 @@ add_library(NintendoSDK OBJECT
   include/vapours/results/sm_results.hpp
   include/vapours/results/psc_results.hpp
 
-  src/nvn/nvnInit.cpp
+  src/NintendoSDK/nvn/nvnInit.cpp
 )
 
 target_include_directories(NintendoSDK PUBLIC include/)
