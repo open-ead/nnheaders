@@ -11,9 +11,6 @@ struct MemoryPoolInfo;
 
 namespace detail {
 
-template <typename T>
-struct DeviceImpl;
-
 class MemoryPoolData {
 public:
     void SetDefault();

@@ -9,18 +9,15 @@ struct BitPack {
     StorageT storage;
 
     void SetBit(int p, bool on) {
-		int mask = MakeMask(p);
-		if (on) {
-			storage |= mask;
-		}
-		else {
-			storage &= ~mask;
-		}
-	}
+        int mask = MakeMask(p);
+        if (on) {
+            storage |= mask;
+        } else {
+            storage &= ~mask;
+        }
+    }
 
-    bool GetBit(int p) const {
-		return IsAnyBitOn(MakeMask(p)); 
-	}
+    bool GetBit(int p) const { return IsAnyBitOn(MakeMask(p)); }
 
     void Clear();
     void SetMaskedBits(int, int);
@@ -30,29 +27,23 @@ struct BitPack {
     bool IsAllBitOn(int) const;
     bool IsAllBitOff(int) const;
 
-    bool IsAnyBitOn(int mask) const {
-		return (storage & mask) == mask;
-	}
+    bool IsAnyBitOn(int mask) const { return (storage & mask) == mask; }
 
-    bool IsAnyBitOff(int) const {
-		return (storage & mask) != mask;
-	}
+    bool IsAnyBitOff(int mask) const { return (storage & mask) != mask; }
 
-	// todo: figure out how BitWidth would be used
-	template<int BitPos, int BitWidth, class T> 
-	struct Field {
-		static const int Pos = BitPos;
-		static const int Next = BitPos + 1;
-		static const int Mask = 1 << BitPos;
-		static const int Width = BitWidth;
+    // todo: figure out how BitWidth would be used
+    template <int BitPos, int BitWidth, class T>
+    struct Field {
+        static const int Pos = BitPos;
+        static const int Next = BitPos + 1;
+        static const int Mask = 1 << BitPos;
+        static const int Width = BitWidth;
 
-		typedef T Type;
-	};
+        typedef T Type;
+    };
 
 private:
-    static int MakeMask(int p) {
-		return 1 << p;
-	}
+    static int MakeMask(int p) { return 1 << p; }
 
     Tag ReadValue(bool*, int, int) const;
 };

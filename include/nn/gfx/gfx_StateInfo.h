@@ -177,7 +177,7 @@ public:
 
     void SetBlendTargetStateInfoArray(const BlendTargetStateInfo* p, int c) {
         blendTargetCount = c;
-        pBlendTargetArray = p->ToData();
+        pBlendTargetArray.ptr = p->ToData();
     }
 
     int GetBlendTargetCount() const { return blendTargetCount; }
@@ -194,7 +194,9 @@ public:
 
     float GetBlendConstant(ColorChannel channel) const { return blendConstant[channel]; }
 
-    const BlendTargetStateInfo* GetBlendTargetStateInfoArray() const { return pBlendTargetArray; }
+    const BlendTargetStateInfo* GetBlendTargetStateInfoArray() const {
+        return DataContainer<BlendTargetStateInfoData>::DataToAccessor(pBlendTargetArray.ptr);
+    }
 };
 
 class DepthStencilStateInfo {

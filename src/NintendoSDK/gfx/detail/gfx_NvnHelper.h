@@ -2,8 +2,8 @@
 
 #include <nn/gfx/gfx_Enum.h>
 #include <nn/gfx/gfx_GpuAddress.h>
-#include <nn/util/util_BitPack.h>
 #include <nn/time.h>
+#include <nn/util/util_BitPack.h>
 #include <nvn/nvn_types.h>
 
 namespace nn::gfx {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nn/gfx/detail/gfx_Misc.h>
 #include <nn/nn_BitTypes.h>
 #include <nn/util/util_BitPack.h>
 

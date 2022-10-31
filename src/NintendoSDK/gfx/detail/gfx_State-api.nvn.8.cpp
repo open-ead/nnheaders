@@ -108,8 +108,7 @@ void BlendStateImpl<NvnApi>::Initialize(Device* device, const InfoType& info) {
             Nvn::GetBlendEquation(pTargetInfo[infoOffset].GetAlphaBlendFunction()));
 
         nvnChannelMaskStateSetChannelMask(
-            pnChannelMaskState, i,
-            pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Red,
+            pnChannelMaskState, i, pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Red,
             pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Green,
             pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Blue,
             pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Alpha);
