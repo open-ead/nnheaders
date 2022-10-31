@@ -22,7 +22,3 @@ using char16 = char16_t;
 using size_t = std::size_t;
 using ulong = u64;
 using ptrdiff_t = std::ptrdiff_t;
-
-namespace nn {
-using Bit32 = u32;
-}

@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <nn/types.h>
 #include <nn/gfx/detail/fwd.h>
+#include <nn/types.h>
 
 namespace nn {
 namespace gfx {
@@ -25,16 +25,6 @@ public:
     u64 _0;
     u64 _8;
     u64 _10;
-};
-
-class CommandBufferInfo {
-public:
-
-};
-
-template<typename T>
-class TCommandBuffer : public detail::CommandBufferImpl<T> {
-	
 };
 
 }  // namespace gfx

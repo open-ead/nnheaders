@@ -1,8 +1,8 @@
 #pragma once
 
-#include <nn/types.h>
 #include <nn/gfx/api.h>
 #include <nn/gfx/detail/fwd.h>
+#include <nn/types.h>
 #include <nvn/nvn_types.h>
 
 namespace nn::gfx {
@@ -38,9 +38,9 @@ public:
     void FlushMappedRange(s64, u64) const;
     void InvalidateMappedRange(s64, u64) const;
 
-	NVNmemoryPool* pnPool;
-	void* field_8;
-	NVNmemoryPool nPool;
+    NVNmemoryPool* pnPool;
+    void* field_8;
+    NVNmemoryPool nPool;
     u8 _110[0x10];  // pool data
 };
 

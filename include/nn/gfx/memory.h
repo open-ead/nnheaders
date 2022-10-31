@@ -14,6 +14,4 @@ namespace nn::gfx {
 template <typename Api>
 class TMemoryPool : public detail::MemoryPoolImpl<Api> {};
 
-using MemoryPool = TMemoryPool<DefaultApi>;
-
 }  // namespace nn::gfx
