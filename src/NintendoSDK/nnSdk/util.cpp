@@ -1,11 +1,7 @@
 #include <nn/util.h>
 
-namespace nn {
-namespace util {
+namespace nn::util {
 
-void ReferSymbol(const void*) {
+void ReferSymbol(const void*) {}
 
-}
-
-}
-}
+}  // namespace nn::util

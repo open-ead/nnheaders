@@ -9,4 +9,4 @@ typedef u16 Bit16;
 typedef u32 Bit32;
 typedef u64 Bit64;
 
-}
+}  // namespace nn
