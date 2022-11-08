@@ -8,6 +8,9 @@
 extern "C" {
 #endif
 
+// todo: figure out where to put this
+PFNNVNGENERICFUNCPTRPROC nvnBootstrapLoader(const char*);
+
 extern PFNNVNDEVICEBUILDERSETDEFAULTSPROC pfnc_nvnDeviceBuilderSetDefaults;
 extern PFNNVNDEVICEBUILDERSETFLAGSPROC pfnc_nvnDeviceBuilderSetFlags;
 extern PFNNVNDEVICEINITIALIZEPROC pfnc_nvnDeviceInitialize;

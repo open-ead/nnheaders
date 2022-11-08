@@ -3,13 +3,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/*?*/ union QueueErrorInfo;
-/*?*/ struct DrawTextureRegion;
-/*?*/ struct ShaderDataExt;
-/*?*/ struct MappingRequest;
-/*?*/ struct TextureSparseTileLayout;
-/*?*/ struct Rectangle;
-
 // todo: implement?
 #define NVN_ENUM(CLASS)                                                                            \
 private:                                                                                           \
@@ -52,19 +45,26 @@ public:                                                                         
     CLASS& operator^=(const CLASS&);                                                               \
     CLASS& operator^=(const Enum&);
 
-typedef unsigned char NVNboolean;
+typedef uint8_t NVNboolean;
 typedef void* NVNnativeWindow;
 typedef void* NVNsubroutineLinkageMapPtr;
 typedef int NVNstorageClass;
 typedef int NVNdebugDomainId;
 
 namespace nvn {
-/*330*/
-typedef unsigned long BufferAddress;
-/*333*/ typedef unsigned long CommandHandle;
-/*337*/ typedef unsigned long TextureHandle;
-/*341*/ typedef unsigned long ImageHandle;
-/*349*/ typedef unsigned long TextureAddress;
+
+/*?*/ union QueueErrorInfo;
+/*?*/ struct DrawTextureRegion;
+/*?*/ struct ShaderDataExt;
+/*?*/ struct MappingRequest;
+/*?*/ struct TextureSparseTileLayout;
+/*?*/ struct Rectangle;
+
+/*330*/ typedef uint64_t BufferAddress;
+/*333*/ typedef uint64_t CommandHandle;
+/*337*/ typedef uint64_t TextureHandle;
+/*341*/ typedef uint64_t ImageHandle;
+/*349*/ typedef uint64_t TextureAddress;
 /*361*/ struct SeparateSamplerHandle { uint64_t value; };
 /*375*/ struct SeparateTextureHandle { uint64_t value; };
 
