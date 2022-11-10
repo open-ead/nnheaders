@@ -14,7 +14,7 @@ static inline void nvnDeviceBuilderSetFlags(NVNdeviceBuilder* builder, NVNdevice
     pfnc_nvnDeviceBuilderSetFlags(builder, flags);
 }
 
-static inline bool nvnDeviceInitialize(NVNdevice* device, const NVNdeviceBuilder* builder) {
+static inline NVNboolean nvnDeviceInitialize(NVNdevice* device, const NVNdeviceBuilder* builder) {
     return pfnc_nvnDeviceInitialize(device, builder);
 }
 
@@ -59,7 +59,7 @@ static inline NVNimageHandle nvnDeviceGetImageHandle(const NVNdevice* device, in
 
 static inline void nvnDeviceInstallDebugCallback(NVNdevice* device,
                                                  const PFNNVNDEBUGCALLBACKPROC callback,
-                                                 void* callbackData, bool enable) {
+                                                 void* callbackData, NVNboolean enable) {
     pfnc_nvnDeviceInstallDebugCallback(device, callback, callbackData, enable);
 }
 
@@ -77,22 +77,22 @@ static inline void nvnDeviceSetDepthMode(NVNdevice* device, NVNdepthMode depthMo
     pfnc_nvnDeviceSetDepthMode(device, depthMode);
 }
 
-static inline bool nvnDeviceRegisterFastClearColor(NVNdevice* device, const float* color,
-                                                   NVNformat format) {
+static inline NVNboolean nvnDeviceRegisterFastClearColor(NVNdevice* device, const float* color,
+                                                         NVNformat format) {
     return pfnc_nvnDeviceRegisterFastClearColor(device, color, format);
 }
 
-static inline bool nvnDeviceRegisterFastClearColori(NVNdevice* device, const int* color,
-                                                    NVNformat format) {
+static inline NVNboolean nvnDeviceRegisterFastClearColori(NVNdevice* device, const int* color,
+                                                          NVNformat format) {
     return pfnc_nvnDeviceRegisterFastClearColori(device, color, format);
 }
 
-static inline bool nvnDeviceRegisterFastClearColorui(NVNdevice* device, const uint32_t* color,
-                                                     NVNformat format) {
+static inline NVNboolean nvnDeviceRegisterFastClearColorui(NVNdevice* device, const uint32_t* color,
+                                                           NVNformat format) {
     return pfnc_nvnDeviceRegisterFastClearColorui(device, color, format);
 }
 
-static inline bool nvnDeviceRegisterFastClearDepth(NVNdevice* device, float f) {
+static inline NVNboolean nvnDeviceRegisterFastClearDepth(NVNdevice* device, float f) {
     return pfnc_nvnDeviceRegisterFastClearDepth(device, f);
 }
 
@@ -134,7 +134,7 @@ static inline NVNseparateSamplerHandle nvnDeviceGetSeparateSamplerHandle(const N
     return pfnc_nvnDeviceGetSeparateSamplerHandle(device, textureID);
 }
 
-static inline bool nvnDeviceIsExternalDebuggerAttached(const NVNdevice* device) {
+static inline NVNboolean nvnDeviceIsExternalDebuggerAttached(const NVNdevice* device) {
     return pfnc_nvnDeviceIsExternalDebuggerAttached(device);
 }
 
@@ -195,7 +195,7 @@ static inline void nvnQueueBuilderSetCommandFlushThreshold(NVNqueueBuilder* buil
     pfnc_nvnQueueBuilderSetCommandFlushThreshold(builder, size);
 }
 
-static inline bool nvnQueueInitialize(NVNqueue* queue, const NVNqueueBuilder* builder) {
+static inline NVNboolean nvnQueueInitialize(NVNqueue* queue, const NVNqueueBuilder* builder) {
     return pfnc_nvnQueueInitialize(queue, builder);
 }
 
@@ -260,7 +260,7 @@ static inline int nvnWindowBuilderGetPresentInterval(const NVNwindowBuilder* bui
     return pfnc_nvnWindowBuilderGetPresentInterval(builder);
 }
 
-static inline bool nvnWindowInitialize(NVNwindow* window, const NVNwindowBuilder* builder) {
+static inline NVNboolean nvnWindowInitialize(NVNwindow* window, const NVNwindowBuilder* builder) {
     return pfnc_nvnWindowInitialize(window, builder);
 }
 
@@ -297,7 +297,7 @@ static inline void nvnWindowGetCrop(const NVNwindow* window, NVNrectangle* recta
     pfnc_nvnWindowGetCrop(window, rectangle);
 }
 
-static inline bool nvnProgramInitialize(NVNprogram* program, NVNdevice* device) {
+static inline NVNboolean nvnProgramInitialize(NVNprogram* program, NVNdevice* device) {
     return pfnc_nvnProgramInitialize(program, device);
 }
 
@@ -309,8 +309,8 @@ static inline void nvnProgramSetDebugLabel(NVNprogram* program, const char* labe
     pfnc_nvnProgramSetDebugLabel(program, label);
 }
 
-static inline bool nvnProgramSetShaders(NVNprogram* program, int count,
-                                        const NVNshaderData* stageData) {
+static inline NVNboolean nvnProgramSetShaders(NVNprogram* program, int count,
+                                              const NVNshaderData* stageData) {
     return pfnc_nvnProgramSetShaders(program, count, stageData);
 }
 
@@ -343,8 +343,8 @@ static inline NVNmemoryPoolFlags nvnMemoryPoolBuilderGetFlags(const NVNmemoryPoo
     return pfnc_nvnMemoryPoolBuilderGetFlags(builder);
 }
 
-static inline bool nvnMemoryPoolInitialize(NVNmemoryPool* pool,
-                                           const NVNmemoryPoolBuilder* builder) {
+static inline NVNboolean nvnMemoryPoolInitialize(NVNmemoryPool* pool,
+                                                 const NVNmemoryPoolBuilder* builder) {
     return pfnc_nvnMemoryPoolInitialize(pool, builder);
 }
 
@@ -374,8 +374,8 @@ static inline NVNbufferAddress nvnMemoryPoolGetBufferAddress(const NVNmemoryPool
     return pfnc_nvnMemoryPoolGetBufferAddress(pool);
 }
 
-static inline bool nvnMemoryPoolMapVirtual(NVNmemoryPool* pool, int numRequests,
-                                           const NVNmappingRequest* requests) {
+static inline NVNboolean nvnMemoryPoolMapVirtual(NVNmemoryPool* pool, int numRequests,
+                                                 const NVNmappingRequest* requests) {
     return pfnc_nvnMemoryPoolMapVirtual(pool, numRequests, requests);
 }
 
@@ -387,9 +387,9 @@ static inline NVNmemoryPoolFlags nvnMemoryPoolGetFlags(const NVNmemoryPool* pool
     return pfnc_nvnMemoryPoolGetFlags(pool);
 }
 
-static inline bool nvnTexturePoolInitialize(NVNtexturePool* texturePool,
-                                            const NVNmemoryPool* memoryPool, ptrdiff_t offset,
-                                            int numDescriptors) {
+static inline NVNboolean nvnTexturePoolInitialize(NVNtexturePool* texturePool,
+                                                  const NVNmemoryPool* memoryPool, ptrdiff_t offset,
+                                                  int numDescriptors) {
     return pfnc_nvnTexturePoolInitialize(texturePool, memoryPool, offset, numDescriptors);
 }
 
@@ -425,9 +425,9 @@ static inline int nvnTexturePoolGetSize(const NVNtexturePool* pool) {
     return pfnc_nvnTexturePoolGetSize(pool);
 }
 
-static inline bool nvnSamplerPoolInitialize(NVNsamplerPool* samplerPool,
-                                            const NVNmemoryPool* memoryPool, ptrdiff_t offset,
-                                            int numDescriptors) {
+static inline NVNboolean nvnSamplerPoolInitialize(NVNsamplerPool* samplerPool,
+                                                  const NVNmemoryPool* memoryPool, ptrdiff_t offset,
+                                                  int numDescriptors) {
     return pfnc_nvnSamplerPoolInitialize(samplerPool, memoryPool, offset, numDescriptors);
 }
 
@@ -486,7 +486,7 @@ static inline size_t nvnBufferBuilderGetSize(const NVNbufferBuilder* builder) {
     return pfnc_nvnBufferBuilderGetSize(builder);
 }
 
-static inline bool nvnBufferInitialize(NVNbuffer* buffer, const NVNbufferBuilder* builder) {
+static inline NVNboolean nvnBufferInitialize(NVNbuffer* buffer, const NVNbufferBuilder* builder) {
     return pfnc_nvnBufferInitialize(buffer, builder);
 }
 
@@ -736,40 +736,43 @@ static inline void nvnTextureViewSetTarget(NVNtextureView* view, NVNtextureTarge
     pfnc_nvnTextureViewSetTarget(view, target);
 }
 
-static inline bool nvnTextureViewGetLevels(const NVNtextureView* view, int* baseLevel,
-                                           int* numLevels) {
+static inline NVNboolean nvnTextureViewGetLevels(const NVNtextureView* view, int* baseLevel,
+                                                 int* numLevels) {
     return pfnc_nvnTextureViewGetLevels(view, baseLevel, numLevels);
 }
 
-static inline bool nvnTextureViewGetLayers(const NVNtextureView* view, int* minLayer,
-                                           int* numLayers) {
+static inline NVNboolean nvnTextureViewGetLayers(const NVNtextureView* view, int* minLayer,
+                                                 int* numLayers) {
     return pfnc_nvnTextureViewGetLayers(view, minLayer, numLayers);
 }
 
-static inline bool nvnTextureViewGetFormat(const NVNtextureView* view, NVNformat* format) {
+static inline NVNboolean nvnTextureViewGetFormat(const NVNtextureView* view, NVNformat* format) {
     return pfnc_nvnTextureViewGetFormat(view, format);
 }
 
-static inline bool nvnTextureViewGetSwizzle(const NVNtextureView* view, NVNtextureSwizzle* r,
-                                            NVNtextureSwizzle* g, NVNtextureSwizzle* b,
-                                            NVNtextureSwizzle* a) {
+static inline NVNboolean nvnTextureViewGetSwizzle(const NVNtextureView* view, NVNtextureSwizzle* r,
+                                                  NVNtextureSwizzle* g, NVNtextureSwizzle* b,
+                                                  NVNtextureSwizzle* a) {
     return pfnc_nvnTextureViewGetSwizzle(view, r, g, b, a);
 }
 
-static inline bool nvnTextureViewGetDepthStencilMode(const NVNtextureView* view,
-                                                     NVNtextureDepthStencilMode* mode) {
+static inline NVNboolean nvnTextureViewGetDepthStencilMode(const NVNtextureView* view,
+                                                           NVNtextureDepthStencilMode* mode) {
     return pfnc_nvnTextureViewGetDepthStencilMode(view, mode);
 }
 
-static inline bool nvnTextureViewGetTarget(const NVNtextureView* view, NVNtextureTarget* target) {
+static inline NVNboolean nvnTextureViewGetTarget(const NVNtextureView* view,
+                                                 NVNtextureTarget* target) {
     return pfnc_nvnTextureViewGetTarget(view, target);
 }
 
-static inline bool nvnTextureViewCompare(const NVNtextureView* view1, const NVNtextureView* view2) {
+static inline NVNboolean nvnTextureViewCompare(const NVNtextureView* view1,
+                                               const NVNtextureView* view2) {
     return pfnc_nvnTextureViewCompare(view1, view2);
 }
 
-static inline bool nvnTextureInitialize(NVNtexture* texture, const NVNtextureBuilder* builder) {
+static inline NVNboolean nvnTextureInitialize(NVNtexture* texture,
+                                              const NVNtextureBuilder* builder) {
     return pfnc_nvnTextureInitialize(texture, builder);
 }
 
@@ -895,7 +898,7 @@ static inline int nvnTextureGetStorageSize(const NVNtexture* texture) {
     return pfnc_nvnTextureGetStorageSize(texture);
 }
 
-static inline bool nvnTextureCompare(const NVNtexture* texture1, const NVNtexture* texture2) {
+static inline NVNboolean nvnTextureCompare(const NVNtexture* texture1, const NVNtexture* texture2) {
     return pfnc_nvnTextureCompare(texture1, texture2);
 }
 
@@ -1014,7 +1017,8 @@ static inline float nvnSamplerBuilderGetLodSnap(const NVNsamplerBuilder* builder
     return pfnc_nvnSamplerBuilderGetLodSnap(builder);
 }
 
-static inline bool nvnSamplerInitialize(NVNsampler* sampler, const NVNsamplerBuilder* builder) {
+static inline NVNboolean nvnSamplerInitialize(NVNsampler* sampler,
+                                              const NVNsamplerBuilder* builder) {
     return pfnc_nvnSamplerInitialize(sampler, builder);
 }
 
@@ -1069,7 +1073,7 @@ static inline NVNsamplerReduction nvnSamplerGetReductionFilter(const NVNsampler*
     return pfnc_nvnSamplerGetReductionFilter(sampler);
 }
 
-static inline bool nvnSamplerCompare(const NVNsampler* sampler1, const NVNsampler* sampler2) {
+static inline NVNboolean nvnSamplerCompare(const NVNsampler* sampler1, const NVNsampler* sampler2) {
     return pfnc_nvnSamplerCompare(sampler1, sampler2);
 }
 
@@ -1105,11 +1109,11 @@ static inline void nvnBlendStateSetAdvancedOverlap(NVNblendState* blend,
     pfnc_nvnBlendStateSetAdvancedOverlap(blend, overlap);
 }
 
-static inline void nvnBlendStateSetAdvancedPremultipliedSrc(NVNblendState* blend, bool b) {
+static inline void nvnBlendStateSetAdvancedPremultipliedSrc(NVNblendState* blend, NVNboolean b) {
     pfnc_nvnBlendStateSetAdvancedPremultipliedSrc(blend, b);
 }
 
-static inline void nvnBlendStateSetAdvancedNormalizedDst(NVNblendState* blend, bool b) {
+static inline void nvnBlendStateSetAdvancedNormalizedDst(NVNblendState* blend, NVNboolean b) {
     pfnc_nvnBlendStateSetAdvancedNormalizedDst(blend, b);
 }
 
@@ -1137,11 +1141,11 @@ static inline NVNblendAdvancedOverlap nvnBlendStateGetAdvancedOverlap(const NVNb
     return pfnc_nvnBlendStateGetAdvancedOverlap(blend);
 }
 
-static inline bool nvnBlendStateGetAdvancedPremultipliedSrc(const NVNblendState* blend) {
+static inline NVNboolean nvnBlendStateGetAdvancedPremultipliedSrc(const NVNblendState* blend) {
     return pfnc_nvnBlendStateGetAdvancedPremultipliedSrc(blend);
 }
 
-static inline bool nvnBlendStateGetAdvancedNormalizedDst(const NVNblendState* blend) {
+static inline NVNboolean nvnBlendStateGetAdvancedNormalizedDst(const NVNblendState* blend) {
     return pfnc_nvnBlendStateGetAdvancedNormalizedDst(blend);
 }
 
@@ -1149,7 +1153,7 @@ static inline void nvnColorStateSetDefaults(NVNcolorState* color) {
     pfnc_nvnColorStateSetDefaults(color);
 }
 
-static inline void nvnColorStateSetBlendEnable(NVNcolorState* color, int index, bool enable) {
+static inline void nvnColorStateSetBlendEnable(NVNcolorState* color, int index, NVNboolean enable) {
     pfnc_nvnColorStateSetBlendEnable(color, index, enable);
 }
 
@@ -1161,7 +1165,7 @@ static inline void nvnColorStateSetAlphaTest(NVNcolorState* color, NVNalphaFunc 
     pfnc_nvnColorStateSetAlphaTest(color, alphaFunc);
 }
 
-static inline bool nvnColorStateGetBlendEnable(const NVNcolorState* color, int index) {
+static inline NVNboolean nvnColorStateGetBlendEnable(const NVNcolorState* color, int index) {
     return pfnc_nvnColorStateGetBlendEnable(color, index);
 }
 
@@ -1178,13 +1182,14 @@ static inline void nvnChannelMaskStateSetDefaults(NVNchannelMaskState* channelMa
 }
 
 static inline void nvnChannelMaskStateSetChannelMask(NVNchannelMaskState* channelMask, int index,
-                                                     bool r, bool g, bool b, bool a) {
+                                                     NVNboolean r, NVNboolean g, NVNboolean b,
+                                                     NVNboolean a) {
     pfnc_nvnChannelMaskStateSetChannelMask(channelMask, index, r, g, b, a);
 }
 
 static inline void nvnChannelMaskStateGetChannelMask(const NVNchannelMaskState* channelMask,
-                                                     int index, bool* r, bool* g, bool* b,
-                                                     bool* a) {
+                                                     int index, NVNboolean* r, NVNboolean* g,
+                                                     NVNboolean* b, NVNboolean* a) {
     pfnc_nvnChannelMaskStateGetChannelMask(channelMask, index, r, g, b, a);
 }
 
@@ -1193,7 +1198,7 @@ static inline void nvnMultisampleStateSetDefaults(NVNmultisampleState* multisamp
 }
 
 static inline void nvnMultisampleStateSetMultisampleEnable(NVNmultisampleState* multisample,
-                                                           bool enable) {
+                                                           NVNboolean enable) {
     pfnc_nvnMultisampleStateSetMultisampleEnable(multisample, enable);
 }
 
@@ -1202,16 +1207,17 @@ static inline void nvnMultisampleStateSetSamples(NVNmultisampleState* multisampl
 }
 
 static inline void nvnMultisampleStateSetAlphaToCoverageEnable(NVNmultisampleState* multisample,
-                                                               bool enable) {
+                                                               NVNboolean enable) {
     pfnc_nvnMultisampleStateSetAlphaToCoverageEnable(multisample, enable);
 }
 
 static inline void nvnMultisampleStateSetAlphaToCoverageDither(NVNmultisampleState* multisample,
-                                                               bool enable) {
+                                                               NVNboolean enable) {
     pfnc_nvnMultisampleStateSetAlphaToCoverageDither(multisample, enable);
 }
 
-static inline bool nvnMultisampleStateGetMultisampleEnable(const NVNmultisampleState* multisample) {
+static inline NVNboolean
+nvnMultisampleStateGetMultisampleEnable(const NVNmultisampleState* multisample) {
     return pfnc_nvnMultisampleStateGetMultisampleEnable(multisample);
 }
 
@@ -1219,12 +1225,12 @@ static inline int nvnMultisampleStateGetSamples(const NVNmultisampleState* multi
     return pfnc_nvnMultisampleStateGetSamples(multisample);
 }
 
-static inline bool
+static inline NVNboolean
 nvnMultisampleStateGetAlphaToCoverageEnable(const NVNmultisampleState* multisample) {
     return pfnc_nvnMultisampleStateGetAlphaToCoverageEnable(multisample);
 }
 
-static inline bool
+static inline NVNboolean
 nvnMultisampleStateGetAlphaToCoverageDither(const NVNmultisampleState* multisample) {
     return pfnc_nvnMultisampleStateGetAlphaToCoverageDither(multisample);
 }
@@ -1249,11 +1255,11 @@ nvnMultisampleStateGetCoverageModulationMode(const NVNmultisampleState* multisam
 }
 
 static inline void nvnMultisampleStateSetCoverageToColorEnable(NVNmultisampleState* multisample,
-                                                               bool enable) {
+                                                               NVNboolean enable) {
     pfnc_nvnMultisampleStateSetCoverageToColorEnable(multisample, enable);
 }
 
-static inline bool
+static inline NVNboolean
 nvnMultisampleStateGetCoverageToColorEnable(const NVNmultisampleState* multisample) {
     return pfnc_nvnMultisampleStateGetCoverageToColorEnable(multisample);
 }
@@ -1269,11 +1275,11 @@ nvnMultisampleStateGetCoverageToColorOutput(const NVNmultisampleState* multisamp
 }
 
 static inline void nvnMultisampleStateSetSampleLocationsEnable(NVNmultisampleState* multisample,
-                                                               bool enable) {
+                                                               NVNboolean enable) {
     pfnc_nvnMultisampleStateSetSampleLocationsEnable(multisample, enable);
 }
 
-static inline bool
+static inline NVNboolean
 nvnMultisampleStateGetSampleLocationsEnable(const NVNmultisampleState* multisample) {
     return pfnc_nvnMultisampleStateGetSampleLocationsEnable(multisample);
 }
@@ -1284,11 +1290,11 @@ static inline void nvnMultisampleStateGetSampleLocationsGrid(NVNmultisampleState
 }
 
 static inline void nvnMultisampleStateSetSampleLocationsGridEnable(NVNmultisampleState* multisample,
-                                                                   bool enable) {
+                                                                   NVNboolean enable) {
     pfnc_nvnMultisampleStateSetSampleLocationsGridEnable(multisample, enable);
 }
 
-static inline bool
+static inline NVNboolean
 nvnMultisampleStateGetSampleLocationsGridEnable(const NVNmultisampleState* multisample) {
     return pfnc_nvnMultisampleStateGetSampleLocationsGridEnable(multisample);
 }
@@ -1341,12 +1347,12 @@ static inline void nvnDepthStencilStateSetDefaults(NVNdepthStencilState* depthSt
 }
 
 static inline void nvnDepthStencilStateSetDepthTestEnable(NVNdepthStencilState* depthStencil,
-                                                          bool enable) {
+                                                          NVNboolean enable) {
     pfnc_nvnDepthStencilStateSetDepthTestEnable(depthStencil, enable);
 }
 
 static inline void nvnDepthStencilStateSetDepthWriteEnable(NVNdepthStencilState* depthStencil,
-                                                           bool enable) {
+                                                           NVNboolean enable) {
     pfnc_nvnDepthStencilStateSetDepthWriteEnable(depthStencil, enable);
 }
 
@@ -1356,7 +1362,7 @@ static inline void nvnDepthStencilStateSetDepthFunc(NVNdepthStencilState* depthS
 }
 
 static inline void nvnDepthStencilStateSetStencilTestEnable(NVNdepthStencilState* depthStencil,
-                                                            bool enable) {
+                                                            NVNboolean enable) {
     pfnc_nvnDepthStencilStateSetStencilTestEnable(depthStencil, enable);
 }
 
@@ -1372,12 +1378,12 @@ static inline void nvnDepthStencilStateSetStencilOp(NVNdepthStencilState* depthS
     pfnc_nvnDepthStencilStateSetStencilOp(depthStencil, faces, fail, depthFail, depthPass);
 }
 
-static inline bool
+static inline NVNboolean
 nvnDepthStencilStateGetDepthTestEnable(const NVNdepthStencilState* depthStencil) {
     return pfnc_nvnDepthStencilStateGetDepthTestEnable(depthStencil);
 }
 
-static inline bool
+static inline NVNboolean
 nvnDepthStencilStateGetDepthWriteEnable(const NVNdepthStencilState* depthStencil) {
     return pfnc_nvnDepthStencilStateGetDepthWriteEnable(depthStencil);
 }
@@ -1387,7 +1393,7 @@ nvnDepthStencilStateGetDepthFunc(const NVNdepthStencilState* depthStencil) {
     return pfnc_nvnDepthStencilStateGetDepthFunc(depthStencil);
 }
 
-static inline bool
+static inline NVNboolean
 nvnDepthStencilStateGetStencilTestEnable(const NVNdepthStencilState* depthStencil) {
     return pfnc_nvnDepthStencilStateGetStencilTestEnable(depthStencil);
 }
@@ -1447,7 +1453,7 @@ static inline int nvnVertexStreamStateGetDivisor(const NVNvertexStreamState* str
     return pfnc_nvnVertexStreamStateGetDivisor(stream);
 }
 
-static inline bool nvnCommandBufferInitialize(NVNcommandBuffer* cmdBuf, NVNdevice* device) {
+static inline NVNboolean nvnCommandBufferInitialize(NVNcommandBuffer* cmdBuf, NVNdevice* device) {
     return pfnc_nvnCommandBufferInitialize(cmdBuf, device);
 }
 
@@ -1649,7 +1655,8 @@ static inline void nvnCommandBufferSetOuterTessellationLevels(NVNcommandBuffer* 
     pfnc_nvnCommandBufferSetOuterTessellationLevels(cmdBuf, f);
 }
 
-static inline void nvnCommandBufferSetPrimitiveRestart(NVNcommandBuffer* cmdBuf, bool b, int i) {
+static inline void nvnCommandBufferSetPrimitiveRestart(NVNcommandBuffer* cmdBuf, NVNboolean b,
+                                                       int i) {
     pfnc_nvnCommandBufferSetPrimitiveRestart(cmdBuf, b, i);
 }
 
@@ -1757,7 +1764,7 @@ static inline void nvnCommandBufferClearColorui(NVNcommandBuffer* cmdBuf, int in
 }
 
 static inline void nvnCommandBufferClearDepthStencil(NVNcommandBuffer* cmdBuf, float depthValue,
-                                                     bool depthMask, int stencilValue,
+                                                     NVNboolean depthMask, int stencilValue,
                                                      int stencilMask) {
     pfnc_nvnCommandBufferClearDepthStencil(cmdBuf, depthValue, depthMask, stencilValue,
                                            stencilMask);
@@ -1803,8 +1810,8 @@ static inline void nvnCommandBufferSetDepthRange(NVNcommandBuffer* cmdBuf, float
     pfnc_nvnCommandBufferSetDepthRange(cmdBuf, n, f);
 }
 
-static inline void nvnCommandBufferSetDepthBounds(NVNcommandBuffer* cmdBuf, bool enable, float n,
-                                                  float f) {
+static inline void nvnCommandBufferSetDepthBounds(NVNcommandBuffer* cmdBuf, NVNboolean enable,
+                                                  float n, float f) {
     pfnc_nvnCommandBufferSetDepthBounds(cmdBuf, enable, n, f);
 }
 
@@ -1886,16 +1893,17 @@ static inline void nvnCommandBufferSetSampleMask(NVNcommandBuffer* cmdBuf, int m
     pfnc_nvnCommandBufferSetSampleMask(cmdBuf, mask);
 }
 
-static inline void nvnCommandBufferSetRasterizerDiscard(NVNcommandBuffer* cmdBuf, bool discard) {
+static inline void nvnCommandBufferSetRasterizerDiscard(NVNcommandBuffer* cmdBuf,
+                                                        NVNboolean discard) {
     pfnc_nvnCommandBufferSetRasterizerDiscard(cmdBuf, discard);
 }
 
-static inline void nvnCommandBufferSetDepthClamp(NVNcommandBuffer* cmdBuf, bool clamp) {
+static inline void nvnCommandBufferSetDepthClamp(NVNcommandBuffer* cmdBuf, NVNboolean clamp) {
     pfnc_nvnCommandBufferSetDepthClamp(cmdBuf, clamp);
 }
 
 static inline void nvnCommandBufferSetConservativeRasterEnable(NVNcommandBuffer* cmdBuf,
-                                                               bool enable) {
+                                                               NVNboolean enable) {
     pfnc_nvnCommandBufferSetConservativeRasterEnable(cmdBuf, enable);
 }
 
@@ -1988,7 +1996,7 @@ static inline void nvnCommandBufferReportValue(NVNcommandBuffer* cmdBuf, uint32_
     pfnc_nvnCommandBufferReportValue(cmdBuf, value, buffer);
 }
 
-static inline void nvnCommandBufferSetRenderEnable(NVNcommandBuffer* cmdBuf, bool enable) {
+static inline void nvnCommandBufferSetRenderEnable(NVNcommandBuffer* cmdBuf, NVNboolean enable) {
     pfnc_nvnCommandBufferSetRenderEnable(cmdBuf, enable);
 }
 
@@ -2103,8 +2111,8 @@ static inline void nvnCommandBufferDrawTexture(NVNcommandBuffer* cmdBuf, NVNtext
     pfnc_nvnCommandBufferDrawTexture(cmdBuf, handle, region1, region2);
 }
 
-static inline bool nvnProgramSetSubroutineLinkage(NVNprogram* program, int i,
-                                                  const NVNsubroutineLinkageMapPtr* ptr) {
+static inline NVNboolean nvnProgramSetSubroutineLinkage(NVNprogram* program, int i,
+                                                        const NVNsubroutineLinkageMapPtr* ptr) {
     return pfnc_nvnProgramSetSubroutineLinkage(program, i, ptr);
 }
 
@@ -2171,11 +2179,11 @@ static inline void nvnCommandBufferGetMemoryCallbackData(const NVNcommandBuffer*
     pfnc_nvnCommandBufferGetMemoryCallbackData(cmdBuf);
 }
 
-static inline bool nvnCommandBufferIsRecording(const NVNcommandBuffer* cmdBuf) {
+static inline NVNboolean nvnCommandBufferIsRecording(const NVNcommandBuffer* cmdBuf) {
     return pfnc_nvnCommandBufferIsRecording(cmdBuf);
 }
 
-static inline bool nvnSyncInitialize(NVNsync* sync, NVNdevice* device) {
+static inline NVNboolean nvnSyncInitialize(NVNsync* sync, NVNdevice* device) {
     return pfnc_nvnSyncInitialize(sync, device);
 }
 
@@ -2196,7 +2204,7 @@ static inline NVNsyncWaitResult nvnSyncWait(const NVNsync* sync, uint64_t timeou
     return pfnc_nvnSyncWait(sync, timeoutNs);
 }
 
-static inline bool nvnQueueWaitSync(NVNqueue* queue, const NVNsync* sync) {
+static inline NVNboolean nvnQueueWaitSync(NVNqueue* queue, const NVNsync* sync) {
     return pfnc_nvnQueueWaitSync(queue, sync);
 }
 
@@ -2209,7 +2217,7 @@ static inline void nvnEventBuilderSetStorage(NVNeventBuilder* builder, const NVN
     pfnc_nvnEventBuilderSetStorage(builder, pool, size);
 }
 
-static inline bool nvnEventInitialize(NVNevent* event, const NVNeventBuilder* builder) {
+static inline NVNboolean nvnEventInitialize(NVNevent* event, const NVNeventBuilder* builder) {
     return pfnc_nvnEventInitialize(event, builder);
 }
 
@@ -2232,9 +2240,9 @@ static inline void nvnCommandBufferWaitEvent(NVNcommandBuffer* cmdBuf, const NVN
 
 static inline void nvnCommandBufferSignalEvent(NVNcommandBuffer* cmdBuf, const NVNevent* event,
                                                NVNeventSignalMode mode,
-                                               NVNeventSignalLocation location, int i1,
-                                               uint32_t i2) {
-    pfnc_nvnCommandBufferSignalEvent(cmdBuf, event, mode, location, i1, i2);
+                                               NVNeventSignalLocation location, int flags,
+                                               uint32_t i) {
+    pfnc_nvnCommandBufferSignalEvent(cmdBuf, event, mode, location, flags, i);
 }
 
 #ifdef __cplusplus

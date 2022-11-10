@@ -1091,8 +1091,8 @@ protected:
 
 public:
     void SetDefaults();
-    void SetFlags(struct DeviceFlagBits);
-    struct DeviceFlagBits GetFlags() const;
+    void SetFlags(DeviceFlagBits);
+    DeviceFlagBits GetFlags() const;
 };
 
 /*4791*/ class Device {
@@ -1100,14 +1100,11 @@ protected:
     char reserved[12288];
 
     Device(const Device&);
+    const Device& operator=(const Device&);
 
 public:
     Device();
 
-protected:
-    const Device& operator=(const Device&);
-
-public:
     NVNboolean Initialize(const DeviceBuilder*);
     void Finalize();
     void SetDebugLabel(const char*);
@@ -1153,8 +1150,10 @@ public:
     size_t GetQueueMemorySize() const;
     QueueBuilder& SetQueueMemory(void*, size_t);
     QueueBuilder& SetCommandFlushThreshold(size_t);
+    /* from dark2
     QueueBuilder& SetQueuePriority(const QueuePriority);
     QueuePriority GetQueuePriority() const;
+    */
     const Device* GetDevice() const;
     int GetFlags() const;
     NVNboolean GetCommandMemorySize(int*) const;
@@ -1170,14 +1169,11 @@ protected:
     char reserved[8192];
 
     Queue(const Queue&);
+    const Queue& operator=(const Queue&);
 
 public:
     Queue();
 
-protected:
-    const Queue& operator=(const Queue&);
-
-public:
     QueueGetErrorResult GetError(QueueErrorInfo*);
     size_t GetTotalCommandMemoryUsed();
     size_t GetTotalControlMemoryUsed();
@@ -1186,7 +1182,7 @@ public:
     NVNboolean Initialize(const QueueBuilder*);
     void Finalize();
     void SetDebugLabel(const char*);
-    void SubmitCommands(int, const nvn::CommandHandle*);
+    void SubmitCommands(int, const CommandHandle*);
     void Flush();
     void Finish();
     void PresentTexture(Window*, int);
@@ -1200,14 +1196,11 @@ protected:
     char reserved[160];
 
     CommandBuffer(const CommandBuffer&);
+    const CommandBuffer& operator=(const CommandBuffer&);
 
 public:
     CommandBuffer();
 
-protected:
-    const CommandBuffer& operator=(const CommandBuffer&);
-
-public:
     NVNboolean Initialize(Device*);
     void Finalize();
     void SetDebugLabel(const char*);
@@ -1507,20 +1500,19 @@ protected:
     char reserved[192];
 
     Program(const Program&);
+    const Program& operator=(const Program&);
 
 public:
     Program();
 
-protected:
-    const Program& operator=(const Program&);
-
-public:
     NVNboolean Initialize(Device*);
     void Finalize();
     void SetDebugLabel(const char*);
     NVNboolean SetShaders(int, const ShaderData*);
+    /* from dark2
     NVNboolean SetShadersExt(int, const ShaderDataExt*);
     void SetSampleShading(SampleShadingMode);
+    */
     NVNboolean SetSubroutineLinkage(int, const NVNsubroutineLinkageMapPtr*);
 };
 
@@ -1544,21 +1536,18 @@ protected:
     char reserved[256];
 
     MemoryPool(const MemoryPool&);
+    const MemoryPool& operator=(const MemoryPool&);
 
 public:
     MemoryPool();
 
-protected:
-    const MemoryPool& operator=(const MemoryPool&);
-
-public:
     NVNboolean Initialize(const MemoryPoolBuilder*);
     void SetDebugLabel(const char*);
     void Finalize();
     void* Map() const;
     void FlushMappedRange(ptrdiff_t, size_t) const;
     void InvalidateMappedRange(ptrdiff_t, size_t) const;
-    nvn::BufferAddress GetBufferAddress() const;
+    BufferAddress GetBufferAddress() const;
     NVNboolean MapVirtual(int, const MappingRequest*);
     size_t GetSize() const;
     MemoryPoolFlags GetFlags() const;
@@ -1569,14 +1558,11 @@ protected:
     char reserved[32];
 
     TexturePool(const TexturePool&);
+    const TexturePool& operator=(const TexturePool&);
 
 public:
     TexturePool();
 
-protected:
-    const TexturePool& operator=(const TexturePool&);
-
-public:
     NVNboolean Initialize(const MemoryPool*, ptrdiff_t, int);
     void SetDebugLabel(const char*);
     void Finalize();
@@ -1592,14 +1578,11 @@ protected:
     char reserved[32];
 
     SamplerPool(const SamplerPool&);
+    const SamplerPool& operator=(const SamplerPool&);
 
 public:
     SamplerPool();
 
-protected:
-    const SamplerPool& operator=(const SamplerPool&);
-
-public:
     NVNboolean Initialize(const MemoryPool*, ptrdiff_t, int);
     void SetDebugLabel(const char*);
     void Finalize();
@@ -1629,19 +1612,16 @@ protected:
     char reserved[48];
 
     Buffer(const Buffer&);
+    const Buffer& operator=(const Buffer&);
 
 public:
     Buffer();
 
-protected:
-    const Buffer& operator=(const Buffer&);
-
-public:
     NVNboolean Initialize(const BufferBuilder*);
     void SetDebugLabel(const char*);
     void Finalize();
     void* Map() const;
-    nvn::BufferAddress GetAddress() const;
+    BufferAddress GetAddress() const;
     void FlushMappedRange(ptrdiff_t, size_t) const;
     void InvalidateMappedRange(ptrdiff_t, size_t) const;
     MemoryPool* GetMemoryPool() const;
@@ -1655,14 +1635,11 @@ protected:
     char reserved[192];
 
     Texture(const Texture&);
+    const Texture& operator=(const Texture&);
 
 public:
     Texture();
 
-protected:
-    const Texture& operator=(const Texture&);
-
-public:
     NVNboolean Initialize(const TextureBuilder*);
     size_t GetZCullStorageSize() const;
     void Finalize();
@@ -1680,7 +1657,7 @@ public:
     void GetSwizzle(TextureSwizzle*, TextureSwizzle*, TextureSwizzle*, TextureSwizzle*) const;
     TextureDepthStencilMode GetDepthStencilMode() const;
     ptrdiff_t GetStride() const;
-    nvn::TextureAddress GetTextureAddress() const;
+    TextureAddress GetTextureAddress() const;
     void GetSparseTileLayout(TextureSparseTileLayout*) const;
     void WriteTexels(const TextureView*, const CopyRegion*, const void*) const;
     void WriteTexelsStrided(const TextureView*, const CopyRegion*, const void*, ptrdiff_t,
@@ -1695,7 +1672,10 @@ public:
     int GetStorageSize() const;
     NVNboolean Compare(const Texture*) const;
     uint64_t GetDebugID() const;
+
+    /* from dark2
     RawStorageClass GetRawStorageClass() const;
+    */
 };
 
 /*10081*/ class TextureBuilder {
@@ -1745,7 +1725,10 @@ public:
     size_t GetZCullStorageSize() const;
     MemoryPool* GetMemoryPool() const;
     ptrdiff_t GetMemoryOffset() const;
+
+    /* from dark2
     RawStorageClass GetRawStorageClass() const;
+    */
 };
 
 /*10500*/ class TextureView {
@@ -1806,14 +1789,11 @@ protected:
     char reserved[96];
 
     Sampler(const Sampler&);
+    const Sampler& operator=(const Sampler&);
 
 public:
     Sampler();
 
-protected:
-    const Sampler& operator=(const Sampler&);
-
-public:
     NVNboolean Initialize(const SamplerBuilder*);
     void Finalize();
     void SetDebugLabel(const char*);
@@ -1836,14 +1816,11 @@ protected:
     char reserved[64];
 
     Sync(const Sync&);
+    const Sync& operator=(const Sync&);
 
 public:
     Sync();
 
-protected:
-    const Sync& operator=(const Sync&);
-
-public:
     NVNboolean Initialize(Device*);
     void Finalize();
     void SetDebugLabel(const char*);
@@ -1855,14 +1832,11 @@ protected:
     char reserved[384];
 
     Window(const Window&);
+    const Window& operator=(const Window&);
 
 public:
     Window();
 
-protected:
-    const Window& operator=(const Window&);
-
-public:
     NVNboolean Initialize(const WindowBuilder*);
     void Finalize();
     void SetDebugLabel(const char*);
@@ -1906,14 +1880,11 @@ protected:
     char reserved[64];
 
     Event(const Event&);
+    const Event& operator=(const Event&);
 
 public:
     Event();
 
-protected:
-    const Event& operator=(const Event&);
-
-public:
     NVNboolean Initialize(const EventBuilder*);
     void Finalize();
     uint32_t GetValue() const;
