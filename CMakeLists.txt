@@ -1,9 +1,10 @@
 project(NintendoSDK CXX ASM)
 
 add_library(NintendoSDK OBJECT
-  include/nvn/nvn_types.h
+  include/nvn/nvn_FuncPtrBase.h
+  include/nvn/nvn_FuncPtrImpl.h
+  include/nvn/nvn_FuncPtrInline.h
   include/nvn/nvn.h
-  include/nvn/nvn_api.h
   include/nn/types.h
   include/nn/os.h
   include/nn/nifm.h
