@@ -46,11 +46,11 @@ typedef void* NVNsubroutineLinkageMapPtr;
 typedef void* NVNnativeWindow;
 
 typedef struct {
-    char details[0x3000];
+    char reserved[0x3000];
 } NVNdevice;
 
 typedef struct {
-    char details[0x40];
+    char reserved[0x40];
 } NVNdeviceBuilder;
 
 typedef struct {
@@ -64,19 +64,19 @@ typedef struct {
 } NVNdrawTextureRegion;
 
 typedef struct {
-    char details[0x18];
+    char reserved[0x18];
 } NVNmultisampleState;
 
 typedef struct {
-    char details[0x8];
+    char reserved[0x8];
 } NVNdepthStencilState;
 
 typedef struct {
-    char details[0x4];
+    char reserved[0x4];
 } NVNchannelMaskState;
 
 typedef struct {
-    char details[0x4];
+    char reserved[0x4];
 } NVNpolygonState;
 
 typedef struct {
@@ -85,7 +85,7 @@ typedef struct {
 } NVNbufferRange;
 
 typedef struct {
-    unsigned char details[4];
+    unsigned char reserved[4];
 } NVNcolorState;
 
 typedef struct {
@@ -102,7 +102,7 @@ typedef struct {
 } NVNseparateSamplerHandle;
 
 typedef struct {
-    char details[0x2000];
+    char reserved[0x2000];
 } NVNqueue;
 
 typedef struct {
@@ -111,27 +111,27 @@ typedef struct {
 } NVNqueueErrorInfo;
 
 typedef struct {
-    char details[0x40];
+    char reserved[0x40];
 } NVNqueueBuilder;
 
 typedef struct {
-    char details[384];
+    char reserved[384];
 } NVNwindow;
 
 typedef struct {
-    char details[0xC0];
+    char reserved[0xC0];
 } NVNtexture;
 
 typedef struct {
-    char details[0x28];
+    char reserved[0x28];
 } NVNtextureView;
 
 typedef struct {
-    char details[0xA0];
+    char reserved[0xA0];
 } NVNcommandBuffer;
 
 typedef struct {
-    char details[0x40];
+    char reserved[0x40];
 } NVNsync;
 
 typedef struct {
@@ -142,7 +142,7 @@ typedef struct {
 } NVNrectangle;
 
 typedef struct {
-    char details[0xC0];
+    char reserved[0xC0];
 } NVNprogram;
 
 typedef struct {
@@ -151,31 +151,31 @@ typedef struct {
 } NVNshaderData;
 
 typedef struct {
-    char details[0x100];
+    char reserved[0x100];
 } NVNmemoryPool;
 
 typedef struct {
-    char details[0x20];
+    char reserved[0x20];
 } NVNtexturePool;
 
 typedef struct {
-    char details[0x20];
+    char reserved[0x20];
 } NVNsamplerPool;
 
 typedef struct {
-    char details[0x8];
+    char reserved[0x8];
 } NVNblendState;
 
 typedef struct {
-    char details[0x4];
+    char reserved[0x4];
 } NVNvertexAttribState;
 
 typedef struct {
-    char details[0x4];
+    char reserved[0x4];
 } NVNvertexStreamState;
 
 typedef struct {
-    char details[0x40];
+    char reserved[0x40];
 } NVNmemoryPoolBuilder;
 
 typedef struct {
@@ -184,27 +184,27 @@ typedef struct {
 } NVNmappingRequest;
 
 typedef struct {
-    char details[0x60];
+    char reserved[0x60];
 } NVNsamplerBuilder;
 
 typedef struct {
-    char details[0x30];
+    char reserved[0x30];
 } NVNsampler;
 
 typedef struct {
-    char details[0x40];
+    char reserved[0x40];
 } NVNbufferBuilder;
 
 typedef struct {
-    char details[0x30];
+    char reserved[0x30];
 } NVNbuffer;
 
 typedef struct {
-    char details[0x40];
+    char reserved[0x40];
 } NVNevent;
 
 typedef struct {
-    char details[0x20];
+    char reserved[0x20];
 } NVNeventBuilder;
 
 typedef struct {
@@ -217,11 +217,11 @@ typedef struct {
 } NVNcopyRegion;
 
 typedef struct {
-    char details[0x40];
+    char reserved[0x40];
 } NVNwindowBuilder;
 
 typedef struct {
-    char details[0x80];
+    char reserved[0x80];
 } NVNtextureBuilder;
 
 typedef struct {

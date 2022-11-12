@@ -53,23 +53,28 @@ typedef int NVNdebugDomainId;
 
 namespace nvn {
 
-/*?*/ union QueueErrorInfo;
-/*?*/ struct DrawTextureRegion;
-/*?*/ struct ShaderDataExt;
-/*?*/ struct MappingRequest;
-/*?*/ struct TextureSparseTileLayout;
-/*?*/ struct Rectangle;
+// todo: find these types, not found in diablo3 or dark2
+union QueueErrorInfo;
+struct DrawTextureRegion;
+struct ShaderDataExt;
+struct MappingRequest;
+struct TextureSparseTileLayout;
+struct Rectangle;
 
-/*330*/ typedef uint64_t BufferAddress;
-/*333*/ typedef uint64_t CommandHandle;
-/*337*/ typedef uint64_t TextureHandle;
-/*341*/ typedef uint64_t ImageHandle;
-/*349*/ typedef uint64_t TextureAddress;
-/*361*/ struct SeparateSamplerHandle { uint64_t value; };
-/*375*/ struct SeparateTextureHandle { uint64_t value; };
+typedef uint64_t BufferAddress;
+typedef uint64_t CommandHandle;
+typedef uint64_t TextureHandle;
+typedef uint64_t ImageHandle;
+typedef uint64_t TextureAddress;
+struct SeparateSamplerHandle {
+    uint64_t value;
+};
+struct SeparateTextureHandle {
+    uint64_t value;
+};
 
-/*388*/ struct DeviceInfo {
-    /*391*/ enum Enum {
+struct DeviceInfo {
+    enum Enum {
         API_MAJOR_VERSION,
         API_MINOR_VERSION,
         UNIFORM_BUFFER_BINDINGS_PER_STAGE,
@@ -174,8 +179,8 @@ namespace nvn {
     NVN_ENUM(DeviceInfo);
 };
 
-/*981*/ struct TextureTarget {
-    /*984*/ enum Enum {
+struct TextureTarget {
+    enum Enum {
         TARGET_1D,
         TARGET_2D,
         TARGET_3D,
@@ -193,20 +198,20 @@ namespace nvn {
     NVN_ENUM(TextureTarget);
 };
 
-/*1030*/ struct TextureSwizzle {
-    /*1033*/ enum Enum { ZERO, ONE, R, G, B, A, NVN_TEXTURE_SWIZZLE_LARGE = -1 };
+struct TextureSwizzle {
+    enum Enum { ZERO, ONE, R, G, B, A, NVN_TEXTURE_SWIZZLE_LARGE = -1 };
 
     NVN_ENUM(TextureSwizzle);
 };
 
-/*1066*/ struct TextureDepthStencilMode {
-    /*1069*/ enum Enum { DEPTH, STENCIL, NVN_TEXTURE_DEPTH_STENCIL_MODE_LARGE = -1 };
+struct TextureDepthStencilMode {
+    enum Enum { DEPTH, STENCIL, NVN_TEXTURE_DEPTH_STENCIL_MODE_LARGE = -1 };
 
     NVN_ENUM(TextureDepthStencilMode);
 };
 
-/*1091*/ struct Format {
-    /*1094*/ enum Enum {
+struct Format {
+    enum Enum {
         NONE,
         R8,
         R8SN,
@@ -370,8 +375,8 @@ namespace nvn {
     NVN_ENUM(Format);
 };
 
-/*1650*/ struct BlendFunc {
-    /*1653*/ enum Enum {
+struct BlendFunc {
+    enum Enum {
         ZERO = 1,
         ONE,
         SRC_COLOR,
@@ -397,8 +402,8 @@ namespace nvn {
     NVN_ENUM(BlendFunc);
 };
 
-/*1742*/ struct BlendAdvancedMode {
-    /*1745*/ enum Enum {
+struct BlendAdvancedMode {
+    enum Enum {
         BLEND_NONE,
         BLEND_ZERO = 5,
         BLEND_SRC,
@@ -452,20 +457,20 @@ namespace nvn {
     NVN_ENUM(BlendAdvancedMode);
 };
 
-/*1900*/ struct BlendAdvancedOverlap {
-    /*1903*/ enum Enum { UNCORRELATED, DISJOINT, CONJOINT, NVN_BLEND_ADVANCED_OVERLAP_LARGE = -1 };
+struct BlendAdvancedOverlap {
+    enum Enum { UNCORRELATED, DISJOINT, CONJOINT, NVN_BLEND_ADVANCED_OVERLAP_LARGE = -1 };
 
     NVN_ENUM(BlendAdvancedOverlap);
 };
 
-/*1944*/ struct BlendEquation {
-    /*1947*/ enum Enum { ADD = 1, SUB, REVERSE_SUB, MIN, MAX, NVN_BLEND_EQUATION_LARGE = -1 };
+struct BlendEquation {
+    enum Enum { ADD = 1, SUB, REVERSE_SUB, MIN, MAX, NVN_BLEND_EQUATION_LARGE = -1 };
 
     NVN_ENUM(BlendEquation);
 };
 
-/*1978*/ struct LogicOp {
-    /*1981*/ enum Enum {
+struct LogicOp {
+    enum Enum {
         CLEAR,
         AND,
         AND_REVERSE,
@@ -488,8 +493,8 @@ namespace nvn {
     NVN_ENUM(LogicOp);
 };
 
-/*2038*/ struct AlphaFunc {
-    /*2041*/ enum Enum {
+struct AlphaFunc {
+    enum Enum {
         NEVER = 1,
         LESS,
         EQUAL,
@@ -504,8 +509,8 @@ namespace nvn {
     NVN_ENUM(AlphaFunc);
 };
 
-/*2079*/ struct DrawPrimitive {
-    /*2082*/ enum Enum {
+struct DrawPrimitive {
+    enum Enum {
         POINTS,
         LINES,
         LINE_LOOP,
@@ -527,14 +532,14 @@ namespace nvn {
     NVN_ENUM(DrawPrimitive);
 };
 
-/*2201*/ struct IndexType {
-    /*2204*/ enum Enum { UNSIGNED_BYTE, UNSIGNED_SHORT, UNSIGNED_INT, NVN_INDEX_TYPE_LARGE = -1 };
+struct IndexType {
+    enum Enum { UNSIGNED_BYTE, UNSIGNED_SHORT, UNSIGNED_INT, NVN_INDEX_TYPE_LARGE = -1 };
 
     NVN_ENUM(IndexType);
 };
 
-/*2222*/ struct DepthFunc {
-    /*2225*/ enum Enum {
+struct DepthFunc {
+    enum Enum {
         NEVER = 1,
         LESS,
         EQUAL,
@@ -549,14 +554,14 @@ namespace nvn {
     NVN_ENUM(DepthFunc);
 };
 
-/*2267*/ struct MagFilter {
-    /*2270*/ enum Enum { NEAREST, LINEAR, NVN_MAG_FILTER_LARGE = -1 };
+struct MagFilter {
+    enum Enum { NEAREST, LINEAR, NVN_MAG_FILTER_LARGE = -1 };
 
     NVN_ENUM(MagFilter);
 };
 
-/*2293*/ struct MinFilter {
-    /*2296*/ enum Enum {
+struct MinFilter {
+    enum Enum {
         NEAREST,
         LINEAR,
         NEAREST_MIPMAP_NEAREST,
@@ -569,8 +574,8 @@ namespace nvn {
     NVN_ENUM(MinFilter);
 };
 
-/*2336*/ struct WrapMode {
-    /*2339*/ enum Enum {
+struct WrapMode {
+    enum Enum {
         CLAMP,
         REPEAT,
         MIRROR_CLAMP,
@@ -585,14 +590,14 @@ namespace nvn {
     NVN_ENUM(WrapMode);
 };
 
-/*2394*/ struct CompareMode {
-    /*2397*/ enum Enum { NONE, COMPARE_R_TO_TEXTURE, NVN_COMPARE_MODE_LARGE = -1 };
+struct CompareMode {
+    enum Enum { NONE, COMPARE_R_TO_TEXTURE, NVN_COMPARE_MODE_LARGE = -1 };
 
     NVN_ENUM(CompareMode);
 };
 
-/*2414*/ struct CompareFunc {
-    /*2417*/ enum Enum {
+struct CompareFunc {
+    enum Enum {
         NEVER = 1,
         LESS,
         EQUAL,
@@ -607,20 +612,20 @@ namespace nvn {
     NVN_ENUM(CompareFunc);
 };
 
-/*2455*/ struct SamplerReduction {
-    /*2458*/ enum Enum { AVERAGE, MIN, MAX, NVN_SAMPLER_REDUCTION_LARGE = -1 };
+struct SamplerReduction {
+    enum Enum { AVERAGE, MIN, MAX, NVN_SAMPLER_REDUCTION_LARGE = -1 };
 
     NVN_ENUM(SamplerReduction);
 };
 
-/*2485*/ struct Face {
-    /*2488*/ enum Enum { NONE, FRONT, BACK, FRONT_AND_BACK, NVN_FACE_LARGE = -1 };
+struct Face {
+    enum Enum { NONE, FRONT, BACK, FRONT_AND_BACK, NVN_FACE_LARGE = -1 };
 
     NVN_ENUM(Face);
 };
 
-/*2513*/ struct StencilFunc {
-    /*2516*/ enum Enum {
+struct StencilFunc {
+    enum Enum {
         NEVER = 1,
         LESS,
         EQUAL,
@@ -635,8 +640,8 @@ namespace nvn {
     NVN_ENUM(StencilFunc);
 };
 
-/*2559*/ struct StencilOp {
-    /*2562*/ enum Enum {
+struct StencilOp {
+    enum Enum {
         KEEP = 1,
         ZERO,
         REPLACE,
@@ -651,32 +656,26 @@ namespace nvn {
     NVN_ENUM(StencilOp);
 };
 
-/*2603*/ struct FrontFace {
-    /*2606*/ enum Enum { CW, CCW, NVN_FRONT_FACE_LARGE = -1 };
+struct FrontFace {
+    enum Enum { CW, CCW, NVN_FRONT_FACE_LARGE = -1 };
 
     NVN_ENUM(FrontFace);
 };
 
-/*2621*/ struct PolygonMode {
-    /*2624*/ enum Enum { POINT, LINE, FILL, NVN_POLYGON_MODE_LARGE = -1 };
+struct PolygonMode {
+    enum Enum { POINT, LINE, FILL, NVN_POLYGON_MODE_LARGE = -1 };
 
     NVN_ENUM(PolygonMode);
 };
 
-/*2649*/ struct PolygonOffsetEnable {
-    /*2652*/ enum Enum {
-        NONE = 0,
-        POINT = 1,
-        LINE = 2,
-        FILL = 4,
-        NVN_POLYGON_OFFSET_ENABLE_LARGE = -1
-    };
+struct PolygonOffsetEnable {
+    enum Enum { NONE = 0, POINT = 1, LINE = 2, FILL = 4, NVN_POLYGON_OFFSET_ENABLE_LARGE = -1 };
 
     NVN_BITS(PolygonOffsetEnable);
 };
 
-/*2677*/ struct SyncCondition {
-    /*2680*/ enum Enum {
+struct SyncCondition {
+    enum Enum {
         ALL_GPU_COMMANDS_COMPLETE,
         GRAPHICS_WORLD_SPACE_COMPLETE,
         NVN_SYNC_CONDITION_LARGE = -1
@@ -685,8 +684,8 @@ namespace nvn {
     NVN_ENUM(SyncCondition);
 };
 
-/*2696*/ struct SyncWaitResult {
-    /*2699*/ enum Enum {
+struct SyncWaitResult {
+    enum Enum {
         ALREADY_SIGNALED,
         CONDITION_SATISFIED,
         TIMEOUT_EXPIRED,
@@ -697,20 +696,20 @@ namespace nvn {
     NVN_ENUM(SyncWaitResult);
 };
 
-/*2726*/ struct QueueAcquireTextureResult {
-    /*2729*/ enum Enum { SUCCESS, NATIVE_ERROR, NVN_QUEUE_ACQUIRE_TEXTURE_RESULT_LARGE = -1 };
+struct QueueAcquireTextureResult {
+    enum Enum { SUCCESS, NATIVE_ERROR, NVN_QUEUE_ACQUIRE_TEXTURE_RESULT_LARGE = -1 };
 
     NVN_ENUM(QueueAcquireTextureResult);
 };
 
-/*2744*/ struct WindowAcquireTextureResult {
-    /*2747*/ enum Enum { SUCCESS, NATIVE_ERROR, NVN_WINDOW_ACQUIRE_TEXTURE_RESULT_LARGE = -1 };
+struct WindowAcquireTextureResult {
+    enum Enum { SUCCESS, NATIVE_ERROR, NVN_WINDOW_ACQUIRE_TEXTURE_RESULT_LARGE = -1 };
 
     NVN_ENUM(WindowAcquireTextureResult);
 };
 
-/*2762*/ struct ShaderStage {
-    /*2765*/ enum Enum {
+struct ShaderStage {
+    enum Enum {
         VERTEX,
         FRAGMENT,
         GEOMETRY,
@@ -723,8 +722,8 @@ namespace nvn {
     NVN_ENUM(ShaderStage);
 };
 
-/*2792*/ struct TiledCacheAction {
-    /*2795*/ enum Enum {
+struct TiledCacheAction {
+    enum Enum {
         ENABLE = 1,
         DISABLE,
         FLUSH,
@@ -737,8 +736,8 @@ namespace nvn {
     NVN_ENUM(TiledCacheAction);
 };
 
-/*2836*/ struct ShaderStageBits {
-    /*2839*/ enum Enum {
+struct ShaderStageBits {
+    enum Enum {
         VERTEX = 1,
         FRAGMENT = 2,
         GEOMETRY = 4,
@@ -752,14 +751,14 @@ namespace nvn {
     NVN_BITS(ShaderStageBits);
 };
 
-/*2873*/ struct SyncFlagBits {
-    /*2876*/ enum Enum { FLUSH_FOR_CPU = 1, NVN_SYNC_FLAG_BITS_LARGE = -1 };
+struct SyncFlagBits {
+    enum Enum { FLUSH_FOR_CPU = 1, NVN_SYNC_FLAG_BITS_LARGE = -1 };
 
     NVN_BITS(SyncFlagBits);
 };
 
-/*2889*/ struct DeviceFlagBits {
-    /*2892*/ enum Enum {
+struct DeviceFlagBits {
+    enum Enum {
         DEBUG_ENABLE = 1,
         DEBUG_SKIP_CALLS_ON_ERROR = 2,
         DEBUG_DRAW_VALIDATION = 4,
@@ -778,32 +777,32 @@ namespace nvn {
     NVN_BITS(DeviceFlagBits);
 };
 
-/*3030*/ struct ClearColorMask {
-    /*3033*/ enum Enum { R = 1, G = 2, B = 4, A = 8, RGBA = 15, NVN_CLEAR_COLOR_MASK_LARGE = -1 };
+struct ClearColorMask {
+    enum Enum { R = 1, G = 2, B = 4, A = 8, RGBA = 15, NVN_CLEAR_COLOR_MASK_LARGE = -1 };
 
     NVN_BITS(ClearColorMask);
 };
 
-/*3061*/ struct DebugCallbackSource {
-    /*3064*/ enum Enum { API, NVN_DEBUG_CALLBACK_SOURCE_LARGE = -1 };
+struct DebugCallbackSource {
+    enum Enum { API, NVN_DEBUG_CALLBACK_SOURCE_LARGE = -1 };
 
     NVN_ENUM(DebugCallbackSource);
 };
 
-/*3076*/ struct DebugCallbackType {
-    /*3079*/ enum Enum { API_ERROR, API_WARNING, NVN_DEBUG_CALLBACK_TYPE_LARGE = -1 };
+struct DebugCallbackType {
+    enum Enum { API_ERROR, API_WARNING, NVN_DEBUG_CALLBACK_TYPE_LARGE = -1 };
 
     NVN_ENUM(DebugCallbackType);
 };
 
-/*3095*/ struct DebugCallbackSeverity {
-    /*3098*/ enum Enum { HIGH, MEDIUM, LOW, NOTIFICATION, NVN_DEBUG_CALLBACK_SEVERITY_LARGE = -1 };
+struct DebugCallbackSeverity {
+    enum Enum { HIGH, MEDIUM, LOW, NOTIFICATION, NVN_DEBUG_CALLBACK_SEVERITY_LARGE = -1 };
 
     NVN_ENUM(DebugCallbackSeverity);
 };
 
-/*3123*/ struct MemoryPoolFlags {
-    /*3126*/ enum Enum {
+struct MemoryPoolFlags {
+    enum Enum {
         CPU_NO_ACCESS = 1,
         CPU_UNCACHED = 2,
         CPU_CACHED = 4,
@@ -820,8 +819,8 @@ namespace nvn {
     NVN_BITS(MemoryPoolFlags);
 };
 
-/*3314*/ struct CounterType {
-    /*3317*/ enum Enum {
+struct CounterType {
+    enum Enum {
         TIMESTAMP,
         SAMPLES_PASSED,
         INPUT_VERTICES,
@@ -845,8 +844,8 @@ namespace nvn {
     NVN_ENUM(CounterType);
 };
 
-/*3462*/ struct CommandBufferMemoryEvent {
-    /*3465*/ enum Enum {
+struct CommandBufferMemoryEvent {
+    enum Enum {
         OUT_OF_COMMAND_MEMORY,
         OUT_OF_CONTROL_MEMORY,
         NVN_COMMAND_BUFFER_MEMORY_EVENT_LARGE = -1
@@ -855,30 +854,26 @@ namespace nvn {
     NVN_ENUM(CommandBufferMemoryEvent);
 };
 
-/*3487*/ struct ConditionalRenderMode {
-    /*3490*/ enum Enum {
-        RENDER_IF_EQUAL,
-        RENDER_IF_NOT_EQUAL,
-        NVN_CONDITIONAL_RENDER_MODE_LARGE = -1
-    };
+struct ConditionalRenderMode {
+    enum Enum { RENDER_IF_EQUAL, RENDER_IF_NOT_EQUAL, NVN_CONDITIONAL_RENDER_MODE_LARGE = -1 };
 
     NVN_ENUM(ConditionalRenderMode);
 };
 
-/*3507*/ struct WindowOriginMode {
-    /*3510*/ enum Enum { LOWER_LEFT, UPPER_LEFT, NVN_WINDOW_ORIGIN_MODE_LARGE = -1 };
+struct WindowOriginMode {
+    enum Enum { LOWER_LEFT, UPPER_LEFT, NVN_WINDOW_ORIGIN_MODE_LARGE = -1 };
 
     NVN_ENUM(WindowOriginMode);
 };
 
-/*3526*/ struct DepthMode {
-    /*3529*/ enum Enum { NEAR_IS_MINUS_W, NEAR_IS_ZERO, NVN_DEPTH_MODE_LARGE = -1 };
+struct DepthMode {
+    enum Enum { NEAR_IS_MINUS_W, NEAR_IS_ZERO, NVN_DEPTH_MODE_LARGE = -1 };
 
     NVN_ENUM(DepthMode);
 };
 
-/*3549*/ struct TextureFlags {
-    /*3552*/ enum Enum {
+struct TextureFlags {
+    enum Enum {
         DISPLAY = 1,
         VIDEO_DECODE = 2,
         IMAGE = 4,
@@ -896,8 +891,8 @@ namespace nvn {
     NVN_BITS(TextureFlags);
 };
 
-/*3741*/ struct BarrierBits {
-    /*3744*/ enum Enum {
+struct BarrierBits {
+    enum Enum {
         ORDER_PRIMITIVES = 1,
         ORDER_FRAGMENTS = 2,
         ORDER_FRAGMENTS_TILED = 4,
@@ -913,8 +908,8 @@ namespace nvn {
     NVN_BITS(BarrierBits);
 };
 
-/*3894*/ struct CopyFlags {
-    /*3897*/ enum Enum {
+struct CopyFlags {
+    enum Enum {
         NONE = 0,
         LINEAR_FILTER = 1,
         ENGINE_2D = 2,
@@ -927,8 +922,8 @@ namespace nvn {
     NVN_BITS(CopyFlags);
 };
 
-/*3958*/ struct ViewportSwizzle {
-    /*3961*/ enum Enum {
+struct ViewportSwizzle {
+    enum Enum {
         POSITIVE_X,
         NEGATIVE_X,
         POSITIVE_Y,
@@ -943,25 +938,20 @@ namespace nvn {
     NVN_ENUM(ViewportSwizzle);
 };
 
-/*4007*/ struct CoverageModulationMode {
-    /*4010*/ enum Enum { NONE, RGB, ALPHA, RGBA, NVN_COVERAGE_MODULATION_MODE_LARGE = -1 };
+struct CoverageModulationMode {
+    enum Enum { NONE, RGB, ALPHA, RGBA, NVN_COVERAGE_MODULATION_MODE_LARGE = -1 };
 
     NVN_ENUM(CoverageModulationMode);
 };
 
-/*4033*/ struct QueueFlags {
-    /*4036*/ enum Enum {
-        NO_FRAGMENT_INTERLOCK = 1,
-        NO_ZCULL = 2,
-        NONE = 0,
-        NVN_QUEUE_FLAGS_LARGE = -1
-    };
+struct QueueFlags {
+    enum Enum { NO_FRAGMENT_INTERLOCK = 1, NO_ZCULL = 2, NONE = 0, NVN_QUEUE_FLAGS_LARGE = -1 };
 
     NVN_BITS(QueueFlags);
 };
 
-/*4073*/ struct DebugObjectType {
-    /*4076*/ enum Enum {
+struct DebugObjectType {
+    enum Enum {
         WINDOW,
         QUEUE,
         COMMAND_BUFFER,
@@ -976,38 +966,38 @@ namespace nvn {
     NVN_ENUM(DebugObjectType);
 };
 
-/*4110*/ struct EventSignalMode {
-    /*4113*/ enum Enum { WRITE, ADD, NVN_EVENT_SIGNAL_MODE_LARGE = -1 };
+struct EventSignalMode {
+    enum Enum { WRITE, ADD, NVN_EVENT_SIGNAL_MODE_LARGE = -1 };
 
     NVN_ENUM(EventSignalMode);
 };
 
-/*4139*/ struct EventWaitMode {
-    /*4142*/ enum Enum { EQUAL, GEQUAL_WRAP, NVN_EVENT_WAIT_MODE_LARGE = -1 };
+struct EventWaitMode {
+    enum Enum { EQUAL, GEQUAL_WRAP, NVN_EVENT_WAIT_MODE_LARGE = -1 };
 
     NVN_ENUM(EventWaitMode);
 };
 
-/*4167*/ struct EventSignalLocation {
-    /*4170*/ enum Enum { TOP, VERTEX_PIPE, BOTTOM, NVN_EVENT_SIGNAL_LOCATION_LARGE = -1 };
+struct EventSignalLocation {
+    enum Enum { TOP, VERTEX_PIPE, BOTTOM, NVN_EVENT_SIGNAL_LOCATION_LARGE = -1 };
 
     NVN_ENUM(EventSignalLocation);
 };
 
-/*4191*/ struct EventSignalFlags {
-    /*4194*/ enum Enum { NO_WAIT_MEMORY = 1, NVN_EVENT_SIGNAL_FLAGS_LARGE = -1 };
+struct EventSignalFlags {
+    enum Enum { NO_WAIT_MEMORY = 1, NVN_EVENT_SIGNAL_FLAGS_LARGE = -1 };
 
     NVN_BITS(EventSignalFlags);
 };
 
-/*4216*/ struct FormatClass {
-    /*4219*/ enum Enum { UNORM8, UNORM10, UNORM16, FP11, FP16, SRGB8, NVN_FORMAT_CLASS_LARGE = -1 };
+struct FormatClass {
+    enum Enum { UNORM8, UNORM10, UNORM16, FP11, FP16, SRGB8, NVN_FORMAT_CLASS_LARGE = -1 };
 
     NVN_ENUM(FormatClass);
 };
 
-/*4269*/ struct QueueGetErrorResult {
-    /*4272*/ enum Enum {
+struct QueueGetErrorResult {
+    enum Enum {
         GPU_NO_ERROR,
         GPU_ERROR_UNKNOWN,
         GPU_ERROR_MMU_FAULT,
@@ -1020,14 +1010,14 @@ namespace nvn {
     NVN_ENUM(QueueGetErrorResult);
 };
 
-/*4328*/ struct QueuePriority {
-    /*4331*/ enum Enum { LOW = 10, NORMAL = 100, HIGH = 1000, NVN_QUEUE_PRIORITY_LARGE = -1 };
+struct QueuePriority {
+    enum Enum { LOW = 10, NORMAL = 100, HIGH = 1000, NVN_QUEUE_PRIORITY_LARGE = -1 };
 
     NVN_ENUM(QueuePriority);
 };
 
-/*4364*/ struct RawStorageClass {
-    /*4367*/ enum Enum {
+struct RawStorageClass {
+    enum Enum {
         NONE,
         LINEAR,
         COLOR_AND_ZF32,
@@ -1040,8 +1030,8 @@ namespace nvn {
     NVN_ENUM(RawStorageClass);
 };
 
-/*4400*/ struct SampleShadingMode {
-    /*4403*/ enum Enum {
+struct SampleShadingMode {
+    enum Enum {
         DEFAULT_FRAGMENT,
         FORCE_SAMPLE_SHADING_ON,
         FORCE_SAMPLE_SHADING_OFF,
@@ -1051,17 +1041,17 @@ namespace nvn {
     NVN_ENUM(SampleShadingMode);
 };
 
-/*4432*/ struct ShaderData {
+struct ShaderData {
     BufferAddress data;
     const void* control;
 };
 
-/*4412*/ struct CounterData {
+struct CounterData {
     uint64_t counter;
     uint64_t timestamp;
 };
 
-/*4519*/ struct CopyRegion {
+struct CopyRegion {
     int xoffset;
     int yoffset;
     int zoffset;
@@ -1070,22 +1060,23 @@ namespace nvn {
     int depth;
 };
 
-/*4601*/ struct PackagedTextureLayout { char layout[8]; };
+struct PackagedTextureLayout {
+    char layout[8];
+};
 
-/*4613*/ struct BufferRange {
+struct BufferRange {
     BufferAddress address;
     uint64_t size;
 };
 
-/*4686*/ typedef void (*GenericFuncPtrFunc)(void);
-/*4720*/ typedef void (*DebugCallbackFunc)(DebugCallbackSource::Enum, DebugCallbackType::Enum, int,
-                                           DebugCallbackSeverity::Enum, const char*, void*);
-/*4748*/ typedef void (*CommandBufferMemoryCallbackFunc)(CommandBuffer*,
-                                                         CommandBufferMemoryEvent::Enum, size_t,
-                                                         void*);
-/*4761*/ typedef void (*WalkDebugDatabaseCallbackFunc)(void*, void*);
+typedef void (*GenericFuncPtrFunc)(void);
+typedef void (*DebugCallbackFunc)(DebugCallbackSource::Enum, DebugCallbackType::Enum, int,
+                                  DebugCallbackSeverity::Enum, const char*, void*);
+typedef void (*CommandBufferMemoryCallbackFunc)(CommandBuffer*, CommandBufferMemoryEvent::Enum,
+                                                size_t, void*);
+typedef void (*WalkDebugDatabaseCallbackFunc)(void*, void*);
 
-/*4770*/ class DeviceBuilder {
+class DeviceBuilder {
 protected:
     char reserved[64];
 
@@ -1095,15 +1086,15 @@ public:
     DeviceFlagBits GetFlags() const;
 };
 
-/*4791*/ class Device {
+class Device {
 protected:
     char reserved[12288];
 
-    Device(const Device&);
-    const Device& operator=(const Device&);
+    Device(const Device&) = delete;
+    const Device& operator=(const Device&) = delete;
 
 public:
-    Device();
+    Device() {}
 
     NVNboolean Initialize(const DeviceBuilder*);
     void Finalize();
@@ -1136,7 +1127,7 @@ public:
     NVNboolean IsExternalDebuggerAttached() const;
 };
 
-/*5137*/ class QueueBuilder {
+class QueueBuilder {
 protected:
     char reserved[64];
 
@@ -1164,15 +1155,15 @@ public:
     void* GetMemory() const;
 };
 
-/*5367*/ class Queue {
+class Queue {
 protected:
     char reserved[8192];
 
-    Queue(const Queue&);
-    const Queue& operator=(const Queue&);
+    Queue(const Queue&) = delete;
+    const Queue& operator=(const Queue&) = delete;
 
 public:
-    Queue();
+    Queue() {}
 
     QueueGetErrorResult GetError(QueueErrorInfo*);
     size_t GetTotalCommandMemoryUsed();
@@ -1191,15 +1182,15 @@ public:
     NVNboolean WaitSync(const Sync*);
 };
 
-/*5570*/ class CommandBuffer {
+class CommandBuffer {
 protected:
     char reserved[160];
 
-    CommandBuffer(const CommandBuffer&);
-    const CommandBuffer& operator=(const CommandBuffer&);
+    CommandBuffer(const CommandBuffer&) = delete;
+    const CommandBuffer& operator=(const CommandBuffer&) = delete;
 
 public:
-    CommandBuffer();
+    CommandBuffer() {}
 
     NVNboolean Initialize(Device*);
     void Finalize();
@@ -1359,7 +1350,7 @@ public:
     void SetStencilCullCriteria(StencilFunc, int, int);
 };
 
-/*8170*/ class BlendState {
+class BlendState {
 protected:
     char reserved[8];
 
@@ -1381,7 +1372,7 @@ public:
     NVNboolean GetAdvancedNormalizedDst() const;
 };
 
-/*8350*/ class ChannelMaskState {
+class ChannelMaskState {
 protected:
     char reserved[4];
 
@@ -1391,7 +1382,7 @@ public:
     void GetChannelMask(int, NVNboolean*, NVNboolean*, NVNboolean*, NVNboolean*) const;
 };
 
-/*8417*/ class ColorState {
+class ColorState {
 protected:
     char reserved[4];
 
@@ -1405,7 +1396,7 @@ public:
     AlphaFunc GetAlphaTest() const;
 };
 
-/*8487*/ class DepthStencilState {
+class DepthStencilState {
 protected:
     char reserved[8];
 
@@ -1425,7 +1416,7 @@ public:
     void GetStencilOp(Face, StencilOp*, StencilOp*, StencilOp*) const;
 };
 
-/*8620*/ class MultisampleState {
+class MultisampleState {
 protected:
     char reserved[24];
 
@@ -1455,7 +1446,7 @@ public:
     MultisampleState& SetSampleLocations(int, int, const float*);
 };
 
-/*8894*/ class PolygonState {
+class PolygonState {
 protected:
     char reserved[4];
 
@@ -1471,7 +1462,7 @@ public:
     PolygonOffsetEnable GetPolygonOffsetEnables() const;
 };
 
-/*8960*/ class VertexAttribState {
+class VertexAttribState {
 protected:
     char reserved[4];
 
@@ -1483,7 +1474,7 @@ public:
     int GetStreamIndex() const;
 };
 
-/*9015*/ class VertexStreamState {
+class VertexStreamState {
 protected:
     char reserved[8];
 
@@ -1495,15 +1486,15 @@ public:
     int GetDivisor() const;
 };
 
-/*9060*/ class Program {
+class Program {
 protected:
     char reserved[192];
 
-    Program(const Program&);
-    const Program& operator=(const Program&);
+    Program(const Program&) = delete;
+    const Program& operator=(const Program&) = delete;
 
 public:
-    Program();
+    Program() {}
 
     NVNboolean Initialize(Device*);
     void Finalize();
@@ -1516,7 +1507,7 @@ public:
     NVNboolean SetSubroutineLinkage(int, const NVNsubroutineLinkageMapPtr*);
 };
 
-/*9132*/ class MemoryPoolBuilder {
+class MemoryPoolBuilder {
 protected:
     char reserved[64];
 
@@ -1531,15 +1522,15 @@ public:
     MemoryPoolFlags GetFlags() const;
 };
 
-/*9222*/ class MemoryPool {
+class MemoryPool {
 protected:
     char reserved[256];
 
-    MemoryPool(const MemoryPool&);
-    const MemoryPool& operator=(const MemoryPool&);
+    MemoryPool(const MemoryPool&) = delete;
+    const MemoryPool& operator=(const MemoryPool&) = delete;
 
 public:
-    MemoryPool();
+    MemoryPool() {}
 
     NVNboolean Initialize(const MemoryPoolBuilder*);
     void SetDebugLabel(const char*);
@@ -1553,15 +1544,15 @@ public:
     MemoryPoolFlags GetFlags() const;
 };
 
-/*9338*/ class TexturePool {
+class TexturePool {
 protected:
     char reserved[32];
 
-    TexturePool(const TexturePool&);
-    const TexturePool& operator=(const TexturePool&);
+    TexturePool(const TexturePool&) = delete;
+    const TexturePool& operator=(const TexturePool&) = delete;
 
 public:
-    TexturePool();
+    TexturePool() {}
 
     NVNboolean Initialize(const MemoryPool*, ptrdiff_t, int);
     void SetDebugLabel(const char*);
@@ -1573,15 +1564,15 @@ public:
     int GetSize() const;
 };
 
-/*9459*/ class SamplerPool {
+class SamplerPool {
 protected:
     char reserved[32];
 
-    SamplerPool(const SamplerPool&);
-    const SamplerPool& operator=(const SamplerPool&);
+    SamplerPool(const SamplerPool&) = delete;
+    const SamplerPool& operator=(const SamplerPool&) = delete;
 
 public:
-    SamplerPool();
+    SamplerPool() {}
 
     NVNboolean Initialize(const MemoryPool*, ptrdiff_t, int);
     void SetDebugLabel(const char*);
@@ -1593,7 +1584,7 @@ public:
     int GetSize() const;
 };
 
-/*9572*/ class BufferBuilder {
+class BufferBuilder {
 protected:
     char reserved[64];
 
@@ -1607,15 +1598,15 @@ public:
     size_t GetSize() const;
 };
 
-/*9627*/ class Buffer {
+class Buffer {
 protected:
     char reserved[48];
 
-    Buffer(const Buffer&);
-    const Buffer& operator=(const Buffer&);
+    Buffer(const Buffer&) = delete;
+    const Buffer& operator=(const Buffer&) = delete;
 
 public:
-    Buffer();
+    Buffer() {}
 
     NVNboolean Initialize(const BufferBuilder*);
     void SetDebugLabel(const char*);
@@ -1630,15 +1621,15 @@ public:
     uint64_t GetDebugID() const;
 };
 
-/*9715*/ class Texture {
+class Texture {
 protected:
     char reserved[192];
 
-    Texture(const Texture&);
-    const Texture& operator=(const Texture&);
+    Texture(const Texture&) = delete;
+    const Texture& operator=(const Texture&) = delete;
 
 public:
-    Texture();
+    Texture() {}
 
     NVNboolean Initialize(const TextureBuilder*);
     size_t GetZCullStorageSize() const;
@@ -1678,7 +1669,7 @@ public:
     */
 };
 
-/*10081*/ class TextureBuilder {
+class TextureBuilder {
 protected:
     char reserved[128];
 
@@ -1731,7 +1722,7 @@ public:
     */
 };
 
-/*10500*/ class TextureView {
+class TextureView {
 protected:
     char reserved[40];
 
@@ -1752,7 +1743,7 @@ public:
     NVNboolean Compare(const TextureView*) const;
 };
 
-/*10717*/ class SamplerBuilder {
+class SamplerBuilder {
 protected:
     char reserved[96];
 
@@ -1784,15 +1775,15 @@ public:
     float GetLodSnap() const;
 };
 
-/*10954*/ class Sampler {
+class Sampler {
 protected:
     char reserved[96];
 
-    Sampler(const Sampler&);
-    const Sampler& operator=(const Sampler&);
+    Sampler(const Sampler&) = delete;
+    const Sampler& operator=(const Sampler&) = delete;
 
 public:
-    Sampler();
+    Sampler() {}
 
     NVNboolean Initialize(const SamplerBuilder*);
     void Finalize();
@@ -1811,15 +1802,15 @@ public:
     uint64_t GetDebugID() const;
 };
 
-/*11062*/ class Sync {
+class Sync {
 protected:
     char reserved[64];
 
-    Sync(const Sync&);
-    const Sync& operator=(const Sync&);
+    Sync(const Sync&) = delete;
+    const Sync& operator=(const Sync&) = delete;
 
 public:
-    Sync();
+    Sync() {}
 
     NVNboolean Initialize(Device*);
     void Finalize();
@@ -1827,15 +1818,15 @@ public:
     SyncWaitResult Wait(uint64_t) const;
 };
 
-/*11102*/ class Window {
+class Window {
 protected:
     char reserved[384];
 
-    Window(const Window&);
-    const Window& operator=(const Window&);
+    Window(const Window&) = delete;
+    const Window& operator=(const Window&) = delete;
 
 public:
-    Window();
+    Window() {}
 
     NVNboolean Initialize(const WindowBuilder*);
     void Finalize();
@@ -1848,7 +1839,7 @@ public:
     void GetCrop(Rectangle*) const;
 };
 
-/*11243*/ class WindowBuilder {
+class WindowBuilder {
 protected:
     char reserved[64];
 
@@ -1865,7 +1856,7 @@ public:
     int GetPresentInterval() const;
 };
 
-/*11374*/ class EventBuilder {
+class EventBuilder {
 protected:
     char reserved[32];
 
@@ -1875,15 +1866,15 @@ public:
     const MemoryPool* GetStorage(int64_t*) const;
 };
 
-/*11421*/ class Event {
+class Event {
 protected:
     char reserved[64];
 
-    Event(const Event&);
-    const Event& operator=(const Event&);
+    Event(const Event&) = delete;
+    const Event& operator=(const Event&) = delete;
 
 public:
-    Event();
+    Event() {}
 
     NVNboolean Initialize(const EventBuilder*);
     void Finalize();
@@ -1891,668 +1882,592 @@ public:
     void Signal(EventSignalMode, uint32_t);
 };
 
-/*11454*/ typedef void (*DeviceBuilderSetDefaultsFunc)(DeviceBuilder*);
-/*11455*/ typedef void (*DeviceBuilderSetFlagsFunc)(DeviceBuilder*, int);
-/*11456*/ typedef int (*DeviceBuilderGetFlagsFunc)(const DeviceBuilder*);
-/*11457*/ typedef NVNboolean (*DeviceInitializeFunc)(Device*, const DeviceBuilder*);
-/*11458*/ typedef void (*DeviceFinalizeFunc)(Device*);
-/*11459*/ typedef void (*DeviceSetDebugLabelFunc)(Device*, const char*);
-/*11460*/ typedef GenericFuncPtrFunc (*DeviceGetProcAddressFunc)(const Device*, const char*);
-/*11461*/ typedef void (*DeviceGetIntegerFunc)(const Device*, DeviceInfo::Enum, int*);
-/*11462*/ typedef uint64_t (*DeviceGetCurrentTimestampInNanosecondsFunc)(const Device*);
-/*11463*/ typedef void (*DeviceSetIntermediateShaderCacheFunc)(Device*, int);
-/*11464*/ typedef TextureHandle (*DeviceGetTextureHandleFunc)(const Device*, int, int);
-/*11465*/ typedef TextureHandle (*DeviceGetTexelFetchHandleFunc)(const Device*, int);
-/*11466*/ typedef ImageHandle (*DeviceGetImageHandleFunc)(const Device*, int);
-/*11467*/ typedef void (*DeviceInstallDebugCallbackFunc)(Device*, const DebugCallbackFunc, void*,
-                                                         NVNboolean);
-/*11468*/ typedef NVNdebugDomainId (*DeviceGenerateDebugDomainIdFunc)(const Device*, const char*);
-/*11469*/ typedef void (*DeviceSetWindowOriginModeFunc)(Device*, WindowOriginMode::Enum);
-/*11470*/ typedef void (*DeviceSetDepthModeFunc)(Device*, DepthMode::Enum);
-/*11471*/ typedef NVNboolean (*DeviceRegisterFastClearColorFunc)(Device*, const float*,
-                                                                 Format::Enum);
-/*11472*/ typedef NVNboolean (*DeviceRegisterFastClearColoriFunc)(Device*, const int*,
-                                                                  Format::Enum);
-/*11473*/ typedef NVNboolean (*DeviceRegisterFastClearColoruiFunc)(Device*, const uint32_t*,
-                                                                   Format::Enum);
-/*11474*/ typedef NVNboolean (*DeviceRegisterFastClearDepthFunc)(Device*, float);
-/*11475*/ typedef WindowOriginMode::Enum (*DeviceGetWindowOriginModeFunc)(const Device*);
-/*11476*/ typedef DepthMode::Enum (*DeviceGetDepthModeFunc)(const Device*);
-/*11477*/ typedef uint64_t (*DeviceGetTimestampInNanosecondsFunc)(const Device*,
-                                                                  const CounterData*);
-/*11478*/ typedef void (*DeviceApplyDeferredFinalizesFunc)(Device*, int);
-/*11479*/ typedef void (*DeviceFinalizeCommandHandleFunc)(Device*, CommandHandle);
-/*11480*/ typedef void (*DeviceWalkDebugDatabaseFunc)(const Device*, DebugObjectType::Enum,
-                                                      WalkDebugDatabaseCallbackFunc, void*);
-/*11481*/ typedef SeparateTextureHandle (*DeviceGetSeparateTextureHandleFunc)(const Device*, int);
-/*11482*/ typedef SeparateSamplerHandle (*DeviceGetSeparateSamplerHandleFunc)(const Device*, int);
-/*11483*/ typedef NVNboolean (*DeviceIsExternalDebuggerAttachedFunc)(const Device*);
-/*11484*/ typedef QueueGetErrorResult::Enum (*QueueGetErrorFunc)(Queue*, QueueErrorInfo*);
-/*11485*/ typedef size_t (*QueueGetTotalCommandMemoryUsedFunc)(Queue*);
-/*11486*/ typedef size_t (*QueueGetTotalControlMemoryUsedFunc)(Queue*);
-/*11487*/ typedef size_t (*QueueGetTotalComputeMemoryUsedFunc)(Queue*);
-/*11488*/ typedef void (*QueueResetMemoryUsageCountsFunc)(Queue*);
-/*11489*/ typedef void (*QueueBuilderSetDeviceFunc)(QueueBuilder*, Device*);
-/*11490*/ typedef void (*QueueBuilderSetDefaultsFunc)(QueueBuilder*);
-/*11491*/ typedef void (*QueueBuilderSetFlagsFunc)(QueueBuilder*, int);
-/*11492*/ typedef void (*QueueBuilderSetCommandMemorySizeFunc)(QueueBuilder*, size_t);
-/*11493*/ typedef void (*QueueBuilderSetComputeMemorySizeFunc)(QueueBuilder*, size_t);
-/*11494*/ typedef void (*QueueBuilderSetControlMemorySizeFunc)(QueueBuilder*, size_t);
-/*11495*/ typedef size_t (*QueueBuilderGetQueueMemorySizeFunc)(const QueueBuilder*);
-/*11496*/ typedef void (*QueueBuilderSetQueueMemoryFunc)(QueueBuilder*, void*, size_t);
-/*11497*/ typedef void (*QueueBuilderSetCommandFlushThresholdFunc)(QueueBuilder*, size_t);
-/*11498*/ typedef const Device* (*QueueBuilderGetDeviceFunc)(const QueueBuilder*);
-/*11499*/ typedef int (*QueueBuilderGetFlagsFunc)(const QueueBuilder*);
-/*11500*/ typedef NVNboolean (*QueueBuilderGetCommandMemorySizeFunc)(const QueueBuilder*, int*);
-/*11501*/ typedef NVNboolean (*QueueBuilderGetComputeMemorySizeFunc)(const QueueBuilder*, int*);
-/*11502*/ typedef NVNboolean (*QueueBuilderGetControlMemorySizeFunc)(const QueueBuilder*, int*);
-/*11503*/ typedef NVNboolean (*QueueBuilderGetCommandFlushThresholdFunc)(const QueueBuilder*, int*);
-/*11504*/ typedef int (*QueueBuilderGetMemorySizeFunc)(const QueueBuilder*);
-/*11505*/ typedef void* (*QueueBuilderGetMemoryFunc)(const QueueBuilder*);
-/*11506*/ typedef NVNboolean (*QueueInitializeFunc)(Queue*, const QueueBuilder*);
-/*11507*/ typedef void (*QueueFinalizeFunc)(Queue*);
-/*11508*/ typedef void (*QueueSetDebugLabelFunc)(Queue*, const char*);
-/*11509*/ typedef void (*QueueSubmitCommandsFunc)(Queue*, int, const CommandHandle*);
-/*11510*/ typedef void (*QueueFlushFunc)(Queue*);
-/*11511*/ typedef void (*QueueFinishFunc)(Queue*);
-/*11512*/ typedef void (*QueuePresentTextureFunc)(Queue*, Window*, int);
-/*11513*/ typedef QueueAcquireTextureResult::Enum (*QueueAcquireTextureFunc)(Queue*, Window*, int*);
-/*11514*/ typedef void (*WindowBuilderSetDeviceFunc)(WindowBuilder*, Device*);
-/*11515*/ typedef void (*WindowBuilderSetDefaultsFunc)(WindowBuilder*);
-/*11516*/ typedef void (*WindowBuilderSetNativeWindowFunc)(WindowBuilder*, NVNnativeWindow);
-/*11517*/ typedef void (*WindowBuilderSetTexturesFunc)(WindowBuilder*, int, Texture* const*);
-/*11518*/ typedef void (*WindowBuilderSetPresentIntervalFunc)(WindowBuilder*, int);
-/*11519*/ typedef const Device* (*WindowBuilderGetDeviceFunc)(const WindowBuilder*);
-/*11520*/ typedef int (*WindowBuilderGetNumTexturesFunc)(const WindowBuilder*);
-/*11521*/ typedef const Texture* (*WindowBuilderGetTextureFunc)(const WindowBuilder*, int);
-/*11522*/ typedef NVNnativeWindow (*WindowBuilderGetNativeWindowFunc)(const WindowBuilder*);
-/*11523*/ typedef int (*WindowBuilderGetPresentIntervalFunc)(const WindowBuilder*);
-/*11524*/ typedef NVNboolean (*WindowInitializeFunc)(Window*, const WindowBuilder*);
-/*11525*/ typedef void (*WindowFinalizeFunc)(Window*);
-/*11526*/ typedef void (*WindowSetDebugLabelFunc)(Window*, const char*);
-/*11527*/ typedef WindowAcquireTextureResult::Enum (*WindowAcquireTextureFunc)(Window*, Sync*,
-                                                                               int*);
-/*11528*/ typedef NVNnativeWindow (*WindowGetNativeWindowFunc)(const Window*);
-/*11529*/ typedef int (*WindowGetPresentIntervalFunc)(const Window*);
-/*11530*/ typedef void (*WindowSetPresentIntervalFunc)(Window*, int);
-/*11531*/ typedef void (*WindowSetCropFunc)(Window*, int, int, int, int);
-/*11532*/ typedef void (*WindowGetCropFunc)(const Window*, Rectangle*);
-/*11533*/ typedef NVNboolean (*ProgramInitializeFunc)(Program*, Device*);
-/*11534*/ typedef void (*ProgramFinalizeFunc)(Program*);
-/*11535*/ typedef void (*ProgramSetDebugLabelFunc)(Program*, const char*);
-/*11536*/ typedef NVNboolean (*ProgramSetShadersFunc)(Program*, int, const ShaderData*);
-/*11537*/ typedef void (*MemoryPoolBuilderSetDeviceFunc)(MemoryPoolBuilder*, Device*);
-/*11538*/ typedef void (*MemoryPoolBuilderSetDefaultsFunc)(MemoryPoolBuilder*);
-/*11539*/ typedef void (*MemoryPoolBuilderSetStorageFunc)(MemoryPoolBuilder*, void*, size_t);
-/*11540*/ typedef void (*MemoryPoolBuilderSetFlagsFunc)(MemoryPoolBuilder*, int);
-/*11541*/ typedef const Device* (*MemoryPoolBuilderGetDeviceFunc)(const MemoryPoolBuilder*);
-/*11542*/ typedef void* (*MemoryPoolBuilderGetMemoryFunc)(const MemoryPoolBuilder*);
-/*11543*/ typedef size_t (*MemoryPoolBuilderGetSizeFunc)(const MemoryPoolBuilder*);
-/*11544*/ typedef int (*MemoryPoolBuilderGetFlagsFunc)(const MemoryPoolBuilder*);
-/*11545*/ typedef NVNboolean (*MemoryPoolInitializeFunc)(MemoryPool*, const MemoryPoolBuilder*);
-/*11546*/ typedef void (*MemoryPoolSetDebugLabelFunc)(MemoryPool*, const char*);
-/*11547*/ typedef void (*MemoryPoolFinalizeFunc)(MemoryPool*);
-/*11548*/ typedef void* (*MemoryPoolMapFunc)(const MemoryPool*);
-/*11549*/ typedef void (*MemoryPoolFlushMappedRangeFunc)(const MemoryPool*, ptrdiff_t, size_t);
-/*11550*/ typedef void (*MemoryPoolInvalidateMappedRangeFunc)(const MemoryPool*, ptrdiff_t, size_t);
-/*11551*/ typedef BufferAddress (*MemoryPoolGetBufferAddressFunc)(const MemoryPool*);
-/*11552*/ typedef NVNboolean (*MemoryPoolMapVirtualFunc)(MemoryPool*, int, const MappingRequest*);
-/*11553*/ typedef size_t (*MemoryPoolGetSizeFunc)(const MemoryPool*);
-/*11554*/ typedef int (*MemoryPoolGetFlagsFunc)(const MemoryPool*);
-/*11555*/ typedef NVNboolean (*TexturePoolInitializeFunc)(TexturePool*, const MemoryPool*,
-                                                          ptrdiff_t, int);
-/*11556*/ typedef void (*TexturePoolSetDebugLabelFunc)(TexturePool*, const char*);
-/*11557*/ typedef void (*TexturePoolFinalizeFunc)(TexturePool*);
-/*11558*/ typedef void (*TexturePoolRegisterTextureFunc)(const TexturePool*, int, const Texture*,
-                                                         const TextureView*);
-/*11559*/ typedef void (*TexturePoolRegisterImageFunc)(const TexturePool*, int, const Texture*,
-                                                       const TextureView*);
-/*11560*/ typedef const MemoryPool* (*TexturePoolGetMemoryPoolFunc)(const TexturePool*);
-/*11561*/ typedef ptrdiff_t (*TexturePoolGetMemoryOffsetFunc)(const TexturePool*);
-/*11562*/ typedef int (*TexturePoolGetSizeFunc)(const TexturePool*);
-/*11563*/ typedef NVNboolean (*SamplerPoolInitializeFunc)(SamplerPool*, const MemoryPool*,
-                                                          ptrdiff_t, int);
-/*11564*/ typedef void (*SamplerPoolSetDebugLabelFunc)(SamplerPool*, const char*);
-/*11565*/ typedef void (*SamplerPoolFinalizeFunc)(SamplerPool*);
-/*11566*/ typedef void (*SamplerPoolRegisterSamplerFunc)(const SamplerPool*, int, const Sampler*);
-/*11567*/ typedef void (*SamplerPoolRegisterSamplerBuilderFunc)(const SamplerPool*, int,
-                                                                const SamplerBuilder*);
-/*11568*/ typedef const MemoryPool* (*SamplerPoolGetMemoryPoolFunc)(const SamplerPool*);
-/*11569*/ typedef ptrdiff_t (*SamplerPoolGetMemoryOffsetFunc)(const SamplerPool*);
-/*11570*/ typedef int (*SamplerPoolGetSizeFunc)(const SamplerPool*);
-/*11571*/ typedef void (*BufferBuilderSetDeviceFunc)(BufferBuilder*, Device*);
-/*11572*/ typedef void (*BufferBuilderSetDefaultsFunc)(BufferBuilder*);
-/*11573*/ typedef void (*BufferBuilderSetStorageFunc)(BufferBuilder*, MemoryPool*, ptrdiff_t,
-                                                      size_t);
-/*11574*/ typedef const Device* (*BufferBuilderGetDeviceFunc)(const BufferBuilder*);
-/*11575*/ typedef MemoryPool* (*BufferBuilderGetMemoryPoolFunc)(const BufferBuilder*);
-/*11576*/ typedef ptrdiff_t (*BufferBuilderGetMemoryOffsetFunc)(const BufferBuilder*);
-/*11577*/ typedef size_t (*BufferBuilderGetSizeFunc)(const BufferBuilder*);
-/*11578*/ typedef NVNboolean (*BufferInitializeFunc)(Buffer*, const BufferBuilder*);
-/*11579*/ typedef void (*BufferSetDebugLabelFunc)(Buffer*, const char*);
-/*11580*/ typedef void (*BufferFinalizeFunc)(Buffer*);
-/*11581*/ typedef void* (*BufferMapFunc)(const Buffer*);
-/*11582*/ typedef BufferAddress (*BufferGetAddressFunc)(const Buffer*);
-/*11583*/ typedef void (*BufferFlushMappedRangeFunc)(const Buffer*, ptrdiff_t, size_t);
-/*11584*/ typedef void (*BufferInvalidateMappedRangeFunc)(const Buffer*, ptrdiff_t, size_t);
-/*11585*/ typedef MemoryPool* (*BufferGetMemoryPoolFunc)(const Buffer*);
-/*11586*/ typedef ptrdiff_t (*BufferGetMemoryOffsetFunc)(const Buffer*);
-/*11587*/ typedef size_t (*BufferGetSizeFunc)(const Buffer*);
-/*11588*/ typedef uint64_t (*BufferGetDebugIDFunc)(const Buffer*);
-/*11589*/ typedef void (*TextureBuilderSetDeviceFunc)(TextureBuilder*, Device*);
-/*11590*/ typedef void (*TextureBuilderSetDefaultsFunc)(TextureBuilder*);
-/*11591*/ typedef void (*TextureBuilderSetFlagsFunc)(TextureBuilder*, int);
-/*11592*/ typedef void (*TextureBuilderSetTargetFunc)(TextureBuilder*, TextureTarget::Enum);
-/*11593*/ typedef void (*TextureBuilderSetWidthFunc)(TextureBuilder*, int);
-/*11594*/ typedef void (*TextureBuilderSetHeightFunc)(TextureBuilder*, int);
-/*11595*/ typedef void (*TextureBuilderSetDepthFunc)(TextureBuilder*, int);
-/*11596*/ typedef void (*TextureBuilderSetSize1DFunc)(TextureBuilder*, int);
-/*11597*/ typedef void (*TextureBuilderSetSize2DFunc)(TextureBuilder*, int, int);
-/*11598*/ typedef void (*TextureBuilderSetSize3DFunc)(TextureBuilder*, int, int, int);
-/*11599*/ typedef void (*TextureBuilderSetLevelsFunc)(TextureBuilder*, int);
-/*11600*/ typedef void (*TextureBuilderSetFormatFunc)(TextureBuilder*, Format::Enum);
-/*11601*/ typedef void (*TextureBuilderSetSamplesFunc)(TextureBuilder*, int);
-/*11602*/ typedef void (*TextureBuilderSetSwizzleFunc)(TextureBuilder*, TextureSwizzle::Enum,
-                                                       TextureSwizzle::Enum, TextureSwizzle::Enum,
-                                                       TextureSwizzle::Enum);
-/*11603*/ typedef void (*TextureBuilderSetDepthStencilModeFunc)(TextureBuilder*,
-                                                                TextureDepthStencilMode::Enum);
-/*11604*/ typedef size_t (*TextureBuilderGetStorageSizeFunc)(const TextureBuilder*);
-/*11605*/ typedef size_t (*TextureBuilderGetStorageAlignmentFunc)(const TextureBuilder*);
-/*11606*/ typedef void (*TextureBuilderSetStorageFunc)(TextureBuilder*, MemoryPool*, ptrdiff_t);
-/*11607*/ typedef void (*TextureBuilderSetPackagedTextureDataFunc)(TextureBuilder*, const void*);
-/*11608*/ typedef void (*TextureBuilderSetPackagedTextureLayoutFunc)(TextureBuilder*,
-                                                                     const PackagedTextureLayout*);
-/*11609*/ typedef void (*TextureBuilderSetStrideFunc)(TextureBuilder*, ptrdiff_t);
-/*11610*/ typedef void (*TextureBuilderSetGLTextureNameFunc)(TextureBuilder*, uint32_t);
-/*11611*/ typedef NVNstorageClass (*TextureBuilderGetStorageClassFunc)(const TextureBuilder*);
-/*11612*/ typedef const Device* (*TextureBuilderGetDeviceFunc)(const TextureBuilder*);
-/*11613*/ typedef int (*TextureBuilderGetFlagsFunc)(const TextureBuilder*);
-/*11614*/ typedef TextureTarget::Enum (*TextureBuilderGetTargetFunc)(const TextureBuilder*);
-/*11615*/ typedef int (*TextureBuilderGetWidthFunc)(const TextureBuilder*);
-/*11616*/ typedef int (*TextureBuilderGetHeightFunc)(const TextureBuilder*);
-/*11617*/ typedef int (*TextureBuilderGetDepthFunc)(const TextureBuilder*);
-/*11618*/ typedef int (*TextureBuilderGetLevelsFunc)(const TextureBuilder*);
-/*11619*/ typedef Format::Enum (*TextureBuilderGetFormatFunc)(const TextureBuilder*);
-/*11620*/ typedef int (*TextureBuilderGetSamplesFunc)(const TextureBuilder*);
-/*11621*/ typedef void (*TextureBuilderGetSwizzleFunc)(const TextureBuilder*, TextureSwizzle*,
-                                                       TextureSwizzle*, TextureSwizzle*,
-                                                       TextureSwizzle*);
-/*11622*/ typedef TextureDepthStencilMode::Enum (*TextureBuilderGetDepthStencilModeFunc)(
+typedef void (*DeviceBuilderSetDefaultsFunc)(DeviceBuilder*);
+typedef void (*DeviceBuilderSetFlagsFunc)(DeviceBuilder*, int);
+typedef int (*DeviceBuilderGetFlagsFunc)(const DeviceBuilder*);
+typedef NVNboolean (*DeviceInitializeFunc)(Device*, const DeviceBuilder*);
+typedef void (*DeviceFinalizeFunc)(Device*);
+typedef void (*DeviceSetDebugLabelFunc)(Device*, const char*);
+typedef GenericFuncPtrFunc (*DeviceGetProcAddressFunc)(const Device*, const char*);
+typedef void (*DeviceGetIntegerFunc)(const Device*, DeviceInfo::Enum, int*);
+typedef uint64_t (*DeviceGetCurrentTimestampInNanosecondsFunc)(const Device*);
+typedef void (*DeviceSetIntermediateShaderCacheFunc)(Device*, int);
+typedef TextureHandle (*DeviceGetTextureHandleFunc)(const Device*, int, int);
+typedef TextureHandle (*DeviceGetTexelFetchHandleFunc)(const Device*, int);
+typedef ImageHandle (*DeviceGetImageHandleFunc)(const Device*, int);
+typedef void (*DeviceInstallDebugCallbackFunc)(Device*, const DebugCallbackFunc, void*, NVNboolean);
+typedef NVNdebugDomainId (*DeviceGenerateDebugDomainIdFunc)(const Device*, const char*);
+typedef void (*DeviceSetWindowOriginModeFunc)(Device*, WindowOriginMode::Enum);
+typedef void (*DeviceSetDepthModeFunc)(Device*, DepthMode::Enum);
+typedef NVNboolean (*DeviceRegisterFastClearColorFunc)(Device*, const float*, Format::Enum);
+typedef NVNboolean (*DeviceRegisterFastClearColoriFunc)(Device*, const int*, Format::Enum);
+typedef NVNboolean (*DeviceRegisterFastClearColoruiFunc)(Device*, const uint32_t*, Format::Enum);
+typedef NVNboolean (*DeviceRegisterFastClearDepthFunc)(Device*, float);
+typedef WindowOriginMode::Enum (*DeviceGetWindowOriginModeFunc)(const Device*);
+typedef DepthMode::Enum (*DeviceGetDepthModeFunc)(const Device*);
+typedef uint64_t (*DeviceGetTimestampInNanosecondsFunc)(const Device*, const CounterData*);
+typedef void (*DeviceApplyDeferredFinalizesFunc)(Device*, int);
+typedef void (*DeviceFinalizeCommandHandleFunc)(Device*, CommandHandle);
+typedef void (*DeviceWalkDebugDatabaseFunc)(const Device*, DebugObjectType::Enum,
+                                            WalkDebugDatabaseCallbackFunc, void*);
+typedef SeparateTextureHandle (*DeviceGetSeparateTextureHandleFunc)(const Device*, int);
+typedef SeparateSamplerHandle (*DeviceGetSeparateSamplerHandleFunc)(const Device*, int);
+typedef NVNboolean (*DeviceIsExternalDebuggerAttachedFunc)(const Device*);
+typedef QueueGetErrorResult::Enum (*QueueGetErrorFunc)(Queue*, QueueErrorInfo*);
+typedef size_t (*QueueGetTotalCommandMemoryUsedFunc)(Queue*);
+typedef size_t (*QueueGetTotalControlMemoryUsedFunc)(Queue*);
+typedef size_t (*QueueGetTotalComputeMemoryUsedFunc)(Queue*);
+typedef void (*QueueResetMemoryUsageCountsFunc)(Queue*);
+typedef void (*QueueBuilderSetDeviceFunc)(QueueBuilder*, Device*);
+typedef void (*QueueBuilderSetDefaultsFunc)(QueueBuilder*);
+typedef void (*QueueBuilderSetFlagsFunc)(QueueBuilder*, int);
+typedef void (*QueueBuilderSetCommandMemorySizeFunc)(QueueBuilder*, size_t);
+typedef void (*QueueBuilderSetComputeMemorySizeFunc)(QueueBuilder*, size_t);
+typedef void (*QueueBuilderSetControlMemorySizeFunc)(QueueBuilder*, size_t);
+typedef size_t (*QueueBuilderGetQueueMemorySizeFunc)(const QueueBuilder*);
+typedef void (*QueueBuilderSetQueueMemoryFunc)(QueueBuilder*, void*, size_t);
+typedef void (*QueueBuilderSetCommandFlushThresholdFunc)(QueueBuilder*, size_t);
+typedef const Device* (*QueueBuilderGetDeviceFunc)(const QueueBuilder*);
+typedef int (*QueueBuilderGetFlagsFunc)(const QueueBuilder*);
+typedef NVNboolean (*QueueBuilderGetCommandMemorySizeFunc)(const QueueBuilder*, int*);
+typedef NVNboolean (*QueueBuilderGetComputeMemorySizeFunc)(const QueueBuilder*, int*);
+typedef NVNboolean (*QueueBuilderGetControlMemorySizeFunc)(const QueueBuilder*, int*);
+typedef NVNboolean (*QueueBuilderGetCommandFlushThresholdFunc)(const QueueBuilder*, int*);
+typedef int (*QueueBuilderGetMemorySizeFunc)(const QueueBuilder*);
+typedef void* (*QueueBuilderGetMemoryFunc)(const QueueBuilder*);
+typedef NVNboolean (*QueueInitializeFunc)(Queue*, const QueueBuilder*);
+typedef void (*QueueFinalizeFunc)(Queue*);
+typedef void (*QueueSetDebugLabelFunc)(Queue*, const char*);
+typedef void (*QueueSubmitCommandsFunc)(Queue*, int, const CommandHandle*);
+typedef void (*QueueFlushFunc)(Queue*);
+typedef void (*QueueFinishFunc)(Queue*);
+typedef void (*QueuePresentTextureFunc)(Queue*, Window*, int);
+typedef QueueAcquireTextureResult::Enum (*QueueAcquireTextureFunc)(Queue*, Window*, int*);
+typedef void (*WindowBuilderSetDeviceFunc)(WindowBuilder*, Device*);
+typedef void (*WindowBuilderSetDefaultsFunc)(WindowBuilder*);
+typedef void (*WindowBuilderSetNativeWindowFunc)(WindowBuilder*, NVNnativeWindow);
+typedef void (*WindowBuilderSetTexturesFunc)(WindowBuilder*, int, Texture* const*);
+typedef void (*WindowBuilderSetPresentIntervalFunc)(WindowBuilder*, int);
+typedef const Device* (*WindowBuilderGetDeviceFunc)(const WindowBuilder*);
+typedef int (*WindowBuilderGetNumTexturesFunc)(const WindowBuilder*);
+typedef const Texture* (*WindowBuilderGetTextureFunc)(const WindowBuilder*, int);
+typedef NVNnativeWindow (*WindowBuilderGetNativeWindowFunc)(const WindowBuilder*);
+typedef int (*WindowBuilderGetPresentIntervalFunc)(const WindowBuilder*);
+typedef NVNboolean (*WindowInitializeFunc)(Window*, const WindowBuilder*);
+typedef void (*WindowFinalizeFunc)(Window*);
+typedef void (*WindowSetDebugLabelFunc)(Window*, const char*);
+typedef WindowAcquireTextureResult::Enum (*WindowAcquireTextureFunc)(Window*, Sync*, int*);
+typedef NVNnativeWindow (*WindowGetNativeWindowFunc)(const Window*);
+typedef int (*WindowGetPresentIntervalFunc)(const Window*);
+typedef void (*WindowSetPresentIntervalFunc)(Window*, int);
+typedef void (*WindowSetCropFunc)(Window*, int, int, int, int);
+typedef void (*WindowGetCropFunc)(const Window*, Rectangle*);
+typedef NVNboolean (*ProgramInitializeFunc)(Program*, Device*);
+typedef void (*ProgramFinalizeFunc)(Program*);
+typedef void (*ProgramSetDebugLabelFunc)(Program*, const char*);
+typedef NVNboolean (*ProgramSetShadersFunc)(Program*, int, const ShaderData*);
+typedef void (*MemoryPoolBuilderSetDeviceFunc)(MemoryPoolBuilder*, Device*);
+typedef void (*MemoryPoolBuilderSetDefaultsFunc)(MemoryPoolBuilder*);
+typedef void (*MemoryPoolBuilderSetStorageFunc)(MemoryPoolBuilder*, void*, size_t);
+typedef void (*MemoryPoolBuilderSetFlagsFunc)(MemoryPoolBuilder*, int);
+typedef const Device* (*MemoryPoolBuilderGetDeviceFunc)(const MemoryPoolBuilder*);
+typedef void* (*MemoryPoolBuilderGetMemoryFunc)(const MemoryPoolBuilder*);
+typedef size_t (*MemoryPoolBuilderGetSizeFunc)(const MemoryPoolBuilder*);
+typedef int (*MemoryPoolBuilderGetFlagsFunc)(const MemoryPoolBuilder*);
+typedef NVNboolean (*MemoryPoolInitializeFunc)(MemoryPool*, const MemoryPoolBuilder*);
+typedef void (*MemoryPoolSetDebugLabelFunc)(MemoryPool*, const char*);
+typedef void (*MemoryPoolFinalizeFunc)(MemoryPool*);
+typedef void* (*MemoryPoolMapFunc)(const MemoryPool*);
+typedef void (*MemoryPoolFlushMappedRangeFunc)(const MemoryPool*, ptrdiff_t, size_t);
+typedef void (*MemoryPoolInvalidateMappedRangeFunc)(const MemoryPool*, ptrdiff_t, size_t);
+typedef BufferAddress (*MemoryPoolGetBufferAddressFunc)(const MemoryPool*);
+typedef NVNboolean (*MemoryPoolMapVirtualFunc)(MemoryPool*, int, const MappingRequest*);
+typedef size_t (*MemoryPoolGetSizeFunc)(const MemoryPool*);
+typedef int (*MemoryPoolGetFlagsFunc)(const MemoryPool*);
+typedef NVNboolean (*TexturePoolInitializeFunc)(TexturePool*, const MemoryPool*, ptrdiff_t, int);
+typedef void (*TexturePoolSetDebugLabelFunc)(TexturePool*, const char*);
+typedef void (*TexturePoolFinalizeFunc)(TexturePool*);
+typedef void (*TexturePoolRegisterTextureFunc)(const TexturePool*, int, const Texture*,
+                                               const TextureView*);
+typedef void (*TexturePoolRegisterImageFunc)(const TexturePool*, int, const Texture*,
+                                             const TextureView*);
+typedef const MemoryPool* (*TexturePoolGetMemoryPoolFunc)(const TexturePool*);
+typedef ptrdiff_t (*TexturePoolGetMemoryOffsetFunc)(const TexturePool*);
+typedef int (*TexturePoolGetSizeFunc)(const TexturePool*);
+typedef NVNboolean (*SamplerPoolInitializeFunc)(SamplerPool*, const MemoryPool*, ptrdiff_t, int);
+typedef void (*SamplerPoolSetDebugLabelFunc)(SamplerPool*, const char*);
+typedef void (*SamplerPoolFinalizeFunc)(SamplerPool*);
+typedef void (*SamplerPoolRegisterSamplerFunc)(const SamplerPool*, int, const Sampler*);
+typedef void (*SamplerPoolRegisterSamplerBuilderFunc)(const SamplerPool*, int,
+                                                      const SamplerBuilder*);
+typedef const MemoryPool* (*SamplerPoolGetMemoryPoolFunc)(const SamplerPool*);
+typedef ptrdiff_t (*SamplerPoolGetMemoryOffsetFunc)(const SamplerPool*);
+typedef int (*SamplerPoolGetSizeFunc)(const SamplerPool*);
+typedef void (*BufferBuilderSetDeviceFunc)(BufferBuilder*, Device*);
+typedef void (*BufferBuilderSetDefaultsFunc)(BufferBuilder*);
+typedef void (*BufferBuilderSetStorageFunc)(BufferBuilder*, MemoryPool*, ptrdiff_t, size_t);
+typedef const Device* (*BufferBuilderGetDeviceFunc)(const BufferBuilder*);
+typedef MemoryPool* (*BufferBuilderGetMemoryPoolFunc)(const BufferBuilder*);
+typedef ptrdiff_t (*BufferBuilderGetMemoryOffsetFunc)(const BufferBuilder*);
+typedef size_t (*BufferBuilderGetSizeFunc)(const BufferBuilder*);
+typedef NVNboolean (*BufferInitializeFunc)(Buffer*, const BufferBuilder*);
+typedef void (*BufferSetDebugLabelFunc)(Buffer*, const char*);
+typedef void (*BufferFinalizeFunc)(Buffer*);
+typedef void* (*BufferMapFunc)(const Buffer*);
+typedef BufferAddress (*BufferGetAddressFunc)(const Buffer*);
+typedef void (*BufferFlushMappedRangeFunc)(const Buffer*, ptrdiff_t, size_t);
+typedef void (*BufferInvalidateMappedRangeFunc)(const Buffer*, ptrdiff_t, size_t);
+typedef MemoryPool* (*BufferGetMemoryPoolFunc)(const Buffer*);
+typedef ptrdiff_t (*BufferGetMemoryOffsetFunc)(const Buffer*);
+typedef size_t (*BufferGetSizeFunc)(const Buffer*);
+typedef uint64_t (*BufferGetDebugIDFunc)(const Buffer*);
+typedef void (*TextureBuilderSetDeviceFunc)(TextureBuilder*, Device*);
+typedef void (*TextureBuilderSetDefaultsFunc)(TextureBuilder*);
+typedef void (*TextureBuilderSetFlagsFunc)(TextureBuilder*, int);
+typedef void (*TextureBuilderSetTargetFunc)(TextureBuilder*, TextureTarget::Enum);
+typedef void (*TextureBuilderSetWidthFunc)(TextureBuilder*, int);
+typedef void (*TextureBuilderSetHeightFunc)(TextureBuilder*, int);
+typedef void (*TextureBuilderSetDepthFunc)(TextureBuilder*, int);
+typedef void (*TextureBuilderSetSize1DFunc)(TextureBuilder*, int);
+typedef void (*TextureBuilderSetSize2DFunc)(TextureBuilder*, int, int);
+typedef void (*TextureBuilderSetSize3DFunc)(TextureBuilder*, int, int, int);
+typedef void (*TextureBuilderSetLevelsFunc)(TextureBuilder*, int);
+typedef void (*TextureBuilderSetFormatFunc)(TextureBuilder*, Format::Enum);
+typedef void (*TextureBuilderSetSamplesFunc)(TextureBuilder*, int);
+typedef void (*TextureBuilderSetSwizzleFunc)(TextureBuilder*, TextureSwizzle::Enum,
+                                             TextureSwizzle::Enum, TextureSwizzle::Enum,
+                                             TextureSwizzle::Enum);
+typedef void (*TextureBuilderSetDepthStencilModeFunc)(TextureBuilder*,
+                                                      TextureDepthStencilMode::Enum);
+typedef size_t (*TextureBuilderGetStorageSizeFunc)(const TextureBuilder*);
+typedef size_t (*TextureBuilderGetStorageAlignmentFunc)(const TextureBuilder*);
+typedef void (*TextureBuilderSetStorageFunc)(TextureBuilder*, MemoryPool*, ptrdiff_t);
+typedef void (*TextureBuilderSetPackagedTextureDataFunc)(TextureBuilder*, const void*);
+typedef void (*TextureBuilderSetPackagedTextureLayoutFunc)(TextureBuilder*,
+                                                           const PackagedTextureLayout*);
+typedef void (*TextureBuilderSetStrideFunc)(TextureBuilder*, ptrdiff_t);
+typedef void (*TextureBuilderSetGLTextureNameFunc)(TextureBuilder*, uint32_t);
+typedef NVNstorageClass (*TextureBuilderGetStorageClassFunc)(const TextureBuilder*);
+typedef const Device* (*TextureBuilderGetDeviceFunc)(const TextureBuilder*);
+typedef int (*TextureBuilderGetFlagsFunc)(const TextureBuilder*);
+typedef TextureTarget::Enum (*TextureBuilderGetTargetFunc)(const TextureBuilder*);
+typedef int (*TextureBuilderGetWidthFunc)(const TextureBuilder*);
+typedef int (*TextureBuilderGetHeightFunc)(const TextureBuilder*);
+typedef int (*TextureBuilderGetDepthFunc)(const TextureBuilder*);
+typedef int (*TextureBuilderGetLevelsFunc)(const TextureBuilder*);
+typedef Format::Enum (*TextureBuilderGetFormatFunc)(const TextureBuilder*);
+typedef int (*TextureBuilderGetSamplesFunc)(const TextureBuilder*);
+typedef void (*TextureBuilderGetSwizzleFunc)(const TextureBuilder*, TextureSwizzle*,
+                                             TextureSwizzle*, TextureSwizzle*, TextureSwizzle*);
+typedef TextureDepthStencilMode::Enum (*TextureBuilderGetDepthStencilModeFunc)(
     const TextureBuilder*);
-/*11623*/ typedef const void* (*TextureBuilderGetPackagedTextureDataFunc)(const TextureBuilder*);
-/*11624*/ typedef NVNboolean (*TextureBuilderGetPackagedTextureLayoutFunc)(const TextureBuilder*,
-                                                                           PackagedTextureLayout*);
-/*11625*/ typedef ptrdiff_t (*TextureBuilderGetStrideFunc)(const TextureBuilder*);
-/*11626*/ typedef void (*TextureBuilderGetSparseTileLayoutFunc)(const TextureBuilder*,
-                                                                TextureSparseTileLayout*);
-/*11627*/ typedef uint32_t (*TextureBuilderGetGLTextureNameFunc)(const TextureBuilder*);
-/*11628*/ typedef size_t (*TextureBuilderGetZCullStorageSizeFunc)(const TextureBuilder*);
-/*11629*/ typedef MemoryPool* (*TextureBuilderGetMemoryPoolFunc)(const TextureBuilder*);
-/*11630*/ typedef ptrdiff_t (*TextureBuilderGetMemoryOffsetFunc)(const TextureBuilder*);
-/*11631*/ typedef void (*TextureViewSetDefaultsFunc)(TextureView*);
-/*11632*/ typedef void (*TextureViewSetLevelsFunc)(TextureView*, int, int);
-/*11633*/ typedef void (*TextureViewSetLayersFunc)(TextureView*, int, int);
-/*11634*/ typedef void (*TextureViewSetFormatFunc)(TextureView*, Format::Enum);
-/*11635*/ typedef void (*TextureViewSetSwizzleFunc)(TextureView*, TextureSwizzle::Enum,
-                                                    TextureSwizzle::Enum, TextureSwizzle::Enum,
-                                                    TextureSwizzle::Enum);
-/*11636*/ typedef void (*TextureViewSetDepthStencilModeFunc)(TextureView*,
-                                                             TextureDepthStencilMode::Enum);
-/*11637*/ typedef void (*TextureViewSetTargetFunc)(TextureView*, TextureTarget::Enum);
-/*11638*/ typedef NVNboolean (*TextureViewGetLevelsFunc)(const TextureView*, int*, int*);
-/*11639*/ typedef NVNboolean (*TextureViewGetLayersFunc)(const TextureView*, int*, int*);
-/*11640*/ typedef NVNboolean (*TextureViewGetFormatFunc)(const TextureView*, Format*);
-/*11641*/ typedef NVNboolean (*TextureViewGetSwizzleFunc)(const TextureView*, TextureSwizzle*,
-                                                          TextureSwizzle*, TextureSwizzle*,
-                                                          TextureSwizzle*);
-/*11642*/ typedef NVNboolean (*TextureViewGetDepthStencilModeFunc)(const TextureView*,
-                                                                   TextureDepthStencilMode*);
-/*11643*/ typedef NVNboolean (*TextureViewGetTargetFunc)(const TextureView*, TextureTarget*);
-/*11644*/ typedef NVNboolean (*TextureViewCompareFunc)(const TextureView*, const TextureView*);
-/*11645*/ typedef NVNboolean (*TextureInitializeFunc)(Texture*, const TextureBuilder*);
-/*11646*/ typedef size_t (*TextureGetZCullStorageSizeFunc)(const Texture*);
-/*11647*/ typedef void (*TextureFinalizeFunc)(Texture*);
-/*11648*/ typedef void (*TextureSetDebugLabelFunc)(Texture*, const char*);
-/*11649*/ typedef NVNstorageClass (*TextureGetStorageClassFunc)(const Texture*);
-/*11650*/ typedef ptrdiff_t (*TextureGetViewOffsetFunc)(const Texture*, const TextureView*);
-/*11651*/ typedef int (*TextureGetFlagsFunc)(const Texture*);
-/*11652*/ typedef TextureTarget::Enum (*TextureGetTargetFunc)(const Texture*);
-/*11653*/ typedef int (*TextureGetWidthFunc)(const Texture*);
-/*11654*/ typedef int (*TextureGetHeightFunc)(const Texture*);
-/*11655*/ typedef int (*TextureGetDepthFunc)(const Texture*);
-/*11656*/ typedef int (*TextureGetLevelsFunc)(const Texture*);
-/*11657*/ typedef Format::Enum (*TextureGetFormatFunc)(const Texture*);
-/*11658*/ typedef int (*TextureGetSamplesFunc)(const Texture*);
-/*11659*/ typedef void (*TextureGetSwizzleFunc)(const Texture*, TextureSwizzle*, TextureSwizzle*,
-                                                TextureSwizzle*, TextureSwizzle*);
-/*11660*/ typedef TextureDepthStencilMode::Enum (*TextureGetDepthStencilModeFunc)(const Texture*);
-/*11661*/ typedef ptrdiff_t (*TextureGetStrideFunc)(const Texture*);
-/*11662*/ typedef TextureAddress (*TextureGetTextureAddressFunc)(const Texture*);
-/*11663*/ typedef void (*TextureGetSparseTileLayoutFunc)(const Texture*, TextureSparseTileLayout*);
-/*11664*/ typedef void (*TextureWriteTexelsFunc)(const Texture*, const TextureView*,
-                                                 const CopyRegion*, const void*);
-/*11665*/ typedef void (*TextureWriteTexelsStridedFunc)(const Texture*, const TextureView*,
-                                                        const CopyRegion*, const void*, ptrdiff_t,
-                                                        ptrdiff_t);
-/*11666*/ typedef void (*TextureReadTexelsFunc)(const Texture*, const TextureView*,
-                                                const CopyRegion*, void*);
-/*11667*/ typedef void (*TextureReadTexelsStridedFunc)(const Texture*, const TextureView*,
-                                                       const CopyRegion*, void*, ptrdiff_t,
-                                                       ptrdiff_t);
-/*11668*/ typedef void (*TextureFlushTexelsFunc)(const Texture*, const TextureView*,
-                                                 const CopyRegion*);
-/*11669*/ typedef void (*TextureInvalidateTexelsFunc)(const Texture*, const TextureView*,
-                                                      const CopyRegion*);
-/*11670*/ typedef MemoryPool* (*TextureGetMemoryPoolFunc)(const Texture*);
-/*11671*/ typedef ptrdiff_t (*TextureGetMemoryOffsetFunc)(const Texture*);
-/*11672*/ typedef int (*TextureGetStorageSizeFunc)(const Texture*);
-/*11673*/ typedef NVNboolean (*TextureCompareFunc)(const Texture*, const Texture*);
-/*11674*/ typedef uint64_t (*TextureGetDebugIDFunc)(const Texture*);
-/*11675*/ typedef void (*SamplerBuilderSetDeviceFunc)(SamplerBuilder*, Device*);
-/*11676*/ typedef void (*SamplerBuilderSetDefaultsFunc)(SamplerBuilder*);
-/*11677*/ typedef void (*SamplerBuilderSetMinMagFilterFunc)(SamplerBuilder*, MinFilter::Enum,
-                                                            MagFilter::Enum);
-/*11678*/ typedef void (*SamplerBuilderSetWrapModeFunc)(SamplerBuilder*, WrapMode::Enum,
-                                                        WrapMode::Enum, WrapMode::Enum);
-/*11679*/ typedef void (*SamplerBuilderSetLodClampFunc)(SamplerBuilder*, float, float);
-/*11680*/ typedef void (*SamplerBuilderSetLodBiasFunc)(SamplerBuilder*, float);
-/*11681*/ typedef void (*SamplerBuilderSetCompareFunc)(SamplerBuilder*, CompareMode::Enum,
-                                                       CompareFunc::Enum);
-/*11682*/ typedef void (*SamplerBuilderSetBorderColorFunc)(SamplerBuilder*, const float*);
-/*11683*/ typedef void (*SamplerBuilderSetBorderColoriFunc)(SamplerBuilder*, const int*);
-/*11684*/ typedef void (*SamplerBuilderSetBorderColoruiFunc)(SamplerBuilder*, const uint32_t*);
-/*11685*/ typedef void (*SamplerBuilderSetMaxAnisotropyFunc)(SamplerBuilder*, float);
-/*11686*/ typedef void (*SamplerBuilderSetReductionFilterFunc)(SamplerBuilder*,
-                                                               SamplerReduction::Enum);
-/*11687*/ typedef void (*SamplerBuilderSetLodSnapFunc)(SamplerBuilder*, float);
-/*11688*/ typedef const Device* (*SamplerBuilderGetDeviceFunc)(const SamplerBuilder*);
-/*11689*/ typedef void (*SamplerBuilderGetMinMagFilterFunc)(const SamplerBuilder*, MinFilter*,
-                                                            MagFilter*);
-/*11690*/ typedef void (*SamplerBuilderGetWrapModeFunc)(const SamplerBuilder*, WrapMode*, WrapMode*,
-                                                        WrapMode*);
-/*11691*/ typedef void (*SamplerBuilderGetLodClampFunc)(const SamplerBuilder*, float*, float*);
-/*11692*/ typedef float (*SamplerBuilderGetLodBiasFunc)(const SamplerBuilder*);
-/*11693*/ typedef void (*SamplerBuilderGetCompareFunc)(const SamplerBuilder*, CompareMode*,
-                                                       CompareFunc*);
-/*11694*/ typedef void (*SamplerBuilderGetBorderColorFunc)(const SamplerBuilder*, float*);
-/*11695*/ typedef void (*SamplerBuilderGetBorderColoriFunc)(const SamplerBuilder*, int*);
-/*11696*/ typedef void (*SamplerBuilderGetBorderColoruiFunc)(const SamplerBuilder*, uint32_t*);
-/*11697*/ typedef float (*SamplerBuilderGetMaxAnisotropyFunc)(const SamplerBuilder*);
-/*11698*/ typedef SamplerReduction::Enum (*SamplerBuilderGetReductionFilterFunc)(
-    const SamplerBuilder*);
-/*11699*/ typedef float (*SamplerBuilderGetLodSnapFunc)(const SamplerBuilder*);
-/*11700*/ typedef NVNboolean (*SamplerInitializeFunc)(Sampler*, const SamplerBuilder*);
-/*11701*/ typedef void (*SamplerFinalizeFunc)(Sampler*);
-/*11702*/ typedef void (*SamplerSetDebugLabelFunc)(Sampler*, const char*);
-/*11703*/ typedef void (*SamplerGetMinMagFilterFunc)(const Sampler*, MinFilter*, MagFilter*);
-/*11704*/ typedef void (*SamplerGetWrapModeFunc)(const Sampler*, WrapMode*, WrapMode*, WrapMode*);
-/*11705*/ typedef void (*SamplerGetLodClampFunc)(const Sampler*, float*, float*);
-/*11706*/ typedef float (*SamplerGetLodBiasFunc)(const Sampler*);
-/*11707*/ typedef void (*SamplerGetCompareFunc)(const Sampler*, CompareMode*, CompareFunc*);
-/*11708*/ typedef void (*SamplerGetBorderColorFunc)(const Sampler*, float*);
-/*11709*/ typedef void (*SamplerGetBorderColoriFunc)(const Sampler*, int*);
-/*11710*/ typedef void (*SamplerGetBorderColoruiFunc)(const Sampler*, uint32_t*);
-/*11711*/ typedef float (*SamplerGetMaxAnisotropyFunc)(const Sampler*);
-/*11712*/ typedef SamplerReduction::Enum (*SamplerGetReductionFilterFunc)(const Sampler*);
-/*11713*/ typedef NVNboolean (*SamplerCompareFunc)(const Sampler*, const Sampler*);
-/*11714*/ typedef uint64_t (*SamplerGetDebugIDFunc)(const Sampler*);
-/*11715*/ typedef void (*BlendStateSetDefaultsFunc)(BlendState*);
-/*11716*/ typedef void (*BlendStateSetBlendTargetFunc)(BlendState*, int);
-/*11717*/ typedef void (*BlendStateSetBlendFuncFunc)(BlendState*, BlendFunc::Enum, BlendFunc::Enum,
-                                                     BlendFunc::Enum, BlendFunc::Enum);
-/*11718*/ typedef void (*BlendStateSetBlendEquationFunc)(BlendState*, BlendEquation::Enum,
-                                                         BlendEquation::Enum);
-/*11719*/ typedef void (*BlendStateSetAdvancedModeFunc)(BlendState*, BlendAdvancedMode::Enum);
-/*11720*/ typedef void (*BlendStateSetAdvancedOverlapFunc)(BlendState*, BlendAdvancedOverlap::Enum);
-/*11721*/ typedef void (*BlendStateSetAdvancedPremultipliedSrcFunc)(BlendState*, NVNboolean);
-/*11722*/ typedef void (*BlendStateSetAdvancedNormalizedDstFunc)(BlendState*, NVNboolean);
-/*11723*/ typedef int (*BlendStateGetBlendTargetFunc)(const BlendState*);
-/*11724*/ typedef void (*BlendStateGetBlendFuncFunc)(const BlendState*, BlendFunc*, BlendFunc*,
-                                                     BlendFunc*, BlendFunc*);
-/*11725*/ typedef void (*BlendStateGetBlendEquationFunc)(const BlendState*, BlendEquation*,
-                                                         BlendEquation*);
-/*11726*/ typedef BlendAdvancedMode::Enum (*BlendStateGetAdvancedModeFunc)(const BlendState*);
-/*11727*/ typedef BlendAdvancedOverlap::Enum (*BlendStateGetAdvancedOverlapFunc)(const BlendState*);
-/*11728*/ typedef NVNboolean (*BlendStateGetAdvancedPremultipliedSrcFunc)(const BlendState*);
-/*11729*/ typedef NVNboolean (*BlendStateGetAdvancedNormalizedDstFunc)(const BlendState*);
-/*11730*/ typedef void (*ColorStateSetDefaultsFunc)(ColorState*);
-/*11731*/ typedef void (*ColorStateSetBlendEnableFunc)(ColorState*, int, NVNboolean);
-/*11732*/ typedef void (*ColorStateSetLogicOpFunc)(ColorState*, LogicOp::Enum);
-/*11733*/ typedef void (*ColorStateSetAlphaTestFunc)(ColorState*, AlphaFunc::Enum);
-/*11734*/ typedef NVNboolean (*ColorStateGetBlendEnableFunc)(const ColorState*, int);
-/*11735*/ typedef LogicOp::Enum (*ColorStateGetLogicOpFunc)(const ColorState*);
-/*11736*/ typedef AlphaFunc::Enum (*ColorStateGetAlphaTestFunc)(const ColorState*);
-/*11737*/ typedef void (*ChannelMaskStateSetDefaultsFunc)(ChannelMaskState*);
-/*11738*/ typedef void (*ChannelMaskStateSetChannelMaskFunc)(ChannelMaskState*, int, NVNboolean,
-                                                             NVNboolean, NVNboolean, NVNboolean);
-/*11739*/ typedef void (*ChannelMaskStateGetChannelMaskFunc)(const ChannelMaskState*, int,
-                                                             NVNboolean*, NVNboolean*, NVNboolean*,
-                                                             NVNboolean*);
-/*11740*/ typedef void (*MultisampleStateSetDefaultsFunc)(MultisampleState*);
-/*11741*/ typedef void (*MultisampleStateSetMultisampleEnableFunc)(MultisampleState*, NVNboolean);
-/*11742*/ typedef void (*MultisampleStateSetSamplesFunc)(MultisampleState*, int);
-/*11743*/ typedef void (*MultisampleStateSetAlphaToCoverageEnableFunc)(MultisampleState*,
-                                                                       NVNboolean);
-/*11744*/ typedef void (*MultisampleStateSetAlphaToCoverageDitherFunc)(MultisampleState*,
-                                                                       NVNboolean);
-/*11745*/ typedef NVNboolean (*MultisampleStateGetMultisampleEnableFunc)(const MultisampleState*);
-/*11746*/ typedef int (*MultisampleStateGetSamplesFunc)(const MultisampleState*);
-/*11747*/ typedef NVNboolean (*MultisampleStateGetAlphaToCoverageEnableFunc)(
+typedef const void* (*TextureBuilderGetPackagedTextureDataFunc)(const TextureBuilder*);
+typedef NVNboolean (*TextureBuilderGetPackagedTextureLayoutFunc)(const TextureBuilder*,
+                                                                 PackagedTextureLayout*);
+typedef ptrdiff_t (*TextureBuilderGetStrideFunc)(const TextureBuilder*);
+typedef void (*TextureBuilderGetSparseTileLayoutFunc)(const TextureBuilder*,
+                                                      TextureSparseTileLayout*);
+typedef uint32_t (*TextureBuilderGetGLTextureNameFunc)(const TextureBuilder*);
+typedef size_t (*TextureBuilderGetZCullStorageSizeFunc)(const TextureBuilder*);
+typedef MemoryPool* (*TextureBuilderGetMemoryPoolFunc)(const TextureBuilder*);
+typedef ptrdiff_t (*TextureBuilderGetMemoryOffsetFunc)(const TextureBuilder*);
+typedef void (*TextureViewSetDefaultsFunc)(TextureView*);
+typedef void (*TextureViewSetLevelsFunc)(TextureView*, int, int);
+typedef void (*TextureViewSetLayersFunc)(TextureView*, int, int);
+typedef void (*TextureViewSetFormatFunc)(TextureView*, Format::Enum);
+typedef void (*TextureViewSetSwizzleFunc)(TextureView*, TextureSwizzle::Enum, TextureSwizzle::Enum,
+                                          TextureSwizzle::Enum, TextureSwizzle::Enum);
+typedef void (*TextureViewSetDepthStencilModeFunc)(TextureView*, TextureDepthStencilMode::Enum);
+typedef void (*TextureViewSetTargetFunc)(TextureView*, TextureTarget::Enum);
+typedef NVNboolean (*TextureViewGetLevelsFunc)(const TextureView*, int*, int*);
+typedef NVNboolean (*TextureViewGetLayersFunc)(const TextureView*, int*, int*);
+typedef NVNboolean (*TextureViewGetFormatFunc)(const TextureView*, Format*);
+typedef NVNboolean (*TextureViewGetSwizzleFunc)(const TextureView*, TextureSwizzle*,
+                                                TextureSwizzle*, TextureSwizzle*, TextureSwizzle*);
+typedef NVNboolean (*TextureViewGetDepthStencilModeFunc)(const TextureView*,
+                                                         TextureDepthStencilMode*);
+typedef NVNboolean (*TextureViewGetTargetFunc)(const TextureView*, TextureTarget*);
+typedef NVNboolean (*TextureViewCompareFunc)(const TextureView*, const TextureView*);
+typedef NVNboolean (*TextureInitializeFunc)(Texture*, const TextureBuilder*);
+typedef size_t (*TextureGetZCullStorageSizeFunc)(const Texture*);
+typedef void (*TextureFinalizeFunc)(Texture*);
+typedef void (*TextureSetDebugLabelFunc)(Texture*, const char*);
+typedef NVNstorageClass (*TextureGetStorageClassFunc)(const Texture*);
+typedef ptrdiff_t (*TextureGetViewOffsetFunc)(const Texture*, const TextureView*);
+typedef int (*TextureGetFlagsFunc)(const Texture*);
+typedef TextureTarget::Enum (*TextureGetTargetFunc)(const Texture*);
+typedef int (*TextureGetWidthFunc)(const Texture*);
+typedef int (*TextureGetHeightFunc)(const Texture*);
+typedef int (*TextureGetDepthFunc)(const Texture*);
+typedef int (*TextureGetLevelsFunc)(const Texture*);
+typedef Format::Enum (*TextureGetFormatFunc)(const Texture*);
+typedef int (*TextureGetSamplesFunc)(const Texture*);
+typedef void (*TextureGetSwizzleFunc)(const Texture*, TextureSwizzle*, TextureSwizzle*,
+                                      TextureSwizzle*, TextureSwizzle*);
+typedef TextureDepthStencilMode::Enum (*TextureGetDepthStencilModeFunc)(const Texture*);
+typedef ptrdiff_t (*TextureGetStrideFunc)(const Texture*);
+typedef TextureAddress (*TextureGetTextureAddressFunc)(const Texture*);
+typedef void (*TextureGetSparseTileLayoutFunc)(const Texture*, TextureSparseTileLayout*);
+typedef void (*TextureWriteTexelsFunc)(const Texture*, const TextureView*, const CopyRegion*,
+                                       const void*);
+typedef void (*TextureWriteTexelsStridedFunc)(const Texture*, const TextureView*, const CopyRegion*,
+                                              const void*, ptrdiff_t, ptrdiff_t);
+typedef void (*TextureReadTexelsFunc)(const Texture*, const TextureView*, const CopyRegion*, void*);
+typedef void (*TextureReadTexelsStridedFunc)(const Texture*, const TextureView*, const CopyRegion*,
+                                             void*, ptrdiff_t, ptrdiff_t);
+typedef void (*TextureFlushTexelsFunc)(const Texture*, const TextureView*, const CopyRegion*);
+typedef void (*TextureInvalidateTexelsFunc)(const Texture*, const TextureView*, const CopyRegion*);
+typedef MemoryPool* (*TextureGetMemoryPoolFunc)(const Texture*);
+typedef ptrdiff_t (*TextureGetMemoryOffsetFunc)(const Texture*);
+typedef int (*TextureGetStorageSizeFunc)(const Texture*);
+typedef NVNboolean (*TextureCompareFunc)(const Texture*, const Texture*);
+typedef uint64_t (*TextureGetDebugIDFunc)(const Texture*);
+typedef void (*SamplerBuilderSetDeviceFunc)(SamplerBuilder*, Device*);
+typedef void (*SamplerBuilderSetDefaultsFunc)(SamplerBuilder*);
+typedef void (*SamplerBuilderSetMinMagFilterFunc)(SamplerBuilder*, MinFilter::Enum,
+                                                  MagFilter::Enum);
+typedef void (*SamplerBuilderSetWrapModeFunc)(SamplerBuilder*, WrapMode::Enum, WrapMode::Enum,
+                                              WrapMode::Enum);
+typedef void (*SamplerBuilderSetLodClampFunc)(SamplerBuilder*, float, float);
+typedef void (*SamplerBuilderSetLodBiasFunc)(SamplerBuilder*, float);
+typedef void (*SamplerBuilderSetCompareFunc)(SamplerBuilder*, CompareMode::Enum, CompareFunc::Enum);
+typedef void (*SamplerBuilderSetBorderColorFunc)(SamplerBuilder*, const float*);
+typedef void (*SamplerBuilderSetBorderColoriFunc)(SamplerBuilder*, const int*);
+typedef void (*SamplerBuilderSetBorderColoruiFunc)(SamplerBuilder*, const uint32_t*);
+typedef void (*SamplerBuilderSetMaxAnisotropyFunc)(SamplerBuilder*, float);
+typedef void (*SamplerBuilderSetReductionFilterFunc)(SamplerBuilder*, SamplerReduction::Enum);
+typedef void (*SamplerBuilderSetLodSnapFunc)(SamplerBuilder*, float);
+typedef const Device* (*SamplerBuilderGetDeviceFunc)(const SamplerBuilder*);
+typedef void (*SamplerBuilderGetMinMagFilterFunc)(const SamplerBuilder*, MinFilter*, MagFilter*);
+typedef void (*SamplerBuilderGetWrapModeFunc)(const SamplerBuilder*, WrapMode*, WrapMode*,
+                                              WrapMode*);
+typedef void (*SamplerBuilderGetLodClampFunc)(const SamplerBuilder*, float*, float*);
+typedef float (*SamplerBuilderGetLodBiasFunc)(const SamplerBuilder*);
+typedef void (*SamplerBuilderGetCompareFunc)(const SamplerBuilder*, CompareMode*, CompareFunc*);
+typedef void (*SamplerBuilderGetBorderColorFunc)(const SamplerBuilder*, float*);
+typedef void (*SamplerBuilderGetBorderColoriFunc)(const SamplerBuilder*, int*);
+typedef void (*SamplerBuilderGetBorderColoruiFunc)(const SamplerBuilder*, uint32_t*);
+typedef float (*SamplerBuilderGetMaxAnisotropyFunc)(const SamplerBuilder*);
+typedef SamplerReduction::Enum (*SamplerBuilderGetReductionFilterFunc)(const SamplerBuilder*);
+typedef float (*SamplerBuilderGetLodSnapFunc)(const SamplerBuilder*);
+typedef NVNboolean (*SamplerInitializeFunc)(Sampler*, const SamplerBuilder*);
+typedef void (*SamplerFinalizeFunc)(Sampler*);
+typedef void (*SamplerSetDebugLabelFunc)(Sampler*, const char*);
+typedef void (*SamplerGetMinMagFilterFunc)(const Sampler*, MinFilter*, MagFilter*);
+typedef void (*SamplerGetWrapModeFunc)(const Sampler*, WrapMode*, WrapMode*, WrapMode*);
+typedef void (*SamplerGetLodClampFunc)(const Sampler*, float*, float*);
+typedef float (*SamplerGetLodBiasFunc)(const Sampler*);
+typedef void (*SamplerGetCompareFunc)(const Sampler*, CompareMode*, CompareFunc*);
+typedef void (*SamplerGetBorderColorFunc)(const Sampler*, float*);
+typedef void (*SamplerGetBorderColoriFunc)(const Sampler*, int*);
+typedef void (*SamplerGetBorderColoruiFunc)(const Sampler*, uint32_t*);
+typedef float (*SamplerGetMaxAnisotropyFunc)(const Sampler*);
+typedef SamplerReduction::Enum (*SamplerGetReductionFilterFunc)(const Sampler*);
+typedef NVNboolean (*SamplerCompareFunc)(const Sampler*, const Sampler*);
+typedef uint64_t (*SamplerGetDebugIDFunc)(const Sampler*);
+typedef void (*BlendStateSetDefaultsFunc)(BlendState*);
+typedef void (*BlendStateSetBlendTargetFunc)(BlendState*, int);
+typedef void (*BlendStateSetBlendFuncFunc)(BlendState*, BlendFunc::Enum, BlendFunc::Enum,
+                                           BlendFunc::Enum, BlendFunc::Enum);
+typedef void (*BlendStateSetBlendEquationFunc)(BlendState*, BlendEquation::Enum,
+                                               BlendEquation::Enum);
+typedef void (*BlendStateSetAdvancedModeFunc)(BlendState*, BlendAdvancedMode::Enum);
+typedef void (*BlendStateSetAdvancedOverlapFunc)(BlendState*, BlendAdvancedOverlap::Enum);
+typedef void (*BlendStateSetAdvancedPremultipliedSrcFunc)(BlendState*, NVNboolean);
+typedef void (*BlendStateSetAdvancedNormalizedDstFunc)(BlendState*, NVNboolean);
+typedef int (*BlendStateGetBlendTargetFunc)(const BlendState*);
+typedef void (*BlendStateGetBlendFuncFunc)(const BlendState*, BlendFunc*, BlendFunc*, BlendFunc*,
+                                           BlendFunc*);
+typedef void (*BlendStateGetBlendEquationFunc)(const BlendState*, BlendEquation*, BlendEquation*);
+typedef BlendAdvancedMode::Enum (*BlendStateGetAdvancedModeFunc)(const BlendState*);
+typedef BlendAdvancedOverlap::Enum (*BlendStateGetAdvancedOverlapFunc)(const BlendState*);
+typedef NVNboolean (*BlendStateGetAdvancedPremultipliedSrcFunc)(const BlendState*);
+typedef NVNboolean (*BlendStateGetAdvancedNormalizedDstFunc)(const BlendState*);
+typedef void (*ColorStateSetDefaultsFunc)(ColorState*);
+typedef void (*ColorStateSetBlendEnableFunc)(ColorState*, int, NVNboolean);
+typedef void (*ColorStateSetLogicOpFunc)(ColorState*, LogicOp::Enum);
+typedef void (*ColorStateSetAlphaTestFunc)(ColorState*, AlphaFunc::Enum);
+typedef NVNboolean (*ColorStateGetBlendEnableFunc)(const ColorState*, int);
+typedef LogicOp::Enum (*ColorStateGetLogicOpFunc)(const ColorState*);
+typedef AlphaFunc::Enum (*ColorStateGetAlphaTestFunc)(const ColorState*);
+typedef void (*ChannelMaskStateSetDefaultsFunc)(ChannelMaskState*);
+typedef void (*ChannelMaskStateSetChannelMaskFunc)(ChannelMaskState*, int, NVNboolean, NVNboolean,
+                                                   NVNboolean, NVNboolean);
+typedef void (*ChannelMaskStateGetChannelMaskFunc)(const ChannelMaskState*, int, NVNboolean*,
+                                                   NVNboolean*, NVNboolean*, NVNboolean*);
+typedef void (*MultisampleStateSetDefaultsFunc)(MultisampleState*);
+typedef void (*MultisampleStateSetMultisampleEnableFunc)(MultisampleState*, NVNboolean);
+typedef void (*MultisampleStateSetSamplesFunc)(MultisampleState*, int);
+typedef void (*MultisampleStateSetAlphaToCoverageEnableFunc)(MultisampleState*, NVNboolean);
+typedef void (*MultisampleStateSetAlphaToCoverageDitherFunc)(MultisampleState*, NVNboolean);
+typedef NVNboolean (*MultisampleStateGetMultisampleEnableFunc)(const MultisampleState*);
+typedef int (*MultisampleStateGetSamplesFunc)(const MultisampleState*);
+typedef NVNboolean (*MultisampleStateGetAlphaToCoverageEnableFunc)(const MultisampleState*);
+typedef NVNboolean (*MultisampleStateGetAlphaToCoverageDitherFunc)(const MultisampleState*);
+typedef void (*MultisampleStateSetRasterSamplesFunc)(MultisampleState*, int);
+typedef int (*MultisampleStateGetRasterSamplesFunc)(MultisampleState*);
+typedef void (*MultisampleStateSetCoverageModulationModeFunc)(MultisampleState*,
+                                                              CoverageModulationMode::Enum);
+typedef CoverageModulationMode::Enum (*MultisampleStateGetCoverageModulationModeFunc)(
     const MultisampleState*);
-/*11748*/ typedef NVNboolean (*MultisampleStateGetAlphaToCoverageDitherFunc)(
-    const MultisampleState*);
-/*11749*/ typedef void (*MultisampleStateSetRasterSamplesFunc)(MultisampleState*, int);
-/*11750*/ typedef int (*MultisampleStateGetRasterSamplesFunc)(MultisampleState*);
-/*11751*/ typedef void (*MultisampleStateSetCoverageModulationModeFunc)(
-    MultisampleState*, CoverageModulationMode::Enum);
-/*11752*/ typedef CoverageModulationMode::Enum (*MultisampleStateGetCoverageModulationModeFunc)(
-    const MultisampleState*);
-/*11753*/ typedef void (*MultisampleStateSetCoverageToColorEnableFunc)(MultisampleState*,
-                                                                       NVNboolean);
-/*11754*/ typedef NVNboolean (*MultisampleStateGetCoverageToColorEnableFunc)(
-    const MultisampleState*);
-/*11755*/ typedef void (*MultisampleStateSetCoverageToColorOutputFunc)(MultisampleState*, int);
-/*11756*/ typedef int (*MultisampleStateGetCoverageToColorOutputFunc)(const MultisampleState*);
-/*11757*/ typedef void (*MultisampleStateSetSampleLocationsEnableFunc)(MultisampleState*,
-                                                                       NVNboolean);
-/*11758*/ typedef NVNboolean (*MultisampleStateGetSampleLocationsEnableFunc)(
-    const MultisampleState*);
-/*11759*/ typedef void (*MultisampleStateGetSampleLocationsGridFunc)(MultisampleState*, int*, int*);
-/*11760*/ typedef void (*MultisampleStateSetSampleLocationsGridEnableFunc)(MultisampleState*,
-                                                                           NVNboolean);
-/*11761*/ typedef NVNboolean (*MultisampleStateGetSampleLocationsGridEnableFunc)(
-    const MultisampleState*);
-/*11762*/ typedef void (*MultisampleStateSetSampleLocationsFunc)(MultisampleState*, int, int,
-                                                                 const float*);
-/*11763*/ typedef void (*PolygonStateSetDefaultsFunc)(PolygonState*);
-/*11764*/ typedef void (*PolygonStateSetCullFaceFunc)(PolygonState*, Face::Enum);
-/*11765*/ typedef void (*PolygonStateSetFrontFaceFunc)(PolygonState*, FrontFace::Enum);
-/*11766*/ typedef void (*PolygonStateSetPolygonModeFunc)(PolygonState*, PolygonMode::Enum);
-/*11767*/ typedef void (*PolygonStateSetPolygonOffsetEnablesFunc)(PolygonState*, int);
-/*11768*/ typedef Face::Enum (*PolygonStateGetCullFaceFunc)(const PolygonState*);
-/*11769*/ typedef FrontFace::Enum (*PolygonStateGetFrontFaceFunc)(const PolygonState*);
-/*11770*/ typedef PolygonMode::Enum (*PolygonStateGetPolygonModeFunc)(const PolygonState*);
-/*11771*/ typedef int (*PolygonStateGetPolygonOffsetEnablesFunc)(const PolygonState*);
-/*11772*/ typedef void (*DepthStencilStateSetDefaultsFunc)(DepthStencilState*);
-/*11773*/ typedef void (*DepthStencilStateSetDepthTestEnableFunc)(DepthStencilState*, NVNboolean);
-/*11774*/ typedef void (*DepthStencilStateSetDepthWriteEnableFunc)(DepthStencilState*, NVNboolean);
-/*11775*/ typedef void (*DepthStencilStateSetDepthFuncFunc)(DepthStencilState*, DepthFunc::Enum);
-/*11776*/ typedef void (*DepthStencilStateSetStencilTestEnableFunc)(DepthStencilState*, NVNboolean);
-/*11777*/ typedef void (*DepthStencilStateSetStencilFuncFunc)(DepthStencilState*, Face::Enum,
-                                                              StencilFunc::Enum);
-/*11778*/ typedef void (*DepthStencilStateSetStencilOpFunc)(DepthStencilState*, Face::Enum,
-                                                            StencilOp::Enum, StencilOp::Enum,
-                                                            StencilOp::Enum);
-/*11779*/ typedef NVNboolean (*DepthStencilStateGetDepthTestEnableFunc)(const DepthStencilState*);
-/*11780*/ typedef NVNboolean (*DepthStencilStateGetDepthWriteEnableFunc)(const DepthStencilState*);
-/*11781*/ typedef DepthFunc::Enum (*DepthStencilStateGetDepthFuncFunc)(const DepthStencilState*);
-/*11782*/ typedef NVNboolean (*DepthStencilStateGetStencilTestEnableFunc)(const DepthStencilState*);
-/*11783*/ typedef StencilFunc::Enum (*DepthStencilStateGetStencilFuncFunc)(const DepthStencilState*,
-                                                                           Face::Enum);
-/*11784*/ typedef void (*DepthStencilStateGetStencilOpFunc)(const DepthStencilState*, Face::Enum,
-                                                            StencilOp*, StencilOp*, StencilOp*);
-/*11785*/ typedef void (*VertexAttribStateSetDefaultsFunc)(VertexAttribState*);
-/*11786*/ typedef void (*VertexAttribStateSetFormatFunc)(VertexAttribState*, Format::Enum,
-                                                         ptrdiff_t);
-/*11787*/ typedef void (*VertexAttribStateSetStreamIndexFunc)(VertexAttribState*, int);
-/*11788*/ typedef void (*VertexAttribStateGetFormatFunc)(const VertexAttribState*, Format*,
-                                                         ptrdiff_t*);
-/*11789*/ typedef int (*VertexAttribStateGetStreamIndexFunc)(const VertexAttribState*);
-/*11790*/ typedef void (*VertexStreamStateSetDefaultsFunc)(VertexStreamState*);
-/*11791*/ typedef void (*VertexStreamStateSetStrideFunc)(VertexStreamState*, ptrdiff_t);
-/*11792*/ typedef void (*VertexStreamStateSetDivisorFunc)(VertexStreamState*, int);
-/*11793*/ typedef ptrdiff_t (*VertexStreamStateGetStrideFunc)(const VertexStreamState*);
-/*11794*/ typedef int (*VertexStreamStateGetDivisorFunc)(const VertexStreamState*);
-/*11795*/ typedef NVNboolean (*CommandBufferInitializeFunc)(CommandBuffer*, Device*);
-/*11796*/ typedef void (*CommandBufferFinalizeFunc)(CommandBuffer*);
-/*11797*/ typedef void (*CommandBufferSetDebugLabelFunc)(CommandBuffer*, const char*);
-/*11798*/ typedef void (*CommandBufferSetMemoryCallbackFunc)(CommandBuffer*,
-                                                             CommandBufferMemoryCallbackFunc);
-/*11799*/ typedef void (*CommandBufferSetMemoryCallbackDataFunc)(CommandBuffer*, void*);
-/*11800*/ typedef void (*CommandBufferAddCommandMemoryFunc)(CommandBuffer*, const MemoryPool*,
-                                                            ptrdiff_t, size_t);
-/*11801*/ typedef void (*CommandBufferAddControlMemoryFunc)(CommandBuffer*, void*, size_t);
-/*11802*/ typedef size_t (*CommandBufferGetCommandMemorySizeFunc)(const CommandBuffer*);
-/*11803*/ typedef size_t (*CommandBufferGetCommandMemoryUsedFunc)(const CommandBuffer*);
-/*11804*/ typedef size_t (*CommandBufferGetCommandMemoryFreeFunc)(const CommandBuffer*);
-/*11805*/ typedef size_t (*CommandBufferGetControlMemorySizeFunc)(const CommandBuffer*);
-/*11806*/ typedef size_t (*CommandBufferGetControlMemoryUsedFunc)(const CommandBuffer*);
-/*11807*/ typedef size_t (*CommandBufferGetControlMemoryFreeFunc)(const CommandBuffer*);
-/*11808*/ typedef void (*CommandBufferBeginRecordingFunc)(CommandBuffer*);
-/*11809*/ typedef CommandHandle (*CommandBufferEndRecordingFunc)(CommandBuffer*);
-/*11810*/ typedef void (*CommandBufferCallCommandsFunc)(CommandBuffer*, int, const CommandHandle*);
-/*11811*/ typedef void (*CommandBufferCopyCommandsFunc)(CommandBuffer*, int, const CommandHandle*);
-/*11812*/ typedef void (*CommandBufferBindBlendStateFunc)(CommandBuffer*, const BlendState*);
-/*11813*/ typedef void (*CommandBufferBindChannelMaskStateFunc)(CommandBuffer*,
-                                                                const ChannelMaskState*);
-/*11814*/ typedef void (*CommandBufferBindColorStateFunc)(CommandBuffer*, const ColorState*);
-/*11815*/ typedef void (*CommandBufferBindMultisampleStateFunc)(CommandBuffer*,
-                                                                const MultisampleState*);
-/*11816*/ typedef void (*CommandBufferBindPolygonStateFunc)(CommandBuffer*, const PolygonState*);
-/*11817*/ typedef void (*CommandBufferBindDepthStencilStateFunc)(CommandBuffer*,
-                                                                 const DepthStencilState*);
-/*11818*/ typedef void (*CommandBufferBindVertexAttribStateFunc)(CommandBuffer*, int,
-                                                                 const VertexAttribState*);
-/*11819*/ typedef void (*CommandBufferBindVertexStreamStateFunc)(CommandBuffer*, int,
-                                                                 const VertexStreamState*);
-/*11820*/ typedef void (*CommandBufferBindProgramFunc)(CommandBuffer*, const Program*, int);
-/*11821*/ typedef void (*CommandBufferBindVertexBufferFunc)(CommandBuffer*, int, BufferAddress,
-                                                            size_t);
-/*11822*/ typedef void (*CommandBufferBindVertexBuffersFunc)(CommandBuffer*, int, int,
-                                                             const BufferRange*);
-/*11823*/ typedef void (*CommandBufferBindUniformBufferFunc)(CommandBuffer*, ShaderStage::Enum, int,
-                                                             BufferAddress, size_t);
-/*11824*/ typedef void (*CommandBufferBindUniformBuffersFunc)(CommandBuffer*, ShaderStage::Enum,
-                                                              int, int, const BufferRange*);
-/*11825*/ typedef void (*CommandBufferBindTransformFeedbackBufferFunc)(CommandBuffer*, int,
-                                                                       BufferAddress, size_t);
-/*11826*/ typedef void (*CommandBufferBindTransformFeedbackBuffersFunc)(CommandBuffer*, int, int,
-                                                                        const BufferRange*);
-/*11827*/ typedef void (*CommandBufferBindStorageBufferFunc)(CommandBuffer*, ShaderStage::Enum, int,
-                                                             BufferAddress, size_t);
-/*11828*/ typedef void (*CommandBufferBindStorageBuffersFunc)(CommandBuffer*, ShaderStage::Enum,
-                                                              int, int, const BufferRange*);
-/*11829*/ typedef void (*CommandBufferBindTextureFunc)(CommandBuffer*, ShaderStage::Enum, int,
-                                                       TextureHandle);
-/*11830*/ typedef void (*CommandBufferBindTexturesFunc)(CommandBuffer*, ShaderStage::Enum, int, int,
-                                                        const TextureHandle*);
-/*11831*/ typedef void (*CommandBufferBindImageFunc)(CommandBuffer*, ShaderStage::Enum, int,
-                                                     ImageHandle);
-/*11832*/ typedef void (*CommandBufferBindImagesFunc)(CommandBuffer*, ShaderStage::Enum, int, int,
-                                                      const ImageHandle*);
-/*11833*/ typedef void (*CommandBufferSetPatchSizeFunc)(CommandBuffer*, int);
-/*11834*/ typedef void (*CommandBufferSetInnerTessellationLevelsFunc)(CommandBuffer*, const float*);
-/*11835*/ typedef void (*CommandBufferSetOuterTessellationLevelsFunc)(CommandBuffer*, const float*);
-/*11836*/ typedef void (*CommandBufferSetPrimitiveRestartFunc)(CommandBuffer*, NVNboolean, int);
-/*11837*/ typedef void (*CommandBufferBeginTransformFeedbackFunc)(CommandBuffer*, BufferAddress);
-/*11838*/ typedef void (*CommandBufferEndTransformFeedbackFunc)(CommandBuffer*, BufferAddress);
-/*11839*/ typedef void (*CommandBufferPauseTransformFeedbackFunc)(CommandBuffer*, BufferAddress);
-/*11840*/ typedef void (*CommandBufferResumeTransformFeedbackFunc)(CommandBuffer*, BufferAddress);
-/*11841*/ typedef void (*CommandBufferDrawTransformFeedbackFunc)(CommandBuffer*,
-                                                                 DrawPrimitive::Enum,
-                                                                 BufferAddress);
-/*11842*/ typedef void (*CommandBufferDrawArraysFunc)(CommandBuffer*, DrawPrimitive::Enum, int,
-                                                      int);
-/*11843*/ typedef void (*CommandBufferDrawElementsFunc)(CommandBuffer*, DrawPrimitive::Enum,
-                                                        IndexType::Enum, int, BufferAddress);
-/*11844*/ typedef void (*CommandBufferDrawElementsBaseVertexFunc)(CommandBuffer*,
-                                                                  DrawPrimitive::Enum,
-                                                                  IndexType::Enum, int,
-                                                                  BufferAddress, int);
-/*11845*/ typedef void (*CommandBufferDrawArraysInstancedFunc)(CommandBuffer*, DrawPrimitive::Enum,
-                                                               int, int, int, int);
-/*11846*/ typedef void (*CommandBufferDrawElementsInstancedFunc)(CommandBuffer*,
-                                                                 DrawPrimitive::Enum,
-                                                                 IndexType::Enum, int,
-                                                                 BufferAddress, int, int, int);
-/*11847*/ typedef void (*CommandBufferDrawArraysIndirectFunc)(CommandBuffer*, DrawPrimitive::Enum,
-                                                              BufferAddress);
-/*11848*/ typedef void (*CommandBufferDrawElementsIndirectFunc)(CommandBuffer*, DrawPrimitive::Enum,
+typedef void (*MultisampleStateSetCoverageToColorEnableFunc)(MultisampleState*, NVNboolean);
+typedef NVNboolean (*MultisampleStateGetCoverageToColorEnableFunc)(const MultisampleState*);
+typedef void (*MultisampleStateSetCoverageToColorOutputFunc)(MultisampleState*, int);
+typedef int (*MultisampleStateGetCoverageToColorOutputFunc)(const MultisampleState*);
+typedef void (*MultisampleStateSetSampleLocationsEnableFunc)(MultisampleState*, NVNboolean);
+typedef NVNboolean (*MultisampleStateGetSampleLocationsEnableFunc)(const MultisampleState*);
+typedef void (*MultisampleStateGetSampleLocationsGridFunc)(MultisampleState*, int*, int*);
+typedef void (*MultisampleStateSetSampleLocationsGridEnableFunc)(MultisampleState*, NVNboolean);
+typedef NVNboolean (*MultisampleStateGetSampleLocationsGridEnableFunc)(const MultisampleState*);
+typedef void (*MultisampleStateSetSampleLocationsFunc)(MultisampleState*, int, int, const float*);
+typedef void (*PolygonStateSetDefaultsFunc)(PolygonState*);
+typedef void (*PolygonStateSetCullFaceFunc)(PolygonState*, Face::Enum);
+typedef void (*PolygonStateSetFrontFaceFunc)(PolygonState*, FrontFace::Enum);
+typedef void (*PolygonStateSetPolygonModeFunc)(PolygonState*, PolygonMode::Enum);
+typedef void (*PolygonStateSetPolygonOffsetEnablesFunc)(PolygonState*, int);
+typedef Face::Enum (*PolygonStateGetCullFaceFunc)(const PolygonState*);
+typedef FrontFace::Enum (*PolygonStateGetFrontFaceFunc)(const PolygonState*);
+typedef PolygonMode::Enum (*PolygonStateGetPolygonModeFunc)(const PolygonState*);
+typedef int (*PolygonStateGetPolygonOffsetEnablesFunc)(const PolygonState*);
+typedef void (*DepthStencilStateSetDefaultsFunc)(DepthStencilState*);
+typedef void (*DepthStencilStateSetDepthTestEnableFunc)(DepthStencilState*, NVNboolean);
+typedef void (*DepthStencilStateSetDepthWriteEnableFunc)(DepthStencilState*, NVNboolean);
+typedef void (*DepthStencilStateSetDepthFuncFunc)(DepthStencilState*, DepthFunc::Enum);
+typedef void (*DepthStencilStateSetStencilTestEnableFunc)(DepthStencilState*, NVNboolean);
+typedef void (*DepthStencilStateSetStencilFuncFunc)(DepthStencilState*, Face::Enum,
+                                                    StencilFunc::Enum);
+typedef void (*DepthStencilStateSetStencilOpFunc)(DepthStencilState*, Face::Enum, StencilOp::Enum,
+                                                  StencilOp::Enum, StencilOp::Enum);
+typedef NVNboolean (*DepthStencilStateGetDepthTestEnableFunc)(const DepthStencilState*);
+typedef NVNboolean (*DepthStencilStateGetDepthWriteEnableFunc)(const DepthStencilState*);
+typedef DepthFunc::Enum (*DepthStencilStateGetDepthFuncFunc)(const DepthStencilState*);
+typedef NVNboolean (*DepthStencilStateGetStencilTestEnableFunc)(const DepthStencilState*);
+typedef StencilFunc::Enum (*DepthStencilStateGetStencilFuncFunc)(const DepthStencilState*,
+                                                                 Face::Enum);
+typedef void (*DepthStencilStateGetStencilOpFunc)(const DepthStencilState*, Face::Enum, StencilOp*,
+                                                  StencilOp*, StencilOp*);
+typedef void (*VertexAttribStateSetDefaultsFunc)(VertexAttribState*);
+typedef void (*VertexAttribStateSetFormatFunc)(VertexAttribState*, Format::Enum, ptrdiff_t);
+typedef void (*VertexAttribStateSetStreamIndexFunc)(VertexAttribState*, int);
+typedef void (*VertexAttribStateGetFormatFunc)(const VertexAttribState*, Format*, ptrdiff_t*);
+typedef int (*VertexAttribStateGetStreamIndexFunc)(const VertexAttribState*);
+typedef void (*VertexStreamStateSetDefaultsFunc)(VertexStreamState*);
+typedef void (*VertexStreamStateSetStrideFunc)(VertexStreamState*, ptrdiff_t);
+typedef void (*VertexStreamStateSetDivisorFunc)(VertexStreamState*, int);
+typedef ptrdiff_t (*VertexStreamStateGetStrideFunc)(const VertexStreamState*);
+typedef int (*VertexStreamStateGetDivisorFunc)(const VertexStreamState*);
+typedef NVNboolean (*CommandBufferInitializeFunc)(CommandBuffer*, Device*);
+typedef void (*CommandBufferFinalizeFunc)(CommandBuffer*);
+typedef void (*CommandBufferSetDebugLabelFunc)(CommandBuffer*, const char*);
+typedef void (*CommandBufferSetMemoryCallbackFunc)(CommandBuffer*, CommandBufferMemoryCallbackFunc);
+typedef void (*CommandBufferSetMemoryCallbackDataFunc)(CommandBuffer*, void*);
+typedef void (*CommandBufferAddCommandMemoryFunc)(CommandBuffer*, const MemoryPool*, ptrdiff_t,
+                                                  size_t);
+typedef void (*CommandBufferAddControlMemoryFunc)(CommandBuffer*, void*, size_t);
+typedef size_t (*CommandBufferGetCommandMemorySizeFunc)(const CommandBuffer*);
+typedef size_t (*CommandBufferGetCommandMemoryUsedFunc)(const CommandBuffer*);
+typedef size_t (*CommandBufferGetCommandMemoryFreeFunc)(const CommandBuffer*);
+typedef size_t (*CommandBufferGetControlMemorySizeFunc)(const CommandBuffer*);
+typedef size_t (*CommandBufferGetControlMemoryUsedFunc)(const CommandBuffer*);
+typedef size_t (*CommandBufferGetControlMemoryFreeFunc)(const CommandBuffer*);
+typedef void (*CommandBufferBeginRecordingFunc)(CommandBuffer*);
+typedef CommandHandle (*CommandBufferEndRecordingFunc)(CommandBuffer*);
+typedef void (*CommandBufferCallCommandsFunc)(CommandBuffer*, int, const CommandHandle*);
+typedef void (*CommandBufferCopyCommandsFunc)(CommandBuffer*, int, const CommandHandle*);
+typedef void (*CommandBufferBindBlendStateFunc)(CommandBuffer*, const BlendState*);
+typedef void (*CommandBufferBindChannelMaskStateFunc)(CommandBuffer*, const ChannelMaskState*);
+typedef void (*CommandBufferBindColorStateFunc)(CommandBuffer*, const ColorState*);
+typedef void (*CommandBufferBindMultisampleStateFunc)(CommandBuffer*, const MultisampleState*);
+typedef void (*CommandBufferBindPolygonStateFunc)(CommandBuffer*, const PolygonState*);
+typedef void (*CommandBufferBindDepthStencilStateFunc)(CommandBuffer*, const DepthStencilState*);
+typedef void (*CommandBufferBindVertexAttribStateFunc)(CommandBuffer*, int,
+                                                       const VertexAttribState*);
+typedef void (*CommandBufferBindVertexStreamStateFunc)(CommandBuffer*, int,
+                                                       const VertexStreamState*);
+typedef void (*CommandBufferBindProgramFunc)(CommandBuffer*, const Program*, int);
+typedef void (*CommandBufferBindVertexBufferFunc)(CommandBuffer*, int, BufferAddress, size_t);
+typedef void (*CommandBufferBindVertexBuffersFunc)(CommandBuffer*, int, int, const BufferRange*);
+typedef void (*CommandBufferBindUniformBufferFunc)(CommandBuffer*, ShaderStage::Enum, int,
+                                                   BufferAddress, size_t);
+typedef void (*CommandBufferBindUniformBuffersFunc)(CommandBuffer*, ShaderStage::Enum, int, int,
+                                                    const BufferRange*);
+typedef void (*CommandBufferBindTransformFeedbackBufferFunc)(CommandBuffer*, int, BufferAddress,
+                                                             size_t);
+typedef void (*CommandBufferBindTransformFeedbackBuffersFunc)(CommandBuffer*, int, int,
+                                                              const BufferRange*);
+typedef void (*CommandBufferBindStorageBufferFunc)(CommandBuffer*, ShaderStage::Enum, int,
+                                                   BufferAddress, size_t);
+typedef void (*CommandBufferBindStorageBuffersFunc)(CommandBuffer*, ShaderStage::Enum, int, int,
+                                                    const BufferRange*);
+typedef void (*CommandBufferBindTextureFunc)(CommandBuffer*, ShaderStage::Enum, int, TextureHandle);
+typedef void (*CommandBufferBindTexturesFunc)(CommandBuffer*, ShaderStage::Enum, int, int,
+                                              const TextureHandle*);
+typedef void (*CommandBufferBindImageFunc)(CommandBuffer*, ShaderStage::Enum, int, ImageHandle);
+typedef void (*CommandBufferBindImagesFunc)(CommandBuffer*, ShaderStage::Enum, int, int,
+                                            const ImageHandle*);
+typedef void (*CommandBufferSetPatchSizeFunc)(CommandBuffer*, int);
+typedef void (*CommandBufferSetInnerTessellationLevelsFunc)(CommandBuffer*, const float*);
+typedef void (*CommandBufferSetOuterTessellationLevelsFunc)(CommandBuffer*, const float*);
+typedef void (*CommandBufferSetPrimitiveRestartFunc)(CommandBuffer*, NVNboolean, int);
+typedef void (*CommandBufferBeginTransformFeedbackFunc)(CommandBuffer*, BufferAddress);
+typedef void (*CommandBufferEndTransformFeedbackFunc)(CommandBuffer*, BufferAddress);
+typedef void (*CommandBufferPauseTransformFeedbackFunc)(CommandBuffer*, BufferAddress);
+typedef void (*CommandBufferResumeTransformFeedbackFunc)(CommandBuffer*, BufferAddress);
+typedef void (*CommandBufferDrawTransformFeedbackFunc)(CommandBuffer*, DrawPrimitive::Enum,
+                                                       BufferAddress);
+typedef void (*CommandBufferDrawArraysFunc)(CommandBuffer*, DrawPrimitive::Enum, int, int);
+typedef void (*CommandBufferDrawElementsFunc)(CommandBuffer*, DrawPrimitive::Enum, IndexType::Enum,
+                                              int, BufferAddress);
+typedef void (*CommandBufferDrawElementsBaseVertexFunc)(CommandBuffer*, DrawPrimitive::Enum,
+                                                        IndexType::Enum, int, BufferAddress, int);
+typedef void (*CommandBufferDrawArraysInstancedFunc)(CommandBuffer*, DrawPrimitive::Enum, int, int,
+                                                     int, int);
+typedef void (*CommandBufferDrawElementsInstancedFunc)(CommandBuffer*, DrawPrimitive::Enum,
+                                                       IndexType::Enum, int, BufferAddress, int,
+                                                       int, int);
+typedef void (*CommandBufferDrawArraysIndirectFunc)(CommandBuffer*, DrawPrimitive::Enum,
+                                                    BufferAddress);
+typedef void (*CommandBufferDrawElementsIndirectFunc)(CommandBuffer*, DrawPrimitive::Enum,
+                                                      IndexType::Enum, BufferAddress,
+                                                      BufferAddress);
+typedef void (*CommandBufferMultiDrawArraysIndirectCountFunc)(CommandBuffer*, DrawPrimitive::Enum,
+                                                              BufferAddress, BufferAddress, int,
+                                                              ptrdiff_t);
+typedef void (*CommandBufferMultiDrawElementsIndirectCountFunc)(CommandBuffer*, DrawPrimitive::Enum,
                                                                 IndexType::Enum, BufferAddress,
-                                                                BufferAddress);
-/*11849*/ typedef void (*CommandBufferMultiDrawArraysIndirectCountFunc)(
-    CommandBuffer*, DrawPrimitive::Enum, BufferAddress, BufferAddress, int, ptrdiff_t);
-/*11850*/ typedef void (*CommandBufferMultiDrawElementsIndirectCountFunc)(
-    CommandBuffer*, DrawPrimitive::Enum, IndexType::Enum, BufferAddress, BufferAddress,
-    BufferAddress, int, ptrdiff_t);
-/*11851*/ typedef void (*CommandBufferClearColorFunc)(CommandBuffer*, int, const float*, int);
-/*11852*/ typedef void (*CommandBufferClearColoriFunc)(CommandBuffer*, int, const int*, int);
-/*11853*/ typedef void (*CommandBufferClearColoruiFunc)(CommandBuffer*, int, const uint32_t*, int);
-/*11854*/ typedef void (*CommandBufferClearDepthStencilFunc)(CommandBuffer*, float, NVNboolean, int,
+                                                                BufferAddress, BufferAddress, int,
+                                                                ptrdiff_t);
+typedef void (*CommandBufferClearColorFunc)(CommandBuffer*, int, const float*, int);
+typedef void (*CommandBufferClearColoriFunc)(CommandBuffer*, int, const int*, int);
+typedef void (*CommandBufferClearColoruiFunc)(CommandBuffer*, int, const uint32_t*, int);
+typedef void (*CommandBufferClearDepthStencilFunc)(CommandBuffer*, float, NVNboolean, int, int);
+typedef void (*CommandBufferDispatchComputeFunc)(CommandBuffer*, int, int, int);
+typedef void (*CommandBufferDispatchComputeIndirectFunc)(CommandBuffer*, BufferAddress);
+typedef void (*CommandBufferSetViewportFunc)(CommandBuffer*, int, int, int, int);
+typedef void (*CommandBufferSetViewportsFunc)(CommandBuffer*, int, int, const float*);
+typedef void (*CommandBufferSetViewportSwizzlesFunc)(CommandBuffer*, int, int,
+                                                     const ViewportSwizzle*);
+typedef void (*CommandBufferSetScissorFunc)(CommandBuffer*, int, int, int, int);
+typedef void (*CommandBufferSetScissorsFunc)(CommandBuffer*, int, int, const int*);
+typedef void (*CommandBufferSetDepthRangeFunc)(CommandBuffer*, float, float);
+typedef void (*CommandBufferSetDepthBoundsFunc)(CommandBuffer*, NVNboolean, float, float);
+typedef void (*CommandBufferSetDepthRangesFunc)(CommandBuffer*, int, int, const float*);
+typedef void (*CommandBufferSetTiledCacheActionFunc)(CommandBuffer*, TiledCacheAction::Enum);
+typedef void (*CommandBufferSetTiledCacheTileSizeFunc)(CommandBuffer*, int, int);
+typedef void (*CommandBufferBindSeparateTextureFunc)(CommandBuffer*, ShaderStage::Enum, int,
+                                                     SeparateTextureHandle);
+typedef void (*CommandBufferBindSeparateSamplerFunc)(CommandBuffer*, ShaderStage::Enum, int,
+                                                     SeparateSamplerHandle);
+typedef void (*CommandBufferBindSeparateTexturesFunc)(CommandBuffer*, ShaderStage::Enum, int, int,
+                                                      const SeparateTextureHandle*);
+typedef void (*CommandBufferBindSeparateSamplersFunc)(CommandBuffer*, ShaderStage::Enum, int, int,
+                                                      const SeparateSamplerHandle*);
+typedef void (*CommandBufferSetStencilValueMaskFunc)(CommandBuffer*, Face::Enum, int);
+typedef void (*CommandBufferSetStencilMaskFunc)(CommandBuffer*, Face::Enum, int);
+typedef void (*CommandBufferSetStencilRefFunc)(CommandBuffer*, Face::Enum, int);
+typedef void (*CommandBufferSetBlendColorFunc)(CommandBuffer*, const float*);
+typedef void (*CommandBufferSetPointSizeFunc)(CommandBuffer*, float);
+typedef void (*CommandBufferSetLineWidthFunc)(CommandBuffer*, float);
+typedef void (*CommandBufferSetPolygonOffsetClampFunc)(CommandBuffer*, float, float, float);
+typedef void (*CommandBufferSetAlphaRefFunc)(CommandBuffer*, float);
+typedef void (*CommandBufferSetSampleMaskFunc)(CommandBuffer*, int);
+typedef void (*CommandBufferSetRasterizerDiscardFunc)(CommandBuffer*, NVNboolean);
+typedef void (*CommandBufferSetDepthClampFunc)(CommandBuffer*, NVNboolean);
+typedef void (*CommandBufferSetConservativeRasterEnableFunc)(CommandBuffer*, NVNboolean);
+typedef void (*CommandBufferSetConservativeRasterDilateFunc)(CommandBuffer*, float);
+typedef void (*CommandBufferSetSubpixelPrecisionBiasFunc)(CommandBuffer*, int, int);
+typedef void (*CommandBufferCopyBufferToTextureFunc)(CommandBuffer*, BufferAddress, const Texture*,
+                                                     const TextureView*, const CopyRegion*, int);
+typedef void (*CommandBufferCopyTextureToBufferFunc)(CommandBuffer*, const Texture*,
+                                                     const TextureView*, const CopyRegion*,
+                                                     BufferAddress, int);
+typedef void (*CommandBufferCopyTextureToTextureFunc)(CommandBuffer*, const Texture*,
+                                                      const TextureView*, const CopyRegion*,
+                                                      const Texture*, const TextureView*,
+                                                      const CopyRegion*, int);
+typedef void (*CommandBufferCopyBufferToBufferFunc)(CommandBuffer*, BufferAddress, BufferAddress,
+                                                    size_t, int);
+typedef void (*CommandBufferClearBufferFunc)(CommandBuffer*, BufferAddress, size_t, uint32_t);
+typedef void (*CommandBufferClearTextureFunc)(CommandBuffer*, const Texture*, const TextureView*,
+                                              const CopyRegion*, const float*, int);
+typedef void (*CommandBufferClearTextureiFunc)(CommandBuffer*, const Texture*, const TextureView*,
+                                               const CopyRegion*, const int*, int);
+typedef void (*CommandBufferClearTextureuiFunc)(CommandBuffer*, const Texture*, const TextureView*,
+                                                const CopyRegion*, const uint32_t*, int);
+typedef void (*CommandBufferUpdateUniformBufferFunc)(CommandBuffer*, BufferAddress, size_t,
+                                                     ptrdiff_t, size_t, const void*);
+typedef void (*CommandBufferReportCounterFunc)(CommandBuffer*, CounterType::Enum, BufferAddress);
+typedef void (*CommandBufferResetCounterFunc)(CommandBuffer*, CounterType::Enum);
+typedef void (*CommandBufferReportValueFunc)(CommandBuffer*, uint32_t, BufferAddress);
+typedef void (*CommandBufferSetRenderEnableFunc)(CommandBuffer*, NVNboolean);
+typedef void (*CommandBufferSetRenderEnableConditionalFunc)(CommandBuffer*,
+                                                            ConditionalRenderMode::Enum,
+                                                            BufferAddress);
+typedef void (*CommandBufferSetRenderTargetsFunc)(CommandBuffer*, int, const Texture* const*,
+                                                  const TextureView* const*, const Texture*,
+                                                  const TextureView*);
+typedef void (*CommandBufferDiscardColorFunc)(CommandBuffer*, int);
+typedef void (*CommandBufferDiscardDepthStencilFunc)(CommandBuffer*);
+typedef void (*CommandBufferDownsampleFunc)(CommandBuffer*, const Texture*, const Texture*);
+typedef void (*CommandBufferTiledDownsampleFunc)(CommandBuffer*, const Texture*, const Texture*);
+typedef void (*CommandBufferDownsampleTextureViewFunc)(CommandBuffer*, const Texture*,
+                                                       const TextureView*, const Texture*,
+                                                       const TextureView*);
+typedef void (*CommandBufferTiledDownsampleTextureViewFunc)(CommandBuffer*, const Texture*,
+                                                            const TextureView*, const Texture*,
+                                                            const TextureView*);
+typedef void (*CommandBufferBarrierFunc)(CommandBuffer*, int);
+typedef void (*CommandBufferWaitSyncFunc)(CommandBuffer*, const Sync*);
+typedef void (*CommandBufferFenceSyncFunc)(CommandBuffer*, Sync*, SyncCondition::Enum, int);
+typedef void (*CommandBufferSetTexturePoolFunc)(CommandBuffer*, const TexturePool*);
+typedef void (*CommandBufferSetSamplerPoolFunc)(CommandBuffer*, const SamplerPool*);
+typedef void (*CommandBufferSetShaderScratchMemoryFunc)(CommandBuffer*, const MemoryPool*,
+                                                        ptrdiff_t, size_t);
+typedef void (*CommandBufferSaveZCullDataFunc)(CommandBuffer*, BufferAddress, size_t);
+typedef void (*CommandBufferRestoreZCullDataFunc)(CommandBuffer*, BufferAddress, size_t);
+typedef void (*CommandBufferSetCopyRowStrideFunc)(CommandBuffer*, ptrdiff_t);
+typedef void (*CommandBufferSetCopyImageStrideFunc)(CommandBuffer*, ptrdiff_t);
+typedef ptrdiff_t (*CommandBufferGetCopyRowStrideFunc)(const CommandBuffer*);
+typedef ptrdiff_t (*CommandBufferGetCopyImageStrideFunc)(const CommandBuffer*);
+typedef void (*CommandBufferDrawTextureFunc)(CommandBuffer*, TextureHandle,
+                                             const DrawTextureRegion*, const DrawTextureRegion*);
+typedef NVNboolean (*ProgramSetSubroutineLinkageFunc)(Program*, int,
+                                                      const NVNsubroutineLinkageMapPtr*);
+typedef void (*CommandBufferSetProgramSubroutinesFunc)(CommandBuffer*, Program*, ShaderStage::Enum,
+                                                       const int, const int, const int*);
+typedef void (*CommandBufferBindCoverageModulationTableFunc)(CommandBuffer*, const float*);
+typedef void (*CommandBufferResolveDepthBufferFunc)(CommandBuffer*);
+typedef void (*CommandBufferSetColorReductionEnableFunc)(CommandBuffer*, NVNboolean);
+typedef void (*CommandBufferSetColorReductionThresholdsFunc)(CommandBuffer*, FormatClass::Enum, int,
                                                              int);
-/*11855*/ typedef void (*CommandBufferDispatchComputeFunc)(CommandBuffer*, int, int, int);
-/*11856*/ typedef void (*CommandBufferDispatchComputeIndirectFunc)(CommandBuffer*, BufferAddress);
-/*11857*/ typedef void (*CommandBufferSetViewportFunc)(CommandBuffer*, int, int, int, int);
-/*11858*/ typedef void (*CommandBufferSetViewportsFunc)(CommandBuffer*, int, int, const float*);
-/*11859*/ typedef void (*CommandBufferSetViewportSwizzlesFunc)(CommandBuffer*, int, int,
-                                                               const ViewportSwizzle*);
-/*11860*/ typedef void (*CommandBufferSetScissorFunc)(CommandBuffer*, int, int, int, int);
-/*11861*/ typedef void (*CommandBufferSetScissorsFunc)(CommandBuffer*, int, int, const int*);
-/*11862*/ typedef void (*CommandBufferSetDepthRangeFunc)(CommandBuffer*, float, float);
-/*11863*/ typedef void (*CommandBufferSetDepthBoundsFunc)(CommandBuffer*, NVNboolean, float, float);
-/*11864*/ typedef void (*CommandBufferSetDepthRangesFunc)(CommandBuffer*, int, int, const float*);
-/*11865*/ typedef void (*CommandBufferSetTiledCacheActionFunc)(CommandBuffer*,
-                                                               TiledCacheAction::Enum);
-/*11866*/ typedef void (*CommandBufferSetTiledCacheTileSizeFunc)(CommandBuffer*, int, int);
-/*11867*/ typedef void (*CommandBufferBindSeparateTextureFunc)(CommandBuffer*, ShaderStage::Enum,
-                                                               int, SeparateTextureHandle);
-/*11868*/ typedef void (*CommandBufferBindSeparateSamplerFunc)(CommandBuffer*, ShaderStage::Enum,
-                                                               int, SeparateSamplerHandle);
-/*11869*/ typedef void (*CommandBufferBindSeparateTexturesFunc)(CommandBuffer*, ShaderStage::Enum,
-                                                                int, int,
-                                                                const SeparateTextureHandle*);
-/*11870*/ typedef void (*CommandBufferBindSeparateSamplersFunc)(CommandBuffer*, ShaderStage::Enum,
-                                                                int, int,
-                                                                const SeparateSamplerHandle*);
-/*11871*/ typedef void (*CommandBufferSetStencilValueMaskFunc)(CommandBuffer*, Face::Enum, int);
-/*11872*/ typedef void (*CommandBufferSetStencilMaskFunc)(CommandBuffer*, Face::Enum, int);
-/*11873*/ typedef void (*CommandBufferSetStencilRefFunc)(CommandBuffer*, Face::Enum, int);
-/*11874*/ typedef void (*CommandBufferSetBlendColorFunc)(CommandBuffer*, const float*);
-/*11875*/ typedef void (*CommandBufferSetPointSizeFunc)(CommandBuffer*, float);
-/*11876*/ typedef void (*CommandBufferSetLineWidthFunc)(CommandBuffer*, float);
-/*11877*/ typedef void (*CommandBufferSetPolygonOffsetClampFunc)(CommandBuffer*, float, float,
-                                                                 float);
-/*11878*/ typedef void (*CommandBufferSetAlphaRefFunc)(CommandBuffer*, float);
-/*11879*/ typedef void (*CommandBufferSetSampleMaskFunc)(CommandBuffer*, int);
-/*11880*/ typedef void (*CommandBufferSetRasterizerDiscardFunc)(CommandBuffer*, NVNboolean);
-/*11881*/ typedef void (*CommandBufferSetDepthClampFunc)(CommandBuffer*, NVNboolean);
-/*11882*/ typedef void (*CommandBufferSetConservativeRasterEnableFunc)(CommandBuffer*, NVNboolean);
-/*11883*/ typedef void (*CommandBufferSetConservativeRasterDilateFunc)(CommandBuffer*, float);
-/*11884*/ typedef void (*CommandBufferSetSubpixelPrecisionBiasFunc)(CommandBuffer*, int, int);
-/*11885*/ typedef void (*CommandBufferCopyBufferToTextureFunc)(CommandBuffer*, BufferAddress,
-                                                               const Texture*, const TextureView*,
-                                                               const CopyRegion*, int);
-/*11886*/ typedef void (*CommandBufferCopyTextureToBufferFunc)(CommandBuffer*, const Texture*,
-                                                               const TextureView*,
-                                                               const CopyRegion*, BufferAddress,
-                                                               int);
-/*11887*/ typedef void (*CommandBufferCopyTextureToTextureFunc)(CommandBuffer*, const Texture*,
-                                                                const TextureView*,
-                                                                const CopyRegion*, const Texture*,
-                                                                const TextureView*,
-                                                                const CopyRegion*, int);
-/*11888*/ typedef void (*CommandBufferCopyBufferToBufferFunc)(CommandBuffer*, BufferAddress,
-                                                              BufferAddress, size_t, int);
-/*11889*/ typedef void (*CommandBufferClearBufferFunc)(CommandBuffer*, BufferAddress, size_t,
-                                                       uint32_t);
-/*11890*/ typedef void (*CommandBufferClearTextureFunc)(CommandBuffer*, const Texture*,
-                                                        const TextureView*, const CopyRegion*,
-                                                        const float*, int);
-/*11891*/ typedef void (*CommandBufferClearTextureiFunc)(CommandBuffer*, const Texture*,
-                                                         const TextureView*, const CopyRegion*,
-                                                         const int*, int);
-/*11892*/ typedef void (*CommandBufferClearTextureuiFunc)(CommandBuffer*, const Texture*,
-                                                          const TextureView*, const CopyRegion*,
-                                                          const uint32_t*, int);
-/*11893*/ typedef void (*CommandBufferUpdateUniformBufferFunc)(CommandBuffer*, BufferAddress,
-                                                               size_t, ptrdiff_t, size_t,
-                                                               const void*);
-/*11894*/ typedef void (*CommandBufferReportCounterFunc)(CommandBuffer*, CounterType::Enum,
-                                                         BufferAddress);
-/*11895*/ typedef void (*CommandBufferResetCounterFunc)(CommandBuffer*, CounterType::Enum);
-/*11896*/ typedef void (*CommandBufferReportValueFunc)(CommandBuffer*, uint32_t, BufferAddress);
-/*11897*/ typedef void (*CommandBufferSetRenderEnableFunc)(CommandBuffer*, NVNboolean);
-/*11898*/ typedef void (*CommandBufferSetRenderEnableConditionalFunc)(CommandBuffer*,
-                                                                      ConditionalRenderMode::Enum,
-                                                                      BufferAddress);
-/*11899*/ typedef void (*CommandBufferSetRenderTargetsFunc)(CommandBuffer*, int,
-                                                            const Texture* const*,
-                                                            const TextureView* const*,
-                                                            const Texture*, const TextureView*);
-/*11900*/ typedef void (*CommandBufferDiscardColorFunc)(CommandBuffer*, int);
-/*11901*/ typedef void (*CommandBufferDiscardDepthStencilFunc)(CommandBuffer*);
-/*11902*/ typedef void (*CommandBufferDownsampleFunc)(CommandBuffer*, const Texture*,
-                                                      const Texture*);
-/*11903*/ typedef void (*CommandBufferTiledDownsampleFunc)(CommandBuffer*, const Texture*,
-                                                           const Texture*);
-/*11904*/ typedef void (*CommandBufferDownsampleTextureViewFunc)(CommandBuffer*, const Texture*,
-                                                                 const TextureView*, const Texture*,
-                                                                 const TextureView*);
-/*11905*/ typedef void (*CommandBufferTiledDownsampleTextureViewFunc)(
-    CommandBuffer*, const Texture*, const TextureView*, const Texture*, const TextureView*);
-/*11906*/ typedef void (*CommandBufferBarrierFunc)(CommandBuffer*, int);
-/*11907*/ typedef void (*CommandBufferWaitSyncFunc)(CommandBuffer*, const Sync*);
-/*11908*/ typedef void (*CommandBufferFenceSyncFunc)(CommandBuffer*, Sync*, SyncCondition::Enum,
-                                                     int);
-/*11909*/ typedef void (*CommandBufferSetTexturePoolFunc)(CommandBuffer*, const TexturePool*);
-/*11910*/ typedef void (*CommandBufferSetSamplerPoolFunc)(CommandBuffer*, const SamplerPool*);
-/*11911*/ typedef void (*CommandBufferSetShaderScratchMemoryFunc)(CommandBuffer*, const MemoryPool*,
-                                                                  ptrdiff_t, size_t);
-/*11912*/ typedef void (*CommandBufferSaveZCullDataFunc)(CommandBuffer*, BufferAddress, size_t);
-/*11913*/ typedef void (*CommandBufferRestoreZCullDataFunc)(CommandBuffer*, BufferAddress, size_t);
-/*11914*/ typedef void (*CommandBufferSetCopyRowStrideFunc)(CommandBuffer*, ptrdiff_t);
-/*11915*/ typedef void (*CommandBufferSetCopyImageStrideFunc)(CommandBuffer*, ptrdiff_t);
-/*11916*/ typedef ptrdiff_t (*CommandBufferGetCopyRowStrideFunc)(const CommandBuffer*);
-/*11917*/ typedef ptrdiff_t (*CommandBufferGetCopyImageStrideFunc)(const CommandBuffer*);
-/*11918*/ typedef void (*CommandBufferDrawTextureFunc)(CommandBuffer*, TextureHandle,
-                                                       const DrawTextureRegion*,
-                                                       const DrawTextureRegion*);
-/*11919*/ typedef NVNboolean (*ProgramSetSubroutineLinkageFunc)(Program*, int,
-                                                                const NVNsubroutineLinkageMapPtr*);
-/*11920*/ typedef void (*CommandBufferSetProgramSubroutinesFunc)(CommandBuffer*, Program*,
-                                                                 ShaderStage::Enum, const int,
-                                                                 const int, const int*);
-/*11921*/ typedef void (*CommandBufferBindCoverageModulationTableFunc)(CommandBuffer*,
-                                                                       const float*);
-/*11922*/ typedef void (*CommandBufferResolveDepthBufferFunc)(CommandBuffer*);
-/*11923*/ typedef void (*CommandBufferSetColorReductionEnableFunc)(CommandBuffer*, NVNboolean);
-/*11924*/ typedef void (*CommandBufferSetColorReductionThresholdsFunc)(CommandBuffer*,
-                                                                       FormatClass::Enum, int, int);
-/*11925*/ typedef void (*CommandBufferPushDebugGroupStaticFunc)(CommandBuffer*, uint32_t,
-                                                                const char*);
-/*11926*/ typedef void (*CommandBufferPushDebugGroupDynamicFunc)(CommandBuffer*, uint32_t,
-                                                                 const char*);
-/*11927*/ typedef void (*CommandBufferPushDebugGroupFunc)(CommandBuffer*, const char*);
-/*11928*/ typedef void (*CommandBufferPopDebugGroupFunc)(CommandBuffer*);
-/*11929*/ typedef void (*CommandBufferPopDebugGroupIdFunc)(CommandBuffer*, uint32_t);
-/*11930*/ typedef void (*CommandBufferInsertDebugMarkerStaticFunc)(CommandBuffer*, uint32_t,
-                                                                   const char*);
-/*11931*/ typedef void (*CommandBufferInsertDebugMarkerDynamicFunc)(CommandBuffer*, uint32_t,
-                                                                    const char*);
-/*11932*/ typedef void (*CommandBufferInsertDebugMarkerFunc)(CommandBuffer*, const char*);
-/*11933*/ typedef CommandBufferMemoryCallbackFunc (*CommandBufferGetMemoryCallbackFunc)(
-    const CommandBuffer*);
-/*11934*/ typedef void* (*CommandBufferGetMemoryCallbackDataFunc)(const CommandBuffer*);
-/*11935*/ typedef NVNboolean (*CommandBufferIsRecordingFunc)(const CommandBuffer*);
-/*11936*/ typedef NVNboolean (*SyncInitializeFunc)(Sync*, Device*);
-/*11937*/ typedef void (*SyncFinalizeFunc)(Sync*);
-/*11938*/ typedef void (*SyncSetDebugLabelFunc)(Sync*, const char*);
-/*11939*/ typedef void (*QueueFenceSyncFunc)(Queue*, Sync*, SyncCondition::Enum, int);
-/*11940*/ typedef SyncWaitResult::Enum (*SyncWaitFunc)(const Sync*, uint64_t);
-/*11941*/ typedef NVNboolean (*QueueWaitSyncFunc)(Queue*, const Sync*);
-/*11942*/ typedef void (*EventBuilderSetDefaultsFunc)(EventBuilder*);
-/*11943*/ typedef void (*EventBuilderSetStorageFunc)(EventBuilder*, const MemoryPool*, int64_t);
-/*11944*/ typedef const MemoryPool* (*EventBuilderGetStorageFunc)(const EventBuilder*, int64_t*);
-/*11945*/ typedef NVNboolean (*EventInitializeFunc)(Event*, const EventBuilder*);
-/*11946*/ typedef void (*EventFinalizeFunc)(Event*);
-/*11947*/ typedef uint32_t (*EventGetValueFunc)(const Event*);
-/*11948*/ typedef void (*EventSignalFunc)(Event*, EventSignalMode::Enum, uint32_t);
-/*11949*/ typedef void (*CommandBufferWaitEventFunc)(CommandBuffer*, const Event*,
-                                                     EventWaitMode::Enum, uint32_t);
-/*11950*/ typedef void (*CommandBufferSignalEventFunc)(CommandBuffer*, const Event*,
-                                                       EventSignalMode::Enum,
-                                                       EventSignalLocation::Enum, int, uint32_t);
-/*11951*/ typedef void (*CommandBufferSetStencilCullCriteriaFunc)(CommandBuffer*, StencilFunc::Enum,
-                                                                  int, int);
+typedef void (*CommandBufferPushDebugGroupStaticFunc)(CommandBuffer*, uint32_t, const char*);
+typedef void (*CommandBufferPushDebugGroupDynamicFunc)(CommandBuffer*, uint32_t, const char*);
+typedef void (*CommandBufferPushDebugGroupFunc)(CommandBuffer*, const char*);
+typedef void (*CommandBufferPopDebugGroupFunc)(CommandBuffer*);
+typedef void (*CommandBufferPopDebugGroupIdFunc)(CommandBuffer*, uint32_t);
+typedef void (*CommandBufferInsertDebugMarkerStaticFunc)(CommandBuffer*, uint32_t, const char*);
+typedef void (*CommandBufferInsertDebugMarkerDynamicFunc)(CommandBuffer*, uint32_t, const char*);
+typedef void (*CommandBufferInsertDebugMarkerFunc)(CommandBuffer*, const char*);
+typedef CommandBufferMemoryCallbackFunc (*CommandBufferGetMemoryCallbackFunc)(const CommandBuffer*);
+typedef void* (*CommandBufferGetMemoryCallbackDataFunc)(const CommandBuffer*);
+typedef NVNboolean (*CommandBufferIsRecordingFunc)(const CommandBuffer*);
+typedef NVNboolean (*SyncInitializeFunc)(Sync*, Device*);
+typedef void (*SyncFinalizeFunc)(Sync*);
+typedef void (*SyncSetDebugLabelFunc)(Sync*, const char*);
+typedef void (*QueueFenceSyncFunc)(Queue*, Sync*, SyncCondition::Enum, int);
+typedef SyncWaitResult::Enum (*SyncWaitFunc)(const Sync*, uint64_t);
+typedef NVNboolean (*QueueWaitSyncFunc)(Queue*, const Sync*);
+typedef void (*EventBuilderSetDefaultsFunc)(EventBuilder*);
+typedef void (*EventBuilderSetStorageFunc)(EventBuilder*, const MemoryPool*, int64_t);
+typedef const MemoryPool* (*EventBuilderGetStorageFunc)(const EventBuilder*, int64_t*);
+typedef NVNboolean (*EventInitializeFunc)(Event*, const EventBuilder*);
+typedef void (*EventFinalizeFunc)(Event*);
+typedef uint32_t (*EventGetValueFunc)(const Event*);
+typedef void (*EventSignalFunc)(Event*, EventSignalMode::Enum, uint32_t);
+typedef void (*CommandBufferWaitEventFunc)(CommandBuffer*, const Event*, EventWaitMode::Enum,
+                                           uint32_t);
+typedef void (*CommandBufferSignalEventFunc)(CommandBuffer*, const Event*, EventSignalMode::Enum,
+                                             EventSignalLocation::Enum, int, uint32_t);
+typedef void (*CommandBufferSetStencilCullCriteriaFunc)(CommandBuffer*, StencilFunc::Enum, int,
+                                                        int);
 }  // namespace nvn
