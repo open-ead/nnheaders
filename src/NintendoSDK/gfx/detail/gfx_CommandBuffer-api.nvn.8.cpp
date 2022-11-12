@@ -4,9 +4,6 @@
 #include <nn/gfx/detail/gfx_State-api.nvn.8.h>
 #include <nn/gfx/memory.h>
 
-#include <nvn/nvn_api.h>
-#include <nvn/nvn_types.h>
-
 #include "gfx_NvnHelper.h"
 
 namespace nn::gfx::detail {
@@ -206,6 +203,7 @@ void CommandBufferImpl<NvnApi>::SetBlendState(const BlendStateImpl<NvnApi>* pBle
 }
 
 void CommandBufferImpl<NvnApi>::SetDepthStencilState(const DepthStencilStateImpl<NvnApi>* depth) {
+    /*
     nvnCommandBufferBindDepthStencilState(pNvnCommandBuffer, depth->nDepthStencilState);
     nvnCommandBufferSetStencilValueMask(pNvnCommandBuffer, NVN_FACE_FRONT_AND_BACK, depth->field_8);
     nvnCommandBufferSetStencilMask(pNvnCommandBuffer, NVN_FACE_FRONT_AND_BACK, depth->field_C);
@@ -213,6 +211,7 @@ void CommandBufferImpl<NvnApi>::SetDepthStencilState(const DepthStencilStateImpl
     nvnCommandBufferSetStencilRef(pNvnCommandBuffer, NVN_FACE_FRONT, depth->field_14);
     if ((depth->flag & 8) == 0)
         nvnCommandBufferSetDepthBounds(pNvnCommandBuffer, false, 0.0, 1.0);
+    */
 }
 
 }  // namespace nn::gfx::detail

@@ -19,7 +19,8 @@ struct BitPack {
 
     bool GetBit(int p) const { return IsAnyBitOn(MakeMask(p)); }
 
-    void Clear();
+    void Clear() { storage = 0; }
+
     void SetMaskedBits(int, int);
     int GetMaskedBits(int) const;
     void SetAllBitOn(int);

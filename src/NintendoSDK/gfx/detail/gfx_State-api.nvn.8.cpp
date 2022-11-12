@@ -141,7 +141,9 @@ void DepthStencilStateImpl<NvnApi>::Initialize(Device*, const DepthStencilStateI
 */
 
 void DepthStencilStateImpl<NvnApi>::Finalize(Device*) {
+    /*
     initialized = false;
+    */
 }
 
 }  // namespace nn::gfx::detail

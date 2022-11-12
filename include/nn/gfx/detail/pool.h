@@ -3,7 +3,7 @@
 #include <nn/gfx/api.h>
 #include <nn/gfx/detail/fwd.h>
 #include <nn/types.h>
-#include <nvn/nvn_types.h>
+#include <nvn/nvn.h>
 
 namespace nn::gfx {
 

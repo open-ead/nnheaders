@@ -1,6 +1,6 @@
 #include "gfx_NvnHelper.h"
 
-#include "nvn/nvn_api.h"
+#include <nvn/nvn_FuncPtrImpl.h>
 
 namespace nn::gfx::detail {
 

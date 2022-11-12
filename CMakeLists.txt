@@ -152,7 +152,6 @@ add_library(NintendoSDK OBJECT
   src/NintendoSDK/gfx/detail/gfx_State-api.nvn.8.cpp
   src/NintendoSDK/gfx/gfx_StateInfo.cpp
   src/NintendoSDK/nnSdk/util.cpp
-  src/NintendoSDK/nvn/nvnInit.cpp
 )
 
 target_include_directories(NintendoSDK PUBLIC include/)

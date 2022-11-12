@@ -5,8 +5,6 @@
 #include <nn/gfx/detail/gfx_DataContainer.h>
 #include <nn/gfx/gfx_Enum.h>
 #include <nn/gfx/gfx_StateInfoData.h>
-#include <nvn/nvn_api.h>
-#include <nvn/nvn_types.h>
 
 namespace nn::gfx {
 

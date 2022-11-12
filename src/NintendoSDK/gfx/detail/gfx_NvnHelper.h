@@ -4,7 +4,8 @@
 #include <nn/gfx/gfx_GpuAddress.h>
 #include <nn/time.h>
 #include <nn/util/util_BitPack.h>
-#include <nvn/nvn_types.h>
+#include <nvn/nvn.h>
+#include <nvn/nvn_FuncPtrInline.h>
 
 namespace nn::gfx {
 

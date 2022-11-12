@@ -4,8 +4,6 @@
 #include <nn/gfx/detail/fwd.h>
 #include <nn/gfx/gfx_StateData-api.nvn.8.h>
 #include <nn/gfx/gfx_StateInfo.h>
-#include <nvn/nvn_api.h>
-#include <nvn/nvn_types.h>
 
 namespace nn::gfx {
 namespace detail {
@@ -52,15 +50,6 @@ public:
 
     void Initialize(Device*, const DepthStencilStateInfo& info);
     void Finalize(Device*);
-
-    NVNdepthStencilState* nDepthStencilState;
-    int field_8;
-    int field_C;
-    int field_10;
-    int field_14;
-    bool initialized;
-    char _19;
-    uint16_t flag;
 };
 
 template <>
