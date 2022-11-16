@@ -1,11 +1,13 @@
 #pragma once
 
-#include "nn/gfx/detail/fwd.h"
+#include <nn/gfx/gfx_Common.h>
 
 namespace nn::gfx {
 
 template <class TTarget>
 class TCommandBuffer : public detail::CommandBufferImpl<TTarget> {
+    NN_GFX_NO_COPY(TCommandBuffer);
+
     typedef void (*OutOfMemoryEventCallback)(TCommandBuffer<TTarget>*, const OutOfMemoryEventArg&);
 
 public:

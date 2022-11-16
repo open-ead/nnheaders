@@ -8,7 +8,7 @@ RasterizerStateImpl<NvnApi>::RasterizerStateImpl() {}
 
 RasterizerStateImpl<NvnApi>::~RasterizerStateImpl() {}
 
-void RasterizerStateImpl<NvnApi>::Initialize(Device* device, const InfoType& info) {
+void RasterizerStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* device, const InfoType& info) {
     NVNpolygonState* pnPolygonState = reinterpret_cast<NVNpolygonState*>(&nvnPolygonState);
     NVNmultisampleState* pnMultisampleState =
         reinterpret_cast<NVNmultisampleState*>(&nvnMultisampleState);
@@ -47,7 +47,7 @@ void RasterizerStateImpl<NvnApi>::Initialize(Device* device, const InfoType& inf
     state = State_Initialized;
 }
 
-void RasterizerStateImpl<NvnApi>::Finalize(Device*) {
+void RasterizerStateImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
     state = State_NotInitialized;
 }
 
@@ -72,9 +72,9 @@ void* BlendStateImpl<NvnApi>::GetMemory() const {
     return pNvnBlendStateData;
 }
 
-void BlendStateImpl<NvnApi>::Initialize(Device* device, const InfoType& info) {
-    auto pnColorState = reinterpret_cast<NVNcolorState*>(nvnColorState);
-    auto pnChannelMaskState = reinterpret_cast<NVNchannelMaskState*>(nvnChannelMaskState);
+void BlendStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* device, const InfoType& info) {
+    auto pnColorState = reinterpret_cast<NVNcolorState*>(&nvnColorState);
+    auto pnChannelMaskState = reinterpret_cast<NVNchannelMaskState*>(&nvnChannelMaskState);
     NVNblendState* pnBlendState = pNvnBlendStateData;
     const BlendTargetStateInfo* pTargetInfo = info.GetBlendTargetStateInfoArray();
 
@@ -88,12 +88,12 @@ void BlendStateImpl<NvnApi>::Initialize(Device* device, const InfoType& info) {
 
     targetCount = info.GetBlendTargetCount();
 
-    for (int i = 0; i < targetCount; ++i) {
+    for (int i = 0; i < info.GetBlendTargetCount(); ++i) {
+        int infoOffset = (info.IsIndependentBlendEnabled()) ? i : 0;
+
         nvnColorStateSetBlendEnable(pnColorState, i, pTargetInfo[i].IsBlendEnabled());
         nvnBlendStateSetDefaults(&pnBlendState[i]);
         nvnBlendStateSetBlendTarget(&pnBlendState[i], i);
-
-        int infoOffset = (info.IsIndependentBlendEnabled()) ? i : 0;
 
         nvnBlendStateSetBlendFunc(
             &pnBlendState[i],
@@ -108,10 +108,11 @@ void BlendStateImpl<NvnApi>::Initialize(Device* device, const InfoType& info) {
             Nvn::GetBlendEquation(pTargetInfo[infoOffset].GetAlphaBlendFunction()));
 
         nvnChannelMaskStateSetChannelMask(
-            pnChannelMaskState, i, pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Red,
-            pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Green,
-            pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Blue,
-            pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Alpha);
+            pnChannelMaskState, i,
+            (pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Red) == ChannelMask_Red,
+            (pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Green) == ChannelMask_Green,
+            (pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Blue) == ChannelMask_Blue,
+            (pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Alpha) == ChannelMask_Alpha);
     }
 
     if (info.IsLogicOperationEnabled()) {
@@ -121,7 +122,7 @@ void BlendStateImpl<NvnApi>::Initialize(Device* device, const InfoType& info) {
     state = State_Initialized;
 }
 
-void BlendStateImpl<NvnApi>::Finalize(Device* device) {
+void BlendStateImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>* device) {
     state = State_NotInitialized;
 }
 
@@ -129,21 +130,94 @@ DepthStencilStateImpl<NvnApi>::DepthStencilStateImpl() {}
 
 DepthStencilStateImpl<NvnApi>::~DepthStencilStateImpl() {}
 
-/*
-void DepthStencilStateImpl<NvnApi>::Initialize(Device*, const DepthStencilStateInfo& info) {
-    nvnDepthStencilStateSetDefaults(nDepthStencilState);
-    nvnDepthStencilStateSetDepthTestEnable(nDepthStencilState, a3->field_4 & 1);
-    nvnDepthStencilStateSetDepthWriteEnable(nDepthStencilState, (a3->field_4 >> 1) & 1);
-    nvnDepthStencilStateSetStencilTestEnable(nDepthStencilState, (a3->field_4 >> 2) & 1);
+void DepthStencilStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>*,
+                                               const DepthStencilStateInfo& info) {
+    auto pnDepth = reinterpret_cast<NVNdepthStencilState*>(&nvnDepthStencilState);
 
-    initialized = true;
+    nvnDepthStencilStateSetDefaults(pnDepth);
+    nvnDepthStencilStateSetDepthTestEnable(pnDepth, info.IsDepthTestEnabled());
+    nvnDepthStencilStateSetDepthWriteEnable(pnDepth, info.IsDepthWriteEnabled());
+    nvnDepthStencilStateSetStencilTestEnable(pnDepth, info.IsStencilTestEnabled());
+
+    nvnDepthStencilStateSetDepthFunc(pnDepth,
+                                     Nvn::GetDepthFunction(info.GetDepthComparisonFunction()));
+
+    nvnDepthStencilStateSetStencilFunc(
+        pnDepth, NVN_FACE_BACK,
+        Nvn::GetStencilFunction(info.GetBackStencilStateInfo().GetComparisonFunction()));
+
+    nvnDepthStencilStateSetStencilOp(
+        pnDepth, NVN_FACE_BACK,
+        Nvn::GetStencilOperation(info.GetBackStencilStateInfo().GetStencilFailOperation()),
+        Nvn::GetStencilOperation(info.GetBackStencilStateInfo().GetDepthFailOperation()),
+        Nvn::GetStencilOperation(info.GetBackStencilStateInfo().GetDepthPassOperation()));
+
+    nvnDepthStencilStateSetStencilFunc(
+        pnDepth, NVN_FACE_FRONT,
+        Nvn::GetStencilFunction(info.GetFrontStencilStateInfo().GetComparisonFunction()));
+
+    nvnDepthStencilStateSetStencilOp(
+        pnDepth, NVN_FACE_FRONT,
+        Nvn::GetStencilOperation(info.GetFrontStencilStateInfo().GetStencilFailOperation()),
+        Nvn::GetStencilOperation(info.GetFrontStencilStateInfo().GetDepthFailOperation()),
+        Nvn::GetStencilOperation(info.GetFrontStencilStateInfo().GetDepthPassOperation()));
+
+    nvnStencilBackRef = info.GetBackStencilStateInfo().GetStencilRef();
+    nvnStencilFrontRef = info.GetFrontStencilStateInfo().GetStencilRef();
+    nvnStencilValueMask = info.GetStencilReadMask();
+    nvnStencilMask = info.GetStencilWriteMask();
+
+    state = State_Initialized;
 }
-*/
 
-void DepthStencilStateImpl<NvnApi>::Finalize(Device*) {
-    /*
-    initialized = false;
-    */
+void DepthStencilStateImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+    state = State_NotInitialized;
+}
+
+size_t VertexStateImpl<NvnApi>::GetRequiredMemorySize(const InfoType& info) {
+    const VertexAttributeStateInfo* pAttrib = info.GetVertexAttributeStateInfoArray();
+    int num = -1;
+
+    for (int i = 0; i < info.GetVertexAttributeCount(); ++i) {
+        int shaderSlot = pAttrib[i].GetShaderSlot();
+
+        if (num < shaderSlot) {
+            num = shaderSlot;
+        }
+
+        if (shaderSlot < 0) {
+            num = 15;
+        }
+    }
+
+    // todo: figure out magic numbers
+    return 4 * (num + 1) + 8 * info.GetVertexBufferCount();
+}
+
+VertexStateImpl<NvnApi>::VertexStateImpl() {}
+
+VertexStateImpl<NvnApi>::~VertexStateImpl() {}
+
+void VertexStateImpl<NvnApi>::SetMemory(void* p, size_t s) {
+    pNvnVertexStreamState = p;
+    memorySize = s;
+}
+
+void* VertexStateImpl<NvnApi>::GetMemory() {
+    return pNvnVertexStreamState;
+}
+
+const void* VertexStateImpl<NvnApi>::GetMemory() const {
+    return pNvnVertexStreamState;
+}
+
+void VertexStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* device, const VertexStateInfo& info,
+                                         const ShaderImpl<NvnApi>* shader) {
+    // todo
+}
+
+void VertexStateImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>* device) {
+    state = State_NotInitialized;
 }
 
 }  // namespace nn::gfx::detail

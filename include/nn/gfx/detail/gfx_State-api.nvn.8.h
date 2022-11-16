@@ -11,20 +11,18 @@ namespace detail {
 template <>
 class RasterizerStateImpl<NvnApi> : public DataContainer<RasterizerStateImplData<NvnApi>> {
 public:
-    using Device = DeviceImpl<NvnApi>;
     typedef RasterizerStateInfo InfoType;
 
     RasterizerStateImpl();
     ~RasterizerStateImpl();
 
-    void Initialize(Device* device, const InfoType& info);
-    void Finalize(Device*);
+    void Initialize(DeviceImpl<NvnApi>* device, const InfoType& info);
+    void Finalize(DeviceImpl<NvnApi>*);
 };
 
 template <>
 class BlendStateImpl<NvnApi> : public DataContainer<BlendStateImplData<NvnApi>> {
 public:
-    using Device = DeviceImpl<NvnApi>;
     typedef BlendStateInfo InfoType;
 
     static size_t GetRequiredMemorySize(const InfoType& info);
@@ -36,27 +34,52 @@ public:
     void* GetMemory();
     void* GetMemory() const;
 
-    void Initialize(Device* device, const InfoType& info);
-    void Finalize(Device* device);
+    void Initialize(DeviceImpl<NvnApi>* device, const InfoType& info);
+    void Finalize(DeviceImpl<NvnApi>* device);
 };
 
 template <>
-class DepthStencilStateImpl<NvnApi> {
+class DepthStencilStateImpl<NvnApi> : public DataContainer<DepthStencilStateImplData<NvnApi>> {
 public:
-    using Device = DeviceImpl<NvnApi>;
+    typedef DepthStencilStateInfo InfoType;
 
     DepthStencilStateImpl();
     ~DepthStencilStateImpl();
 
-    void Initialize(Device*, const DepthStencilStateInfo& info);
-    void Finalize(Device*);
+    void Initialize(DeviceImpl<NvnApi>*, const DepthStencilStateInfo& info);
+    void Finalize(DeviceImpl<NvnApi>*);
 };
 
 template <>
-class VertexStateImpl<NvnApi> {};
+class VertexStateImpl<NvnApi> : public DataContainer<VertexStateImplData<NvnApi>> {
+public:
+    typedef VertexStateInfo InfoType;
+
+    enum RequiredMemoryInfo { RequiredMemoryInfo_Alignment = 8 };
+
+    VertexStateImpl();
+    ~VertexStateImpl();
+    static size_t GetRequiredMemorySize(const InfoType&);
+    void SetMemory(void*, size_t);
+    void* GetMemory();
+    const void* GetMemory() const;
+    void Initialize(DeviceImpl<NvnApi>*, const InfoType&, const ShaderImpl<NvnApi>*);
+    void Finalize(DeviceImpl<NvnApi>*);
+};
 
 template <>
-class TessellationStateImpl<NvnApi> {};
+class TessellationStateImpl<NvnApi> : public DataContainer<TessellationStateImplData<NvnApi>> {
+public:
+    typedef TessellationStateInfo InfoType;
+
+    TessellationStateImpl();
+    ~TessellationStateImpl();
+    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
+    void Finalize(DeviceImpl<NvnApi>*);
+};
+
+template <>
+class ViewportScissorStateImpl<NvnApi> {};
 
 }  // namespace detail
 }  // namespace nn::gfx

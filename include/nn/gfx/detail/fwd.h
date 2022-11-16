@@ -23,6 +23,21 @@ struct RasterizerStateImplData;
 template <typename TTarget>
 struct BlendStateImplData;
 
+template <typename TTarget>
+struct DepthStencilStateImplData;
+
+template <typename TTarget>
+struct VertexStateImplData;
+
+template <typename TTarget>
+struct TessellationStateImplData;
+
+template <typename TTarget>
+struct ViewportScissorStateImplData;
+
+template <typename TTarget>
+struct PipelineImplData;
+
 namespace detail {
 
 template <typename TTarget>
@@ -41,6 +56,21 @@ template <typename TTarget>
 class PipelineImpl;
 
 template <typename TTarget>
+class RootSignatureImpl;
+
+template <typename TTarget>
+class ShaderImpl;
+
+template <typename TTarget>
+class TextureImpl;
+
+template <typename TTarget>
+class DescriptorPoolImpl;
+
+template <typename TTarget>
+class SamplerImpl;
+
+template <typename TTarget>
 class RasterizerStateImpl;
 
 template <typename TTarget>
@@ -56,7 +86,16 @@ template <typename TTarget>
 class TessellationStateImpl;
 
 template <typename TTarget>
-class RootSignatureImpl;
+class ViewportScissorStateImpl;
+
+template <typename TTarget>
+class ColorTargetViewImpl;
+
+template <typename TTarget>
+class DepthStencilViewImpl;
+
+template <typename TTarget>
+class TextureViewImpl;
 
 }  // namespace detail
 

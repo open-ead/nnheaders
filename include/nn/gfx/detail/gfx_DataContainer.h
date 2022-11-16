@@ -92,3 +92,23 @@ public:
 };
 
 }  // namespace nn::gfx::detail
+
+// helper functions, made for convenience
+namespace nn::gfx {
+
+template <typename TData>
+detail::Caster<detail::DataContainer<TData>> DataToAccessor(TData& data) {
+    return detail::DataContainer<TData>::DataToAccessor(data);
+}
+
+template <typename TData>
+detail::Caster<const detail::DataContainer<TData>> DataToAccessor(const TData& data) {
+    return detail::DataContainer<TData>::DataToAccessor(data);
+}
+
+template <typename TData>
+detail::Caster<const detail::DataContainer<TData>> DataToAccessor(const TData* data) {
+    return detail::DataContainer<TData>::DataToAccessor(data);
+}
+
+}  // namespace nn

@@ -9,7 +9,7 @@ NVNblendEquation Nvn::GetBlendEquation(BlendFunction a) {
                                     NVN_BLEND_EQUATION_REVERSE_SUB, NVN_BLEND_EQUATION_MIN,
                                     NVN_BLEND_EQUATION_MAX};
 
-    return eqs[static_cast<u8>(a)];
+    return eqs[a];
 }
 
 NVNblendFunc Nvn::GetBlendFunction(BlendFactor a) {
@@ -35,7 +35,7 @@ NVNblendFunc Nvn::GetBlendFunction(BlendFactor a) {
         NVN_BLEND_FUNC_ONE_MINUS_SRC1_ALPHA,
     };
 
-    return funcs[static_cast<u8>(a)];
+    return funcs[a];
 }
 
 NVNlogicOp Nvn::GetLogicOperation(LogicOperation a) {
@@ -48,20 +48,20 @@ NVNlogicOp Nvn::GetLogicOperation(LogicOperation a) {
                               NVN_LOGIC_OP_COPY_INVERTED, NVN_LOGIC_OP_OR_INVERTED,
                               NVN_LOGIC_OP_NAND,          NVN_LOGIC_OP_SET};
 
-    return ops[static_cast<u8>(a)];
+    return ops[a];
 }
 
 NVNfrontFace Nvn::GetFrontFace(FrontFace a) {
     const NVNfrontFace faces[] = {NVN_FRONT_FACE_CCW, NVN_FRONT_FACE_CW};
 
-    return faces[static_cast<u8>(a)];
+    return faces[a];
 }
 
 NVNpolygonMode Nvn::GetFillMode(FillMode a) {
     const NVNpolygonMode faces[] = {NVN_POLYGON_MODE_POINT, NVN_POLYGON_MODE_LINE,
                                     NVN_POLYGON_MODE_FILL};
 
-    return faces[static_cast<u8>(a)];
+    return faces[a];
 }
 
 NVNdrawPrimitive Nvn::GetDrawPrimitive(PrimitiveTopology a) {
@@ -78,20 +78,20 @@ NVNdrawPrimitive Nvn::GetDrawPrimitive(PrimitiveTopology a) {
         NVN_DRAW_PRIMITIVE_PATCHES,
     };
 
-    return prims[static_cast<int>(a)];
+    return prims[a];
 }
 
 NVNindexType Nvn::GetIndexFormat(IndexFormat a) {
     const NVNindexType formats[] = {NVN_INDEX_TYPE_UNSIGNED_BYTE, NVN_INDEX_TYPE_UNSIGNED_SHORT,
                                     NVN_INDEX_TYPE_UNSIGNED_INT};
 
-    return formats[static_cast<int>(a)];
+    return formats[a];
 }
 
 NVNface Nvn::GetCullMode(CullMode a) {
     const NVNface culls[] = {NVN_FACE_NONE, NVN_FACE_FRONT, NVN_FACE_BACK};
 
-    return culls[static_cast<u8>(a)];
+    return culls[a];
 }
 
 NVNbufferAddress Nvn::GetBufferAddress(GpuAddress addr) {
@@ -100,6 +100,8 @@ NVNbufferAddress Nvn::GetBufferAddress(GpuAddress addr) {
 
 util::BitPack32 Nvn::GetDeviceFeature(const NVNdevice* device) {
     util::BitPack32 feature;
+    feature.Clear();
+
     int supported;
 
     nvnDeviceGetInteger(device, NVN_DEVICE_INFO_SUPPORTS_MIN_MAX_FILTERING, &supported);

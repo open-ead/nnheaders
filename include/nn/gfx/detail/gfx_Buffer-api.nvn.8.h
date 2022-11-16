@@ -4,6 +4,7 @@
 #include <nn/gfx/detail/fwd.h>
 #include <nn/gfx/detail/gfx_DataContainer.h>
 #include <nn/gfx/gfx_BufferData-api.nvn.8.h>
+#include <nn/gfx/gfx_Common.h>
 #include <nn/types.h>
 
 namespace nn::gfx {
@@ -15,21 +16,21 @@ namespace detail {
 
 template <>
 class BufferImpl<NvnApi> : public DataContainer<BufferImplData<NvnApi>> {
-public:
-    using Device = DeviceImpl<NvnApi>;
-    using MemoryPool = MemoryPoolImpl<NvnApi>;
+    NN_GFX_NO_COPY(BufferImpl);
 
+public:
     typedef BufferInfo InfoType;
 
     static const bool IsMemoryPoolRequired = true;
 
-    static size_t GetBufferAlignment(Device*, const InfoType&);
+    static size_t GetBufferAlignment(DeviceImpl<NvnApi>*, const InfoType&);
 
     BufferImpl();
     ~BufferImpl();
 
-    void Initialize(Device*, const BufferInfo&, MemoryPool*, ptrdiff_t, size_t);
-    void Finalize(Device*);
+    void Initialize(DeviceImpl<NvnApi>*, const BufferInfo&, MemoryPoolImpl<NvnApi>*, ptrdiff_t,
+                    size_t);
+    void Finalize(DeviceImpl<NvnApi>*);
     void* Map() const;
     void Unmap() const;
     void FlushMappedRange(ptrdiff_t, size_t) const;

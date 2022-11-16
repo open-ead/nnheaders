@@ -18,7 +18,7 @@ void RasterizerStateInfo::SetDefault() {
 
     SetRasterEnabled(true);
     SetMultisampleEnabled(false);
-    SetDepthClipEnabled(false);
+    SetDepthClipEnabled(true);  // false in smo
     SetScissorEnabled(false);
 
     SetSlopeScaledDepthBias(0.0f);
@@ -27,14 +27,13 @@ void RasterizerStateInfo::SetDefault() {
 
     SetConservativeRasterizationMode(ConservativeRasterizationMode_Disable);
 
-    // todo: figure out where to put this
     EditMultisampleStateInfo().SetDefault();
 }
 
 void BlendTargetStateInfo::SetDefault() {
+    SetBlendEnabled(false);
     SetSourceColorBlendFactor(BlendFactor_One);
     SetSourceAlphaBlendFactor(BlendFactor_One);
-    SetBlendEnabled(false);
     SetDestinationColorBlendFactor(BlendFactor_Zero);
     SetColorBlendFunction(BlendFunction_Add);
     SetDestinationAlphaBlendFactor(BlendFactor_Zero);
@@ -43,17 +42,62 @@ void BlendTargetStateInfo::SetDefault() {
 }
 
 void BlendStateInfo::SetDefault() {
-    SetLogicOperation(LogicOperation_NoOp);
-    SetBlendConstant(0.0f, 0.0f, 0.0f, 1.0f);
-
     SetAlphaToCoverageEnabled(false);
     SetDualSourceBlendEnabled(false);
     SetIndependentBlendEnabled(false);
     SetLogicOperationEnabled(false);
 
+    SetLogicOperation(LogicOperation_NoOp);
+    SetBlendConstant(0.0f, 0.0f, 0.0f, 1.0f);
+
     SetBlendTargetStateInfoArray(nullptr, 0);
 }
 
-void DepthStencilStateInfo::SetDefault() {}
+void StencilStateInfo::SetDefault() {
+    SetStencilFailOperation(StencilOperation_Keep);
+    SetDepthFailOperation(StencilOperation_Keep);
+    SetDepthPassOperation(StencilOperation_Keep);
+    SetComparisonFunction(ComparisonFunction_Always);
+    SetStencilRef(0);
+}
+
+void DepthStencilStateInfo::SetDefault() {
+    SetDepthComparisonFunction(ComparisonFunction_Less);
+
+    SetDepthTestEnabled(false);
+    SetDepthWriteEnabled(false);
+    SetStencilTestEnabled(false);
+    SetDepthBoundsTestEnabled(false);
+
+    SetStencilReadMask(0xFF);
+    SetStencilWriteMask(0xFF);
+
+    EditFrontStencilStateInfo().SetDefault();
+    EditBackStencilStateInfo().SetDefault();
+}
+
+void VertexAttributeStateInfo::SetDefault() {
+    SetSemanticIndex(0);
+    SetShaderSlot(-1);
+    SetBufferIndex(0);
+    SetOffset(0);
+
+    SetFormat(AttributeFormat_Undefined);
+    SetNamePtr(nullptr);
+}
+
+void VertexBufferStateInfo::SetDefault() {
+    SetStride(0);
+    SetDivisor(0);
+}
+
+void VertexStateInfo::SetDefault() {
+    SetVertexAttributeStateInfoArray(nullptr, 0);
+    SetVertexBufferStateInfoArray(nullptr, 0);
+}
+
+void TessellationStateInfo::SetDefault() {
+    SetPatchControlPointCount(1);
+}
 
 }  // namespace nn::gfx

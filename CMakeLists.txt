@@ -158,5 +158,3 @@ target_include_directories(NintendoSDK PUBLIC include/)
 target_compile_options(NintendoSDK PRIVATE -fno-strict-aliasing)
 target_compile_options(NintendoSDK PRIVATE -Wall -Wextra)
 target_compile_options(NintendoSDK PRIVATE -Wno-invalid-offsetof)
-
-target_link_libraries(NintendoSDK PUBLIC)

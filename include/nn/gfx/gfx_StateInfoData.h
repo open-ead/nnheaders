@@ -70,4 +70,64 @@ struct BlendStateInfoData {
     char reserved[16];
 };
 
+struct StencilStateInfoData {
+    Bit8 stencilFailOperation;
+    Bit8 depthFailOperation;
+    Bit8 depthPassOperation;
+    Bit8 comparisonFunction;
+    uint8_t stencilRef;
+    char reserved[11];
+};
+
+struct DepthStencilStateInfoData {
+    enum Flag {
+        Flag_DepthTestEnable,
+        Flag_DepthWriteEnable,
+        Flag_StencilTestEnable,
+        Flag_DepthBoundsTestEnable
+    };
+
+    Bit8 depthComparisonFunction;
+    uint8_t stencilReadMask;
+    uint8_t stencilWriteMask;
+    char reserved2;
+    util::BitPack16 flag;
+    char reserved3[2];
+    StencilStateInfoData frontStencil;
+    StencilStateInfoData backStencil;
+    char reserved[24];
+};
+
+struct VertexAttributeStateInfoData {
+    uint8_t semanticIndex;
+    char reserved2;
+    int16_t shaderSlot;
+    uint16_t bufferIndex;
+    char reserved3[2];
+    uint32_t offset;
+    Bit32 format;
+    detail::Ptr<const char> pName;
+    char reserved[16];
+};
+
+struct VertexBufferStateInfoData {
+    int32_t stride;
+    uint32_t divisor;
+    char reserved[8];
+};
+
+struct VertexStateInfoData {
+    uint16_t attributeCount;
+    uint16_t bufferCount;
+    char reserved2[4];
+    detail::Ptr<const VertexAttributeStateInfoData> pAttributeArray;
+    detail::Ptr<const VertexBufferStateInfoData> pBufferArray;
+    char reserved[24];
+};
+
+struct TessellationStateInfoData {
+    uint16_t patchControlPointCount;
+    char reserved[30];
+};
+
 }  // namespace nn::gfx

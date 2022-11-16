@@ -1,6 +1,7 @@
 #include <nn/gfx/detail/gfx_CommandBuffer-api.nvn.8.h>
 
 #include <nn/gfx/detail/deviceimpl.h>
+#include <nn/gfx/detail/gfx_Pipeline-api.nvn.8.h>
 #include <nn/gfx/detail/gfx_State-api.nvn.8.h>
 #include <nn/gfx/memory.h>
 
@@ -8,13 +9,13 @@
 
 namespace nn::gfx::detail {
 
-size_t CommandBufferImpl<NvnApi>::GetCommandMemoryAlignment(Device* device) {
+size_t CommandBufferImpl<NvnApi>::GetCommandMemoryAlignment(DeviceImpl<NvnApi>* device) {
     int align;
     nvnDeviceGetInteger(device->pnDevice, NVN_DEVICE_INFO_COMMAND_BUFFER_COMMAND_ALIGNMENT, &align);
     return align;
 }
 
-size_t CommandBufferImpl<NvnApi>::GetControlMemoryAlignment(Device* device) {
+size_t CommandBufferImpl<NvnApi>::GetControlMemoryAlignment(DeviceImpl<NvnApi>* device) {
     int align;
     nvnDeviceGetInteger(device->pnDevice, NVN_DEVICE_INFO_COMMAND_BUFFER_CONTROL_ALIGNMENT, &align);
     return align;
@@ -24,7 +25,7 @@ CommandBufferImpl<NvnApi>::CommandBufferImpl() {}
 
 CommandBufferImpl<NvnApi>::~CommandBufferImpl() {}
 
-void CommandBufferImpl<NvnApi>::Initialize(Device* device, const InfoType& unused) {
+void CommandBufferImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* device, const InfoType& unused) {
     pNnDevice = device;
     pNvnCommandBuffer = &nvnCommandBuffer;
 
@@ -54,7 +55,7 @@ void CommandBufferImpl<NvnApi>::Initialize(Device* device, const InfoType& unuse
 
         default:
             // nn::detail::UnexpectedDefaultImpl("", "", 0, userData);
-            pThis->Finalize();
+            pThis->Finalize(pThis->pNnDevice);  // parameter optimized out
             break;
         }
     };
@@ -65,13 +66,13 @@ void CommandBufferImpl<NvnApi>::Initialize(Device* device, const InfoType& unuse
     hNvnCommandBuffer = 0;
 
     flags.SetBit(Flag_ConservativeRasterSupported,
-                 device->deviceFeatures & Device::Feature_SupportsConservativeRaster);
+                 device->deviceFeatures & device->Feature_SupportsConservativeRaster);
     flags.SetBit(Flag_Shared, false);
 
     state = State_Initialized;
 }
 
-void CommandBufferImpl<NvnApi>::Finalize() {
+void CommandBufferImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>* unused) {
     if (hNvnCommandBuffer != 0) {
         nvnDeviceFinalizeCommandHandle(pNnDevice->pnDevice, hNvnCommandBuffer);
         hNvnCommandBuffer = 0;
@@ -81,7 +82,8 @@ void CommandBufferImpl<NvnApi>::Finalize() {
     state = State_NotInitialized;
 }
 
-void CommandBufferImpl<NvnApi>::AddCommandMemory(MemoryPool* pool, ptrdiff_t ptr, size_t size) {
+void CommandBufferImpl<NvnApi>::AddCommandMemory(MemoryPoolImpl<NvnApi>* pool, ptrdiff_t ptr,
+                                                 size_t size) {
     nvnCommandBufferAddCommandMemory(pNvnCommandBuffer, pool->pnPool, ptr, size);
 }
 
@@ -159,10 +161,24 @@ void CommandBufferImpl<NvnApi>::DrawIndexedIndirect(PrimitiveTopology top, Index
                                          Nvn::GetBufferAddress(addr2));
 }
 
-// todo: figure out the PipelineImpl struct
-// void CommandBufferImpl<NvnApi>::SetPipeline(const Pipeline*);
+void CommandBufferImpl<NvnApi>::SetPipeline(const PipelineImpl<NvnApi>* pPipe) {
+    const PipelineImplData<NvnApi>& pipe = pPipe->ToData();
 
-void CommandBufferImpl<NvnApi>::SetRasterizerState(const Raster* pRast) {
+    if (pipe.nnPipelineType == pipe.PipelineType_Graphics) {
+        SetRasterizerState(nn::gfx::DataToAccessor(pipe.nnRasterizerState));
+        SetBlendState(nn::gfx::DataToAccessor(pipe.nnBlendState));
+        SetDepthStencilState(nn::gfx::DataToAccessor(pipe.nnDepthStencilState));
+        SetVertexState(nn::gfx::DataToAccessor(pipe.nnVertexState));
+
+        if (pipe.flags.GetBit(pipe.Flag_HasTessellationState)) {
+            SetTessellationState(nn::gfx::DataToAccessor(pipe.nnTessellationState));
+        }
+    }
+
+    SetShader(pipe.pShader, ShaderStageBit_All);
+}
+
+void CommandBufferImpl<NvnApi>::SetRasterizerState(const RasterizerStateImpl<NvnApi>* pRast) {
     const RasterizerStateImplData<NvnApi>& rast = pRast->ToData();
 
     nvnCommandBufferBindPolygonState(
@@ -192,7 +208,7 @@ void CommandBufferImpl<NvnApi>::SetBlendState(const BlendStateImpl<NvnApi>* pBle
     const NVNblendState* pnBlendState = blend.pNvnBlendStateData;
 
     for (int i = 0; i < blend.targetCount; ++i) {
-        nvnCommandBufferBindBlendState(pNvnCommandBuffer, &pnBlendState[i]);
+        nvnCommandBufferBindBlendState(pNvnCommandBuffer, pnBlendState + i);
     }
 
     nvnCommandBufferBindChannelMaskState(
@@ -202,16 +218,36 @@ void CommandBufferImpl<NvnApi>::SetBlendState(const BlendStateImpl<NvnApi>* pBle
     nvnCommandBufferSetBlendColor(pNvnCommandBuffer, blend.nvnBlendConstant);
 }
 
-void CommandBufferImpl<NvnApi>::SetDepthStencilState(const DepthStencilStateImpl<NvnApi>* depth) {
-    /*
-    nvnCommandBufferBindDepthStencilState(pNvnCommandBuffer, depth->nDepthStencilState);
-    nvnCommandBufferSetStencilValueMask(pNvnCommandBuffer, NVN_FACE_FRONT_AND_BACK, depth->field_8);
-    nvnCommandBufferSetStencilMask(pNvnCommandBuffer, NVN_FACE_FRONT_AND_BACK, depth->field_C);
-    nvnCommandBufferSetStencilRef(pNvnCommandBuffer, NVN_FACE_BACK, depth->field_10);
-    nvnCommandBufferSetStencilRef(pNvnCommandBuffer, NVN_FACE_FRONT, depth->field_14);
-    if ((depth->flag & 8) == 0)
-        nvnCommandBufferSetDepthBounds(pNvnCommandBuffer, false, 0.0, 1.0);
-    */
+void CommandBufferImpl<NvnApi>::SetDepthStencilState(const DepthStencilStateImpl<NvnApi>* pDepth) {
+    const DepthStencilStateImplData<NvnApi>& depth = pDepth->ToData();
+
+    nvnCommandBufferBindDepthStencilState(
+        pNvnCommandBuffer,
+        reinterpret_cast<const NVNdepthStencilState*>(depth.nvnDepthStencilState));
+    nvnCommandBufferSetStencilValueMask(pNvnCommandBuffer, NVN_FACE_FRONT_AND_BACK,
+                                        depth.nvnStencilValueMask);
+    nvnCommandBufferSetStencilMask(pNvnCommandBuffer, NVN_FACE_FRONT_AND_BACK,
+                                   depth.nvnStencilMask);
+    nvnCommandBufferSetStencilRef(pNvnCommandBuffer, NVN_FACE_BACK, depth.nvnStencilBackRef);
+    nvnCommandBufferSetStencilRef(pNvnCommandBuffer, NVN_FACE_FRONT, depth.nvnStencilFrontRef);
+
+    if (!depth.flag.GetBit(depth.Flag_DepthBoundsTestEnable))
+        nvnCommandBufferSetDepthBounds(pNvnCommandBuffer, false, 0.0f, 1.0f);
+}
+
+void CommandBufferImpl<NvnApi>::SetVertexState(const VertexStateImpl<NvnApi>* pVert) {
+    const VertexStateImplData<NvnApi>& vert = pVert->ToData();
+
+    nvnCommandBufferBindVertexAttribState(pNvnCommandBuffer, vert.vertexAttributeStateCount,
+                                          vert.pNvnVertexAttribState);
+    nvnCommandBufferBindVertexStreamState(pNvnCommandBuffer, vert.vertexStreamStateCount,
+                                          vert.pNvnVertexStreamState);
+}
+
+void CommandBufferImpl<NvnApi>::SetTessellationState(const TessellationStateImpl<NvnApi>* pTess) {
+    const TessellationStateImplData<NvnApi>& tess = pTess->ToData();
+
+    nvnCommandBufferSetPatchSize(pNvnCommandBuffer, tess.patchSize);
 }
 
 }  // namespace nn::gfx::detail

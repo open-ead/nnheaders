@@ -60,7 +60,7 @@ public:
     }
 
     MultisampleStateInfo& EditMultisampleStateInfo() {
-        return detail::DataContainer<MultisampleStateInfoData>::DataToAccessor(multisample);
+        return nn::gfx::DataToAccessor(multisample);
     }
 
     FillMode GetFillMode() const { return static_cast<FillMode>(fillMode); }
@@ -92,7 +92,7 @@ public:
     }
 
     const MultisampleStateInfo& GetMultisampleStateInfo() const {
-        return detail::DataContainer<MultisampleStateInfoData>::DataToAccessor(multisample);
+        return nn::gfx::DataToAccessor(multisample);
     }
 };
 
@@ -193,20 +193,180 @@ public:
     float GetBlendConstant(ColorChannel channel) const { return blendConstant[channel]; }
 
     const BlendTargetStateInfo* GetBlendTargetStateInfoArray() const {
-        return DataContainer<BlendTargetStateInfoData>::DataToAccessor(pBlendTargetArray.ptr);
+        return nn::gfx::DataToAccessor(pBlendTargetArray.ptr);
     }
 };
 
-class DepthStencilStateInfo {
+class StencilStateInfo : public detail::DataContainer<StencilStateInfoData> {
 public:
+    StencilStateInfo() {}
+
     void SetDefault();
 
-    enum Flag {
-        Flag_1 = 1,
-        Flag_2 = 2,
-        Flag_4 = 4,
-        Flag_DepthBoundsEnable = 8,
-    };
+    void SetStencilFailOperation(StencilOperation op) { stencilFailOperation = op; }
+
+    void SetDepthFailOperation(StencilOperation op) { depthFailOperation = op; }
+
+    void SetDepthPassOperation(StencilOperation op) { depthPassOperation = op; }
+
+    void SetComparisonFunction(ComparisonFunction function) { comparisonFunction = function; }
+
+    void SetStencilRef(int ref) { stencilRef = ref; }
+
+    StencilOperation GetStencilFailOperation() const {
+        return static_cast<StencilOperation>(stencilFailOperation);
+    }
+
+    StencilOperation GetDepthFailOperation() const {
+        return static_cast<StencilOperation>(depthFailOperation);
+    }
+
+    StencilOperation GetDepthPassOperation() const {
+        return static_cast<StencilOperation>(depthPassOperation);
+    }
+
+    ComparisonFunction GetComparisonFunction() const {
+        return static_cast<ComparisonFunction>(comparisonFunction);
+    }
+
+    int GetStencilRef() const { return stencilRef; }
+};
+
+class DepthStencilStateInfo : public detail::DataContainer<DepthStencilStateInfoData> {
+public:
+    DepthStencilStateInfo() {}
+
+    void SetDefault();
+
+    void SetDepthComparisonFunction(ComparisonFunction function) {
+        depthComparisonFunction = function;
+    }
+
+    void SetDepthTestEnabled(bool b) { flag.SetBit(Flag_DepthTestEnable, b); }
+
+    void SetDepthWriteEnabled(bool b) { flag.SetBit(Flag_DepthWriteEnable, b); }
+
+    void SetStencilTestEnabled(bool b) { flag.SetBit(Flag_StencilTestEnable, b); }
+
+    void SetDepthBoundsTestEnabled(bool b) { flag.SetBit(Flag_DepthBoundsTestEnable, b); }
+
+    void SetStencilReadMask(int mask) { stencilReadMask = mask; }
+
+    void SetStencilWriteMask(int mask) { stencilWriteMask = mask; }
+
+    StencilStateInfo& EditFrontStencilStateInfo() { return nn::gfx::DataToAccessor(frontStencil); }
+
+    StencilStateInfo& EditBackStencilStateInfo() { return nn::gfx::DataToAccessor(backStencil); }
+
+    ComparisonFunction GetDepthComparisonFunction() const {
+        return static_cast<ComparisonFunction>(depthComparisonFunction);
+    }
+
+    bool IsDepthTestEnabled() const { return flag.GetBit(Flag_DepthTestEnable); }
+
+    bool IsDepthWriteEnabled() const { return flag.GetBit(Flag_DepthWriteEnable); }
+
+    bool IsStencilTestEnabled() const { return flag.GetBit(Flag_StencilTestEnable); }
+
+    bool IsDepthBoundsTestEnabled() const { return flag.GetBit(Flag_DepthBoundsTestEnable); }
+
+    int GetStencilReadMask() const { return stencilReadMask; }
+
+    int GetStencilWriteMask() const { return stencilWriteMask; }
+
+    const StencilStateInfo& GetFrontStencilStateInfo() const {
+        return nn::gfx::DataToAccessor(frontStencil);
+    }
+
+    const StencilStateInfo& GetBackStencilStateInfo() const {
+        return nn::gfx::DataToAccessor(backStencil);
+    }
+};
+
+class VertexAttributeStateInfo : public detail::DataContainer<VertexAttributeStateInfoData> {
+public:
+    VertexAttributeStateInfo() {}
+
+    void SetDefault();
+
+    void SetSemanticIndex(int i) { semanticIndex = i; }
+
+    void SetShaderSlot(int s) { shaderSlot = s; }
+
+    void SetBufferIndex(int i) { bufferIndex = i; }
+
+    void SetOffset(ptrdiff_t o) { offset = o; }
+
+    void SetFormat(AttributeFormat f) { format = f; }
+
+    void SetNamePtr(const char* n) { pName = n; }
+
+    int GetSemanticIndex() const { return semanticIndex; }
+
+    int GetShaderSlot() const { return shaderSlot; }
+
+    int GetBufferIndex() const { return bufferIndex; }
+
+    ptrdiff_t GetOffset() const { return offset; }
+
+    AttributeFormat GetFormat() const { return static_cast<AttributeFormat>(format); }
+
+    const char* GetNamePtr() const { return pName; }
+};
+
+class VertexBufferStateInfo : public detail::DataContainer<VertexBufferStateInfoData> {
+public:
+    VertexBufferStateInfo() {}
+
+    void SetDefault();
+
+    void SetStride(ptrdiff_t s) { stride = s; }
+
+    void SetDivisor(int d) { divisor = d; }
+
+    ptrdiff_t GetStride() const { return stride; }
+
+    int GetDivisor() const { return divisor; }
+};
+
+class VertexStateInfo : public detail::DataContainer<VertexStateInfoData> {
+public:
+    VertexStateInfo() {}
+
+    void SetDefault();
+
+    void SetVertexAttributeStateInfoArray(const VertexAttributeStateInfo* p, int c) {
+        attributeCount = c;
+        pAttributeArray.ptr = p->ToData();
+    }
+
+    void SetVertexBufferStateInfoArray(const VertexBufferStateInfo* p, int c) {
+        bufferCount = c;
+        pBufferArray.ptr = p->ToData();
+    }
+
+    int GetVertexAttributeCount() const { return attributeCount; }
+
+    int GetVertexBufferCount() const { return bufferCount; }
+
+    const VertexAttributeStateInfo* GetVertexAttributeStateInfoArray() const {
+        return nn::gfx::DataToAccessor(pAttributeArray.ptr);
+    }
+
+    const VertexBufferStateInfo* GetVertexBufferStateInfoArray() const {
+        return nn::gfx::DataToAccessor(pBufferArray.ptr);
+    }
+};
+
+class TessellationStateInfo : public detail::DataContainer<TessellationStateInfoData> {
+public:
+    TessellationStateInfo() {}
+
+    void SetDefault();
+
+    void SetPatchControlPointCount(int c) { patchControlPointCount = c; }
+
+    int GetPatchControlPointCount() const { return patchControlPointCount; }
 };
 
 }  // namespace nn::gfx

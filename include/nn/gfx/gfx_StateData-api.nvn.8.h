@@ -43,4 +43,57 @@ struct BlendStateImplData<NvnApi> {
     char reserved[2];
 };
 
+template <>
+struct DepthStencilStateImplData<NvnApi> {
+    enum Flag { Flag_DepthBoundsTestEnable = 3 };
+
+    enum State { State_NotInitialized, State_Initialized };
+
+    char nvnDepthStencilState[8];
+    Bit32 nvnStencilValueMask;
+    Bit32 nvnStencilMask;
+    Bit32 nvnStencilBackRef;
+    Bit32 nvnStencilFrontRef;
+    Bit8 state;
+    char reserved;
+    util::BitPack16 flag;
+};
+
+template <>
+struct VertexStateImplData<NvnApi> {
+    enum State { State_NotInitialized, State_Initialized };
+
+    Bit8 state;
+    char reserved[3];
+    int32_t vertexStreamStateCount;
+    int32_t vertexAttributeStateCount;
+    uint32_t memorySize;
+    detail::Ptr<void> pNvnVertexStreamState;
+    detail::Ptr<void> pNvnVertexAttribState;
+};
+
+template <>
+struct TessellationStateImplData<NvnApi> {
+    enum State { State_NotInitialized, State_Initialized };
+
+    Bit8 state;
+    char reserved[3];
+    uint32_t patchSize;
+};
+
+template <>
+struct ViewportScissorStateImplData<NvnApi> {
+    enum State { State_NotInitialized, State_Initialized };
+
+    detail::Ptr<void> pWorkMemory;
+    int32_t viewportCount;
+    uint32_t memorySize;
+    float viewport[4];
+    double depthRange[2];
+    int32_t scissor[4];
+    Bit8 state;
+    util::BitPack8 flag;
+    char reserved[2];
+};
+
 }  // namespace nn::gfx
