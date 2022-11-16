@@ -111,4 +111,4 @@ detail::Caster<const detail::DataContainer<TData>> DataToAccessor(const TData* d
     return detail::DataContainer<TData>::DataToAccessor(data);
 }
 
-}  // namespace nn
+}  // namespace nn::gfx
