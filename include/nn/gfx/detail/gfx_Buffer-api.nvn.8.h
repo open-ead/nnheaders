@@ -1,7 +1,5 @@
 #pragma once
 
-#include <nn/gfx/api.h>
-#include <nn/gfx/detail/fwd.h>
 #include <nn/gfx/detail/gfx_DataContainer.h>
 #include <nn/gfx/gfx_BufferData-api.nvn.8.h>
 #include <nn/gfx/gfx_Common.h>
@@ -16,7 +14,7 @@ namespace detail {
 
 template <>
 class BufferImpl<NvnApi> : public DataContainer<BufferImplData<NvnApi>> {
-    NN_GFX_NO_COPY(BufferImpl);
+    NN_NO_COPY(BufferImpl);
 
 public:
     typedef BufferInfo InfoType;

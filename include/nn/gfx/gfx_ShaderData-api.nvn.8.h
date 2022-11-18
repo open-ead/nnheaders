@@ -1,23 +1,24 @@
 #pragma once
 
 #include <nn/gfx/detail/gfx_Misc.h>
-#include <nn/gfx/gfx_Common.h>
 #include <nn/nn_BitTypes.h>
 #include <nn/util/util_BitPack.h>
 
 namespace nn::gfx {
 
 template <>
-struct BufferImplData<NvnApi> {
+struct ShaderImplData<NvnApi> {
     enum State { State_NotInitialized, State_Initialized };
-
-    enum Flag { Flag_Shared, Flag_CpuCached };
+    enum Flag { Flag_SeparationEnable, Flag_ResShader, Flag_Shared };
 
     Bit8 state;
     util::BitPack8 flags;
-    char reserved[6];
-    detail::Ptr<void> pNvnBuffer;
-    char nvnBuffer[48];
+    char reserved[2];
+    Bit32 nvnShaderStageBits;
+    detail::Ptr<void> pNvnProgram;
+    char nvnProgram[192];
+    detail::Ptr<const void> pReflection;
+    detail::Ptr<void> pOnlineCompiledShader;
     detail::Ptr<void> userPtr;
 };
 

@@ -8,16 +8,16 @@
 namespace nn::gfx {
 
 template <>
-struct BufferImplData<NvnApi> {
+struct DeviceImplData<NvnApi> {
     enum State { State_NotInitialized, State_Initialized };
+    enum Flag { Flag_Shared };
 
-    enum Flag { Flag_Shared, Flag_CpuCached };
-
+    detail::Ptr<void> pNvnDevice;
+    char nvnDevice[12288];
     Bit8 state;
     util::BitPack8 flags;
-    char reserved[6];
-    detail::Ptr<void> pNvnBuffer;
-    char nvnBuffer[48];
+    char reserved[2];
+    util::BitPack32 supportedFeatures;
     detail::Ptr<void> userPtr;
 };
 

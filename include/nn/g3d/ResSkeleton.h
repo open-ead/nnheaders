@@ -1,7 +1,7 @@
 #pragma once
 
 #include <nn/nn_BitTypes.h>
-#include "nn/gfx/ResUserData.h"
+#include "nn/gfx/gfx_ResUserData.h"
 #include "nn/util/BinaryTypes.h"
 #include "nn/util/MathTypes.h"
 #include "nn/util/ResDic.h"

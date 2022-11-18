@@ -10,7 +10,7 @@
 namespace nn::gfx {
 
 struct ImageFormatProperty;
-struct TextureInfo;
+class TextureInfo;
 struct SwapChainInfo;
 
 namespace detail {

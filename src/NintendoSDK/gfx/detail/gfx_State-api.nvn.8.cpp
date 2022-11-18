@@ -1,5 +1,7 @@
 #include <nn/gfx/detail/gfx_State-api.nvn.8.h>
 
+#include <nn/gfx/gfx_StateInfo.h>
+
 #include "gfx_NvnHelper.h"
 
 namespace nn::gfx::detail {

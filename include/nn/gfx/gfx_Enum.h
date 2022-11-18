@@ -580,6 +580,20 @@ enum ColorChannel {
     ColorChannel_End
 };
 
+enum DescriptorPoolType {
+    DescriptorPoolType_BufferView,
+    DescriptorPoolType_TextureView,
+    DescriptorPoolType_Sampler,
+    DescriptorPoolType_End
+};
+
+enum DescriptorSlotType {
+    DescriptorSlotType_ConstantBuffer,
+    DescriptorSlotType_UnorderedAccessBuffer,
+    DescriptorSlotType_TextureSampler,
+    DescriptorSlotType_End
+};
+
 enum PipelineType { PipelineType_Graphics, PipelineType_Compute, PipelineType_End };
 
 enum MemoryPoolProperty {
@@ -599,6 +613,35 @@ enum CommandBufferType {
     CommandBufferType_End
 };
 
+enum BufferState {
+    BufferState_Undefined = 0x0,
+    BufferState_DataTransfer = 0x1,
+    BufferState_CopySource = 0x2,
+    BufferState_CopyDestination = 0x4,
+    BufferState_VertexBuffer = 0x8,
+    BufferState_IndexBuffer = 0x10,
+    BufferState_ConstantBuffer = 0x20,
+    BufferState_UnorderedAccessBuffer = 0x40,
+    BufferState_IndirectArgument = 0x80,
+    BufferState_QueryBuffer = 0x100
+};
+
+enum TextureState {
+    TextureState_Undefined = 0x0,
+    TextureState_DataTransfer = 0x1,
+    TextureState_CopySource = 0x2,
+    TextureState_CopyDestination = 0x4,
+    TextureState_ShaderRead = 0x8,
+    TextureState_ShaderWrite = 0x10,
+    TextureState_ColorTarget = 0x20,
+    TextureState_DepthRead = 0x40,
+    TextureState_DepthWrite = 0x80,
+    TextureState_Clear = 0x100,
+    TextureState_ResolveSource = 0x200,
+    TextureState_ResolveDestination = 0x400,
+    TextureState_Present = 0x800
+};
+
 enum ShaderStageBit {
     ShaderStageBit_Vertex = 0x1,
     ShaderStageBit_Hull = 0x2,
@@ -608,6 +651,17 @@ enum ShaderStageBit {
     ShaderStageBit_Compute = 0x20,
     ShaderStageBit_All = ShaderStageBit_Vertex | ShaderStageBit_Hull | ShaderStageBit_Domain |
                          ShaderStageBit_Geometry | ShaderStageBit_Pixel | ShaderStageBit_Compute
+};
+
+enum PipelineStageBit {
+    PipelineStageBit_VertexInput = 0x1,
+    PipelineStageBit_VertexShader = 0x2,
+    PipelineStageBit_HullShader = 0x4,
+    PipelineStageBit_DomainShader = 0x8,
+    PipelineStageBit_GeometryShader = 0x10,
+    PipelineStageBit_PixelShader = 0x20,
+    PipelineStageBit_RenderTarget = 0x40,
+    PipelineStageBit_ComputeShader = 0x80
 };
 
 enum DebugMode { DebugMode_Disable, DebugMode_Enable, DebugMode_Full, DebugMode_End };

@@ -48,4 +48,41 @@ private:
     void* m_Ptr;
 };
 
+class ConstBytePtr {
+public:
+    explicit ConstBytePtr(const void* ptr) : m_Ptr(ptr) {}
+    ConstBytePtr(const BytePtr&);
+    ConstBytePtr(const void*, ptrdiff_t);
+
+    void Reset(const void*);
+
+    const void* Get() const { return m_Ptr; }
+
+    template <typename T>
+    const T* Get() const {
+        return static_cast<const T*>(Get());
+    }
+
+    ConstBytePtr& Advance(ptrdiff_t offset) {
+        m_Ptr = Get<char>() + offset;
+        return *this;
+    }
+
+    ptrdiff_t Distance(const void*) const;
+    bool IsAligned(size_t) const;
+    ConstBytePtr& AlignUp(size_t);
+    ConstBytePtr& AlignDown(size_t);
+    ConstBytePtr& operator+=(ptrdiff_t);
+    ConstBytePtr& operator-=(ptrdiff_t);
+    ConstBytePtr operator+(ptrdiff_t) const;
+    ConstBytePtr operator-(ptrdiff_t) const;
+    ConstBytePtr operator++(int);
+    ConstBytePtr& operator++();
+    ConstBytePtr operator--(int);
+    ConstBytePtr& operator--();
+
+private:
+    const void* m_Ptr;
+};
+
 }  // namespace nn::util

@@ -9,7 +9,9 @@ protected:
 
 public:
     CasterBase(T* value) : m_Value(value) {}
-    T* operator->();
+
+    T* operator->() { return m_Value; }
+
     operator bool();
     operator bool() const;
     bool IsNull();

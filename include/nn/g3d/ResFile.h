@@ -5,8 +5,7 @@
 
 #pragma once
 
-#include <nn/gfx/api.h>
-#include <nn/gfx/memory.h>
+#include <nn/gfx/gfx_Types.h>
 #include <nn/types.h>
 #include <nn/util.h>
 
@@ -32,14 +31,9 @@ public:
     static nn::g3d::ResFile* ResCast(void*);
     s32 BindTexture(nn::g3d::TextureRef (*ref)(char const*, void*), void*);
     void ReleaseTexture();
-    void
-    Setup(nn::gfx::TDevice<nn::gfx::ApiVariation<nn::gfx::ApiType<4>, nn::gfx::ApiVersion<8>>>*);
-    void
-    Setup(nn::gfx::TDevice<nn::gfx::ApiVariation<nn::gfx::ApiType<4>, nn::gfx::ApiVersion<8>>>*,
-          nn::gfx::TMemoryPool<nn::gfx::ApiVariation<nn::gfx::ApiType<4>, nn::gfx::ApiVersion<8>>>*,
-          s64, u64);
-    void
-    Cleanup(nn::gfx::TDevice<nn::gfx::ApiVariation<nn::gfx::ApiType<4>, nn::gfx::ApiVersion<8>>>*);
+    void Setup(gfx::Device*);
+    void Setup(gfx::Device*, gfx::MemoryPool*, s64, u64);
+    void Cleanup(gfx::Device*);
     void Reset();
 
     u64 mFileNameLength;                  // _20

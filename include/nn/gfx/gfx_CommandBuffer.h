@@ -1,17 +1,18 @@
 #pragma once
 
+#include <nn/gfx/detail/gfx_CommandBuffer-api.nvn.8.h>
 #include <nn/gfx/gfx_Common.h>
 
 namespace nn::gfx {
 
 template <class TTarget>
 class TCommandBuffer : public detail::CommandBufferImpl<TTarget> {
-    NN_GFX_NO_COPY(TCommandBuffer);
+    NN_NO_COPY(TCommandBuffer);
 
     typedef void (*OutOfMemoryEventCallback)(TCommandBuffer<TTarget>*, const OutOfMemoryEventArg&);
 
 public:
-    TCommandBuffer();
+    TCommandBuffer() {}
 
     static size_t GetCommandMemoryAlignment(TDevice<TTarget>*);
     static size_t GetControlMemoryAlignment(TDevice<TTarget>*);

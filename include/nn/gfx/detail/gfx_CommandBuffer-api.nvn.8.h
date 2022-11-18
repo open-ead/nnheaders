@@ -22,7 +22,7 @@ namespace detail {
 
 template <>
 class CommandBufferImpl<NvnApi> : public DataContainer<CommandBufferImplData<NvnApi>> {
-    NN_GFX_NO_COPY(CommandBufferImpl);
+    NN_NO_COPY(CommandBufferImpl);
 
 public:
     typedef CommandBufferInfo InfoType;

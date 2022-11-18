@@ -13,7 +13,7 @@ namespace detail {
 
 template <>
 class PipelineImpl<NvnApi> : public DataContainer<PipelineImplData<NvnApi>> {
-    NN_GFX_NO_COPY(PipelineImpl);
+    NN_NO_COPY(PipelineImpl);
 
 public:
     typedef GraphicsPipelineInfo GraphicsInfoType;

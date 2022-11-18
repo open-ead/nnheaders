@@ -58,3 +58,18 @@ struct BitFlagSet {};
 
 void ReferSymbol(const void*);
 }  // namespace nn
+
+// todo: move with more info
+#define NN_NO_COPY(CLASS)                                                                          \
+private:                                                                                           \
+    CLASS(const CLASS&) = delete;                                                                  \
+    CLASS& operator=(const CLASS&) = delete
+
+namespace nn::detail {
+
+void UnexpectedDefaultImpl(const char*, const char*, int);
+
+}  // namespace nn::detail
+
+// todo: ifdef to support debug functionality?
+#define NN_UNEXPECTED_DEFAULT nn::detail::UnexpectedDefaultImpl("", "", 0)

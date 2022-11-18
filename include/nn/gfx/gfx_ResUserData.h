@@ -1,11 +1,14 @@
 #pragma once
 
-#include "nn/gfx/ResUserDataData.h"
+#include <nn/gfx/gfx_Common.h>
+#include <nn/gfx/gfx_ResUserDataData.h>
 #include "nn/util/AccessorBase.h"
 
 namespace nn::gfx {
 
 class ResUserData : util::AccessorBase<ResUserDataData> {
+    NN_NO_COPY(ResUserData);
+
 public:
     enum Type {
         Type_Int,
@@ -13,9 +16,6 @@ public:
         Type_String,
         Type_Stream,
     };
-
-    ResUserData(const ResUserData&) = delete;
-    auto operator=(const ResUserData&) = delete;
 
     const char* GetName() const { return pName.Get()->GetData(); }
     int GetCount() const { return static_cast<int>(count); }

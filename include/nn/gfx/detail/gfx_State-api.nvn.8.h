@@ -1,11 +1,18 @@
 #pragma once
 
-#include <nn/gfx/api.h>
-#include <nn/gfx/detail/fwd.h>
+#include <nn/gfx/detail/gfx_DataContainer.h>
+#include <nn/gfx/gfx_Common.h>
 #include <nn/gfx/gfx_StateData-api.nvn.8.h>
-#include <nn/gfx/gfx_StateInfo.h>
 
 namespace nn::gfx {
+
+class RasterizerStateInfo;
+class BlendStateInfo;
+class DepthStencilStateInfo;
+class VertexStateInfo;
+class TessellationStateInfo;
+class ViewportScissorStateInfo;
+
 namespace detail {
 
 template <>
@@ -79,7 +86,20 @@ public:
 };
 
 template <>
-class ViewportScissorStateImpl<NvnApi> {};
+class ViewportScissorStateImpl<NvnApi>
+    : public DataContainer<ViewportScissorStateImplData<NvnApi>> {
+public:
+    typedef ViewportScissorStateInfo InfoType;
+
+    ViewportScissorStateImpl();
+    ~ViewportScissorStateImpl();
+    static size_t GetRequiredMemorySize(const InfoType&);
+    void SetMemory(void*, size_t);
+    void* GetMemory();
+    const void* GetMemory() const;
+    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
+    void Finalize(DeviceImpl<NvnApi>*);
+};
 
 }  // namespace detail
 }  // namespace nn::gfx

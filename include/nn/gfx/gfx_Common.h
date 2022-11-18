@@ -3,16 +3,15 @@
 #include <nn/types.h>
 
 // not sure what these are named
-#include <nn/gfx/api.h>
 #include <nn/gfx/detail/fwd.h>
-
-// todo: figure out where to place this?
-#define NN_GFX_NO_COPY(CLASS)                                                                      \
-private:                                                                                           \
-    CLASS(const CLASS&) = delete;                                                                  \
-    CLASS& operator=(const CLASS&) = delete;
+#include <nn/gfx/gfx_VariationBase.h>
+#include <nn/util.h>
 
 namespace nn::gfx {
+
+// todo: seems to be named ApiVariationNvn8
+using NvnApi = ApiVariation<ApiType<4>, ApiVersion<8>>;
+using DefaultApi = NvnApi;
 
 struct OutOfMemoryEventArg {
     size_t minRequiredSize;

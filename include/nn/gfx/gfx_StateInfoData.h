@@ -130,4 +130,27 @@ struct TessellationStateInfoData {
     char reserved[30];
 };
 
+struct DepthRangeInfoData {
+    float minDepth;
+    float maxDepth;
+    char reserved[8];
+};
+
+struct ViewportStateInfoData {
+    float originX;
+    float originY;
+    float width;
+    float height;
+    DepthRangeInfoData depthRange;
+    char reserved[16];
+};
+
+struct ScissorStateInfoData {
+    uint32_t originX;
+    uint32_t originY;
+    uint32_t width;
+    uint32_t height;
+    char reserved[16];
+};
+
 }  // namespace nn::gfx
