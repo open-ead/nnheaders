@@ -61,7 +61,18 @@ public:
 };
 
 class TextureMipRange;
-class TextureArrayRange;
+
+class TextureArrayRange : public detail::DataContainer<TextureArrayRangeData> {
+public:
+    TextureArrayRange();
+    void SetDefault();
+    void SetBaseArrayIndex(int);
+    void SetArrayLength(int);
+
+    int GetBaseArrayIndex() const { return baseArrayIndex; }
+    int GetArrayLength() const { return arrayLength; }
+};
+
 class TextureSubresourceRange;
 
 class TextureSubresource : public detail::DataContainer<TextureSubresourceData> {

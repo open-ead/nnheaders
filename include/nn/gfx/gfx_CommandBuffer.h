@@ -4,6 +4,7 @@
 #include <nn/gfx/gfx_Common.h>
 
 namespace nn::gfx {
+class CommandBufferInfo;
 
 template <class TTarget>
 class TCommandBuffer : public detail::CommandBufferImpl<TTarget> {
@@ -12,6 +13,8 @@ class TCommandBuffer : public detail::CommandBufferImpl<TTarget> {
     typedef void (*OutOfMemoryEventCallback)(TCommandBuffer<TTarget>*, const OutOfMemoryEventArg&);
 
 public:
+    typedef CommandBufferInfo InfoType;
+
     TCommandBuffer() {}
 
     static size_t GetCommandMemoryAlignment(TDevice<TTarget>*);
@@ -103,6 +106,8 @@ public:
     void SetUserPtr(void*);
     void* GetUserPtr();
     const void* GetUserPtr() const;
+
+    typedef void (*Gl4UserCommandCallbackType)(const void*);
     void Gl4SetUserCommand(Gl4UserCommandCallbackType, const void*);
     void Gl4SetUserCommandDynamic(Gl4UserCommandCallbackType, const void*, size_t);
 };

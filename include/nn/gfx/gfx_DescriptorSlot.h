@@ -14,7 +14,9 @@ class DescriptorSlot : public detail::DataContainer<DescriptorSlotData> {
 
 public:
     DescriptorSlot();
-    void Offset(ptrdiff_t);
+
+    void Offset(ptrdiff_t offset) { value += offset; }
+
     bool IsValid() const;
     void Invalidate();
 };

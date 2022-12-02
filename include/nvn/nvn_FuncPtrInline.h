@@ -2023,9 +2023,9 @@ static inline void nvnCommandBufferDiscardDepthStencil(NVNcommandBuffer* cmdBuf)
     pfnc_nvnCommandBufferDiscardDepthStencil(cmdBuf);
 }
 
-static inline void nvnCommandBufferDownsample(NVNcommandBuffer* cmdBuf, const NVNtexture* texture1,
-                                              const NVNtexture* texture2) {
-    pfnc_nvnCommandBufferDownsample(cmdBuf, texture1, texture2);
+static inline void nvnCommandBufferDownsample(NVNcommandBuffer* cmdBuf, const NVNtexture* src,
+                                              const NVNtexture* dst) {
+    pfnc_nvnCommandBufferDownsample(cmdBuf, src, dst);
 }
 
 static inline void nvnCommandBufferTiledDownsample(NVNcommandBuffer* cmdBuf,

@@ -5,6 +5,7 @@
 #include <nn/gfx/detail/gfx_Device-api.nvn.8.h>
 #include <nn/gfx/detail/gfx_MemoryPool-api.nvn.8.h>
 #include <nn/gfx/detail/gfx_Pipeline-api.nvn.8.h>
+#include <nn/gfx/detail/gfx_RootSignature-api.nvn.8.h>
 #include <nn/gfx/detail/gfx_Shader-api.nvn.8.h>
 #include <nn/gfx/detail/gfx_State-api.nvn.8.h>
 #include <nn/gfx/detail/gfx_Texture-api.nvn.8.h>
@@ -99,19 +100,18 @@ void CommandBufferMemoryCallbackProcedure(NVNcommandBuffer* pNvnCommandBuffer,
     OutOfMemoryEventArg arg{minSize};
 
     switch (event) {
-    case NVN_COMMAND_BUFFER_MEMORY_EVENT_OUT_OF_CONTROL_MEMORY:
-        reinterpret_cast<CommandBufferImpl<NvnApi>::OutOfMemoryEventCallback>(
-            obj.pOutOfCommandMemoryCallback.ptr)(pCommandBuffer, arg);
-        break;
-
     case NVN_COMMAND_BUFFER_MEMORY_EVENT_OUT_OF_COMMAND_MEMORY:
         reinterpret_cast<CommandBufferImpl<NvnApi>::OutOfMemoryEventCallback>(
             obj.pOutOfCommandMemoryCallback.ptr)(pCommandBuffer, arg);
         break;
 
+    case NVN_COMMAND_BUFFER_MEMORY_EVENT_OUT_OF_CONTROL_MEMORY:
+        reinterpret_cast<CommandBufferImpl<NvnApi>::OutOfMemoryEventCallback>(
+            obj.pOutOfControlMemoryCallback.ptr)(pCommandBuffer, arg);
+        break;
+
     default:
         NN_UNEXPECTED_DEFAULT;
-        pThis->Finalize(obj.pNnDevice);  // parameter optimized out
         break;
     }
 }
@@ -555,24 +555,222 @@ void CommandBufferImpl<NvnApi>::CopyImageToBuffer(BufferImpl<NvnApi>* pDstBuffer
                                         &view, &region, bufferAddress, NVN_COPY_FLAGS_NONE);
 }
 
-/*
-void CopyBufferToImage(TextureImpl<NvnApi>*, const TextureCopyRegion&,
-                        const BufferImpl<NvnApi>*, ptrdiff_t);
-void CopyImageToBuffer(BufferImpl<NvnApi>*, ptrdiff_t, const TextureImpl<NvnApi>*,
-                        const TextureCopyRegion&);
-void BlitImage(TextureImpl<NvnApi>*, const TextureCopyRegion&, const TextureImpl<NvnApi>*,
-                const TextureCopyRegion&, int);
-void ClearBuffer(BufferImpl<NvnApi>*, ptrdiff_t, size_t, uint32_t);
-void ClearColor(ColorTargetViewImpl<NvnApi>*, float, float, float, float,
-                const TextureArrayRange*);
-void ClearColorTarget(ColorTargetViewImpl<NvnApi>*, const ClearColorValue&,
-                        const TextureArrayRange*);
-void ClearDepthStencil(DepthStencilViewImpl<NvnApi>*, float, int, DepthStencilClearMode,
-                        const TextureArrayRange*);
+void CommandBufferImpl<NvnApi>::CopyBufferToImage(TextureImpl<NvnApi>* pDstTexture,
+                                                  const TextureCopyRegion& dstRegion,
+                                                  const BufferImpl<NvnApi>* pSrcBuffer,
+                                                  ptrdiff_t srcOffset) {
+    NVNtextureTarget target = nvnTextureGetTarget(pDstTexture->ToData()->pNvnTexture);
 
-void Resolve(TextureImpl<NvnApi>*, int, int, const ColorTargetViewImpl<NvnApi>*,
-                const TextureArrayRange*);
-*/
+    int offsetY;
+    int height;
+    int offsetZ;
+    int depth;
+    GetNvnCopyRegion(&offsetY, &height, &offsetZ, &depth, dstRegion, target);
+
+    NVNcopyRegion region;
+    region.xoffset = dstRegion.GetOffsetU();
+    region.yoffset = offsetY;
+    region.zoffset = offsetZ;
+    region.width = dstRegion.GetWidth();
+    region.height = height;
+    region.depth = depth;
+
+    NVNtextureView view;
+    nvnTextureViewSetDefaults(&view);
+    nvnTextureViewSetLevels(&view, dstRegion.GetSubresource().GetMipLevel(), 1);
+
+    NVNbufferAddress bufferAddress =
+        nvnBufferGetAddress(pSrcBuffer->ToData()->pNvnBuffer) + srcOffset;
+
+    nvnCommandBufferSetCopyRowStride(pNvnCommandBuffer, 0);
+    nvnCommandBufferSetCopyImageStride(pNvnCommandBuffer, 0);
+    nvnCommandBufferCopyBufferToTexture(pNvnCommandBuffer, bufferAddress,
+                                        pDstTexture->ToData()->pNvnTexture, &view, &region,
+                                        NVN_COPY_FLAGS_NONE);
+}
+
+void CommandBufferImpl<NvnApi>::CopyImageToBuffer(BufferImpl<NvnApi>* pDstBuffer,
+                                                  ptrdiff_t dstOffset,
+                                                  const TextureImpl<NvnApi>* pSrcTexture,
+                                                  const TextureCopyRegion& srcRegion) {
+    NVNtextureTarget target = nvnTextureGetTarget(pSrcTexture->ToData()->pNvnTexture);
+
+    int offsetY;
+    int height;
+    int offsetZ;
+    int depth;
+    GetNvnCopyRegion(&offsetY, &height, &offsetZ, &depth, srcRegion, target);
+
+    NVNcopyRegion region;
+    region.xoffset = srcRegion.GetOffsetU();
+    region.yoffset = offsetY;
+    region.zoffset = offsetZ;
+    region.width = srcRegion.GetWidth();
+    region.height = height;
+    region.depth = depth;
+
+    NVNtextureView view;
+    nvnTextureViewSetDefaults(&view);
+    nvnTextureViewSetLevels(&view, srcRegion.GetSubresource().GetMipLevel(), 1);
+
+    NVNbufferAddress bufferAddress =
+        nvnBufferGetAddress(pDstBuffer->ToData()->pNvnBuffer) + dstOffset;
+
+    nvnCommandBufferSetCopyRowStride(pNvnCommandBuffer, 0);
+    nvnCommandBufferSetCopyImageStride(pNvnCommandBuffer, 0);
+    nvnCommandBufferCopyTextureToBuffer(pNvnCommandBuffer, pSrcTexture->ToData()->pNvnTexture,
+                                        &view, &region, bufferAddress, NVN_COPY_FLAGS_NONE);
+}
+
+void CommandBufferImpl<NvnApi>::BlitImage(TextureImpl<NvnApi>* pDstTexture,
+                                          const TextureCopyRegion& dstCopyRegion,
+                                          const TextureImpl<NvnApi>* pSrcTexture,
+                                          const TextureCopyRegion& srcCopyRegion, int copyFlags) {
+    NVNtextureTarget dstTarget = nvnTextureGetTarget(pDstTexture->ToData()->pNvnTexture);
+
+    int dstV;
+    int dstHeight;
+    int dstW;
+    int dstDepth;
+    GetNvnCopyRegion(&dstV, &dstHeight, &dstW, &dstDepth, dstCopyRegion, dstTarget);
+
+    NVNtextureTarget srcTarget = nvnTextureGetTarget(pSrcTexture->ToData()->pNvnTexture);
+
+    int srcV;
+    int srcHeight;
+    int srcW;
+    int srcDepth;
+    GetNvnCopyRegion(&srcV, &srcHeight, &srcW, &srcDepth, srcCopyRegion, srcTarget);
+
+    NVNcopyRegion dstRegion;
+    dstRegion.xoffset = dstCopyRegion.GetOffsetU();
+    dstRegion.yoffset = dstV;
+    dstRegion.zoffset = dstW;
+    dstRegion.width = dstCopyRegion.GetWidth();
+    dstRegion.height = dstHeight;
+    dstRegion.depth = dstDepth;
+
+    NVNcopyRegion srcRegion;
+    srcRegion.xoffset = srcCopyRegion.GetOffsetU();
+    srcRegion.yoffset = srcV;
+    srcRegion.zoffset = srcW;
+    srcRegion.width = srcCopyRegion.GetWidth();
+    srcRegion.height = srcHeight;
+    srcRegion.depth = srcDepth;
+
+    NVNtextureView dstView;
+    nvnTextureViewSetDefaults(&dstView);
+    nvnTextureViewSetLevels(&dstView, dstCopyRegion.GetSubresource().GetMipLevel(), 1);
+
+    NVNtextureView srcView;
+    nvnTextureViewSetDefaults(&srcView);
+    nvnTextureViewSetLevels(&srcView, srcCopyRegion.GetSubresource().GetMipLevel(), 1);
+
+    int nvnCopyFlags = 0;
+    nvnCopyFlags |= copyFlags & 1;  // todo: figure out this conversion?
+    nvnCommandBufferCopyTextureToTexture(pNvnCommandBuffer, pSrcTexture->ToData()->pNvnTexture,
+                                         &srcView, &srcRegion, pDstTexture->ToData()->pNvnTexture,
+                                         &dstView, &dstRegion, nvnCopyFlags);
+}
+
+void CommandBufferImpl<NvnApi>::ClearBuffer(BufferImpl<NvnApi>* pBuffer, ptrdiff_t offset,
+                                            size_t size, uint32_t value) {
+    NVNbufferAddress bufferAddress = nvnBufferGetAddress(pBuffer->ToData()->pNvnBuffer) + offset;
+    nvnCommandBufferClearBuffer(pNvnCommandBuffer, bufferAddress, size, value);
+}
+
+void CommandBufferImpl<NvnApi>::ClearColor(ColorTargetViewImpl<NvnApi>* pColorTarget, float r,
+                                           float g, float b, float a,
+                                           const TextureArrayRange* pArrayRange) {
+    ClearColorValue clearColor{r, g, b, a};
+    ClearColorTarget(pColorTarget, clearColor, pArrayRange);
+}
+
+void CommandBufferImpl<NvnApi>::ClearColorTarget(ColorTargetViewImpl<NvnApi>* pColorTarget,
+                                                 const ClearColorValue& clearColor,
+                                                 const TextureArrayRange* pArrayRange) {
+    const NVNtexture* const pNvnTexture = pColorTarget->ToData()->pNvnTexture;
+    const NVNtextureView* const pNvnTextureView = pColorTarget->ToData()->pNvnTextureView;
+
+    NVNcopyRegion region{};
+
+    int level;
+    NVNtextureTarget target;
+
+    if (pNvnTextureView) {
+        int levelCount;
+        NVNboolean result;
+
+        result = nvnTextureViewGetLevels(pNvnTextureView, &level, &levelCount);
+        result = nvnTextureViewGetTarget(pNvnTextureView, &target);
+    } else {
+        level = 0;
+        target = nvnTextureGetTarget(pNvnTexture);
+    }
+
+    region.width = nvnTextureGetWidth(pNvnTexture);
+    region.height = nvnTextureGetHeight(pNvnTexture);
+    region.depth = nvnTextureGetDepth(pNvnTexture);
+
+    region.width = std::max(region.width >> level, 1);
+    if (target != NVN_TEXTURE_TARGET_1D && target != NVN_TEXTURE_TARGET_1D_ARRAY) {
+        region.height = std::max(region.height >> level, 1);
+        if (target == NVN_TEXTURE_TARGET_3D) {
+            region.depth = std::max(region.depth >> level, 1);
+        }
+    }
+
+    if (pArrayRange) {
+        if (target == NVN_TEXTURE_TARGET_1D_ARRAY) {
+            region.yoffset = pArrayRange->GetBaseArrayIndex();
+            region.height = pArrayRange->GetArrayLength();
+        } else if (target == NVN_TEXTURE_TARGET_2D_ARRAY ||
+                   target == NVN_TEXTURE_TARGET_2D_MULTISAMPLE_ARRAY) {
+            region.zoffset = pArrayRange->GetBaseArrayIndex();
+            region.depth = pArrayRange->GetArrayLength();
+        }
+    }
+
+    nvnCommandBufferClearTexture(pNvnCommandBuffer, pNvnTexture, pNvnTextureView, &region,
+                                 clearColor.valueFloat, NVN_CLEAR_COLOR_MASK_RGBA);
+}
+
+void CommandBufferImpl<NvnApi>::ClearDepthStencil(DepthStencilViewImpl<NvnApi>* pDepthStencil,
+                                                  float depth, int stencil,
+                                                  DepthStencilClearMode clearMode,
+                                                  const TextureArrayRange* pArrayRange) {
+    const NVNtexture* const pNvnTexture = pDepthStencil->ToData()->pNvnTexture;
+    const NVNtextureView* const pNvnTextureView = pDepthStencil->ToData()->pNvnTextureView;
+
+    nvnCommandBufferSetScissor(pNvnCommandBuffer, 0, 0, 0x7FFFFFFF, 0x7FFFFFFF);
+    nvnCommandBufferSetRenderTargets(pNvnCommandBuffer, 0, nullptr, nullptr, pNvnTexture,
+                                     pNvnTextureView);
+    switch (clearMode) {
+    case DepthStencilClearMode_Depth:
+        nvnCommandBufferClearDepthStencil(pNvnCommandBuffer, depth, true, stencil, 0);
+        break;
+    case DepthStencilClearMode_Stencil:
+        nvnCommandBufferClearDepthStencil(pNvnCommandBuffer, depth, false, stencil, -1);
+        break;
+    case DepthStencilClearMode_DepthStencil:
+        nvnCommandBufferClearDepthStencil(pNvnCommandBuffer, depth, true, stencil, -1);
+        break;
+
+    default:
+        NN_UNEXPECTED_DEFAULT;
+        break;
+    }
+}
+
+void CommandBufferImpl<NvnApi>::Resolve(TextureImpl<NvnApi>* pDstTexture, int dstMipLevel,
+                                        int dstStartArrayIndex,
+                                        const ColorTargetViewImpl<NvnApi>* pSrcColorTarget,
+                                        const TextureArrayRange* pSrcArrayRange) {
+    const NVNtexture* pSrcNvnTexture = pSrcColorTarget->ToData()->pNvnTexture;
+
+    nvnCommandBufferDownsample(pNvnCommandBuffer, pSrcNvnTexture,
+                               pDstTexture->ToData()->pNvnTexture);
+}
 
 void CommandBufferImpl<NvnApi>::FlushMemory(int gpuAccessFlags) {
     int barrier = 0;  // const value of 1 in dwarf
@@ -611,14 +809,16 @@ void CommandBufferImpl<NvnApi>::InvalidateMemory(int gpuAccessFlags) {
 
 void CommandBufferImpl<NvnApi>::CallCommandBuffer(
     const CommandBufferImpl<NvnApi>* pNestedCommandBuffer) {
-    nvnCommandBufferCallCommands(pNvnCommandBuffer, 1,
-                                 &pNestedCommandBuffer->ToData()->hNvnCommandBuffer);
+    NVNcommandHandle nvnCommandHandle = pNestedCommandBuffer->ToData()->hNvnCommandBuffer;
+
+    nvnCommandBufferCallCommands(pNvnCommandBuffer, 1, &nvnCommandHandle);
 }
 
 void CommandBufferImpl<NvnApi>::CopyCommandBuffer(
     const CommandBufferImpl<NvnApi>* pNestedCommandBuffer) {
-    nvnCommandBufferCopyCommands(pNvnCommandBuffer, 1,
-                                 &pNestedCommandBuffer->ToData()->hNvnCommandBuffer);
+    NVNcommandHandle nvnCommandHandle = pNestedCommandBuffer->ToData()->hNvnCommandBuffer;
+
+    nvnCommandBufferCopyCommands(pNvnCommandBuffer, 1, &nvnCommandHandle);
 }
 
 void CommandBufferImpl<NvnApi>::SetBufferStateTransition(BufferImpl<NvnApi>*, int oldState,
@@ -697,26 +897,66 @@ void CommandBufferImpl<NvnApi>::SetDescriptorPool(
     }
 }
 
-/*
-void SetRootSignature(PipelineType, RootSignatureImpl<NvnApi>*);
-void SetRootBufferDescriptorTable(PipelineType, int, const DescriptorSlot&);
-void SetRootTextureAndSamplerDescriptorTable(PipelineType, int, const DescriptorSlot&,
-                                                const DescriptorSlot&);
-void SetRootConstantBuffer(PipelineType, int, const GpuAddress&, size_t);
-void SetRootUnorderedAccessBuffer(PipelineType, int, const GpuAddress&, size_t);
-void SetRootTextureAndSampler(PipelineType, int, const TextureViewImpl<NvnApi>*,
-                                const SamplerImpl<NvnApi>*);
-*/
+void CommandBufferImpl<NvnApi>::SetRootSignature(PipelineType pipelineType,
+                                                 RootSignatureImpl<NvnApi>* pRootSignature) {
+    pGfxRootSignature = pRootSignature;
+}
+
+void CommandBufferImpl<NvnApi>::SetRootBufferDescriptorTable(
+    PipelineType pipelineType, int indexDescriptorTable,
+    const DescriptorSlot& startBufferDescriptorSlot) {
+    nn::gfx::detail::SetRootBufferDescriptorTable<NvnApi>(
+        this, pipelineType, indexDescriptorTable, startBufferDescriptorSlot,
+        DescriptorPoolImpl<NvnApi>::GetDescriptorSlotIncrementSize(pNnDevice,
+                                                                   DescriptorPoolType_BufferView));
+}
+
+void CommandBufferImpl<NvnApi>::SetRootTextureAndSamplerDescriptorTable(
+    PipelineType pipelineType, int indexDescriptorTable,
+    const DescriptorSlot& startTextureDescriptorSlot,
+    const DescriptorSlot& startSamplerDescriptorSlot) {
+    nn::gfx::detail::SetRootTextureAndSamplerDescriptorTable(
+        this, pipelineType, indexDescriptorTable, startTextureDescriptorSlot,
+        startSamplerDescriptorSlot,
+        DescriptorPoolImpl<NvnApi>::GetDescriptorSlotIncrementSize(pNnDevice,
+                                                                   DescriptorPoolType_TextureView),
+        DescriptorPoolImpl<NvnApi>::GetDescriptorSlotIncrementSize(pNnDevice,
+                                                                   DescriptorPoolType_Sampler));
+}
+
+void CommandBufferImpl<NvnApi>::SetRootConstantBuffer(PipelineType pipelineType,
+                                                      int indexDynamicDescriptor,
+                                                      const GpuAddress& constantBufferAddress,
+                                                      size_t size) {
+    nn::gfx::detail::SetRootConstantBuffer(this, pipelineType, indexDynamicDescriptor,
+                                           constantBufferAddress, size);
+}
+
+void CommandBufferImpl<NvnApi>::SetRootUnorderedAccessBuffer(
+    PipelineType pipelineType, int indexDynamicDescriptor,
+    const GpuAddress& unorderedAccessBufferAddress, size_t size) {
+    nn::gfx::detail::SetRootUnorderedAccessBuffer(this, pipelineType, indexDynamicDescriptor,
+                                                  unorderedAccessBufferAddress, size);
+}
+
+void CommandBufferImpl<NvnApi>::SetRootTextureAndSampler(
+    PipelineType pipelineType, int indexDynamicDescriptor,
+    const TextureViewImpl<NvnApi>* pTextureView, const SamplerImpl<NvnApi>* pSampler) {
+    nn::gfx::detail::SetRootTextureAndSampler(this, pipelineType, indexDynamicDescriptor,
+                                              pTextureView, pSampler);
+}
 
 void CommandBufferImpl<NvnApi>::BeginQuery(QueryTarget target) {
     if (target != QueryTarget_ComputeShaderInvocations) {
-        nvnCommandBufferResetCounter(pNvnCommandBuffer, Nvn::GetCounterType(target));
+        NVNcounterType counterType = Nvn::GetCounterType(target);
+        nvnCommandBufferResetCounter(pNvnCommandBuffer, counterType);
     }
 }
 
 void CommandBufferImpl<NvnApi>::EndQuery(const GpuAddress& dstBufferAddress, QueryTarget target) {
     if (target != QueryTarget_ComputeShaderInvocations) {
-        nvnCommandBufferReportCounter(pNvnCommandBuffer, Nvn::GetCounterType(target),
+        NVNcounterType counterType = Nvn::GetCounterType(target);
+        nvnCommandBufferReportCounter(pNvnCommandBuffer, counterType,
                                       Nvn::GetBufferAddress(dstBufferAddress));
     }
 }

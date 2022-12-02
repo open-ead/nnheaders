@@ -61,13 +61,12 @@ void ReferSymbol(const void*);
 
 // todo: move with more info
 #define NN_NO_COPY(CLASS)                                                                          \
-private:                                                                                           \
     CLASS(const CLASS&) = delete;                                                                  \
     CLASS& operator=(const CLASS&) = delete
 
 namespace nn::detail {
 
-void UnexpectedDefaultImpl(const char*, const char*, int);
+[[noreturn]] void UnexpectedDefaultImpl(const char*, const char*, int);
 
 }  // namespace nn::detail
 

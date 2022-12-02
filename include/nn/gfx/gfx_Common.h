@@ -9,6 +9,9 @@
 
 namespace nn::gfx {
 
+// todo: figure out where to put this
+enum LowLevelApi { LowLevelApi_Common = 0 };
+
 // todo: seems to be named ApiVariationNvn8
 using NvnApi = ApiVariation<ApiType<4>, ApiVersion<8>>;
 using DefaultApi = NvnApi;

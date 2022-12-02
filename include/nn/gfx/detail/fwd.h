@@ -18,6 +18,48 @@ template <typename TTarget>
 class TPipeline;
 
 template <typename TTarget>
+class TColorTargetView;
+
+template <typename TTarget>
+class TDepthStencilView;
+
+template <typename TTarget>
+class TViewportScissorState;
+
+template <typename TTarget>
+class TBuffer;
+
+template <typename TTarget>
+class TDescriptorPool;
+
+template <typename TTarget>
+class TRootSignature;
+
+template <typename TTarget>
+class TTextureView;
+
+template <typename TTarget>
+class TSampler;
+
+template <typename TTarget>
+class TShader;
+
+template <typename TTarget>
+class TRasterizerState;
+
+template <typename TTarget>
+class TBlendState;
+
+template <typename TTarget>
+class TDepthStencilState;
+
+template <typename TTarget>
+class TVertexState;
+
+template <typename TTarget>
+class TTessellationState;
+
+template <typename TTarget>
 struct BufferImplData;
 
 template <typename TTarget>
