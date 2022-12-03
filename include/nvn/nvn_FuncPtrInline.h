@@ -498,8 +498,8 @@ static inline void nvnBufferFinalize(NVNbuffer* buffer) {
     pfnc_nvnBufferFinalize(buffer);
 }
 
-static inline void nvnBufferMap(const NVNbuffer* buffer) {
-    pfnc_nvnBufferMap(buffer);
+static inline void* nvnBufferMap(const NVNbuffer* buffer) {
+    return pfnc_nvnBufferMap(buffer);
 }
 
 static inline NVNbufferAddress nvnBufferGetAddress(const NVNbuffer* buffer) {
@@ -516,7 +516,7 @@ static inline void nvnBufferInvalidateMappedRange(const NVNbuffer* buffer, ptrdi
     pfnc_nvnBufferInvalidateMappedRange(buffer, offset, size);
 }
 
-static inline NVNmemoryPool nvnBufferGetMemoryPool(const NVNbuffer* buffer) {
+static inline NVNmemoryPool* nvnBufferGetMemoryPool(const NVNbuffer* buffer) {
     return pfnc_nvnBufferGetMemoryPool(buffer);
 }
 

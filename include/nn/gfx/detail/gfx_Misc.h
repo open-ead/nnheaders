@@ -11,7 +11,7 @@ union Ptr {
     typedef Ptr<TType, TValue> SelfType;
 
     PtrType ptr;
-    TValue value;  // todo: figure out use of member
+    ValueType value;  // todo: figure out use of member
 
     PtrType operator->() const { return ptr; }
 

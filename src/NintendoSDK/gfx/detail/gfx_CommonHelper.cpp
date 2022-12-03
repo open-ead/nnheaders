@@ -2,6 +2,12 @@
 
 namespace nn::gfx::detail {
 
+NN_MIDDLEWARE("NintendoSDK_gfx-3_5_1-Release");
+
+void UseMiddleWare() {
+    util::ReferSymbol(g_MiddlewareInfo);
+}
+
 int GetBlockWidth(ChannelFormat format) {
     switch (format) {
     case ChannelFormat_Pvrtc1_2Bpp:

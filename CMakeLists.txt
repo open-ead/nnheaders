@@ -94,9 +94,11 @@ add_library(NintendoSDK OBJECT
   include/nn/gfx/detail/gfx_Shader-api.nvn.8.h
   include/nn/gfx/detail/gfx_State-api.nvn.8.h
   include/nn/gfx/detail/gfx_Texture-api.nvn.8.h
-  include/nn/gfx/buffer.h
+  include/nn/gfx/util/gfx_PrimitiveShape.h
   include/nn/gfx/device.h
   include/nn/gfx/gfx_BufferData-api.nvn.8.h
+  include/nn/gfx/gfx_BufferInfo.h
+  include/nn/gfx/gfx_BufferInfoData.h
   include/nn/gfx/gfx_CommandBuffer.h
   include/nn/gfx/gfx_CommandBufferData-api.nvn.8.h
   include/nn/gfx/gfx_Common.h
@@ -114,6 +116,8 @@ add_library(NintendoSDK OBJECT
   include/nn/gfx/gfx_StateData-api.nvn.8.h
   include/nn/gfx/gfx_StateInfo.h
   include/nn/gfx/gfx_StateInfoData.h
+  include/nn/gfx/gfx_SwapChainInfo.h
+  include/nn/gfx/gfx_SwapChainInfoData.h
   include/nn/gfx/gfx_TextureInfo.h
   include/nn/gfx/gfx_TextureInfoData.h
   include/nn/gfx/gfx_Types.h
@@ -162,10 +166,12 @@ add_library(NintendoSDK OBJECT
   src/NintendoSDK/gfx/detail/gfx_CommandBuffer-api.nvn.8.cpp
   src/NintendoSDK/gfx/detail/gfx_CommonHelper.cpp
   src/NintendoSDK/gfx/detail/gfx_CommonHelper.h
+  src/NintendoSDK/gfx/detail/gfx_GlslcFunction.cpp
   src/NintendoSDK/gfx/detail/gfx_NvnHelper.cpp
   src/NintendoSDK/gfx/detail/gfx_NvnHelper.h
   src/NintendoSDK/gfx/detail/gfx_Shader-api.nvn.8.cpp
   src/NintendoSDK/gfx/detail/gfx_State-api.nvn.8.cpp
+  src/NintendoSDK/gfx/util/gfx_PrimitiveShape.cpp
   src/NintendoSDK/gfx/gfx_StateInfo.cpp
   src/NintendoSDK/nnSdk/util.cpp
 )

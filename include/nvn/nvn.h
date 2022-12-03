@@ -639,6 +639,18 @@ typedef enum {
 } NVNshaderStage;
 
 typedef enum {
+    NVN_SHADER_STAGE_VERTEX_BIT = 0x1,
+    NVN_SHADER_STAGE_FRAGMENT_BIT = 0x2,
+    NVN_SHADER_STAGE_GEOMETRY_BIT = 0x4,
+    NVN_SHADER_STAGE_TESS_CONTROL_BIT = 0x8,
+    NVN_SHADER_STAGE_TESS_EVALUATION_BIT = 0x10,
+    NVN_SHADER_STAGE_COMPUTE_BIT = 0x20,
+    NVN_SHADER_STAGE_ALL_GRAPHICS_BITS = 31,
+
+    NVN_SHADER_STAGE_BITS_LARGE = 0x7FFFFFFF
+} NVNshaderStageBits;
+
+typedef enum {
     NVN_EVENT_WAIT_MODE_EQUAL = 0x0,
     NVN_EVENT_WAIT_MODE_GEQUAL_WRAP = 0x1,
 
@@ -1229,11 +1241,11 @@ typedef size_t (*PFNNVNBUFFERBUILDERGETSIZEPROC)(const NVNbufferBuilder*);
 typedef NVNboolean (*PFNNVNBUFFERINITIALIZEPROC)(NVNbuffer*, const NVNbufferBuilder*);
 typedef void (*PFNNVNBUFFERSETDEBUGLABELPROC)(NVNbuffer*, const char*);
 typedef void (*PFNNVNBUFFERFINALIZEPROC)(NVNbuffer*);
-typedef void (*PFNNVNBUFFERMAPPROC)(const NVNbuffer*);
+typedef void* (*PFNNVNBUFFERMAPPROC)(const NVNbuffer*);
 typedef NVNbufferAddress (*PFNNVNBUFFERGETADDRESSPROC)(const NVNbuffer*);
 typedef void (*PFNNVNBUFFERFLUSHMAPPEDRANGEPROC)(const NVNbuffer*, ptrdiff_t, size_t);
 typedef void (*PFNNVNBUFFERINVALIDATEMAPPEDRANGEPROC)(const NVNbuffer*, ptrdiff_t, size_t);
-typedef NVNmemoryPool (*PFNNVNBUFFERGETMEMORYPOOLPROC)(const NVNbuffer*);
+typedef NVNmemoryPool* (*PFNNVNBUFFERGETMEMORYPOOLPROC)(const NVNbuffer*);
 typedef ptrdiff_t (*PFNNVNBUFFERGETMEMORYOFFSETPROC)(const NVNbuffer*);
 typedef size_t (*PFNNVNBUFFERGETSIZEPROC)(const NVNbuffer*);
 typedef uint64_t (*PFNNVNBUFFERGETDEBUGIDPROC)(const NVNbuffer*);

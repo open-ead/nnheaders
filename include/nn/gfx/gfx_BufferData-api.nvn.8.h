@@ -21,4 +21,16 @@ struct BufferImplData<NvnApi> {
     detail::Ptr<void> userPtr;
 };
 
+template <>
+struct BufferTextureViewImplData<NvnApi> {
+    enum State { State_NotInitialized, State_Initialized };
+    enum Flag { Flag_Shared };
+
+    Bit8 state;
+    util::BitPack8 flags;
+    char reserved[6];
+    char nvnTexture[192];
+    detail::Ptr<void> pNvnTexture;
+};
+
 }  // namespace nn::gfx

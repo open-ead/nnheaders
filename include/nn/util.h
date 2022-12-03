@@ -54,10 +54,13 @@ public:
 
 template <s32 size, typename T>
 struct BitFlagSet {};
-}  // namespace util
 
 void ReferSymbol(const void*);
+}  // namespace util
 }  // namespace nn
+
+// todo: change the section?
+#define NN_MIDDLEWARE(name) static const char g_MiddlewareInfo[] = "SDK MW+Nintendo+" name
 
 // todo: move with more info
 #define NN_NO_COPY(CLASS)                                                                          \

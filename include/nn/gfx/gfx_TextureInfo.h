@@ -7,7 +7,36 @@
 
 namespace nn::gfx {
 
-class TextureInfo;
+class TextureSubresourceRange;
+class TextureArrayRange;
+
+class TextureInfo : public detail::DataContainer<TextureInfoData> {
+public:
+    TextureInfo();
+    void SetDefault();
+    void SetImageStorageDimension(ImageStorageDimension value) { imageStorageDimension = value; }
+    void SetImageFormat(ImageFormat value) { imageFormat = value; }
+    void SetGpuAccessFlags(int value) { gpuAccessFlags = value; }
+    void SetTileMode(TileMode value) { tileMode = value; }
+    void SetWidth(int value) { width = value; }
+    void SetHeight(int value) { height = value; }
+    void SetDepth(int value) { depth = value; }
+    void SetArrayLength(int value) { arrayLength = value; }
+    void SetSwizzle(int value) { swizzle = value; }
+    void SetMultiSampleCount(int value) { multisampleCount = value; }
+    void SetMipCount(int value) { mipCount = value; }
+    ImageStorageDimension GetImageStorageDimension() const;
+    ImageFormat GetImageFormat() const;
+    int GetGpuAccessFlags() const;
+    TileMode GetTileMode() const;
+    int GetWidth() const;
+    int GetHeight() const;
+    int GetDepth() const;
+    int GetMipCount() const;
+    int GetArrayLength() const;
+    int GetSwizzle() const;
+    int GetMultisampleCount() const;
+};
 
 class TextureViewInfo : public detail::DataContainer<TextureViewInfoData> {
 public:

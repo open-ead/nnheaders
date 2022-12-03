@@ -63,6 +63,9 @@ template <typename TTarget>
 struct BufferImplData;
 
 template <typename TTarget>
+struct BufferTextureViewImplData;
+
+template <typename TTarget>
 struct CommandBufferImplData;
 
 template <typename TTarget>
@@ -120,6 +123,9 @@ class DeviceImpl;
 
 template <typename TTarget>
 class BufferImpl;
+
+template <typename TTarget>
+class BufferTextureViewImpl;
 
 template <typename TTarget>
 class CommandBufferImpl;

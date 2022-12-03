@@ -8,6 +8,8 @@
 
 namespace nn::gfx::detail {
 
+void UseMiddleWare();
+
 int GetBlockWidth(ChannelFormat);
 int GetBlockHeight(ChannelFormat);
 bool IsCompressedFormat(ChannelFormat);

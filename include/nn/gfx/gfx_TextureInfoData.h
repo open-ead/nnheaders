@@ -22,7 +22,23 @@ struct TextureSubresourceRangeData {
     TextureArrayRangeData arrayRange;
 };
 
-struct TextureInfoData;
+struct TextureInfoData {
+    util::BitPack8 flags;
+    Bit8 imageStorageDimension;
+    Bit16 tileMode;
+    uint16_t swizzle;
+    uint16_t mipCount;
+    uint16_t multisampleCount;
+    char reserved2[2];
+    Bit32 imageFormat;
+    Bit32 gpuAccessFlags;
+    uint32_t width;
+    uint32_t height;
+    uint32_t depth;
+    uint32_t arrayLength;
+    char textureLayout[8];
+    char reserved[20];
+};
 
 struct TextureViewInfoData {
     Bit8 imageDimension;
@@ -78,6 +94,10 @@ struct BufferTextureCopyRegionData {
     uint32_t bufferImageWidth;
     uint32_t bufferImageHeight;
     TextureCopyRegionData textureCopyRegion;
+};
+
+struct ImageFormatProperty {
+    Bit32 propertyFlags;
 };
 
 }  // namespace nn::gfx

@@ -2,6 +2,12 @@
 
 #include <nvn/nvn.h>
 
+#define GLSLC_PTR(type, var)                                                                       \
+    union {                                                                                        \
+        type var;                                                                                  \
+        uint64_t ptr##var;                                                                         \
+    }
+
 /*
 GLSLCpiqUniformKind;
 GLSLCpiqTypeEnum;
@@ -54,12 +60,25 @@ GLSLCuniform_rec;
 GLSLCProgramInputInfo_rec;
 GLSLCProgramOutput_rec;
 GLSLCssboInfo_rec;
-GLSLCxfbInfo_rec;
-typedef GLSLCxfbInfo_rec GLSLCxfbInfo;
-GLSLCincludeInfo_rec;
-typedef GLSLCincludeInfo_rec GLSLCincludeInfo;
-typedef GLSLCspecializationBatch_rec GLSLCspecializationBatch;
 */
+
+typedef struct GLSLCxfbInfo_rec {
+    GLSLC_PTR(const char* const*, varyings);
+
+    uint32_t numVaryings;
+    uint8_t reserved[32];
+} GLSLCxfbInfo;
+
+typedef struct GLSLCincludeInfo_rec {
+    GLSLC_PTR(const char* const*, paths);
+
+    uint32_t numPaths;
+    uint8_t reserved[32];
+} GLSLCincludeInfo;
+
+typedef struct GLSLCspecializationBatch_rec {
+    // todo: reverse from nnSdk, type never used
+} GLSLCspecializationBatch;
 
 typedef struct GLSLCoptionFlags_rec {
     uint32_t glslSeparable : 1;
@@ -83,15 +102,42 @@ typedef struct GLSLCoptionFlags_rec {
     GLSLCwarnUninitControlEnum warnUninitControl : 3;
 } GLSLCoptionFlags;
 
-/*
-GLSLCoptions_rec;
-typedef GLSLCoptions_rec GLSLCoptions;
-GLSLCcompilationStatus_rec;
-typedef GLSLCcompilationStatus_rec GLSLCcompilationStatus;
-typedef GLSLCspirvSpecializationInfo_rec GLSLCspirvSpecializationInfo;
-GLSLCinput_rec;
-typedef GLSLCinput_rec GLSLCinput;
-*/
+typedef struct GLSLCoptions_rec {
+    GLSLC_PTR(const char*, forceIncludeStdHeader);
+
+    GLSLCoptionFlags optionFlags;
+    GLSLCincludeInfo includeInfo;
+    GLSLCxfbInfo xfbVaryingInfo;
+    uint8_t reserved[32];
+} GLSLCoptions;
+
+typedef struct GLSLCcompilationStatus_rec {
+    GLSLC_PTR(const char*, infoLog);
+
+    uint32_t infoLogLength;
+    uint8_t success;
+    uint8_t allocError;
+    uint8_t usedMTSpecialization;
+    uint8_t reserved[1];
+    uint32_t numEntriesInBatch;
+    uint8_t reserved2[24];
+} GLSLCcompilationStatus;
+
+typedef struct GLSLCspirvSpecializationInfo_rec {
+    // todo: reverse from nnSdk, type never used
+} GLSLCspirvSpecializationInfo;
+
+typedef struct GLSLCinput_rec {
+    GLSLC_PTR(const char* const*, sources);
+    GLSLC_PTR(const NVNshaderStage*, stages);
+
+    uint8_t count;
+    uint8_t reserved[7];
+
+    GLSLC_PTR(const char* const*, spirvEntryPointNames);
+    GLSLC_PTR(const uint32_t*, spirvModuleSizes);
+    GLSLC_PTR(const GLSLCspirvSpecializationInfo* const*, spirvSpecInfo);
+} GLSLCinput;
 
 typedef struct GLSLCsectionHeaderCommon_rec {
     uint32_t size;
@@ -211,14 +257,30 @@ typedef struct GLSLCoutput_rec {
     GLSLCsectionHeaderUnion headers[1];
 } GLSLCoutput;
 
-/*
-GLSLCresults_rec;
-typedef GLSLCresults_rec GLSLCresults;
-GLSLCinitializationStatus_enum;
-typedef GLSLCinitializationStatus_enum GLSLCinitializationStatus;
-GLSLCcompileObject;
-typedef GLSLCcompileObject GLSLCcompileObject;
+typedef struct GLSLCresults_rec {
+    GLSLC_PTR(GLSLCcompilationStatus*, compilationStatus);
+    GLSLC_PTR(GLSLCoutput*, glslcOutput);
+    uint8_t reserved[32];
+} GLSLCresults;
+
+typedef enum GLSLCinitializationStatus_enum {
+    GLSLC_INIT_ERROR_UNINITIALIZED,
+    GLSLC_INIT_SUCCESS,
+    GLSLC_INIT_ERROR_ALLOC_FAILURE,
+    GLSLC_INIT_ERROR_NO_ALLOC_CALLBACKS_SET
+} GLSLCinitializationStatus;
+
+typedef struct GLSLCcompileObject {
+    GLSLC_PTR(GLSLCresults*, lastCompiledResults);
+    GLSLC_PTR(GLSLCprogramReflectionHeader*, reflectionSection);
+    GLSLC_PTR(void*, privateData);
+
+    GLSLCoptions options;
+    GLSLCinput input;
+    GLSLCinitializationStatus initStatus;
+    uint8_t reserved[28];
+} GLSLCcompileObject;
+
 typedef void* (*GLSLCallocateFunction)(size_t, size_t, void*);
 typedef void (*GLSLCfreeFunction)(void*, void*);
 typedef void* (*GLSLCreallocateFunction)(void*, size_t, void*);
-*/

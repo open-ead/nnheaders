@@ -8,6 +8,7 @@
 namespace nn::gfx {
 
 class BufferInfo;
+class BufferTextureViewInfo;
 class GpuAddress;
 
 namespace detail {
@@ -34,6 +35,21 @@ public:
     void FlushMappedRange(ptrdiff_t, size_t) const;
     void InvalidateMappedRange(ptrdiff_t, size_t) const;
     void GetGpuAddress(GpuAddress*) const;
+};
+
+template <>
+class BufferTextureViewImpl<NvnApi> : public DataContainer<BufferTextureViewImplData<NvnApi>> {
+    NN_NO_COPY(BufferTextureViewImpl);
+
+public:
+    typedef BufferTextureViewInfo InfoType;
+
+    static size_t GetOffsetAlignment(DeviceImpl<NvnApi>*, const InfoType&);
+
+    BufferTextureViewImpl();
+    ~BufferTextureViewImpl();
+    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
+    void Finalize(DeviceImpl<NvnApi>*);
 };
 
 }  // namespace detail
