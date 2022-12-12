@@ -2,6 +2,7 @@
 
 #include <nn/gfx/detail/gfx_Misc.h>
 #include <nn/nn_BitTypes.h>
+#include <nn/util/util_BitPack.h>
 
 namespace nn::gfx {
 
@@ -23,7 +24,9 @@ struct TextureSubresourceRangeData {
 };
 
 struct TextureInfoData {
-    util::BitPack8 flags;
+    enum Flag { Flag_SpecifyTextureLayout, Flag_SparseBinding, Flag_SparseResidency };
+
+    nn::util::BitPack8 flags;
     Bit8 imageStorageDimension;
     Bit16 tileMode;
     uint16_t swizzle;

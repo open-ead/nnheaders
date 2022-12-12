@@ -171,7 +171,7 @@ typedef struct {
 } NVNvertexAttribState;
 
 typedef struct {
-    char reserved[0x4];
+    char reserved[0x8];
 } NVNvertexStreamState;
 
 typedef struct {
@@ -1119,7 +1119,7 @@ typedef void (*PFNNVNDEBUGCALLBACKPROC)(NVNdebugCallbackSource source, NVNdebugC
 typedef void (*PFNNVNWALKDEBUGDATABASECALLBACKPROC)(void*, void*);
 
 typedef void (*PFNNVNDEVICEBUILDERSETDEFAULTSPROC)(NVNdeviceBuilder*);
-typedef void (*PFNNVNDEVICEBUILDERSETFLAGSPROC)(NVNdeviceBuilder*, NVNdeviceFlagBits);
+typedef void (*PFNNVNDEVICEBUILDERSETFLAGSPROC)(NVNdeviceBuilder*, int);
 typedef NVNboolean (*PFNNVNDEVICEINITIALIZEPROC)(NVNdevice*, const NVNdeviceBuilder*);
 typedef void (*PFNNVNDEVICEFINALIZEPROC)(NVNdevice*);
 typedef void (*PFNNVNDEVICESETDEBUGLABELPROC)(NVNdevice*, const char*);
@@ -1203,7 +1203,7 @@ typedef NVNmemoryPoolFlags (*PFNNVNMEMORYPOOLBUILDERGETFLAGSPROC)(const NVNmemor
 typedef NVNboolean (*PFNNVNMEMORYPOOLINITIALIZEPROC)(NVNmemoryPool*, const NVNmemoryPoolBuilder*);
 typedef void (*PFNNVNMEMORYPOOLSETDEBUGLABELPROC)(NVNmemoryPool*, const char*);
 typedef void (*PFNNVNMEMORYPOOLFINALIZEPROC)(NVNmemoryPool*);
-typedef void (*PFNNVNMEMORYPOOLMAPPROC)(const NVNmemoryPool*);
+typedef void* (*PFNNVNMEMORYPOOLMAPPROC)(const NVNmemoryPool*);
 typedef void (*PFNNVNMEMORYPOOLFLUSHMAPPEDRANGEPROC)(const NVNmemoryPool*, ptrdiff_t, size_t);
 typedef void (*PFNNVNMEMORYPOOLINVALIDATEMAPPEDRANGEPROC)(const NVNmemoryPool*, ptrdiff_t, size_t);
 typedef NVNbufferAddress (*PFNNVNMEMORYPOOLGETBUFFERADDRESSPROC)(const NVNmemoryPool*);

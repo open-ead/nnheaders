@@ -6,18 +6,9 @@
 
 namespace nn::gfx {
 
-struct MemoryPoolInfo;
+class MemoryPoolInfo;
 
 namespace detail {
-
-class MemoryPoolData {
-public:
-    void SetDefault();
-
-    s32 _0;  // set to 0x88
-    s32 _4;
-    u64 _8;
-};
 
 template <>
 class MemoryPoolImpl<NvnApi> : public DataContainer<MemoryPoolImplData<NvnApi>> {

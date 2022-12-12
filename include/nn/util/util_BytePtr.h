@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nn/util/util_BitUtil.h>
 #include "nn/types.h"
 
 namespace nn::util {
@@ -29,7 +30,13 @@ public:
 
     // TODO
     bool IsAligned(size_t alignment) const;
-    BytePtr& AlignUp(size_t alignment);
+
+    BytePtr& AlignUp(size_t alignment) {
+        uintptr_t& ptr = reinterpret_cast<uintptr_t&>(m_Ptr);
+        ptr = align_up(ptr, alignment);
+        return *this;
+    }
+
     BytePtr& AlignDown(size_t alignment);
 
     BytePtr& operator+=(ptrdiff_t offset) { return Advance(offset); }
@@ -52,7 +59,7 @@ class ConstBytePtr {
 public:
     explicit ConstBytePtr(const void* ptr) : m_Ptr(ptr) {}
     ConstBytePtr(const BytePtr&);
-    ConstBytePtr(const void*, ptrdiff_t);
+    ConstBytePtr(const void* ptr, ptrdiff_t offset) : ConstBytePtr(ptr) { Advance(offset); }
 
     void Reset(const void*);
 
@@ -68,7 +75,10 @@ public:
         return *this;
     }
 
-    ptrdiff_t Distance(const void*) const;
+    ptrdiff_t Distance(const void* ptr) const {
+        return static_cast<const char*>(ptr) - Get<char>();
+    }
+
     bool IsAligned(size_t) const;
     ConstBytePtr& AlignUp(size_t);
     ConstBytePtr& AlignDown(size_t);

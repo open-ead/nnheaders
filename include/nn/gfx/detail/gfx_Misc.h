@@ -11,7 +11,8 @@ union Ptr {
     typedef Ptr<TType, TValue> SelfType;
 
     PtrType ptr;
-    ValueType value;  // todo: figure out use of member
+    // doesn't seem to exist in SMO
+    // ValueType value;
 
     PtrType operator->() const { return ptr; }
 

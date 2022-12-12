@@ -9,9 +9,12 @@ namespace nn::gfx {
 
 template <>
 struct DescriptorPoolImplData<NvnApi> {
+    enum State { State_NotInitialized, State_Initialized, State_Begun };
+    enum Flag { Flag_Shared };
+
     Bit8 state;
     Bit8 descriptorPoolType;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved;
     int32_t slotCount;
     int32_t reservedSlots;

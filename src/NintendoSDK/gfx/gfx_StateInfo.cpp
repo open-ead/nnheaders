@@ -18,7 +18,11 @@ void RasterizerStateInfo::SetDefault() {
 
     SetRasterEnabled(true);
     SetMultisampleEnabled(false);
-    SetDepthClipEnabled(true);  // false in smo
+#if NN_VER > 351
+    SetDepthClipEnabled(true);
+#else
+    SetDepthClipEnabled(false);
+#endif
     SetScissorEnabled(false);
 
     SetSlopeScaledDepthBias(0.0f);
@@ -76,6 +80,15 @@ void DepthStencilStateInfo::SetDefault() {
     EditBackStencilStateInfo().SetDefault();
 }
 
+void ColorTargetStateInfo::SetDefault() {
+    SetFormat(ImageFormat_Undefined);
+}
+
+void RenderTargetStateInfo::SetDefault() {
+    SetDepthStencilFormat(ImageFormat_Undefined);
+    SetColorTargetStateInfoArray(nullptr, 0);
+}
+
 void VertexAttributeStateInfo::SetDefault() {
     SetSemanticIndex(0);
     SetShaderSlot(-1);
@@ -98,6 +111,28 @@ void VertexStateInfo::SetDefault() {
 
 void TessellationStateInfo::SetDefault() {
     SetPatchControlPointCount(1);
+}
+
+void ViewportStateInfo::SetDefault() {
+    SetOriginX(0.0f);
+    SetOriginY(0.0f);
+    SetWidth(0.0f);
+    SetHeight(0.0f);
+    SetMinDepth(0.0f);
+    SetMaxDepth(1.0f);
+}
+
+void ScissorStateInfo::SetDefault() {
+    SetOriginX(0);
+    SetOriginY(0);
+    SetWidth(0);
+    SetHeight(0);
+}
+
+void ViewportScissorStateInfo::SetDefault() {
+    SetScissorEnabled(false);
+    SetViewportStateInfoArray(nullptr, 0);
+    SetScissorStateInfoArray(nullptr, 0);
 }
 
 }  // namespace nn::gfx

@@ -9,7 +9,7 @@ enum PrimitiveShapeFormat {
     PrimitiveShapeFormat_Pos = 0x1,
     PrimitiveShapeFormat_Normal = 0x2,
     PrimitiveShapeFormat_Uv = 0x4,
-    PrimitiveShapeFormat_Default = 7
+    PrimitiveShapeFormat_Default = 0x7
 };
 
 class PrimitiveShape {
@@ -33,7 +33,7 @@ public:
 protected:
     PrimitiveShape(PrimitiveShapeFormat, PrimitiveTopology);
 
-    virtual void CalculateImpl(void*, size_t, void*, size_t);
+    virtual void CalculateImpl(void*, size_t, void*, size_t) = 0;
     void SetVertexBuffer(void*);
     void SetIndexBuffer(void*);
     void SetVertexBufferSize(size_t);
@@ -64,7 +64,7 @@ public:
 protected:
     int CalculateVertexCount();
     int CalculateIndexCount();
-    virtual void CalculateImpl(void*, size_t, void*, size_t);
+    void CalculateImpl(void*, size_t, void*, size_t);
 
 private:
     template <typename T>
@@ -76,15 +76,140 @@ private:
     int m_StackCount;
 };
 
-//*308*/ CircleShape;
-//*382*/ CubeShape;
-//*434*/ CubeShape::CubeVertex;
-//*443*/ CubeShape::CubeIndex;
-//*470*/ QuadShape;
-//*522*/ QuadShape::QuadVertex;
-//*530*/ QuadShape::QuadIndex;
-//*557*/ HemiSphereShape;
-//*631*/ PipeShape;
-//*705*/ CylinderShape;
-//*779*/ ConeShape;
+class CircleShape : public PrimitiveShape {
+public:
+    CircleShape(PrimitiveShapeFormat, PrimitiveTopology, int);
+    virtual ~CircleShape();
+
+protected:
+    int CalculateVertexCount();
+    int CalculateIndexCount();
+    virtual void CalculateImpl(void*, size_t, void*, size_t);
+
+private:
+    void* CalculateVertexBuffer();
+
+    template <typename T>
+    void CalculateIndexBuffer();
+
+    int m_SliceCount;
+};
+
+class CubeShape : public PrimitiveShape {
+public:
+    CubeShape(PrimitiveShapeFormat, PrimitiveTopology);
+    virtual ~CubeShape();
+
+protected:
+    int CalculateVertexCount();
+    int CalculateIndexCount();
+    virtual void CalculateImpl(void*, size_t, void*, size_t);
+
+    enum CubeVertex { CubeVertexCount_Wired = 8, CubeVertexCount_Solid = 24 };
+    enum CubeIndex { CubeIndexCount_Wired = 48, CubeIndexCount_Solid = 36 };
+
+private:
+    void* CalculateVertexBuffer();
+
+    template <typename T>
+    void CalculateIndexBuffer();
+};
+
+class QuadShape : public PrimitiveShape {
+public:
+    QuadShape(PrimitiveShapeFormat, PrimitiveTopology);
+    virtual ~QuadShape();
+
+protected:
+    int CalculateVertexCount();
+    int CalculateIndexCount();
+    virtual void CalculateImpl(void*, size_t, void*, size_t);
+
+    enum QuadVertex { QuadVertexCount = 4 };
+
+    enum QuadIndex { QuadIndexCount_Wired = 5, QuadIndexCountt_Solid = 6 };
+
+private:
+    void* CalculateVertexBuffer();
+
+    template <typename T>
+    void CalculateIndexBuffer();
+};
+
+class HemiSphereShape : public PrimitiveShape {
+public:
+    HemiSphereShape(PrimitiveShapeFormat, PrimitiveTopology, int);
+    virtual ~HemiSphereShape();
+
+protected:
+    int CalculateVertexCount();
+    int CalculateIndexCount();
+    virtual void CalculateImpl(void*, size_t, void*, size_t);
+
+private:
+    void* CalculateVertexBuffer();
+
+    template <typename T>
+    void CalculateIndexBuffer();
+
+    int m_SliceCount;
+};
+
+class PipeShape : public PrimitiveShape {
+public:
+    PipeShape(PrimitiveShapeFormat, PrimitiveTopology, int);
+    virtual ~PipeShape();
+
+protected:
+    int CalculateVertexCount();
+    int CalculateIndexCount();
+    virtual void CalculateImpl(void*, size_t, void*, size_t);
+
+private:
+    void* CalculateVertexBuffer();
+
+    template <typename T>
+    void CalculateIndexBuffer();
+
+    int m_SliceCount;
+};
+
+class CylinderShape : public PrimitiveShape {
+public:
+    CylinderShape(PrimitiveShapeFormat, PrimitiveTopology, int);
+    virtual ~CylinderShape();
+
+protected:
+    int CalculateVertexCount();
+    int CalculateIndexCount();
+    virtual void CalculateImpl(void*, size_t, void*, size_t);
+
+private:
+    void* CalculateVertexBuffer();
+
+    template <typename T>
+    void CalculateIndexBuffer();
+
+    int m_SliceCount;
+};
+
+class ConeShape : public PrimitiveShape {
+public:
+    ConeShape(PrimitiveShapeFormat, PrimitiveTopology, int);
+    virtual ~ConeShape();
+
+protected:
+    int CalculateVertexCount();
+    int CalculateIndexCount();
+    virtual void CalculateImpl(void*, size_t, void*, size_t);
+
+private:
+    void* CalculateVertexBuffer();
+
+    template <typename T>
+    void CalculateIndexBuffer();
+
+    int m_SliceCount;
+};
+
 }  // namespace nn::gfx::util

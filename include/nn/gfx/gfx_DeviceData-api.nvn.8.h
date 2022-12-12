@@ -15,9 +15,9 @@ struct DeviceImplData<NvnApi> {
     detail::Ptr<void> pNvnDevice;
     char nvnDevice[12288];
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[2];
-    util::BitPack32 supportedFeatures;
+    nn::util::BitPack32 supportedFeatures;
     detail::Ptr<void> userPtr;
 };
 

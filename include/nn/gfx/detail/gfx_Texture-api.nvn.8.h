@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nn/gfx/detail/gfx_DataContainer.h>
 #include <nn/gfx/gfx_Common.h>
 #include <nn/gfx/gfx_TextureData-api.nvn.8.h>
 
@@ -68,7 +69,6 @@ public:
     typedef DepthStencilViewInfo InfoType;
 
     DepthStencilViewImpl();
-
     ~DepthStencilViewImpl();
     void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
     void Finalize(DeviceImpl<NvnApi>*);

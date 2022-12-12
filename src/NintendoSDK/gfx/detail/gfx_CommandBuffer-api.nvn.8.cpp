@@ -12,7 +12,7 @@
 #include <nn/gfx/gfx_DescriptorSlot.h>
 #include <nn/gfx/gfx_StateInfo.h>
 #include <nn/gfx/gfx_TextureInfo.h>
-#include <nn/util/BytePtr.h>
+#include <nn/util/util_BytePtr.h>
 
 #include <algorithm>
 
@@ -132,7 +132,9 @@ size_t CommandBufferImpl<NvnApi>::GetControlMemoryAlignment(DeviceImpl<NvnApi>* 
     return align;
 }
 
-CommandBufferImpl<NvnApi>::CommandBufferImpl() {}
+CommandBufferImpl<NvnApi>::CommandBufferImpl() {
+    state = State_NotInitialized;
+}
 
 CommandBufferImpl<NvnApi>::~CommandBufferImpl() {}
 
@@ -411,7 +413,7 @@ void CommandBufferImpl<NvnApi>::SetViewportScissorState(
     if (viewportCount > 1) {
         int extraViewportCount = viewportCount - 1;
 
-        util::BytePtr ptr(view.pWorkMemory.ptr);
+        nn::util::BytePtr ptr(view.pWorkMemory.ptr);
 
         auto* viewportArray = ptr.Get<float>();
         auto* depthRangeArray = ptr.Advance(16 * extraViewportCount).Get<float>();
@@ -1019,7 +1021,7 @@ void CommandBufferImpl<NvnApi>::SetScissors(int firstScissor, int scissorCount,
 
 void CommandBufferImpl<NvnApi>::SetConstantBuffer(int slot, ShaderStage stage,
                                                   const DescriptorSlot& constantBufferDescriptor) {
-    util::ConstBytePtr pDescriptor(ToPtr<void*>(constantBufferDescriptor));
+    nn::util::ConstBytePtr pDescriptor(ToPtr<void*>(constantBufferDescriptor));
     NVNbufferAddress address = *pDescriptor.Get<NVNbufferAddress>();
     size_t size = *pDescriptor.Advance(8).Get<size_t>();
 
@@ -1029,7 +1031,7 @@ void CommandBufferImpl<NvnApi>::SetConstantBuffer(int slot, ShaderStage stage,
 
 void CommandBufferImpl<NvnApi>::SetUnorderedAccessBuffer(
     int slot, ShaderStage stage, const DescriptorSlot& unorderedAccessBufferDescriptor) {
-    util::ConstBytePtr pDescriptor(ToPtr<void*>(unorderedAccessBufferDescriptor));
+    nn::util::ConstBytePtr pDescriptor(ToPtr<void*>(unorderedAccessBufferDescriptor));
     NVNbufferAddress address = *pDescriptor.Get<NVNbufferAddress>();
     size_t size = *pDescriptor.Advance(8).Get<size_t>();
 

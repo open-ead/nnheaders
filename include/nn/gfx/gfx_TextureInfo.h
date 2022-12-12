@@ -12,8 +12,10 @@ class TextureArrayRange;
 
 class TextureInfo : public detail::DataContainer<TextureInfoData> {
 public:
-    TextureInfo();
+    TextureInfo() {}
+
     void SetDefault();
+
     void SetImageStorageDimension(ImageStorageDimension value) { imageStorageDimension = value; }
     void SetImageFormat(ImageFormat value) { imageFormat = value; }
     void SetGpuAccessFlags(int value) { gpuAccessFlags = value; }
@@ -25,107 +27,182 @@ public:
     void SetSwizzle(int value) { swizzle = value; }
     void SetMultiSampleCount(int value) { multisampleCount = value; }
     void SetMipCount(int value) { mipCount = value; }
-    ImageStorageDimension GetImageStorageDimension() const;
-    ImageFormat GetImageFormat() const;
-    int GetGpuAccessFlags() const;
-    TileMode GetTileMode() const;
-    int GetWidth() const;
-    int GetHeight() const;
-    int GetDepth() const;
-    int GetMipCount() const;
-    int GetArrayLength() const;
-    int GetSwizzle() const;
-    int GetMultisampleCount() const;
+
+    ImageStorageDimension GetImageStorageDimension() const {
+        return static_cast<ImageStorageDimension>(imageStorageDimension);
+    }
+
+    ImageFormat GetImageFormat() const { return static_cast<ImageFormat>(imageFormat); }
+    int GetGpuAccessFlags() const { return gpuAccessFlags; }
+    TileMode GetTileMode() const { return static_cast<TileMode>(tileMode); }
+    int GetWidth() const { return width; }
+    int GetHeight() const { return height; }
+    int GetDepth() const { return depth; }
+    int GetMipCount() const { return mipCount; }
+    int GetArrayLength() const { return arrayLength; }
+    int GetSwizzle() const { return swizzle; }
+    int GetMultisampleCount() const { return multisampleCount; }
 };
 
 class TextureViewInfo : public detail::DataContainer<TextureViewInfoData> {
 public:
-    TextureViewInfo();
+    TextureViewInfo() {}
+
     void SetDefault();
-    void SetImageDimension(ImageDimension);
-    void SetDepthStencilTextureMode(DepthStencilFetchMode);
-    void SetImageFormat(ImageFormat);
-    void SetTexturePtr(const void*);
-    void SetChannelMapping(ChannelMapping, ChannelMapping, ChannelMapping, ChannelMapping);
-    TextureSubresourceRange& EditSubresourceRange();
-    ImageDimension GetImageDimension() const;
-    DepthStencilFetchMode GetDepthStencilTextureMode() const;
-    ImageFormat GetImageFormat() const;
-    detail::Caster<const void> GetTexturePtr() const;
-    ChannelMapping GetChannelMapping(ColorChannel) const;
-    const TextureSubresourceRange& GetSubresourceRange() const;
+
+    void SetImageDimension(ImageDimension value) { imageDimension = value; }
+
+    void SetDepthStencilTextureMode(DepthStencilFetchMode value) {
+        depthStencilTextureMode = value;
+    }
+
+    void SetImageFormat(ImageFormat value) { imageFormat = value; }
+    void SetTexturePtr(const void* value) { pTexture = value; }
+
+    void SetChannelMapping(ChannelMapping red, ChannelMapping green, ChannelMapping blue,
+                           ChannelMapping alpha) {
+        channelMapping[ColorChannel_Red] = red;
+        channelMapping[ColorChannel_Green] = green;
+        channelMapping[ColorChannel_Blue] = blue;
+        channelMapping[ColorChannel_Alpha] = alpha;
+    }
+
+    TextureSubresourceRange& EditSubresourceRange() {
+        return gfx::DataToAccessor(subresourceRange);
+    }
+
+    ImageDimension GetImageDimension() const { return static_cast<ImageDimension>(imageDimension); }
+
+    DepthStencilFetchMode GetDepthStencilTextureMode() const {
+        return static_cast<DepthStencilFetchMode>(depthStencilTextureMode);
+    }
+
+    ImageFormat GetImageFormat() const { return static_cast<ImageFormat>(imageFormat); }
+
+    detail::Caster<const void> GetTexturePtr() const {
+        return detail::Caster<const void>(pTexture.ptr);
+    }
+
+    ChannelMapping GetChannelMapping(ColorChannel channel) const {
+        return static_cast<ChannelMapping>(channelMapping[channel]);
+    }
+
+    const TextureSubresourceRange& GetSubresourceRange() const {
+        return gfx::DataToAccessor(subresourceRange);
+    }
 };
 
 class ColorTargetViewInfo : public detail::DataContainer<ColorTargetViewInfoData> {
 public:
-    ColorTargetViewInfo();
+    ColorTargetViewInfo() {}
     void SetDefault();
-    void SetImageDimension(ImageDimension);
-    void SetImageFormat(ImageFormat);
-    void SetMipLevel(int);
-    void SetTexturePtr(const void*);
-    TextureArrayRange& EditArrayRange();
-    ImageDimension GetImageDimension() const;
-    ImageFormat GetImageFormat() const;
-    int GetMipLevel() const;
-    detail::Caster<void const> GetTexturePtr() const;
-    const TextureArrayRange& GetArrayRange() const;
+    void SetImageDimension(ImageDimension value) { imageDimension = value; }
+    void SetImageFormat(ImageFormat value) { imageFormat = value; }
+    void SetMipLevel(int value) { mipLevel = value; }
+    void SetTexturePtr(const void* value) { pTexture = value; }
+
+    TextureArrayRange& EditArrayRange() { return gfx::DataToAccessor(arrayRange); }
+    ImageDimension GetImageDimension() const { return static_cast<ImageDimension>(imageDimension); }
+    ImageFormat GetImageFormat() const { return static_cast<ImageFormat>(imageFormat); }
+    int GetMipLevel() const { return mipLevel; }
+
+    detail::Caster<const void> GetTexturePtr() const {
+        return detail::Caster<const void>(pTexture.ptr);
+    }
+
+    const TextureArrayRange& GetArrayRange() const { return gfx::DataToAccessor(arrayRange); }
 };
 
 class DepthStencilViewInfo : public detail::DataContainer<DepthStencilViewInfoData> {
 public:
-    DepthStencilViewInfo();
+    DepthStencilViewInfo() {}
+
     void SetDefault();
-    void SetImageDimension(ImageDimension);
-    void SetMipLevel(int);
-    void SetTexturePtr(const void*);
-    TextureArrayRange& EditArrayRange();
-    ImageDimension GetImageDimension() const;
-    int GetMipLevel() const;
-    detail::Caster<void const> GetTexturePtr() const;
-    const TextureArrayRange& GetArrayRange() const;
+
+    void SetImageDimension(ImageDimension value) { imageDimension = value; }
+    void SetMipLevel(int value) { mipLevel = value; }
+    void SetTexturePtr(const void* value) { pTexture = value; }
+
+    TextureArrayRange& EditArrayRange() { return gfx::DataToAccessor(arrayRange); }
+    ImageDimension GetImageDimension() const { return static_cast<ImageDimension>(imageDimension); }
+    int GetMipLevel() const { return mipLevel; }
+
+    detail::Caster<const void> GetTexturePtr() const {
+        return detail::Caster<const void>(pTexture.ptr);
+    }
+
+    const TextureArrayRange& GetArrayRange() const { return gfx::DataToAccessor(arrayRange); }
 
     template <typename TTarget>
     void SetTexturePtr(const TTexture<TTarget>*);
 };
 
-class TextureMipRange;
+class TextureMipRange : public detail::DataContainer<TextureMipRangeData> {
+public:
+    TextureMipRange() {}
+
+    void SetDefault();
+
+    void SetMinMipLevel(int value) { minMipLevel = value; }
+    void SetMipCount(int value) { mipCount = value; }
+
+    int GetMinMipLevel() const { return minMipLevel; }
+    int GetMipCount() const { return mipCount; }
+};
 
 class TextureArrayRange : public detail::DataContainer<TextureArrayRangeData> {
 public:
-    TextureArrayRange();
+    TextureArrayRange() {}
+
     void SetDefault();
-    void SetBaseArrayIndex(int);
-    void SetArrayLength(int);
+
+    void SetBaseArrayIndex(int value) { baseArrayIndex = value; }
+    void SetArrayLength(int value) { arrayLength = value; }
 
     int GetBaseArrayIndex() const { return baseArrayIndex; }
     int GetArrayLength() const { return arrayLength; }
 };
 
-class TextureSubresourceRange;
+class TextureSubresourceRange : public detail::DataContainer<TextureSubresourceRangeData> {
+public:
+    TextureSubresourceRange() {}
+
+    void SetDefault();
+
+    TextureMipRange& EditMipRange() { return gfx::DataToAccessor(mipRange); }
+    TextureArrayRange& EditArrayRange() { return gfx::DataToAccessor(arrayRange); }
+
+    const TextureMipRange& GetMipRange() const { return gfx::DataToAccessor(mipRange); }
+    const TextureArrayRange& GetArrayRange() const { return gfx::DataToAccessor(arrayRange); }
+};
 
 class TextureSubresource : public detail::DataContainer<TextureSubresourceData> {
 public:
-    TextureSubresource();
+    TextureSubresource() {}
+
     void SetDefault();
-    void SetMipLevel(int);
-    void SetArrayIndex(int);
+
+    void SetMipLevel(int value) { mipLevel = value; }
+    void SetArrayIndex(int value) { arrayIndex = value; }
+
     int GetMipLevel() const { return mipLevel; }
     int GetArrayIndex() const { return arrayIndex; }
 };
 
 class TextureCopyRegion : public detail::DataContainer<TextureCopyRegionData> {
 public:
-    TextureCopyRegion();
+    TextureCopyRegion() {}
+
     void SetDefault();
-    void SetOffsetU(int);
-    void SetOffsetV(int);
-    void SetOffsetW(int);
-    void SetWidth(int);
-    void SetHeight(int);
-    void SetDepth(int);
-    TextureSubresource& EditSubresource();
-    void SetArrayLength(int);
+
+    void SetOffsetU(int value) { offsetU = value; }
+    void SetOffsetV(int value) { offsetV = value; }
+    void SetOffsetW(int value) { offsetW = value; }
+    void SetWidth(int value) { width = value; }
+    void SetHeight(int value) { height = value; }
+    void SetDepth(int value) { depth = value; }
+    TextureSubresource& EditSubresource() { return gfx::DataToAccessor(subresource); }
+    void SetArrayLength(int value) { arrayLength = value; }
 
     int GetOffsetU() const { return offsetU; }
     int GetOffsetV() const { return offsetV; }
@@ -134,27 +211,29 @@ public:
     int GetHeight() const { return height; }
     int GetDepth() const { return depth; }
 
-    const TextureSubresource& GetSubresource() const {
-        return nn::gfx::DataToAccessor(subresource);
-    }
+    const TextureSubresource& GetSubresource() const { return gfx::DataToAccessor(subresource); }
 
     int GetArrayLength() const { return arrayLength; }
 };
 
 class BufferTextureCopyRegion : public detail::DataContainer<BufferTextureCopyRegionData> {
 public:
-    BufferTextureCopyRegion();
+    BufferTextureCopyRegion() {}
+
     void SetDefault();
-    void SetBufferOffset(int);
-    void SetBufferImageWidth(int);
-    void SetBufferImageHeight(int);
-    TextureCopyRegion& EditTextureCopyRegion();
+
+    void SetBufferOffset(int value) { bufferOffset = value; }
+    void SetBufferImageWidth(int value) { bufferImageWidth = value; }
+    void SetBufferImageHeight(int value) { bufferImageHeight = value; }
+
+    TextureCopyRegion& EditTextureCopyRegion() { return gfx::DataToAccessor(textureCopyRegion); }
+
     int GetBufferOffset() const { return bufferOffset; }
     int GetBufferImageWidth() const { return bufferImageWidth; }
     int GetBufferImageHeight() const { return bufferImageHeight; }
 
     const TextureCopyRegion& GetTextureCopyRegion() const {
-        return nn::gfx::DataToAccessor(textureCopyRegion);
+        return gfx::DataToAccessor(textureCopyRegion);
     }
 };
 

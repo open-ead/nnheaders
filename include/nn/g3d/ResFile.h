@@ -8,6 +8,7 @@
 #include <nn/gfx/gfx_Types.h>
 #include <nn/types.h>
 #include <nn/util.h>
+#include <nn/util/util_BinaryFormat.h>
 
 namespace nn {
 

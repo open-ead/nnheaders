@@ -10,17 +10,16 @@
 #include <nn/time.h>
 #include <nn/types.h>
 
+#include <nn/os/detail/os_InternalCriticalSection.h>
+#include <nn/os/os_MessageQueueTypes.h>
+#include <nn/os/os_Mutex.h>
+#include <nn/os/os_MutexTypes.h>
+#include <nn/os/os_ThreadTypes.h>
+
 namespace nn {
 namespace os {
 
 namespace detail {
-struct InternalCriticalSection {
-    u32 Image;
-};
-
-struct InternalConditionVariable {
-    u32 Image;
-};
 
 struct InterProcessEventType {
     enum State {
@@ -62,50 +61,6 @@ typedef EventType Event;
 
 enum EventClearMode { EventClearMode_ManualClear, EventClearMode_AutoClear };
 
-// https://github.com/misson20000/nn-types/blob/master/nn_os.h
-struct ThreadType {
-    u64 field_8;
-    u64 field_10;
-    u64 field_18;
-    char field_20[32];
-    uint32_t thread_status;
-    char field_41;
-    u16 field_42;
-    uint32_t thread_prio_shift;
-    uint64_t thread_stack_base_addr;
-    uint64_t thread_stack_base_addr_mirror;
-    uint64_t thread_stack_size;
-    uint64_t thread_param;
-    uint64_t thread_func;
-    u64 field_70;
-    u64 field_78;
-    u64 field_80;
-    char field_88[0x100];
-    char thread_name[0x20];
-    const char* thread_name_addr;
-    nn::os::detail::InternalCriticalSection crit;
-    nn::os::detail::InternalConditionVariable condvar;
-    u32 thread_handle;
-};
-#ifdef SWITCH
-static_assert(sizeof(ThreadType) == 0x1C0, "Wrong size");
-#endif
-
-struct MessageQueueType {
-    u64 _x0;
-    u64 _x8;
-    u64 _x10;
-    u64 _x18;
-    void* Buffer;
-    u32 MaxCount;
-    u32 Count;
-    u32 Offset;
-    bool Initialized;
-    detail::InternalCriticalSection _x38;
-    detail::InternalConditionVariable _x3C;
-    detail::InternalConditionVariable _x40;
-};
-
 struct ConditionVariableType {};
 
 struct SemaphoreType {
@@ -142,26 +97,6 @@ void AllocateMemoryBlock(u64*, u64);
 void FreeMemoryBlock(u64, u64);
 void SetMemoryHeapSize(u64);
 
-// MUTEX
-struct MutexType {
-    u8 _state;
-    bool _isRecursive;
-    int _lockLevel;
-    int _nestCount;
-    nn::os::ThreadType* _ownerThread;
-    union {
-        int32_t _mutexImage[1];
-        nn::os::detail::InternalCriticalSection _mutex;
-    };
-};
-
-void InitializeMutex(nn::os::MutexType*, bool, s32);
-void FinalizeMutex(nn::os::MutexType*);
-void LockMutex(nn::os::MutexType*);
-bool TryLockMutex(nn::os::MutexType*);
-void UnlockMutex(nn::os::MutexType*);
-bool IsMutexLockedByCurrentThread(nn::os::MutexType const*);
-
 // QUEUE
 void InitializeMessageQueue(nn::os::MessageQueueType*, u64* buf, u64 queueCount);
 void FinalizeMessageQueue(nn::os::MessageQueueType*);
@@ -189,7 +124,7 @@ void FinalizeConditionVariable(ConditionVariableType*);
 void SignalConditionVariable(ConditionVariableType*);
 void BroadcastConditionVariable(ConditionVariableType*);
 void WaitConditionVariable(ConditionVariableType*);
-u8 TimedWaitConditionVariable(ConditionVariableType*, MutexType*, nn::TimeSpan);
+u8 TimedWaitConditionVariable(ConditionVariableType*, nn::os::MutexType*, nn::TimeSpan);
 
 // THREAD
 Result CreateThread(nn::os::ThreadType*, void (*)(void*), void* arg, void* srcStack, u64 stackSize,

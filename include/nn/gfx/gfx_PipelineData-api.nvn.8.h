@@ -14,7 +14,7 @@ struct PipelineImplData<NvnApi> {
 
     Bit8 state;
     Bit8 nnPipelineType;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved;
     Bit32 memorySize;
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nn/gfx/gfx_Common.h>
 #include <nn/gfx/gfx_Enum.h>
 #include <nn/gfx/gfx_GpuAddress.h>
 #include <nn/time.h>
@@ -62,13 +63,14 @@ public:
     static NVNbufferAddress GetBufferAddress(const GpuAddress);
     static void SetupScanBufferTextureInfo(TextureInfo*, const SwapChainInfo&);
     static NVNcounterType GetCounterType(QueryTarget);
-    static util::BitPack32 GetDeviceFeature(const NVNdevice*);
+    static nn::util::BitPack32 GetDeviceFeature(const NVNdevice*);
     static void GetImageFormatProperty(ImageFormatProperty*, NVNformat);
     static ImageFormat GetGfxImageFormat(NVNformat);
     static void DebugCallback(NVNdebugCallbackSource, NVNdebugCallbackType, int,
                               NVNdebugCallbackSeverity, const char*, void*);
     static int GetFirstScanBufferIndex();
-    static void SetPackagedTextureDataImpl(NVNtextureBuilder*, const TextureInfo&);
+    static void SetPackagedTextureDataImpl(NVNtextureBuilder*, const TextureInfo&,
+                                           MemoryPoolImpl<NvnApi>*, ptrdiff_t, size_t);
     static TimeSpan ToTimeSpan(int64_t);
 };
 
@@ -107,6 +109,8 @@ public:
 private:
     void* m_hDll;
 };
+
+bool IsThinBinaryAvailable();
 
 }  // namespace detail
 

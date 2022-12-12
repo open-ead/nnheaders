@@ -16,7 +16,7 @@ struct MemoryPoolImplData<NvnApi> {
     detail::Ptr<void> pMemory;
     char nvnMemoryPool[256];
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[6];
     detail::Ptr<void> userPtr;
 };

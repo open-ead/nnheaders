@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nn/gfx/gfx_Enum.h>
+
 namespace nn::gfx {
 
 template <typename TTarget>
@@ -60,6 +62,27 @@ template <typename TTarget>
 class TTessellationState;
 
 template <typename TTarget>
+class TQueue;
+
+template <typename TTarget>
+class TInteroperation;
+
+template <typename TTarget>
+class TFence;
+
+template <typename TTarget>
+class TSemaphore;
+
+template <typename TTarget>
+class TSwapChain;
+
+template <typename TTarget>
+class TColorTargetView;
+
+template <typename TTarget>
+class TBufferTextureView;
+
+template <typename TTarget>
 struct BufferImplData;
 
 template <typename TTarget>
@@ -112,6 +135,14 @@ struct DeviceImplData;
 
 template <typename TTarget>
 struct DescriptorPoolImplData;
+
+template <class TTarget>
+struct SamplerImplData;
+
+template <class TTarget>
+struct QueueImplData;
+
+struct ImageFormatProperty;
 
 namespace detail {
 
@@ -178,6 +209,33 @@ class TextureViewImpl;
 template <typename TTarget>
 class BufferTextureViewImpl;
 
+template <typename TTarget>
+class QueueImpl;
+
+template <typename TTarget>
+class FenceImpl;
+
+template <typename TTarget>
+class SemaphoreImpl;
+
+template <typename TTarget>
+class SwapChainImpl;
+
+// todo: figure out where to put this
+template <typename TTarget>
+void GetImageFormatProperty(ImageFormatProperty*, DeviceImpl<TTarget>*, ImageFormat);
+
 }  // namespace detail
 
+namespace util {
+// todo: figure out where to put these
+template <typename TTarget>
+void SetMemoryPoolDebugLabel(TMemoryPool<TTarget>*, const char*);
+template <typename TTarget>
+void SetBufferDebugLabel(TBuffer<TTarget>*, const char*);
+template <typename TTarget>
+void SetTextureDebugLabel(TTexture<TTarget>*, const char*);
+template <typename TTarget>
+void SetSamplerDebugLabel(TSampler<TTarget>*, const char*);
+}  // namespace util
 }  // namespace nn::gfx

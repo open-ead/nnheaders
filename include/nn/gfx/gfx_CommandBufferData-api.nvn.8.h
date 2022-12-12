@@ -15,7 +15,7 @@ struct CommandBufferImplData<NvnApi> {
     enum State { State_NotInitialized, State_Initialized, State_Begun };
 
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[6];
     detail::Ptr<detail::DeviceImpl<NvnApi>> pNnDevice;
     detail::Ptr<const detail::RootSignatureImpl<NvnApi>> pGfxRootSignature;

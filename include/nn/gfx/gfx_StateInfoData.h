@@ -11,7 +11,7 @@ struct MultisampleStateInfoData {
 
     uint8_t sampleCount;
     char reserved2;
-    util::BitPack16 flag;
+    nn::util::BitPack16 flag;
     uint32_t sampleMask;
     char reserved[8];
 };
@@ -28,7 +28,7 @@ struct RasterizerStateInfoData {
     Bit8 frontFace;
     Bit8 cullMode;
     Bit8 primitiveTopologyType;
-    util::BitPack16 flag;
+    nn::util::BitPack16 flag;
     Bit8 conservativeRasterizationMode;
     char reserved2;
     float slopeScaledDepthBias;
@@ -42,7 +42,7 @@ struct RasterizerStateInfoData {
 struct BlendTargetStateInfoData {
     enum Flag { Flag_BlendEnable };
 
-    util::BitPack8 flag;
+    nn::util::BitPack8 flag;
     Bit8 sourceColorBlendFactor;
     Bit8 destinationColorBlendFactor;
     Bit8 colorBlendFunction;
@@ -63,7 +63,7 @@ struct BlendStateInfoData {
 
     uint8_t blendTargetCount;
     Bit8 logicOperation;
-    util::BitPack16 flag;
+    nn::util::BitPack16 flag;
     float blendConstant[4];
     char reserved2[4];
     detail::Ptr<const BlendTargetStateInfoData> pBlendTargetArray;
@@ -91,11 +91,24 @@ struct DepthStencilStateInfoData {
     uint8_t stencilReadMask;
     uint8_t stencilWriteMask;
     char reserved2;
-    util::BitPack16 flag;
+    nn::util::BitPack16 flag;
     char reserved3[2];
     StencilStateInfoData frontStencil;
     StencilStateInfoData backStencil;
     char reserved[24];
+};
+
+struct ColorTargetStateInfoData {
+    Bit32 format;
+    char reserved[28];
+};
+
+struct RenderTargetStateInfoData {
+    uint8_t colorTargetCount;
+    char reserved2[3];
+    Bit32 depthStencilFormat;
+    detail::Ptr<const ColorTargetStateInfoData> pColorTargetStateArray;
+    char reserved[16];
 };
 
 struct VertexAttributeStateInfoData {
@@ -151,6 +164,19 @@ struct ScissorStateInfoData {
     uint32_t width;
     uint32_t height;
     char reserved[16];
+};
+
+struct ViewportScissorStateInfoData {
+    enum Flag { Flag_ScissorEnable };
+
+    nn::util::BitPack8 flag;
+    char reserved2;
+    uint16_t viewportCount;
+    uint16_t scissorCount;
+    char reserved3[2];
+    detail::Ptr<const ViewportStateInfoData> pViewportArray;
+    detail::Ptr<const ScissorStateInfoData> pScissorArray;
+    char reserved[8];
 };
 
 }  // namespace nn::gfx

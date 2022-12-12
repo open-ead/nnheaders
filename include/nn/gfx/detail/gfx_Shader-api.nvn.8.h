@@ -17,10 +17,9 @@ class ShaderImpl<NvnApi> : public DataContainer<ShaderImplData<NvnApi>> {
 public:
     typedef ShaderInfo InfoType;
 
-    ShaderImpl();
-
     static size_t GetBinaryCodeAlignment(DeviceImpl<NvnApi>*);
 
+    ShaderImpl();
     ~ShaderImpl();
     ShaderInitializeResult Initialize(DeviceImpl<NvnApi>*, const InfoType&);
     void Finalize(DeviceImpl<NvnApi>*);

@@ -185,8 +185,164 @@ struct ImageFormatAndProperty {
     ImageFormatProperty property;
 };
 
-ImageFormatAndProperty g_ImageFormatAndPropetyTable[157] = {
-
+ImageFormatAndProperty g_ImageFormatAndPropetyTable[] = {
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_R8_Unorm, {3}},
+    {ImageFormat_R8_Snorm, {3}},
+    {ImageFormat_R8_Uint, {3}},
+    {ImageFormat_R8_Sint, {3}},
+    {ImageFormat_R16_Float, {3}},
+    {ImageFormat_R16_Unorm, {3}},
+    {ImageFormat_R16_Snorm, {3}},
+    {ImageFormat_R16_Uint, {3}},
+    {ImageFormat_R16_Sint, {3}},
+    {ImageFormat_R32_Float, {3}},
+    {ImageFormat_R32_Uint, {3}},
+    {ImageFormat_R32_Sint, {3}},
+    {ImageFormat_R8_G8_Unorm, {3}},
+    {ImageFormat_R8_G8_Snorm, {3}},
+    {ImageFormat_R8_G8_Uint, {3}},
+    {ImageFormat_R8_G8_Sint, {3}},
+    {ImageFormat_R16_G16_Float, {3}},
+    {ImageFormat_R16_G16_Unorm, {3}},
+    {ImageFormat_R16_G16_Snorm, {3}},
+    {ImageFormat_R16_G16_Uint, {3}},
+    {ImageFormat_R16_G16_Sint, {3}},
+    {ImageFormat_R32_G32_Float, {3}},
+    {ImageFormat_R32_G32_Uint, {3}},
+    {ImageFormat_R32_G32_Sint, {3}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_R32_G32_B32_Float, {1}},
+    {ImageFormat_R32_G32_B32_Uint, {1}},
+    {ImageFormat_R32_G32_B32_Sint, {1}},
+    {ImageFormat_R8_G8_B8_A8_Unorm, {3}},
+    {ImageFormat_R8_G8_B8_A8_Snorm, {3}},
+    {ImageFormat_R8_G8_B8_A8_Uint, {3}},
+    {ImageFormat_R8_G8_B8_A8_Sint, {3}},
+    {ImageFormat_R16_G16_B16_A16_Float, {3}},
+    {ImageFormat_R16_G16_B16_A16_Unorm, {3}},
+    {ImageFormat_R16_G16_B16_A16_Snorm, {3}},
+    {ImageFormat_R16_G16_B16_A16_Uint, {3}},
+    {ImageFormat_R16_G16_B16_A16_Sint, {3}},
+    {ImageFormat_R32_G32_B32_A32_Float, {3}},
+    {ImageFormat_R32_G32_B32_A32_Uint, {3}},
+    {ImageFormat_R32_G32_B32_A32_Sint, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_D16_Unorm, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_D32_Float, {3}},
+    {ImageFormat_D24_Unorm_S8_Uint, {3}},
+    {ImageFormat_D32_Float_S8_Uint_X24, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_R8_G8_B8_A8_UnormSrgb, {3}},
+    {ImageFormat_R4_G4_B4_A4_Unorm, {1}},
+    {ImageFormat_Undefined, {1}},
+    {ImageFormat_R5_G5_B5_A1_Unorm, {1}},
+    {ImageFormat_R5_G6_B5_Unorm, {1}},
+    {ImageFormat_R10_G10_B10_A2_Unorm, {3}},
+    {ImageFormat_R10_G10_B10_A2_Uint, {3}},
+    {ImageFormat_R11_G11_B10_Float, {3}},
+    {ImageFormat_R9_G9_B9_E5_SharedExp, {1}},
+    {ImageFormat_Undefined, {1}},
+    {ImageFormat_Bc1_Unorm, {1}},
+    {ImageFormat_Bc2_Unorm, {1}},
+    {ImageFormat_Bc3_Unorm, {1}},
+    {ImageFormat_Undefined, {1}},
+    {ImageFormat_Bc1_UnormSrgb, {1}},
+    {ImageFormat_Bc2_UnormSrgb, {1}},
+    {ImageFormat_Bc3_UnormSrgb, {1}},
+    {ImageFormat_Bc4_Unorm, {1}},
+    {ImageFormat_Bc4_Snorm, {1}},
+    {ImageFormat_Bc5_Unorm, {1}},
+    {ImageFormat_Bc5_Snorm, {1}},
+    {ImageFormat_Bc7_Unorm, {1}},
+    {ImageFormat_Bc7_UnormSrgb, {1}},
+    {ImageFormat_Bc6_Float, {1}},
+    {ImageFormat_Bc6_Ufloat, {1}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {0}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_Astc_4x4_Unorm, {1}},
+    {ImageFormat_Astc_5x4_Unorm, {1}},
+    {ImageFormat_Astc_5x5_Unorm, {1}},
+    {ImageFormat_Astc_6x5_Unorm, {1}},
+    {ImageFormat_Astc_6x6_Unorm, {1}},
+    {ImageFormat_Astc_8x5_Unorm, {1}},
+    {ImageFormat_Astc_8x6_Unorm, {1}},
+    {ImageFormat_Astc_8x8_Unorm, {1}},
+    {ImageFormat_Astc_10x5_Unorm, {1}},
+    {ImageFormat_Astc_10x6_Unorm, {1}},
+    {ImageFormat_Astc_10x8_Unorm, {1}},
+    {ImageFormat_Astc_10x10_Unorm, {1}},
+    {ImageFormat_Astc_12x10_Unorm, {1}},
+    {ImageFormat_Astc_12x12_Unorm, {1}},
+    {ImageFormat_Astc_4x4_UnormSrgb, {1}},
+    {ImageFormat_Astc_5x4_UnormSrgb, {1}},
+    {ImageFormat_Astc_5x5_UnormSrgb, {1}},
+    {ImageFormat_Astc_6x5_UnormSrgb, {1}},
+    {ImageFormat_Astc_6x6_UnormSrgb, {1}},
+    {ImageFormat_Astc_8x5_UnormSrgb, {1}},
+    {ImageFormat_Astc_8x6_UnormSrgb, {1}},
+    {ImageFormat_Astc_8x8_UnormSrgb, {1}},
+    {ImageFormat_Astc_10x5_UnormSrgb, {1}},
+    {ImageFormat_Astc_10x6_UnormSrgb, {1}},
+    {ImageFormat_Astc_10x8_UnormSrgb, {1}},
+    {ImageFormat_Astc_10x10_UnormSrgb, {1}},
+    {ImageFormat_Astc_12x10_UnormSrgb, {1}},
+    {ImageFormat_Astc_12x12_UnormSrgb, {1}},
+    {ImageFormat_B5_G6_R5_Unorm, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_B5_G5_R5_A1_Unorm, {3}},
+    {ImageFormat_A1_B5_G5_R5_Unorm, {1}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_B8_G8_R8_A8_Unorm, {3}},
+    {ImageFormat_Undefined, {3}},
+    {ImageFormat_B8_G8_R8_A8_UnormSrgb, {3}},
 };
 
 }  // namespace
@@ -513,8 +669,8 @@ NVNcounterType Nvn::GetCounterType(QueryTarget target) {
     return s_CounterTypeTable[target];
 }
 
-util::BitPack32 Nvn::GetDeviceFeature(const NVNdevice* device) {
-    util::BitPack32 feature;
+nn::util::BitPack32 Nvn::GetDeviceFeature(const NVNdevice* device) {
+    nn::util::BitPack32 feature;
     feature.Clear();
 
     int supported;
@@ -573,15 +729,55 @@ util::BitPack32 Nvn::GetDeviceFeature(const NVNdevice* device) {
     return feature;
 }
 
-/*
-void Nvn::GetImageFormatProperty(nn::gfx::ImageFormatProperty*, NVNformat);
-nn::gfx::ImageFormat Nvn::GetGfxImageFormat(NVNformat);
-void Nvn::DebugCallback(NVNdebugCallbackSource, NVNdebugCallbackType, int, NVNdebugCallbackSeverity,
-                        const char*, void*);
+void Nvn::GetImageFormatProperty(ImageFormatProperty* pOutImageFormatProperty,
+                                 NVNformat nvnFormat) {
+    *pOutImageFormatProperty = g_ImageFormatAndPropetyTable[nvnFormat].property;
+}
 
-GlslcDll& GlslcDll::GetInstance();
-void GlslcDll::GlslcDll();
-void GlslcDll::~GlslcDll();
-*/
+ImageFormat Nvn::GetGfxImageFormat(NVNformat nvnFormat) {
+    return g_ImageFormatAndPropetyTable[nvnFormat].format;
+}
+
+void Nvn::DebugCallback(NVNdebugCallbackSource source, NVNdebugCallbackType type, int id,
+                        NVNdebugCallbackSeverity severity, const char* message, void*) {
+    static const char* s_DebugCallbackSourceStrings[1];
+    static const char* s_DebugCallbackSeverityStrings[4];
+
+    switch (type) {
+    case NVN_DEBUG_CALLBACK_TYPE_API_ERROR:
+    case NVN_DEBUG_CALLBACK_TYPE_API_WARNING:
+        break;
+
+    default:
+        NN_UNEXPECTED_DEFAULT;
+        break;
+    }
+}
+
+GlslcDll& GlslcDll::GetInstance() {
+    static GlslcDll s_GlslcDll;
+
+    if (!s_GlslcDll.IsInitialized()) {
+        bool isSucceeded = s_GlslcDll.Initialize();
+    }
+
+    return s_GlslcDll;
+}
+
+GlslcDll::GlslcDll() {
+    GlslcCompilePreSpecialized = nullptr;
+    GlslcCompileSpecialized = nullptr;
+    GlslcInitialize = nullptr;
+    GlslcFinalize = nullptr;
+    GlslcCompile = nullptr;
+    GlslcGetVersion = nullptr;
+    GlslcSetAllocator = nullptr;
+    GlslcGetDefaultOptions = nullptr;
+    m_hDll = nullptr;
+}
+
+GlslcDll::~GlslcDll() {
+    Finalize();
+}
 
 }  // namespace nn::gfx::detail

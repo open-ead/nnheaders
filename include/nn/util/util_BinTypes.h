@@ -1,14 +1,29 @@
 #pragma once
 
+#include <nn/util/util_BytePtr.h>
+#include <nn/util/util_StringView.h>
 #include "nn/types.h"
-#include "nn/util/BytePtr.h"
-#include "nn/util/StringView.h"
 
 namespace nn::util {
 
+// todo: is this here?
 constexpr uint32_t MakeSignature(u8 a, u8 b, u8 c, u8 d) {
     return a | (b << 8) | (c << 16) | (d << 24);
 }
+
+struct BinFileSignature {
+    bool IsValid(const char*) const;
+    bool IsValid(int64_t) const;
+    void Set(const char*);
+    const char* Get() const;
+    void SetPacked(int64_t);
+    int64_t GetPacked() const;
+
+    union {
+        char _str[8];
+        int64_t _packed;
+    };
+};
 
 struct BinBlockSignature {
     // TODO: implement these inline functions
@@ -25,32 +40,27 @@ struct BinBlockSignature {
     };
 };
 
-struct BinaryBlockHeader {
-    BinaryBlockHeader* GetNextBlock();
-    const BinaryBlockHeader* GetNextBlock() const;
-    BinaryBlockHeader* FindNextBlock(int signature);
-    const BinaryBlockHeader* FindNextBlock(int signature) const;
-    size_t GetBlockSize() const;
-    void SetNextBlock(BinaryBlockHeader* block);
-    void SetBlockSize(size_t size);
+struct BinVersion {
+    uint8_t micro;
+    uint8_t minor;
+    uint16_t major;
 
-    BinBlockSignature signature;
-    uint32_t _offsetToNextBlock;
-    uint32_t _blockSize;
-    uint32_t _reserved;
+    bool IsValid(int, int, int) const;
+    void SetPacked(uint32_t);
+    uint32_t GetPacked() const;
 };
 
 template <typename T>
 struct BinTPtr {
-    using pointer = T*;
-    using const_pointer = const T*;
-    using difference_type = ptrdiff_t;
+    typedef T* pointer;
+    typedef const T* const_pointer;  // detail::AddConst
+    typedef int64_t difference_type;
 
     void Clear() { _offset = 0; }
 
     void Set(pointer ptr) { _ptr = ptr; }
     pointer Get() { return _ptr; }
-    pointer Get() const { return _ptr; }
+    const_pointer Get() const { return _ptr; }
 
     void SetOffset(void* base, void* ptr) { SetOffset(ptr ? BytePtr(base).Distance(ptr) : 0); }
     void SetOffset(difference_type offset) { _offset = offset; }
@@ -71,6 +81,8 @@ struct BinTPtr {
         pointer _ptr;
     };
 };
+
+using BinPtr = BinTPtr<void>;
 
 template <typename CharT>
 struct BinTString {
@@ -100,7 +112,6 @@ struct BinTString {
 };
 
 using BinString = BinTString<char>;
-using BinPtr = BinTPtr<void>;
 using BinPtrToString = BinTPtr<BinString>;
 
 }  // namespace nn::util

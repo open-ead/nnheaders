@@ -25,7 +25,7 @@ struct RasterizerStateImplData<NvnApi> {
     float nvnDepthBiasClamp;
     float nvnSlopeScaledDepthBias;
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[2];
 };
 
@@ -56,7 +56,7 @@ struct DepthStencilStateImplData<NvnApi> {
     Bit32 nvnStencilFrontRef;
     Bit8 state;
     char reserved;
-    util::BitPack16 flag;
+    nn::util::BitPack16 flag;
 };
 
 template <>
@@ -92,7 +92,7 @@ struct ViewportScissorStateImplData<NvnApi> {
     double depthRange[2];
     int32_t scissor[4];
     Bit8 state;
-    util::BitPack8 flag;
+    nn::util::BitPack8 flag;
     char reserved[2];
 };
 

@@ -1,11 +1,13 @@
 #include "gfx_CommonHelper.h"
 
+#include <nn/gfx/gfx_ResShaderData.h>
+
 namespace nn::gfx::detail {
 
-NN_MIDDLEWARE("NintendoSDK_gfx-3_5_1-Release");
+NN_MIDDLEWARE(g_MiddlewareInfo, "Nintendo", "NintendoSDK_gfx-3_5_1-Release");
 
 void UseMiddleWare() {
-    util::ReferSymbol(g_MiddlewareInfo);
+    nn::util::ReferSymbol(g_MiddlewareInfo);
 }
 
 int GetBlockWidth(ChannelFormat format) {
@@ -116,6 +118,10 @@ bool IsCompressedFormat(ChannelFormat format) {
     }
 }
 
+bool IsSrgbFormat(TypeFormat format) {
+    return format == TypeFormat_UnormSrgb;
+}
+
 int GetBytePerPixel(ChannelFormat format) {
     switch (format) {
     case ChannelFormat_Bc1:
@@ -174,6 +180,104 @@ int GetBytePerPixel(ChannelFormat format) {
     } else {
         return 16;
     }
+}
+
+size_t CalculateImageSize(ChannelFormat format, uint32_t width, uint32_t height, uint32_t depth) {
+    if (IsCompressedFormat(format)) {
+        int blockWidth = GetBlockWidth(format);
+        int blockHeight = GetBlockHeight(format);
+        width = (width + blockWidth - 1) / blockWidth;
+        height = (height + blockHeight - 1) / blockHeight;
+    }
+
+    return width * height * depth * GetBytePerPixel(format);
+}
+
+int GetChannelCount(ChannelFormat format) {
+    const int s_ChannelCountTable[] = {
+        0, 2, 1, 4, 4, 4, 4, 3, 3, 2, 1, 4, 4, 4, 4, 3, 3, 3, 2, 2, 1, 4, 2, 2, 3, 4, 4, 4, 4, 1,
+        2, 3, 4, 1, 2, 3, 3, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+    };
+
+    return s_ChannelCountTable[format];
+}
+
+size_t CalculateRowSize(uint32_t width, ChannelFormat format) {
+    if (IsCompressedFormat(format)) {
+        int blockWidth = GetBlockWidth(format);
+        width = (width + blockWidth - 1) / blockWidth;
+    }
+
+    return GetBytePerPixel(format) * width;
+}
+
+bool IsValidMemoryPoolProperty(int value) {
+    int cpuPageProperty = value & 0x7;
+    int gpuPageProperty = value & 0x38;
+
+    return (cpuPageProperty == MemoryPoolProperty_CpuInvisible ||
+            cpuPageProperty == MemoryPoolProperty_CpuUncached ||
+            cpuPageProperty == MemoryPoolProperty_CpuCached) &&
+           (gpuPageProperty == MemoryPoolProperty_GpuInvisible ||
+            gpuPageProperty == MemoryPoolProperty_GpuUncached ||
+            gpuPageProperty == MemoryPoolProperty_GpuCached);
+}
+
+ImageDimension GetImageDimension(ImageStorageDimension imageStorageDimension, bool isArray,
+                                 bool isMultisample) {
+    ImageDimension ret;
+
+    switch (imageStorageDimension) {
+    case ImageStorageDimension_1d:
+        if (isArray) {
+            ret = ImageDimension_1dArray;
+        } else {
+            ret = ImageDimension_1d;
+        }
+        break;
+
+    case ImageStorageDimension_2d:
+        if (isArray) {
+            if (isMultisample) {
+                ret = ImageDimension_2dMultisampleArray;
+            } else {
+                ret = ImageDimension_2dArray;
+            }
+        } else {
+            if (isMultisample) {
+                ret = ImageDimension_2dMultisample;
+            } else {
+                ret = ImageDimension_2d;
+            }
+        }
+        break;
+
+    case ImageStorageDimension_3d:
+        ret = ImageDimension_3d;
+        break;
+
+    default:
+        NN_UNEXPECTED_DEFAULT;
+        break;
+    }
+
+    return ret;
+}
+
+bool CheckBinaryTarget(const ResShaderContainerData& resShaderContainer, int lowLevelApi,
+                       int apiVersion) {
+    const char* s_LowLevelApiToStringTable[6];
+
+    int targetApi = resShaderContainer.targetApiType;
+
+    if (targetApi == 3) {
+        // some logging?
+        const char* pTargetApiString;
+
+        targetApi = 4;
+    }
+
+    return targetApi == lowLevelApi;
 }
 
 }  // namespace nn::gfx::detail

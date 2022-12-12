@@ -76,7 +76,10 @@ size_t BufferImpl<NvnApi>::GetBufferAlignment(DeviceImpl<NvnApi>* pDevice, const
     return alignment;
 }
 
-BufferImpl<NvnApi>::BufferImpl() {}
+BufferImpl<NvnApi>::BufferImpl() {
+    state = State_NotInitialized;
+}
+
 BufferImpl<NvnApi>::~BufferImpl() {}
 
 void BufferImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const BufferInfo& info,
@@ -139,7 +142,10 @@ size_t BufferTextureViewImpl<NvnApi>::GetOffsetAlignment(DeviceImpl<NvnApi>* pDe
     return alignment;
 }
 
-BufferTextureViewImpl<NvnApi>::BufferTextureViewImpl() {}
+BufferTextureViewImpl<NvnApi>::BufferTextureViewImpl() {
+    state = State_NotInitialized;
+}
+
 BufferTextureViewImpl<NvnApi>::~BufferTextureViewImpl() {}
 
 void BufferTextureViewImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice,

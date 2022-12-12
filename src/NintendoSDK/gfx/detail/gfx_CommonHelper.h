@@ -6,17 +6,36 @@
 #include <nn/gfx/gfx_Enum.h>
 #include <nn/gfx/gfx_RootSignatureInfo.h>
 
-namespace nn::gfx::detail {
+namespace nn::gfx {
+struct ResShaderContainerData;
+
+namespace detail {
 
 void UseMiddleWare();
 
 int GetBlockWidth(ChannelFormat);
 int GetBlockHeight(ChannelFormat);
 bool IsCompressedFormat(ChannelFormat);
+bool IsSrgbFormat(TypeFormat);
 int GetBytePerPixel(ChannelFormat);
+size_t CalculateImageSize(ChannelFormat, uint32_t, uint32_t, uint32_t);
+int GetChannelCount(ChannelFormat);
+size_t CalculateRowSize(uint32_t, ChannelFormat);
+bool IsValidMemoryPoolProperty(int);
+ImageDimension GetImageDimension(ImageStorageDimension, bool, bool);
+bool CheckBinaryTarget(const ResShaderContainerData&, int, int);
 
 inline ChannelFormat GetChannelFormat(ImageFormat format) {
     return static_cast<ChannelFormat>(format >> 8);
+}
+
+inline bool IsFilterModeAnisotropic(FilterMode filterMode) {
+    return (filterMode >> 6) & 1;
+}
+
+// todo: confirm this function exists
+inline bool IsFilterModeComparison(FilterMode filterMode) {
+    return (filterMode >> 7) & 1;
 }
 
 template <typename TTarget>
@@ -158,5 +177,5 @@ void SetRootTextureAndSampler(CommandBufferImpl<TTarget>* pThis, PipelineType,
                                 static_cast<ShaderStage>(dynamicDescriptor.shaderStage),
                                 pTextureView, pSampler);
 }
-
-}  // namespace nn::gfx::detail
+}  // namespace detail
+}  // namespace nn::gfx

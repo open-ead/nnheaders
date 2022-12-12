@@ -1,9 +1,8 @@
 #pragma once
 
-#include <iterator>
-#include "nn/types.h"
-#include "nn/util/AccessorBase.h"
-#include "nn/util/BinaryTypes.h"
+#include <nn/util.h>
+#include <nn/util/AccessorBase.h>
+#include <nn/util/util_BinTypes.h>
 
 namespace nn::util {
 
@@ -19,23 +18,20 @@ struct ResDicData {
     Entry entries[1];
 };
 
-// TODO: clean up ore::ResDic based on this implementation
-// (this one is likely to be more accurate since it is based on debug symbols/info)
 class ResDic : public AccessorBase<ResDicData> {
-public:
-    static constexpr int Npos = -1;
+    NN_NO_COPY(ResDic);
 
-    ResDic(const ResDic&) = delete;
-    auto operator=(const ResDic&) = delete;
+public:
+    static const int Npos = -1;
 
     int GetCount() const { return ToData().count; }
 
     string_view GetKey(int index) const { return ToData().entries[1 + index].pKey.Get()->Get(); }
 
     int FindIndex(const string_view& key) const {
-        const Entry* entry = FindImpl(key);
-        return *entry->pKey.Get() == key ?
-                   static_cast<int>(std::distance(&ToData().entries[1], entry)) :
+        const Entry* pEntry = FindImpl(key);
+        return *pEntry->pKey.Get() == key ?
+                   static_cast<int>(std::distance(&ToData().entries[1], pEntry)) :
                    Npos;
     }
 
@@ -50,24 +46,24 @@ public:
 
 private:
     static int ExtractRefBit(const string_view& key, int refBit) {
-        int index = refBit >> 3;
-        if (u32(index) < key.length()) {
+        int charIndex = refBit >> 3;
+        if (static_cast<size_t>(charIndex) < key.length()) {
             int bitIndex = refBit & 7;
-            return (key[key.length() - index - 1] >> bitIndex) & 1;
+            return (key[key.length() - charIndex - 1] >> bitIndex) & 1;
         }
         return 0;
     }
 
     static int FindRefBit(const string_view& lhs, const string_view& rhs);
 
-    static bool Older(const ResDicData::Entry* parent, const ResDicData::Entry* child) {
-        return parent->refBit < child->refBit;
+    static bool Older(const ResDicData::Entry* pParent, const ResDicData::Entry* pChild) {
+        return pParent->refBit < pChild->refBit;
     }
 
-    ResDicData::Entry* GetChild(const ResDicData::Entry* parent, const string_view& key) {
-        int bit = ExtractRefBit(key, parent->refBit);
-        int index = parent->children[bit];
-        return &ToData().entries[index];
+    ResDicData::Entry* GetChild(const ResDicData::Entry* pParent, const string_view& key) {
+        int childIndex = ExtractRefBit(key, pParent->refBit);
+        int entryIndex = pParent->children[childIndex];
+        return &ToData().entries[entryIndex];
     }
 
     const ResDicData::Entry* GetChild(const ResDicData::Entry* parent,
@@ -84,15 +80,14 @@ private:
     }
 
     const ResDicData::Entry* FindImpl(const string_view& key) const {
-        const Entry* parent = &ToData().entries[0];
-        const Entry* child = &ToData().entries[parent->children[0]];
+        const Entry* pParent = &ToData().entries[0];
+        const Entry* pChild = &ToData().entries[pParent->children[0]];
 
-        while (Older(parent, child)) {
-            parent = child;
-            child = GetChild(child, key);
+        while (Older(pParent, pChild)) {
+            pParent = pChild;
+            pChild = GetChild(pChild, key);
         }
-        return child;
+        return pChild;
     }
 };
-
 }  // namespace nn::util

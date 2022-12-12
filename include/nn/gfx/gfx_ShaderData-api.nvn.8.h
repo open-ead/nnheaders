@@ -12,7 +12,7 @@ struct ShaderImplData<NvnApi> {
     enum Flag { Flag_SeparationEnable, Flag_ResShader, Flag_Shared };
 
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[2];
     Bit32 nvnShaderStageBits;
     detail::Ptr<void> pNvnProgram;

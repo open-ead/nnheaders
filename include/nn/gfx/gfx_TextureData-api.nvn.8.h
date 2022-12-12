@@ -13,7 +13,7 @@ struct TextureImplData<NvnApi> {
     enum Flag { Flag_Shared };
 
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[6];
     detail::Ptr<void> pNvnTexture;
     char nvnTexture[192];
@@ -26,7 +26,7 @@ struct TextureViewImplData<NvnApi> {
     enum Flag { Flag_Shared };
 
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[6];
     detail::Ptr<void> pNvnTexture;
     detail::Ptr<void> pNvnTextureView;
@@ -40,7 +40,7 @@ struct ColorTargetViewImplData<NvnApi> {
     enum Flag { Flag_Shared };
 
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[6];
     detail::Ptr<void> pNvnTexture;
     detail::Ptr<void> pNvnTextureView;
@@ -54,7 +54,7 @@ struct DepthStencilViewImplData<NvnApi> {
     enum Flag { Flag_Shared };
 
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[6];
     detail::Ptr<void> pNvnTexture;
     detail::Ptr<void> pNvnTextureView;

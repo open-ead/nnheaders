@@ -231,6 +231,40 @@ public:
     }
 };
 
+class ColorTargetStateInfo : public detail::DataContainer<ColorTargetStateInfoData> {
+public:
+    ColorTargetStateInfo() {}
+
+    void SetDefault();
+
+    void SetFormat(ImageFormat value) { format = value; }
+    ImageFormat GetFormat() const { return static_cast<ImageFormat>(format); }
+};
+
+class RenderTargetStateInfo : public detail::DataContainer<RenderTargetStateInfoData> {
+public:
+    RenderTargetStateInfo() {}
+
+    void SetDefault();
+
+    void SetDepthStencilFormat(ImageFormat value) { depthStencilFormat = value; }
+    void SetColorTargetStateInfoArray(const ColorTargetStateInfo* pColorTargetStateInfoArray,
+                                      int colorTargetStateCount) {
+        pColorTargetStateArray.ptr = pColorTargetStateInfoArray->ToData();
+        colorTargetCount = colorTargetStateCount;
+    }
+
+    ImageFormat GetDepthStencilFormat() const {
+        return static_cast<ImageFormat>(depthStencilFormat);
+    }
+
+    int GetColorTargetCount() const { return colorTargetCount; }
+
+    const ColorTargetStateInfo* GetColorTargetStateInfoArray() const {
+        return nn::gfx::DataToAccessor(pColorTargetStateArray.ptr);
+    }
+};
+
 class VertexAttributeStateInfo : public detail::DataContainer<VertexAttributeStateInfoData> {
 public:
     VertexAttributeStateInfo() {}
@@ -306,14 +340,16 @@ public:
 
 class ViewportStateInfo : public detail::DataContainer<ViewportStateInfoData> {
 public:
-    ViewportStateInfo();
+    ViewportStateInfo() {}
+
     void SetDefault();
-    void SetOriginX(float);
-    void SetOriginY(float);
-    void SetWidth(float);
-    void SetHeight(float);
-    void SetMinDepth(float);
-    void SetMaxDepth(float);
+
+    void SetOriginX(float value) { originX = value; }
+    void SetOriginY(float value) { originY = value; }
+    void SetWidth(float value) { width = value; }
+    void SetHeight(float value) { height = value; }
+    void SetMinDepth(float value) { depthRange.minDepth = value; }
+    void SetMaxDepth(float value) { depthRange.maxDepth = value; }
 
     float GetOriginX() const { return originX; }
     float GetOriginY() const { return originY; }
@@ -325,17 +361,52 @@ public:
 
 class ScissorStateInfo : public detail::DataContainer<ScissorStateInfoData> {
 public:
-    ScissorStateInfo();
+    ScissorStateInfo() {}
+
     void SetDefault();
-    void SetOriginX(int);
-    void SetOriginY(int);
-    void SetWidth(int);
-    void SetHeight(int);
+
+    void SetOriginX(int value) { originX = value; }
+    void SetOriginY(int value) { originY = value; }
+    void SetWidth(int value) { width = value; }
+    void SetHeight(int value) { height = value; }
 
     int GetOriginX() const { return originX; }
     int GetOriginY() const { return originY; }
     int GetWidth() const { return width; }
     int GetHeight() const { return height; }
+};
+
+class ViewportScissorStateInfo : public detail::DataContainer<ViewportScissorStateInfoData> {
+public:
+    ViewportScissorStateInfo() {}
+
+    void SetDefault();
+
+    void SetScissorEnabled(bool value) { flag.SetBit(Flag_ScissorEnable, value); }
+
+    void SetViewportStateInfoArray(const ViewportStateInfo* pViewportStateInfoArray,
+                                   int viewportStateCount) {
+        pViewportArray.ptr = pViewportStateInfoArray->ToData();
+        viewportCount = viewportStateCount;
+    }
+
+    void SetScissorStateInfoArray(const ScissorStateInfo* pScissorStateInfoArray,
+                                  int scissorStateCount) {
+        pScissorArray.ptr = pScissorStateInfoArray->ToData();
+        scissorCount = scissorStateCount;
+    }
+
+    bool IsScissorEnabled() const { return flag.GetBit(Flag_ScissorEnable); }
+    int GetViewportCount() const { return viewportCount; }
+    int GetScissorCount() const { return scissorCount; }
+
+    const ViewportStateInfo* GetViewportStateInfoArray() const {
+        return nn::gfx::DataToAccessor(pViewportArray.ptr);
+    }
+
+    const ScissorStateInfo* GetScissorStateInfoArray() const {
+        return nn::gfx::DataToAccessor(pScissorArray.ptr);
+    }
 };
 
 }  // namespace nn::gfx

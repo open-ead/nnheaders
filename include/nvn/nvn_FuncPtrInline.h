@@ -10,7 +10,7 @@ static inline void nvnDeviceBuilderSetDefaults(NVNdeviceBuilder* builder) {
     pfnc_nvnDeviceBuilderSetDefaults(builder);
 }
 
-static inline void nvnDeviceBuilderSetFlags(NVNdeviceBuilder* builder, NVNdeviceFlagBits flags) {
+static inline void nvnDeviceBuilderSetFlags(NVNdeviceBuilder* builder, int flags) {
     pfnc_nvnDeviceBuilderSetFlags(builder, flags);
 }
 
@@ -356,8 +356,8 @@ static inline void nvnMemoryPoolFinalize(NVNmemoryPool* pool) {
     pfnc_nvnMemoryPoolFinalize(pool);
 }
 
-static inline void nvnMemoryPoolMap(const NVNmemoryPool* pool) {
-    pfnc_nvnMemoryPoolMap(pool);
+static inline void* nvnMemoryPoolMap(const NVNmemoryPool* pool) {
+    return pfnc_nvnMemoryPoolMap(pool);
 }
 
 static inline void nvnMemoryPoolFlushMappedRange(const NVNmemoryPool* pool, ptrdiff_t offset,

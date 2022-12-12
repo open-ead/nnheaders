@@ -1,12 +1,12 @@
 #pragma once
 
-#include "nn/util/BinaryTypes.h"
+#include <nn/util/util_BinTypes.h>
 
 namespace nn::gfx {
 
 struct ResUserDataData {
-    util::BinPtrToString pName;
-    util::BinPtr pData;
+    nn::util::BinPtrToString pName;
+    nn::util::BinPtr pData;
     uint32_t count;
     uint8_t type;
     char reserved[43];

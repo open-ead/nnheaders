@@ -2,11 +2,11 @@
 
 #include <nn/gfx/gfx_Common.h>
 #include <nn/gfx/gfx_ResUserDataData.h>
-#include "nn/util/AccessorBase.h"
+#include <nn/util/AccessorBase.h>
 
 namespace nn::gfx {
 
-class ResUserData : util::AccessorBase<ResUserDataData> {
+class ResUserData : nn::util::AccessorBase<ResUserDataData> {
     NN_NO_COPY(ResUserData);
 
 public:
@@ -28,7 +28,7 @@ public:
     const float* GetFloat() const { return static_cast<const float*>(pData.Get()); }
 
     const char* GetString(int index) const {
-        return static_cast<const util::BinPtrToString*>(pData.Get())[index].Get()->GetData();
+        return static_cast<const nn::util::BinPtrToString*>(pData.Get())[index].Get()->GetData();
     }
 
     void* GetStream() { return pData.Get(); }

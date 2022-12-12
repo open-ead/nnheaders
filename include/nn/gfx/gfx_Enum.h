@@ -19,10 +19,10 @@ enum FilterModeBit {
     FilterModeBit_MinFilterMask = 3 << FilterModeBit_MinFilterShift,
     FilterModeBit_MagFilterMask = 3 << FilterModeBit_MagFilterShift,
     FilterModeBit_MipFilterMask = 3 << FilterModeBit_MipFilterShift,
-    FilterModeBit_Anisotropic = 64,
-    FilterModeBit_Comparison = 128,
-    FilterModeBit_Minimum = 256,
-    FilterModeBit_Maximum = 512
+    FilterModeBit_Anisotropic = 0x40,
+    FilterModeBit_Comparison = 0x80,
+    FilterModeBit_Minimum = 0x100,
+    FilterModeBit_Maximum = 0x200
 };
 
 }  // namespace detail

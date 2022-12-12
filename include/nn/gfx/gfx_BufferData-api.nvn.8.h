@@ -14,7 +14,7 @@ struct BufferImplData<NvnApi> {
     enum Flag { Flag_Shared, Flag_CpuCached };
 
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[6];
     detail::Ptr<void> pNvnBuffer;
     char nvnBuffer[48];
@@ -27,7 +27,7 @@ struct BufferTextureViewImplData<NvnApi> {
     enum Flag { Flag_Shared };
 
     Bit8 state;
-    util::BitPack8 flags;
+    nn::util::BitPack8 flags;
     char reserved[6];
     char nvnTexture[192];
     detail::Ptr<void> pNvnTexture;

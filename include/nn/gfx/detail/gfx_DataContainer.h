@@ -8,7 +8,7 @@ protected:
     T* m_Value;
 
 public:
-    CasterBase(T* value) : m_Value(value) {}
+    explicit CasterBase(T* value) : m_Value(value) {}
 
     T* operator->() { return m_Value; }
 
@@ -25,7 +25,7 @@ public:
 template <class T>
 class Caster : public CasterBase<T> {
 public:
-    Caster(T* value) : CasterBase<T>(value) {}
+    explicit Caster(T* value) : CasterBase<T>(value) {}
 
     template <class U>
     operator U&() {
@@ -36,7 +36,7 @@ public:
 template <class T>
 class Caster<const T> : public CasterBase<const T> {
 public:
-    Caster(const T* value) : CasterBase<const T>(value) {}
+    explicit Caster(const T* value) : CasterBase<const T>(value) {}
 
     template <class U>
     operator const U&() {
@@ -47,13 +47,13 @@ public:
 template <class T>
 class Caster<volatile T> : public CasterBase<volatile T> {
 public:
-    Caster(volatile T* value) : CasterBase<volatile T>(value) {}
+    explicit Caster(volatile T* value) : CasterBase<volatile T>(value) {}
 };
 
 template <class T>
 class Caster<const volatile T> : public CasterBase<const volatile T> {
 public:
-    Caster(const volatile T* value) : CasterBase<const volatile T>(value) {}
+    explicit Caster(const volatile T* value) : CasterBase<const volatile T>(value) {}
 };
 
 template <class TData>
