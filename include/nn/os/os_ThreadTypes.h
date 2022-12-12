@@ -24,10 +24,8 @@ struct ThreadType {
     util::TypedStorage<util::IntrusiveListNode, 16, 8> _allThreadsListNode;
     util::TypedStorage<detail::MultiWaitObjectList, 16, 8> _multiWaitObjectList;
 
-    // todo: figure out how they got an anonymous member variable
-    char unk[32];
-
-    uint8_t _state;
+    // todo: is this right?
+    alignas(0x40) uint8_t _state;
     bool _stackIsAliased;
     bool _autoRegistered;
     uint8_t _suspendCount;

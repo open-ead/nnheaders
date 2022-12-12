@@ -20,4 +20,4 @@ public:
     const void* GetUserPtr() const;
 };
 
-}  // namespace nn
+}  // namespace nn::gfx
