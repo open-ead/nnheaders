@@ -5,6 +5,7 @@
 #include <nn/gfx/gfx_Enum.h>
 
 namespace nn::gfx {
+
 class DeviceInfo : public detail::DataContainer<DeviceInfoData> {
 public:
     DeviceInfo();
@@ -15,4 +16,5 @@ public:
     int GetApiMajorVersion() const;
     int GetApiMinorVersion() const;
 };
-}  // namespace nn
+
+}  // namespace nn::gfx
