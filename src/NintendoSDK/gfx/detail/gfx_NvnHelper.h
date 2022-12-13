@@ -34,11 +34,13 @@ enum NvnDeviceFeature {
     NvnDeviceFeature_PostDepthCoverage,
     NvnDeviceFeature_ImagesUsingTextureHandles,
     NvnDeviceFeature_SampleLocations,
-    NvnDeviceFeature_SupportFragmentShaderInterlock
+    NvnDeviceFeature_SupportFragmentShaderInterlock,
+    NvnDeviceFeature_SupportsDebugLayer
 };
 
 class Nvn {
 public:
+    static int GetCpuMapAccess(int);
     static NVNformat GetImageFormat(ImageFormat);
     static NVNformat GetAttributeFormat(AttributeFormat);
     static NVNtextureTarget GetImageTarget(ImageDimension);
@@ -61,17 +63,18 @@ public:
     static NVNface GetCullMode(CullMode);
     static int GetMemoryPoolFlags(int);
     static NVNbufferAddress GetBufferAddress(const GpuAddress);
-    static void SetupScanBufferTextureInfo(TextureInfo*, const SwapChainInfo&);
     static NVNcounterType GetCounterType(QueryTarget);
     static nn::util::BitPack32 GetDeviceFeature(const NVNdevice*);
-    static void GetImageFormatProperty(ImageFormatProperty*, NVNformat);
+    static void SetupScanBufferTextureInfo(TextureInfo*, const SwapChainInfo&);
+    static TimeSpan ToTimeSpan(int64_t);
     static ImageFormat GetGfxImageFormat(NVNformat);
-    static void DebugCallback(NVNdebugCallbackSource, NVNdebugCallbackType, int,
-                              NVNdebugCallbackSeverity, const char*, void*);
+    static void GetImageFormatProperty(ImageFormatProperty*, NVNformat);
     static int GetFirstScanBufferIndex();
     static void SetPackagedTextureDataImpl(NVNtextureBuilder*, const TextureInfo&,
                                            MemoryPoolImpl<NvnApi>*, ptrdiff_t, size_t);
-    static TimeSpan ToTimeSpan(int64_t);
+    static void SetTextureViewFormat(NVNtextureView*, NVNformat, const NVNtexture*);
+    static void DebugCallback(NVNdebugCallbackSource, NVNdebugCallbackType, int,
+                              NVNdebugCallbackSeverity, const char*, void*);
 };
 
 class GlslcDll {

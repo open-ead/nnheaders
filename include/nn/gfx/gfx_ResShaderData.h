@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nn/gfx/gfx_ShaderInfoData.h>
+#include <nn/gfx/gfx_ShaderInfo.h>
 #include <nn/util.h>
 #include <nn/util/util_BinaryFormat.h>
 

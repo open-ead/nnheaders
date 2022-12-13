@@ -19,6 +19,10 @@ int Nvn::GetFirstScanBufferIndex() {
 void Nvn::SetPackagedTextureDataImpl(NVNtextureBuilder*, const TextureInfo&,
                                      MemoryPoolImpl<NvnApi>*, ptrdiff_t, size_t) {}
 
+void Nvn::SetTextureViewFormat(NVNtextureView* pTextureView, NVNformat value, const NVNtexture*) {
+    nvnTextureViewSetFormat(pTextureView, value);
+}
+
 TimeSpan Nvn::ToTimeSpan(int64_t timestamp) {
     return TimeSpan::FromNanoSeconds((timestamp * 13) >> 3);
 }

@@ -15,15 +15,15 @@ RasterizerStateImpl<NvnApi>::RasterizerStateImpl() {}
 
 RasterizerStateImpl<NvnApi>::~RasterizerStateImpl() {}
 
-void RasterizerStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* device, const InfoType& info) {
-    NVNpolygonState* pnPolygonState = reinterpret_cast<NVNpolygonState*>(&nvnPolygonState);
-    NVNmultisampleState* pnMultisampleState =
+void RasterizerStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const InfoType& info) {
+    NVNpolygonState* pPolygonState = reinterpret_cast<NVNpolygonState*>(&nvnPolygonState);
+    NVNmultisampleState* pMultisampleState =
         reinterpret_cast<NVNmultisampleState*>(&nvnMultisampleState);
 
-    nvnPolygonStateSetDefaults(pnPolygonState);
-    nvnPolygonStateSetCullFace(pnPolygonState, Nvn::GetCullMode(info.GetCullMode()));
-    nvnPolygonStateSetFrontFace(pnPolygonState, Nvn::GetFrontFace(info.GetFrontFace()));
-    nvnPolygonStateSetPolygonMode(pnPolygonState, Nvn::GetFillMode(info.GetFillMode()));
+    nvnPolygonStateSetDefaults(pPolygonState);
+    nvnPolygonStateSetCullFace(pPolygonState, Nvn::GetCullMode(info.GetCullMode()));
+    nvnPolygonStateSetFrontFace(pPolygonState, Nvn::GetFrontFace(info.GetFrontFace()));
+    nvnPolygonStateSetPolygonMode(pPolygonState, Nvn::GetFillMode(info.GetFillMode()));
 
     nvnDepthBias = info.GetDepthBias();
     nvnDepthBiasClamp = info.GetDepthBiasClamp();
@@ -31,19 +31,24 @@ void RasterizerStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* device, const I
 
     bool polyEnables =
         (nvnDepthBias != 0.0f || nvnDepthBiasClamp != 0.0f || nvnSlopeScaledDepthBias != 0);
-    nvnPolygonStateSetPolygonOffsetEnables(pnPolygonState, (polyEnables) ?
-                                                               (NVN_POLYGON_OFFSET_ENABLE_POINT |
-                                                                NVN_POLYGON_OFFSET_ENABLE_LINE |
-                                                                NVN_POLYGON_OFFSET_ENABLE_FILL) :
-                                                               NVN_POLYGON_OFFSET_ENABLE_NONE);
+    nvnPolygonStateSetPolygonOffsetEnables(pPolygonState, (polyEnables) ?
+                                                              (NVN_POLYGON_OFFSET_ENABLE_POINT |
+                                                               NVN_POLYGON_OFFSET_ENABLE_LINE |
+                                                               NVN_POLYGON_OFFSET_ENABLE_FILL) :
+                                                              NVN_POLYGON_OFFSET_ENABLE_NONE);
 
     nvnSampleMask = info.GetMultisampleStateInfo().GetSampleMask();
-    nvnMultisampleStateSetDefaults(pnMultisampleState);
-    nvnMultisampleStateSetMultisampleEnable(pnMultisampleState, info.IsMultisampleEnabled());
-    nvnMultisampleStateSetSamples(pnMultisampleState,
+    nvnMultisampleStateSetDefaults(pMultisampleState);
+    nvnMultisampleStateSetMultisampleEnable(pMultisampleState, info.IsMultisampleEnabled());
+#if NN_VER > 351
+    int sampleCount = info.GetMultisampleStateInfo().GetSampleCount();
+    nvnMultisampleStateSetSamples(pMultisampleState, (sampleCount > 1) ? sampleCount : 0);
+#else
+    nvnMultisampleStateSetSamples(pMultisampleState,
                                   info.GetMultisampleStateInfo().GetSampleCount());
+#endif
     nvnMultisampleStateSetAlphaToCoverageEnable(
-        pnMultisampleState, info.GetMultisampleStateInfo().IsAlphaToCoverageEnabled());
+        pMultisampleState, info.GetMultisampleStateInfo().IsAlphaToCoverageEnabled());
 
     flags.SetBit(Flag_MultisampleEnabled, info.IsMultisampleEnabled());
     flags.SetBit(Flag_DepthClipEnabled, info.IsDepthClipEnabled());
@@ -79,51 +84,55 @@ void* BlendStateImpl<NvnApi>::GetMemory() const {
     return pNvnBlendStateData;
 }
 
-void BlendStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* device, const InfoType& info) {
-    auto pnColorState = reinterpret_cast<NVNcolorState*>(&nvnColorState);
-    auto pnChannelMaskState = reinterpret_cast<NVNchannelMaskState*>(&nvnChannelMaskState);
-    NVNblendState* pnBlendState = pNvnBlendStateData;
-    const BlendTargetStateInfo* pTargetInfo = info.GetBlendTargetStateInfoArray();
+void BlendStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const InfoType& info) {
+    auto pColorState = reinterpret_cast<NVNcolorState*>(&nvnColorState);
+    auto pChannelMaskState = reinterpret_cast<NVNchannelMaskState*>(&nvnChannelMaskState);
+    NVNblendState* pBlendStateData = pNvnBlendStateData;
+    const BlendTargetStateInfo* pBlendInfo = info.GetBlendTargetStateInfoArray();
 
     nvnBlendConstant[0] = info.GetBlendConstant(ColorChannel_Red);
     nvnBlendConstant[1] = info.GetBlendConstant(ColorChannel_Green);
     nvnBlendConstant[2] = info.GetBlendConstant(ColorChannel_Blue);
     nvnBlendConstant[3] = info.GetBlendConstant(ColorChannel_Alpha);
 
-    nvnColorStateSetDefaults(pnColorState);
-    nvnChannelMaskStateSetDefaults(pnChannelMaskState);
+    nvnColorStateSetDefaults(pColorState);
+    nvnChannelMaskStateSetDefaults(pChannelMaskState);
 
     targetCount = info.GetBlendTargetCount();
 
-    for (int i = 0; i < info.GetBlendTargetCount(); ++i) {
-        int infoOffset = (info.IsIndependentBlendEnabled()) ? i : 0;
+    for (int index = 0; index < info.GetBlendTargetCount(); ++index) {
+        int infoIndex = (info.IsIndependentBlendEnabled()) ? index : 0;
 
-        nvnColorStateSetBlendEnable(pnColorState, i, pTargetInfo[i].IsBlendEnabled());
-        nvnBlendStateSetDefaults(&pnBlendState[i]);
-        nvnBlendStateSetBlendTarget(&pnBlendState[i], i);
+#if NN_VER > 351
+        nvnColorStateSetBlendEnable(pColorState, index, pBlendInfo[infoIndex].IsBlendEnabled());
+#else
+        nvnColorStateSetBlendEnable(pColorState, index, pBlendInfo[index].IsBlendEnabled());
+#endif
+        nvnBlendStateSetDefaults(&pBlendStateData[index]);
+        nvnBlendStateSetBlendTarget(&pBlendStateData[index], index);
 
         nvnBlendStateSetBlendFunc(
-            &pnBlendState[i],
-            Nvn::GetBlendFunction(pTargetInfo[infoOffset].GetSourceColorBlendFactor()),
-            Nvn::GetBlendFunction(pTargetInfo[infoOffset].GetDestinationColorBlendFactor()),
-            Nvn::GetBlendFunction(pTargetInfo[infoOffset].GetSourceAlphaBlendFactor()),
-            Nvn::GetBlendFunction(pTargetInfo[infoOffset].GetDestinationAlphaBlendFactor()));
+            &pBlendStateData[index],
+            Nvn::GetBlendFunction(pBlendInfo[infoIndex].GetSourceColorBlendFactor()),
+            Nvn::GetBlendFunction(pBlendInfo[infoIndex].GetDestinationColorBlendFactor()),
+            Nvn::GetBlendFunction(pBlendInfo[infoIndex].GetSourceAlphaBlendFactor()),
+            Nvn::GetBlendFunction(pBlendInfo[infoIndex].GetDestinationAlphaBlendFactor()));
 
         nvnBlendStateSetBlendEquation(
-            &pnBlendState[i],
-            Nvn::GetBlendEquation(pTargetInfo[infoOffset].GetColorBlendFunction()),
-            Nvn::GetBlendEquation(pTargetInfo[infoOffset].GetAlphaBlendFunction()));
+            &pBlendStateData[index],
+            Nvn::GetBlendEquation(pBlendInfo[infoIndex].GetColorBlendFunction()),
+            Nvn::GetBlendEquation(pBlendInfo[infoIndex].GetAlphaBlendFunction()));
 
-        nvnChannelMaskStateSetChannelMask(
-            pnChannelMaskState, i,
-            (pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Red) == ChannelMask_Red,
-            (pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Green) == ChannelMask_Green,
-            (pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Blue) == ChannelMask_Blue,
-            (pTargetInfo[infoOffset].GetChannelMask() & ChannelMask_Alpha) == ChannelMask_Alpha);
+        ChannelMask channelMask = static_cast<ChannelMask>(pBlendInfo[infoIndex].GetChannelMask());
+        nvnChannelMaskStateSetChannelMask(pChannelMaskState, index,
+                                          (channelMask & ChannelMask_Red) == ChannelMask_Red,
+                                          (channelMask & ChannelMask_Green) == ChannelMask_Green,
+                                          (channelMask & ChannelMask_Blue) == ChannelMask_Blue,
+                                          (channelMask & ChannelMask_Alpha) == ChannelMask_Alpha);
     }
 
     if (info.IsLogicOperationEnabled()) {
-        nvnColorStateSetLogicOp(pnColorState, Nvn::GetLogicOperation(info.GetLogicOperation()));
+        nvnColorStateSetLogicOp(pColorState, Nvn::GetLogicOperation(info.GetLogicOperation()));
     }
 
     state = State_Initialized;

@@ -207,7 +207,13 @@ void TextureViewImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>*, const TextureViewI
                                 info.GetSubresourceRange().GetArrayRange().GetArrayLength());
     }
 
+#if NN_VER > 351
+    Nvn::SetTextureViewFormat(pNvnTextureView, Nvn::GetImageFormat(info.GetImageFormat()),
+                              pNvnTexture);
+#else
     nvnTextureViewSetFormat(pNvnTextureView, Nvn::GetImageFormat(info.GetImageFormat()));
+#endif
+
     nvnTextureViewSetSwizzle(pNvnTextureView,
                              s_ChannelMappingTable[info.GetChannelMapping(ColorChannel_Red)],
                              s_ChannelMappingTable[info.GetChannelMapping(ColorChannel_Green)],
