@@ -43,11 +43,11 @@ void ReferSymbol(const void*);
 #define NN_SDK_TYPE "Release"
 #endif
 
-#ifndef NN_VER
-#define NN_VER(major, minor, patch) ((major << 16) | (minor << 8) | (patch))
+#ifndef NN_MAKE_VER
+#define NN_MAKE_VER(major, minor, patch) ((major << 16) | (minor << 8) | (patch))
 
-#define NN_SDK_VER NN_VER(NN_SDK_MAJOR, NN_SDK_MINOR, NN_SDK_PATCH)
-#define NN_WARE_VER NN_VER(NN_WARE_MAJOR, NN_WARE_MINOR, NN_WARE_PATCH)
+#define NN_SDK_VER NN_MAKE_VER(NN_SDK_MAJOR, NN_SDK_MINOR, NN_SDK_PATCH)
+#define NN_WARE_VER NN_MAKE_VER(NN_WARE_MAJOR, NN_WARE_MINOR, NN_WARE_PATCH)
 
 #define NN_STRINGIFY1(s) #s
 #define NN_STRINGIFY(s) NN_STRINGIFY1(s)

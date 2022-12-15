@@ -211,7 +211,7 @@ void TextureViewImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>*
                                 info.GetSubresourceRange().GetArrayRange().GetArrayLength());
     }
 
-#if NN_SDK_VER > NN_VER(3, 5, 1)
+#if NN_SDK_VER > NN_MAKE_VER(3, 5, 1)
     Nvn::SetTextureViewFormat(pNvnTextureView, Nvn::GetImageFormat(info.GetImageFormat()),
                               pNvnTexture);
 #else
