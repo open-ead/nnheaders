@@ -10,10 +10,10 @@
 namespace nn::gfx {
 
 // todo: figure out where to put this
-enum LowLevelApi { LowLevelApi_Common = 0 };
+enum LowLevelApi { LowLevelApi_Common = 0, LowLevelApi_Nvn = 4 };
 
 // todo: seems to be named ApiVariationNvn8
-using ApiVariationNvn8 = ApiVariation<ApiType<4>, ApiVersion<8>>;
+using ApiVariationNvn8 = ApiVariation<ApiType<LowLevelApi_Nvn>, ApiVersion<8>>;
 using DefaultApi = ApiVariationNvn8;
 
 struct OutOfMemoryEventArg {
