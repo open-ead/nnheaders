@@ -4,6 +4,7 @@
 #include <nn/gfx/gfx_Common.h>
 
 namespace nn::gfx {
+
 template <class TTarget>
 class TBuffer : public detail::BufferImpl<TTarget> {
     NN_NO_COPY(TBuffer);
@@ -27,4 +28,5 @@ public:
     void* GetUserPtr();
     const void* GetUserPtr() const;
 };
+
 }  // namespace nn::gfx

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <nn/gfx/detail/fwd.h>
 #include <nn/gfx/gfx_Common.h>
 #include <nn/gfx/gfx_PipelineData-api.nvn.8.h>
 
@@ -19,10 +18,11 @@ public:
     typedef GraphicsPipelineInfo GraphicsInfoType;
     typedef ComputePipelineInfo ComputeInfoType;
 
-    PipelineImpl();
-    ~PipelineImpl();
     static size_t GetRequiredMemorySize(const GraphicsInfoType&);
     static size_t GetRequiredMemorySize(const ComputeInfoType&);
+
+    PipelineImpl();
+    ~PipelineImpl();
     void SetMemory(void*, size_t);
     void* GetMemory();
     const void* GetMemory() const;

@@ -84,18 +84,26 @@ add_library(NintendoSDK OBJECT
   include/nn/init.h
   include/nn/crypto.h
   include/nn/ssl.h
-  include/nn/gfx/detail/fwd.h
   include/nn/gfx/detail/gfx_Buffer-api.nvn.8.h
   include/nn/gfx/detail/gfx_CommandBuffer-api.nvn.8.h
   include/nn/gfx/detail/gfx_Common-api.nvn.h
   include/nn/gfx/detail/gfx_DataContainer.h
   include/nn/gfx/detail/gfx_DescriptorPool-api.nvn.8.h
   include/nn/gfx/detail/gfx_Device-api.nvn.8.h
+  include/nn/gfx/detail/gfx_Fwd.h
   include/nn/gfx/detail/gfx_MemoryPool-api.nvn.8.h
   include/nn/gfx/detail/gfx_Misc.h
   include/nn/gfx/detail/gfx_Pipeline-api.nvn.8.h
+  include/nn/gfx/detail/gfx_Queue-api.nvn.8.h
+  include/nn/gfx/detail/gfx_RequiredMemory.h
+  include/nn/gfx/detail/gfx_ResShaderImpl.h
+  include/nn/gfx/detail/gfx_RootSignature-api.common.h
+  include/nn/gfx/detail/gfx_RootSignature-api.nvn.8.h
+  include/nn/gfx/detail/gfx_Sampler-api.nvn.8.h
   include/nn/gfx/detail/gfx_Shader-api.nvn.8.h
   include/nn/gfx/detail/gfx_State-api.nvn.8.h
+  include/nn/gfx/detail/gfx_SwapChain-api.nvn.8.h
+  include/nn/gfx/detail/gfx_Sync-api.nvn.8.h
   include/nn/gfx/detail/gfx_Texture-api.nvn.8.h
   include/nn/gfx/util/gfx_PrimitiveShape.h
   include/nn/gfx/gfx_Buffer.h
@@ -104,21 +112,35 @@ add_library(NintendoSDK OBJECT
   include/nn/gfx/gfx_BufferInfoData.h
   include/nn/gfx/gfx_CommandBuffer.h
   include/nn/gfx/gfx_CommandBufferData-api.nvn.8.h
+  include/nn/gfx/gfx_CommandBufferInfo.h
+  include/nn/gfx/gfx_CommandBufferInfoData.h
   include/nn/gfx/gfx_Common.h
+  include/nn/gfx/gfx_DescriptorPool.h
   include/nn/gfx/gfx_DescriptorPoolData-api.nvn.8.h
-  include/nn/gfx/gfx_DescriptorSlot.h
   include/nn/gfx/gfx_DescriptorPoolInfo.h
   include/nn/gfx/gfx_DescriptorPoolInfoData.h
+  include/nn/gfx/gfx_DescriptorSlot.h
+  include/nn/gfx/gfx_Device.h
   include/nn/gfx/gfx_DeviceData-api.nvn.8.h
   include/nn/gfx/gfx_DeviceInfo.h
   include/nn/gfx/gfx_DeviceInfoData.h
   include/nn/gfx/gfx_Enum.h
   include/nn/gfx/gfx_GpuAddress.h
+  include/nn/gfx/gfx_Interoperation-api.nvn.8.h
   include/nn/gfx/gfx_MemoryPool.h
   include/nn/gfx/gfx_MemoryPoolData-api.nvn.8.h
+  include/nn/gfx/gfx_MemoryPoolInfo.h
+  include/nn/gfx/gfx_MemoryPoolInfoData.h
   include/nn/gfx/gfx_PipelineData-api.nvn.8.h
+  include/nn/gfx/gfx_Queue.h
+  include/nn/gfx/gfx_QueueData-api.nvn.8.h
+  include/nn/gfx/gfx_QueueInfo.h
+  include/nn/gfx/gfx_QueueInfoData.h
   include/nn/gfx/gfx_ResShader.h
+  include/nn/gfx/gfx_ResShaderData-api.nvn.h
   include/nn/gfx/gfx_ResShaderData.h
+  include/nn/gfx/gfx_ResTexture.h
+  include/nn/gfx/gfx_ResTextureData.h
   include/nn/gfx/gfx_ResUserData.h
   include/nn/gfx/gfx_ResUserDataData.h
   include/nn/gfx/gfx_RootSignatureData-api.common.h
@@ -126,13 +148,24 @@ add_library(NintendoSDK OBJECT
   include/nn/gfx/gfx_RootSignatureInfoData.h
   include/nn/gfx/gfx_Sampler.h
   include/nn/gfx/gfx_SamplerData-api.nvn.8.h
+  include/nn/gfx/gfx_SamplerInfo.h
+  include/nn/gfx/gfx_SamplerInfoData.h
+  include/nn/gfx/gfx_Shader.h
   include/nn/gfx/gfx_ShaderData-api.nvn.8.h
+  include/nn/gfx/gfx_ShaderInfo.h
   include/nn/gfx/gfx_ShaderInfoData.h
+  include/nn/gfx/gfx_State.h
   include/nn/gfx/gfx_StateData-api.nvn.8.h
   include/nn/gfx/gfx_StateInfo.h
   include/nn/gfx/gfx_StateInfoData.h
+  include/nn/gfx/gfx_SwapChain.h
+  include/nn/gfx/gfx_SwapChainData-api.nvn.8.h
   include/nn/gfx/gfx_SwapChainInfo.h
   include/nn/gfx/gfx_SwapChainInfoData.h
+  include/nn/gfx/gfx_Sync.h
+  include/nn/gfx/gfx_SyncData-api.nvn.8.h
+  include/nn/gfx/gfx_SyncInfo.h
+  include/nn/gfx/gfx_SyncInfoData.h
   include/nn/gfx/gfx_Texture.h
   include/nn/gfx/gfx_TextureData-api.nvn.8.h
   include/nn/gfx/gfx_TextureInfo.h

@@ -142,6 +142,15 @@ struct SamplerImplData;
 template <class TTarget>
 struct QueueImplData;
 
+template <class TTarget>
+struct SwapChainImplData;
+
+template <class TTarget>
+struct FenceImplData;
+
+template <class TTarget>
+struct SemaphoreImplData;
+
 struct ImageFormatProperty;
 
 namespace detail {

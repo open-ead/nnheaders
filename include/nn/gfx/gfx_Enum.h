@@ -690,4 +690,8 @@ enum ShaderInitializeResult {
     ShaderInitializeResult_SetupFailed
 };
 
+enum SyncResult { SyncResult_Success, SyncResult_TimeoutExpired };
+
+enum AcquireScanBufferResult { AcquireScanBufferResult_Success, AcquireScanBufferResult_Failed };
+
 }  // namespace nn::gfx

@@ -3,7 +3,7 @@
 #include <nn/types.h>
 
 // not sure what these are named
-#include <nn/gfx/detail/fwd.h>
+#include <nn/gfx/detail/gfx_Fwd.h>
 #include <nn/gfx/gfx_VariationBase.h>
 #include <nn/util.h>
 

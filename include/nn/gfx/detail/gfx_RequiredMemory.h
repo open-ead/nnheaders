@@ -2,7 +2,7 @@
 
 namespace nn::gfx::detail {
 
-template <class TImpl>  // [with TImpl = BlendStateImpl<ApiVariation<ApiType<4>, ApiVersion<8>>>]
+template <class TImpl>
 class RequiredMemory {
 protected:
     static size_t GetRequiredMemorySize(...);

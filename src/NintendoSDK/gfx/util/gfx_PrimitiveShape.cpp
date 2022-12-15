@@ -2,6 +2,7 @@
 
 #include <nn/types.h>
 #include <nn/util/MathTypes.h>
+#include <nn/util/util_Arithmetic.h>
 
 namespace nn::gfx::util {
 
@@ -267,15 +268,83 @@ void SphereShape::CalculateImpl(void* pVertexMemory, size_t vertexSize, void* pI
     }
 }
 
-// CircleShape::CircleShape(PrimitiveShapeFormat, PrimitiveTopology, int);
+CircleShape::CircleShape(PrimitiveShapeFormat vertexFormat, PrimitiveTopology primitiveTopology,
+                         int sliceCount)
+    : PrimitiveShape(vertexFormat, primitiveTopology) {
+    m_SliceCount = sliceCount;
+
+    SetVertexCount(CalculateVertexCount());
+    SetIndexCount(CalculateIndexCount());
+
+    const size_t stride = GetStride();
+    SetVertexBufferSize(stride * GetVertexCount());
+    SetIndexBufferSize(sizeof(4) * GetIndexCount());
+}
 
 CircleShape::~CircleShape() {}
 
-// int CircleShape::CalculateVertexCount();
+int CircleShape::CalculateVertexCount() {
+    return m_SliceCount + 1;
+}
+
+int CircleShape::CalculateIndexCount() {
+    switch (GetPrimitiveTopology()) {
+    case PrimitiveTopology_LineStrip:
+        return m_SliceCount + 1;
+
+    case PrimitiveTopology_TriangleList:
+        return 3 * m_SliceCount;
+
+    default:
+        return 0;
+    }
+}
+
+void* CircleShape::CalculateVertexBuffer() {
+    float* pVertexBuffer = static_cast<float*>(GetVertexBuffer());
+
+    if (m_SliceCount > 0) {
+        for (int idxSlice = 0; idxSlice < m_SliceCount; ++idxSlice) {
+            float rad = nn::util::DegreeToRadian(360.0f) * idxSlice / m_SliceCount;
+            float cosXY = nn::util::CosTable(nn::util::RadianToAngleIndex(rad));
+            float sinXY = nn::util::SinTable(nn::util::RadianToAngleIndex(rad));
+
+            if (GetVertexFormat() & PrimitiveShapeFormat_Pos) {
+                *pVertexBuffer++ = cosXY;
+                *pVertexBuffer++ = sinXY;
+                *pVertexBuffer++ = 0.0f;
+            }
+            if (GetVertexFormat() & PrimitiveShapeFormat_Normal) {
+                *pVertexBuffer++ = 0.0f;
+                *pVertexBuffer++ = 0.0f;
+                *pVertexBuffer++ = 1.0f;
+            }
+            if (GetVertexFormat() & PrimitiveShapeFormat_Uv) {
+                *pVertexBuffer++ = cosXY * 0.5f + 0.5f;
+                *pVertexBuffer++ = 1.0f - (sinXY * 0.5f + 0.5f);
+            }
+        }
+    }
+
+    if (GetVertexFormat() & PrimitiveShapeFormat_Pos) {
+        *pVertexBuffer++ = 0.0f;
+        *pVertexBuffer++ = 0.0f;
+        *pVertexBuffer++ = 0.0f;
+    }
+    if (GetVertexFormat() & PrimitiveShapeFormat_Normal) {
+        *pVertexBuffer++ = 0.0f;
+        *pVertexBuffer++ = 0.0f;
+        *pVertexBuffer++ = 1.0f;
+    }
+    if (GetVertexFormat() & PrimitiveShapeFormat_Uv) {
+        *pVertexBuffer++ = 0.5f;
+        *pVertexBuffer++ = 0.5f;
+    }
+
+    return pVertexBuffer;
+}
 
 /*
-int CircleShape::CalculateIndexCount();
-void* CircleShape::CalculateVertexBuffer();
 void CircleShape::CalculateImpl(void* pVertexMemory, size_t vertexSize, void* pIndexMemory,
                                 size_t indexSize);
 */
