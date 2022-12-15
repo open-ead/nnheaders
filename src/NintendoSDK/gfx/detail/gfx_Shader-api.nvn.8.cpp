@@ -172,7 +172,7 @@ bool OnlineCompiledShader::Initialize(DeviceImpl<NvnApi>* pDevice, const GLSLCou
         offset = nn::util::align_up(offset, ShaderImpl<NvnApi>::GetBinaryCodeAlignment(pDevice));
     }
 
-    return ShaderInitializeResult_Success;
+    return true;
 }
 
 void OnlineCompiledShader::Finalize() {
@@ -323,13 +323,14 @@ ShaderInitializeResult NvnGlslcCompile(ShaderImpl<NvnApi>* pThis, const ShaderIn
     }
 
     uint8_t compileResult = GlslcDll::GetInstance().GlslcCompile(&compileObject);
-    if (compileResult == 0) {
+    const GLSLCcompilationStatus& compilationStatus =
+        *compileObject.lastCompiledResults->compilationStatus;
+
+    if (compilationStatus.allocError) {
         return ShaderInitializeResult_SetupFailed;
     }
 
-    const GLSLCcompilationStatus& compilationStatus =
-        *compileObject.lastCompiledResults->compilationStatus;
-    if (compilationStatus.allocError || !compilationStatus.success) {
+    if (compileResult == 0 || !compilationStatus.success) {
         return ShaderInitializeResult_SetupFailed;
     }
 
@@ -392,8 +393,8 @@ ShaderInitializeResult InitializeSourceShader(ShaderImpl<NvnApi>* pThis, const S
         return initializeResult;
     }
 
-    if (!static_cast<OnlineCompiledShader*>(pThis->ToData()->pOnlineCompiledShader)
-             ->SetShader(pThis->ToData()->pNvnProgram)) {
+    if (static_cast<OnlineCompiledShader*>(pThis->ToData()->pOnlineCompiledShader)
+            ->SetShader(pThis->ToData()->pNvnProgram) != true) {
         return ShaderInitializeResult_SetupFailed;
     }
 
@@ -410,9 +411,9 @@ void ReassembleControlSection(void* pDestination,
 
     const ReassembleControlSectionInfo ReassembleControlSectionInfoArray[5] = {
         {20, 24, &NvnDecomposedControlSection::pAssemblyData},
-        {32, 28, &NvnDecomposedControlSection::pSpecializationData},
-        {1776, 1780, &NvnDecomposedControlSection::pPragmaData},
-        {1992, 1996, &NvnDecomposedControlSection::pAssemblyLocalsData},
+        {32, 28, &NvnDecomposedControlSection::pAssemblyLocalsData},
+        {1776, 1780, &NvnDecomposedControlSection::pSpecializationData},
+        {1992, 1996, &NvnDecomposedControlSection::pPragmaData},
         {2024, 2028, &NvnDecomposedControlSection::pUniform64InfoData},
     };
 
@@ -503,18 +504,17 @@ ShaderInitializeResult ShaderImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevic
         break;
     }
 
-    if (result != ShaderInitializeResult_Success) {
-        return result;
+    if (result == ShaderInitializeResult_Success) {
+        if (!info.IsSeparationEnabled()) {
+            nvnShaderStageBits = (info.GetShaderCodePtr(ShaderStage_Compute)) ?
+                                     NVN_SHADER_STAGE_COMPUTE_BIT :
+                                     NVN_SHADER_STAGE_ALL_GRAPHICS_BITS;
+        }
+
+        flags.SetBit(Flag_Shared, false);
+        state = State_Initialized;
     }
 
-    if (!info.IsSeparationEnabled()) {
-        nvnShaderStageBits = (info.GetShaderCodePtr(ShaderStage_Compute)) ?
-                                 NVN_SHADER_STAGE_COMPUTE_BIT :
-                                 NVN_SHADER_STAGE_ALL_GRAPHICS_BITS;
-    }
-
-    flags.SetBit(Flag_Shared, false);
-    state = State_Initialized;
     return result;
 }
 
