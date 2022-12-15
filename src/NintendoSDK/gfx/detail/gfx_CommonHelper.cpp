@@ -4,7 +4,7 @@
 
 namespace nn::gfx::detail {
 
-NN_MIDDLEWARE(g_MiddlewareInfo, "Nintendo", "NintendoSDK_gfx-3_5_1-Release");
+NN_MIDDLEWARE(g_MiddlewareInfo, "Nintendo", "NintendoSDK_gfx" NN_SDK_BUILD_STR);
 
 void UseMiddleWare() {
     nn::util::ReferSymbol(g_MiddlewareInfo);

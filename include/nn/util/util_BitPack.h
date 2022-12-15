@@ -31,7 +31,6 @@ struct BitPack {
     bool IsAnyBitOn(int mask) const { return static_cast<int>(storage & mask) == mask; }
     bool IsAnyBitOff(int mask) const { return static_cast<int>(storage & mask) != mask; }
 
-    // todo: figure out how BitWidth would be used
     template <int BitPos, int BitWidth, class T>
     struct Field {
         static const int Pos = BitPos;

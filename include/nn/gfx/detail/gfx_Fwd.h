@@ -1,3 +1,5 @@
+// todo: validate the existance of this file and figure out what it's named
+
 #pragma once
 
 #include <nn/gfx/gfx_Enum.h>

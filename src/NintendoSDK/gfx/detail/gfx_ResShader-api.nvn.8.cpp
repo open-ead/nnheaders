@@ -7,8 +7,6 @@
 
 #include "gfx_NvnHelper.h"
 
-// todo: all these functions
-
 namespace nn::gfx {
 namespace detail {
 

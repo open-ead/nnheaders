@@ -26,7 +26,7 @@ struct SinCosSample {
 
 extern SinCosSample SinCosSampleTable[4];
 
-/* todo:
+/* todo: implement for shape functions
 inline float ModPi(float x) {
     float factor;
     float roundedQuotient;

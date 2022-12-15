@@ -19,7 +19,7 @@ class ResShaderContainerImpl {
 public:
     template <typename TTarget>
     static void Initialize(ResShaderContainer*, DeviceImpl<TTarget>*) {
-        // todo: vfx_Resource.cpp
+        // todo: implement this, used in vfx_Resource.cpp
     }
 
     template <typename TTarget>
@@ -32,7 +32,6 @@ public:
 }  // namespace detail
 
 // todo: figure out where to put this
-
 template <typename TTarget>
 size_t NvnGetMaxRecommendedScratchMemorySize(TDevice<TTarget>* pDevice,
                                              const ResShaderFile* const* ppResShaderFileArray,

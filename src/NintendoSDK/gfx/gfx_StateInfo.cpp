@@ -18,7 +18,7 @@ void RasterizerStateInfo::SetDefault() {
 
     SetRasterEnabled(true);
     SetMultisampleEnabled(false);
-#if NN_SDK_VER > 351
+#if NN_SDK_VER > NN_VER(3, 5, 1)
     SetDepthClipEnabled(true);
 #else
     SetDepthClipEnabled(false);

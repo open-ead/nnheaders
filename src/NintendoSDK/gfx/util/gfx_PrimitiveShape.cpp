@@ -4,6 +4,9 @@
 #include <nn/util/MathTypes.h>
 #include <nn/util/util_Arithmetic.h>
 
+// todo: most of these functions are still non-matching
+// matching should be done using odyssey 1.2 as a base
+
 namespace nn::gfx::util {
 
 PrimitiveShape::PrimitiveShape(PrimitiveShapeFormat vertexFormat,
@@ -152,7 +155,6 @@ int SphereShape::CalculateIndexCount() {
     return numIndices;
 }
 
-// todo:
 void* SphereShape::CalculateVertexBuffer() {
     return nullptr;
 }
@@ -404,7 +406,6 @@ int CubeShape::CalculateIndexCount() {
     return numVertices;
 }
 
-// todo:
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-braces"
 void* CubeShape::CalculateVertexBuffer() {
