@@ -14,7 +14,8 @@ SamplerImpl<ApiVariationNvn8>::SamplerImpl() {
 
 SamplerImpl<ApiVariationNvn8>::~SamplerImpl() {}
 
-void SamplerImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice, const SamplerInfo& info) {
+void SamplerImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                               const SamplerInfo& info) {
     static const float s_BorderColors[3][4] = {
         {1.0f, 1.0f, 1.0f, 1.0f},
         {0.0f, 0.0f, 0.0f, 0.0f},

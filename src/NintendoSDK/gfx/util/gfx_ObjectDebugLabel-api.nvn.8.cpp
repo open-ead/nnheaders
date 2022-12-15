@@ -8,6 +8,7 @@
 #include <nvn/nvn_FuncPtrInline.h>
 
 namespace nn::gfx::util {
+	
 template <>
 void SetMemoryPoolDebugLabel<ApiVariationNvn8>(TMemoryPool<ApiVariationNvn8>* pMemoryPool, const char* label) {
     nvnMemoryPoolSetDebugLabel(pMemoryPool->ToData()->pNvnMemoryPool, label);
