@@ -23,8 +23,8 @@ public:
 
     SwapChainImpl();
     ~SwapChainImpl();
-    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&, MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t,
-                    size_t);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&,
+                    MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t, size_t);
     void Finalize(DeviceImpl<ApiVariationNvn8>*);
     int GetScanBufferViews(TColorTargetView<ApiVariationNvn8>**, int);
     int GetScanBuffers(TTexture<ApiVariationNvn8>**, int);

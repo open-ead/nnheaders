@@ -14,20 +14,22 @@ class GpuAddress;
 namespace detail {
 
 template <>
-class DescriptorPoolImpl<ApiVariationNvn8> : public DataContainer<DescriptorPoolImplData<ApiVariationNvn8>> {
+class DescriptorPoolImpl<ApiVariationNvn8>
+    : public DataContainer<DescriptorPoolImplData<ApiVariationNvn8>> {
     NN_NO_COPY(DescriptorPoolImpl);
 
 public:
     typedef DescriptorPoolInfo InfoType;
 
     static size_t CalculateDescriptorPoolSize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
-    static ptrdiff_t GetDescriptorSlotIncrementSize(DeviceImpl<ApiVariationNvn8>*, DescriptorPoolType);
+    static ptrdiff_t GetDescriptorSlotIncrementSize(DeviceImpl<ApiVariationNvn8>*,
+                                                    DescriptorPoolType);
     static size_t GetDescriptorPoolAlignment(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
 
     DescriptorPoolImpl();
     ~DescriptorPoolImpl();
-    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&, MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t,
-                    size_t);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&,
+                    MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t, size_t);
     void Finalize(DeviceImpl<ApiVariationNvn8>*);
     void BeginUpdate();
     void EndUpdate();

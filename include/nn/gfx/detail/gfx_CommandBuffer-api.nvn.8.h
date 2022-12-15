@@ -21,13 +21,15 @@ class ScissorStateInfo;
 namespace detail {
 
 template <>
-class CommandBufferImpl<ApiVariationNvn8> : public DataContainer<CommandBufferImplData<ApiVariationNvn8>> {
+class CommandBufferImpl<ApiVariationNvn8>
+    : public DataContainer<CommandBufferImplData<ApiVariationNvn8>> {
     NN_NO_COPY(CommandBufferImpl);
 
 public:
     typedef CommandBufferInfo InfoType;
 
-    typedef void (*OutOfMemoryEventCallback)(TCommandBuffer<ApiVariationNvn8>*, const OutOfMemoryEventArg&);
+    typedef void (*OutOfMemoryEventCallback)(TCommandBuffer<ApiVariationNvn8>*,
+                                             const OutOfMemoryEventArg&);
 
     static size_t GetCommandMemoryAlignment(DeviceImpl<ApiVariationNvn8>*);
     static size_t GetControlMemoryAlignment(DeviceImpl<ApiVariationNvn8>*);
@@ -63,7 +65,8 @@ public:
     void SetVertexBuffer(int, const GpuAddress&, ptrdiff_t, size_t);
     void SetViewportScissorState(const ViewportScissorStateImpl<ApiVariationNvn8>*);
 
-    void CopyBuffer(BufferImpl<ApiVariationNvn8>*, ptrdiff_t, const BufferImpl<ApiVariationNvn8>*, ptrdiff_t, size_t);
+    void CopyBuffer(BufferImpl<ApiVariationNvn8>*, ptrdiff_t, const BufferImpl<ApiVariationNvn8>*,
+                    ptrdiff_t, size_t);
     void CopyImage(TextureImpl<ApiVariationNvn8>*, const TextureSubresource&, int, int, int,
                    const TextureImpl<ApiVariationNvn8>*, const TextureCopyRegion&);
     void CopyBufferToImage(TextureImpl<ApiVariationNvn8>*, const BufferImpl<ApiVariationNvn8>*,
@@ -72,20 +75,20 @@ public:
                            const BufferImpl<ApiVariationNvn8>*, ptrdiff_t);
     void CopyImageToBuffer(BufferImpl<ApiVariationNvn8>*, const TextureImpl<ApiVariationNvn8>*,
                            const BufferTextureCopyRegion&);
-    void CopyImageToBuffer(BufferImpl<ApiVariationNvn8>*, ptrdiff_t, const TextureImpl<ApiVariationNvn8>*,
-                           const TextureCopyRegion&);
-    void BlitImage(TextureImpl<ApiVariationNvn8>*, const TextureCopyRegion&, const TextureImpl<ApiVariationNvn8>*,
-                   const TextureCopyRegion&, int);
+    void CopyImageToBuffer(BufferImpl<ApiVariationNvn8>*, ptrdiff_t,
+                           const TextureImpl<ApiVariationNvn8>*, const TextureCopyRegion&);
+    void BlitImage(TextureImpl<ApiVariationNvn8>*, const TextureCopyRegion&,
+                   const TextureImpl<ApiVariationNvn8>*, const TextureCopyRegion&, int);
     void ClearBuffer(BufferImpl<ApiVariationNvn8>*, ptrdiff_t, size_t, uint32_t);
     void ClearColor(ColorTargetViewImpl<ApiVariationNvn8>*, float, float, float, float,
                     const TextureArrayRange*);
     void ClearColorTarget(ColorTargetViewImpl<ApiVariationNvn8>*, const ClearColorValue&,
                           const TextureArrayRange*);
-    void ClearDepthStencil(DepthStencilViewImpl<ApiVariationNvn8>*, float, int, DepthStencilClearMode,
-                           const TextureArrayRange*);
+    void ClearDepthStencil(DepthStencilViewImpl<ApiVariationNvn8>*, float, int,
+                           DepthStencilClearMode, const TextureArrayRange*);
 
-    void Resolve(TextureImpl<ApiVariationNvn8>*, int, int, const ColorTargetViewImpl<ApiVariationNvn8>*,
-                 const TextureArrayRange*);
+    void Resolve(TextureImpl<ApiVariationNvn8>*, int, int,
+                 const ColorTargetViewImpl<ApiVariationNvn8>*, const TextureArrayRange*);
     void FlushMemory(int);
     void InvalidateMemory(int);
 
@@ -93,8 +96,8 @@ public:
     void CopyCommandBuffer(const CommandBufferImpl<ApiVariationNvn8>*);
 
     void SetBufferStateTransition(BufferImpl<ApiVariationNvn8>*, int, int, int, int);
-    void SetTextureStateTransition(TextureImpl<ApiVariationNvn8>*, const TextureSubresourceRange*, int, int,
-                                   int, int);
+    void SetTextureStateTransition(TextureImpl<ApiVariationNvn8>*, const TextureSubresourceRange*,
+                                   int, int, int, int);
     void SetDescriptorPool(const DescriptorPoolImpl<ApiVariationNvn8>*);
     void SetRootSignature(PipelineType, RootSignatureImpl<ApiVariationNvn8>*);
     void SetRootBufferDescriptorTable(PipelineType, int, const DescriptorSlot&);

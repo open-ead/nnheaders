@@ -16,7 +16,8 @@ class ViewportScissorStateInfo;
 namespace detail {
 
 template <>
-class RasterizerStateImpl<ApiVariationNvn8> : public DataContainer<RasterizerStateImplData<ApiVariationNvn8>> {
+class RasterizerStateImpl<ApiVariationNvn8>
+    : public DataContainer<RasterizerStateImplData<ApiVariationNvn8>> {
 public:
     typedef RasterizerStateInfo InfoType;
 
@@ -28,7 +29,8 @@ public:
 };
 
 template <>
-class BlendStateImpl<ApiVariationNvn8> : public DataContainer<BlendStateImplData<ApiVariationNvn8>> {
+class BlendStateImpl<ApiVariationNvn8>
+    : public DataContainer<BlendStateImplData<ApiVariationNvn8>> {
 public:
     typedef BlendStateInfo InfoType;
 
@@ -46,7 +48,8 @@ public:
 };
 
 template <>
-class DepthStencilStateImpl<ApiVariationNvn8> : public DataContainer<DepthStencilStateImplData<ApiVariationNvn8>> {
+class DepthStencilStateImpl<ApiVariationNvn8>
+    : public DataContainer<DepthStencilStateImplData<ApiVariationNvn8>> {
 public:
     typedef DepthStencilStateInfo InfoType;
 
@@ -58,7 +61,8 @@ public:
 };
 
 template <>
-class VertexStateImpl<ApiVariationNvn8> : public DataContainer<VertexStateImplData<ApiVariationNvn8>> {
+class VertexStateImpl<ApiVariationNvn8>
+    : public DataContainer<VertexStateImplData<ApiVariationNvn8>> {
 public:
     typedef VertexStateInfo InfoType;
 
@@ -70,12 +74,14 @@ public:
     void SetMemory(void*, size_t);
     void* GetMemory();
     const void* GetMemory() const;
-    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&, const ShaderImpl<ApiVariationNvn8>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&,
+                    const ShaderImpl<ApiVariationNvn8>*);
     void Finalize(DeviceImpl<ApiVariationNvn8>*);
 };
 
 template <>
-class TessellationStateImpl<ApiVariationNvn8> : public DataContainer<TessellationStateImplData<ApiVariationNvn8>> {
+class TessellationStateImpl<ApiVariationNvn8>
+    : public DataContainer<TessellationStateImplData<ApiVariationNvn8>> {
 public:
     typedef TessellationStateInfo InfoType;
 

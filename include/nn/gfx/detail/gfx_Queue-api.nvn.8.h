@@ -25,7 +25,8 @@ public:
     void Sync() const;
     void SetSemaphore(SemaphoreImpl<ApiVariationNvn8>*);
     void SyncSemaphore(const SemaphoreImpl<ApiVariationNvn8>*);
-    void CopyToScanBuffer(SwapChainImpl<ApiVariationNvn8>*, const ColorTargetViewImpl<ApiVariationNvn8>*);
+    void CopyToScanBuffer(SwapChainImpl<ApiVariationNvn8>*,
+                          const ColorTargetViewImpl<ApiVariationNvn8>*);
     void Present(SwapChainImpl<ApiVariationNvn8>*, int);
 };
 

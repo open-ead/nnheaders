@@ -8,9 +8,10 @@
 #include <nvn/nvn_FuncPtrInline.h>
 
 namespace nn::gfx::util {
-	
+
 template <>
-void SetMemoryPoolDebugLabel<ApiVariationNvn8>(TMemoryPool<ApiVariationNvn8>* pMemoryPool, const char* label) {
+void SetMemoryPoolDebugLabel<ApiVariationNvn8>(TMemoryPool<ApiVariationNvn8>* pMemoryPool,
+                                               const char* label) {
     nvnMemoryPoolSetDebugLabel(pMemoryPool->ToData()->pNvnMemoryPool, label);
 }
 
@@ -20,12 +21,14 @@ void SetBufferDebugLabel<ApiVariationNvn8>(TBuffer<ApiVariationNvn8>* pBuffer, c
 }
 
 template <>
-void SetTextureDebugLabel<ApiVariationNvn8>(TTexture<ApiVariationNvn8>* pTexture, const char* label) {
+void SetTextureDebugLabel<ApiVariationNvn8>(TTexture<ApiVariationNvn8>* pTexture,
+                                            const char* label) {
     nvnTextureSetDebugLabel(pTexture->ToData()->pNvnTexture, label);
 }
 
 template <>
-void SetSamplerDebugLabel<ApiVariationNvn8>(TSampler<ApiVariationNvn8>* pSampler, const char* label) {
+void SetSamplerDebugLabel<ApiVariationNvn8>(TSampler<ApiVariationNvn8>* pSampler,
+                                            const char* label) {
     nvnSamplerSetDebugLabel(pSampler->ToData()->pNvnSampler, label);
 }
 

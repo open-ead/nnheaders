@@ -27,8 +27,8 @@ public:
     BufferImpl();
     ~BufferImpl();
 
-    void Initialize(DeviceImpl<ApiVariationNvn8>*, const BufferInfo&, MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t,
-                    size_t);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const BufferInfo&,
+                    MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t, size_t);
     void Finalize(DeviceImpl<ApiVariationNvn8>*);
     void* Map() const;
     void Unmap() const;
@@ -38,7 +38,8 @@ public:
 };
 
 template <>
-class BufferTextureViewImpl<ApiVariationNvn8> : public DataContainer<BufferTextureViewImplData<ApiVariationNvn8>> {
+class BufferTextureViewImpl<ApiVariationNvn8>
+    : public DataContainer<BufferTextureViewImplData<ApiVariationNvn8>> {
     NN_NO_COPY(BufferTextureViewImpl);
 
 public:

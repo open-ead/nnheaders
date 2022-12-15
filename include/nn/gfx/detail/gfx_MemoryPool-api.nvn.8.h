@@ -11,7 +11,8 @@ class MemoryPoolInfo;
 namespace detail {
 
 template <>
-class MemoryPoolImpl<ApiVariationNvn8> : public DataContainer<MemoryPoolImplData<ApiVariationNvn8>> {
+class MemoryPoolImpl<ApiVariationNvn8>
+    : public DataContainer<MemoryPoolImplData<ApiVariationNvn8>> {
     NN_NO_COPY(MemoryPoolImpl);
 
 public:
