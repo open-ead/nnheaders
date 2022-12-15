@@ -11,7 +11,7 @@ class ComputePipelineInfo;
 namespace detail {
 
 template <>
-class PipelineImpl<NvnApi> : public DataContainer<PipelineImplData<NvnApi>> {
+class PipelineImpl<ApiVariationNvn8> : public DataContainer<PipelineImplData<ApiVariationNvn8>> {
     NN_NO_COPY(PipelineImpl);
 
 public:
@@ -26,9 +26,9 @@ public:
     void SetMemory(void*, size_t);
     void* GetMemory();
     const void* GetMemory() const;
-    void Initialize(DeviceImpl<NvnApi>*, const GraphicsInfoType&);
-    void Initialize(DeviceImpl<NvnApi>*, const ComputeInfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const GraphicsInfoType&);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const ComputeInfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
 };
 
 }  // namespace detail

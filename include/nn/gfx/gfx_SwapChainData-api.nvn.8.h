@@ -7,9 +7,9 @@
 namespace nn::gfx {
 
 template <>
-struct SwapChainImplData<NvnApi> {
+struct SwapChainImplData<ApiVariationNvn8> {
     static const int NvnMaxScanBufferCount;
-    detail::Ptr<const detail::DeviceImpl<NvnApi>> pNnDevice;
+    detail::Ptr<const detail::DeviceImpl<ApiVariationNvn8>> pNnDevice;
     detail::Ptr<void> pNvnWindow;
     char nvnWindow[384];
     Bit8 state;
@@ -18,8 +18,8 @@ struct SwapChainImplData<NvnApi> {
     uint32_t currentScanBufferIndex;
     uint32_t totalScanBuffers;
     char reserved2[4];
-    TextureImplData<NvnApi> scanBufferTextures[4];
-    ColorTargetViewImplData<NvnApi> scanBufferViews[4];
+    TextureImplData<ApiVariationNvn8> scanBufferTextures[4];
+    ColorTargetViewImplData<ApiVariationNvn8> scanBufferViews[4];
     detail::Ptr<void> userPtr;
 };
 

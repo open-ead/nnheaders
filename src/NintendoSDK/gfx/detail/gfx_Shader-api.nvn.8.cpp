@@ -25,12 +25,14 @@ int GetShaderSlot(const TInterface& piq, NVNshaderStage stage) {
 }
 
 template <>
-int GetShaderSlot<GLSLCProgramInputInfo>(const GLSLCProgramInputInfo& piq, NVNshaderStage stage) {
+int GetShaderSlot<GLSLCProgramInputInfo>(const GLSLCProgramInputInfo& piq,
+                                         [[maybe_unused]] NVNshaderStage stage) {
     return piq.location;
 }
 
 template <>
-int GetShaderSlot<GLSLCProgramOutputInfo>(const GLSLCProgramOutputInfo& piq, NVNshaderStage stage) {
+int GetShaderSlot<GLSLCProgramOutputInfo>(const GLSLCProgramOutputInfo& piq,
+                                          [[maybe_unused]] NVNshaderStage stage) {
     return piq.location;
 }
 
@@ -54,7 +56,7 @@ public:
 
     ~OnlineCompiledShader() { Finalize(); }
 
-    bool Initialize(DeviceImpl<NvnApi>*, const GLSLCoutput*);
+    bool Initialize(DeviceImpl<ApiVariationNvn8>*, const GLSLCoutput*);
     void Finalize();
 
     NVNboolean SetShader(NVNprogram* pNvnProgram) const {
@@ -100,7 +102,8 @@ private:
     const GLSLCprogramReflectionHeader* m_pReflectionHeader;
 };
 
-bool OnlineCompiledShader::Initialize(DeviceImpl<NvnApi>* pDevice, const GLSLCoutput* pOutput) {
+bool OnlineCompiledShader::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                      const GLSLCoutput* pOutput) {
     m_pOutput = static_cast<GLSLCoutput*>(malloc(pOutput->size));
     if (!m_pOutput) {
         return false;
@@ -120,7 +123,7 @@ bool OnlineCompiledShader::Initialize(DeviceImpl<NvnApi>* pDevice, const GLSLCou
 
             memoryPoolSize += gpuCodeHeader.dataSize;
             memoryPoolSize = nn::util::align_up(
-                memoryPoolSize, ShaderImpl<NvnApi>::GetBinaryCodeAlignment(pDevice));
+                memoryPoolSize, ShaderImpl<ApiVariationNvn8>::GetBinaryCodeAlignment(pDevice));
 
             const void* pData =
                 nn::util::ConstBytePtr(m_pOutput, gpuCodeHeader.common.dataOffset).Get();
@@ -151,7 +154,7 @@ bool OnlineCompiledShader::Initialize(DeviceImpl<NvnApi>* pDevice, const GLSLCou
     for (int idxStage = 0; idxStage < m_StageCount; ++idxStage) {
         memcpy(pDst.Get(), pStageData[idxStage], stageDataSize[idxStage]);
         pDst.Advance(stageDataSize[idxStage])
-            .AlignUp(ShaderImpl<NvnApi>::GetBinaryCodeAlignment(pDevice));
+            .AlignUp(ShaderImpl<ApiVariationNvn8>::GetBinaryCodeAlignment(pDevice));
     }
 
     NVNmemoryPoolBuilder memoryPoolBuilder;
@@ -169,7 +172,8 @@ bool OnlineCompiledShader::Initialize(DeviceImpl<NvnApi>* pDevice, const GLSLCou
     for (int idxStage = 0; idxStage < m_StageCount; ++idxStage) {
         m_NvnShaderData[idxStage].data = offset + address;
         offset += stageDataSize[idxStage];
-        offset = nn::util::align_up(offset, ShaderImpl<NvnApi>::GetBinaryCodeAlignment(pDevice));
+        offset = nn::util::align_up(offset,
+                                    ShaderImpl<ApiVariationNvn8>::GetBinaryCodeAlignment(pDevice));
     }
 
     return true;
@@ -264,8 +268,8 @@ void OnlineCompiledShader::GetWorkGroupSize(int* pOutWorkGroupSizeX, int* pOutWo
     *pOutWorkGroupSizeZ = shaderInfoCompute.workGroupSize[2];
 }
 
-ShaderInitializeResult NvnGlslcCompile(ShaderImpl<NvnApi>* pThis, const ShaderInfo& info,
-                                       DeviceImpl<NvnApi>* pDevice) {
+ShaderInitializeResult NvnGlslcCompile(ShaderImpl<ApiVariationNvn8>* pThis, const ShaderInfo& info,
+                                       DeviceImpl<ApiVariationNvn8>* pDevice) {
     class CompileObjectFinalizer {
     public:
         explicit CompileObjectFinalizer(GLSLCcompileObject* pCompileObject) {
@@ -346,8 +350,9 @@ ShaderInitializeResult NvnGlslcCompile(ShaderImpl<NvnApi>* pThis, const ShaderIn
     return ShaderInitializeResult_Success;
 }
 
-ShaderInitializeResult InitializeSourceShader(ShaderImpl<NvnApi>* pThis, const ShaderInfo& info,
-                                              DeviceImpl<NvnApi>* pDevice) {
+ShaderInitializeResult InitializeSourceShader(ShaderImpl<ApiVariationNvn8>* pThis,
+                                              const ShaderInfo& info,
+                                              DeviceImpl<ApiVariationNvn8>* pDevice) {
     class MutexLocker {
     public:
         explicit MutexLocker(os::Mutex* pMutex) {
@@ -437,7 +442,8 @@ void ReassembleControlSection(void* pDestination,
     }
 }
 
-ShaderInitializeResult InitializeBinaryShader(ShaderImpl<NvnApi>* pThis, const ShaderInfo& info) {
+ShaderInitializeResult InitializeBinaryShader(ShaderImpl<ApiVariationNvn8>* pThis,
+                                              const ShaderInfo& info) {
     int nSources = 0;
     NVNshaderData sources[6];
 
@@ -473,21 +479,22 @@ ShaderInitializeResult InitializeBinaryShader(ShaderImpl<NvnApi>* pThis, const S
 
 }  // namespace
 
-size_t ShaderImpl<NvnApi>::GetBinaryCodeAlignment(DeviceImpl<NvnApi>*) {
+size_t ShaderImpl<ApiVariationNvn8>::GetBinaryCodeAlignment(DeviceImpl<ApiVariationNvn8>*) {
     return 256;
 }
 
-ShaderImpl<NvnApi>::ShaderImpl() {
+ShaderImpl<ApiVariationNvn8>::ShaderImpl() {
     state = State_NotInitialized;
 }
 
-ShaderImpl<NvnApi>::~ShaderImpl() {}
+ShaderImpl<ApiVariationNvn8>::~ShaderImpl() {}
 
-ShaderInitializeResult ShaderImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice,
-                                                      const ShaderInfo& info) {
+ShaderInitializeResult
+ShaderImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                         const ShaderInfo& info) {
     pNvnProgram = &nvnProgram;
     flags = info.ToData()->flags;
-    NVNboolean isProgramOK = nvnProgramInitialize(pNvnProgram, pDevice->ToData()->pNvnDevice);
+    nvnProgramInitialize(pNvnProgram, pDevice->ToData()->pNvnDevice);
     ShaderInitializeResult result = ShaderInitializeResult_Success;
 
     switch (info.GetCodeType()) {
@@ -518,7 +525,7 @@ ShaderInitializeResult ShaderImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevic
     return result;
 }
 
-void ShaderImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void ShaderImpl<ApiVariationNvn8>::Finalize(DeviceImpl<ApiVariationNvn8>*) {
     nvnProgramFinalize(pNvnProgram);
     pNvnProgram = nullptr;
 
@@ -532,8 +539,9 @@ void ShaderImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
     state = State_NotInitialized;
 }
 
-int ShaderImpl<NvnApi>::GetInterfaceSlot(ShaderStage stage, ShaderInterfaceType shaderInterfaceType,
-                                         const char* pName) const {
+int ShaderImpl<ApiVariationNvn8>::GetInterfaceSlot(ShaderStage stage,
+                                                   ShaderInterfaceType shaderInterfaceType,
+                                                   const char* pName) const {
     if (pOnlineCompiledShader) {
         return static_cast<const OnlineCompiledShader*>(pOnlineCompiledShader)
             ->GetInterfaceSlot(stage, shaderInterfaceType, pName);
@@ -610,8 +618,9 @@ int ShaderImpl<NvnApi>::GetInterfaceSlot(ShaderStage stage, ShaderInterfaceType 
     return -1;
 }
 
-void ShaderImpl<NvnApi>::GetWorkGroupSize(int* pOutWorkGroupSizeX, int* pOutWorkGroupSizeY,
-                                          int* pOutWorkGroupSizeZ) const {
+void ShaderImpl<ApiVariationNvn8>::GetWorkGroupSize(int* pOutWorkGroupSizeX,
+                                                    int* pOutWorkGroupSizeY,
+                                                    int* pOutWorkGroupSizeZ) const {
     if (pOnlineCompiledShader) {
         return static_cast<const OnlineCompiledShader*>(pOnlineCompiledShader)
             ->GetWorkGroupSize(pOutWorkGroupSizeX, pOutWorkGroupSizeY, pOutWorkGroupSizeZ);

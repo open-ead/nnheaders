@@ -16,7 +16,7 @@ class SemaphoreInfo;
 namespace detail {
 
 template <>
-class FenceImpl<NvnApi> : public DataContainer<FenceImplData<NvnApi>> {
+class FenceImpl<ApiVariationNvn8> : public DataContainer<FenceImplData<ApiVariationNvn8>> {
     NN_NO_COPY(FenceImpl);
 
 public:
@@ -24,14 +24,14 @@ public:
 
     FenceImpl();
     ~FenceImpl();
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
     bool IsSignaled() const;
     SyncResult Sync(TimeSpan) const;
 };
 
 template <>
-class SemaphoreImpl<NvnApi> : public DataContainer<SemaphoreImplData<NvnApi>> {
+class SemaphoreImpl<ApiVariationNvn8> : public DataContainer<SemaphoreImplData<ApiVariationNvn8>> {
     NN_NO_COPY(SemaphoreImpl);
 
 public:
@@ -39,8 +39,8 @@ public:
 
     SemaphoreImpl();
     ~SemaphoreImpl();
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
 };
 
 }  // namespace detail

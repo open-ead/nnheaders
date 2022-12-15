@@ -100,7 +100,7 @@ public:
     };
 
     BitArray();
-    BitArray(void* workMemory, size_t workMemorySize, size_type length)
+    BitArray(void* workMemory, [[maybe_unused]] size_t workMemorySize, size_type length)
         : m_pBuf(static_cast<RawType*>(workMemory)), m_Len(length) {}
 
     void* ResetWorkMemory();

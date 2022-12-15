@@ -242,8 +242,8 @@ void SphereShape::CalculateIndexBuffer() {
     }
 }
 
-void SphereShape::CalculateImpl(void* pVertexMemory, size_t vertexSize, void* pIndexMemory,
-                                size_t indexSize) {
+void SphereShape::CalculateImpl(void* pVertexMemory, [[maybe_unused]] size_t vertexSize,
+                                void* pIndexMemory, [[maybe_unused]] size_t indexSize) {
     SetVertexBuffer(pVertexMemory);
     SetIndexBuffer(pIndexMemory);
 
@@ -432,7 +432,7 @@ void* CubeShape::CalculateVertexBuffer() {
     float* pVertexBuffer = static_cast<float*>(GetVertexBuffer());
     const PrimitiveTopology primitiveTopology = GetPrimitiveTopology();
 
-    switch (primitiveTopology == PrimitiveTopology_LineList) {
+    if (primitiveTopology == PrimitiveTopology_LineList) {
         int idx = 0;
         pVertexBuffer[idx++] = 0.5f;
         pVertexBuffer[idx++] = 0.5f;

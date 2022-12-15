@@ -8,7 +8,7 @@
 namespace nn::gfx {
 
 template <>
-struct TextureImplData<NvnApi> {
+struct TextureImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
     enum Flag { Flag_Shared };
 
@@ -21,7 +21,7 @@ struct TextureImplData<NvnApi> {
 };
 
 template <>
-struct TextureViewImplData<NvnApi> {
+struct TextureViewImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
     enum Flag { Flag_Shared };
 
@@ -35,7 +35,7 @@ struct TextureViewImplData<NvnApi> {
 };
 
 template <>
-struct ColorTargetViewImplData<NvnApi> {
+struct ColorTargetViewImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
     enum Flag { Flag_Shared };
 
@@ -49,7 +49,7 @@ struct ColorTargetViewImplData<NvnApi> {
 };
 
 template <>
-struct DepthStencilViewImplData<NvnApi> {
+struct DepthStencilViewImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
     enum Flag { Flag_Shared };
 

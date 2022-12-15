@@ -8,13 +8,13 @@
 
 namespace nn::gfx::detail {
 
-SamplerImpl<NvnApi>::SamplerImpl() {
+SamplerImpl<ApiVariationNvn8>::SamplerImpl() {
     state = State_NotInitialized;
 }
 
-SamplerImpl<NvnApi>::~SamplerImpl() {}
+SamplerImpl<ApiVariationNvn8>::~SamplerImpl() {}
 
-void SamplerImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const SamplerInfo& info) {
+void SamplerImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice, const SamplerInfo& info) {
     static const float s_BorderColors[3][4] = {
         {1.0f, 1.0f, 1.0f, 1.0f},
         {0.0f, 0.0f, 0.0f, 0.0f},
@@ -65,7 +65,7 @@ void SamplerImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const SamplerI
     state = State_Initialized;
 }
 
-void SamplerImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void SamplerImpl<ApiVariationNvn8>::Finalize(DeviceImpl<ApiVariationNvn8>*) {
     nvnSamplerFinalize(pNvnSampler);
     pNvnSampler = nullptr;
     state = State_NotInitialized;

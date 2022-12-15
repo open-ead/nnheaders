@@ -8,7 +8,7 @@
 namespace nn::gfx {
 
 template <>
-struct RasterizerStateImplData<NvnApi> {
+struct RasterizerStateImplData<ApiVariationNvn8> {
     enum Flag {
         Flag_MultisampleEnabled,
         Flag_DepthClipEnabled,
@@ -30,7 +30,7 @@ struct RasterizerStateImplData<NvnApi> {
 };
 
 template <>
-struct BlendStateImplData<NvnApi> {
+struct BlendStateImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
 
     detail::Ptr<void> pNvnBlendStateData;
@@ -44,7 +44,7 @@ struct BlendStateImplData<NvnApi> {
 };
 
 template <>
-struct DepthStencilStateImplData<NvnApi> {
+struct DepthStencilStateImplData<ApiVariationNvn8> {
     enum Flag { Flag_DepthBoundsTestEnable = 3 };
 
     enum State { State_NotInitialized, State_Initialized };
@@ -60,7 +60,7 @@ struct DepthStencilStateImplData<NvnApi> {
 };
 
 template <>
-struct VertexStateImplData<NvnApi> {
+struct VertexStateImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
 
     Bit8 state;
@@ -73,7 +73,7 @@ struct VertexStateImplData<NvnApi> {
 };
 
 template <>
-struct TessellationStateImplData<NvnApi> {
+struct TessellationStateImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
 
     Bit8 state;
@@ -82,7 +82,7 @@ struct TessellationStateImplData<NvnApi> {
 };
 
 template <>
-struct ViewportScissorStateImplData<NvnApi> {
+struct ViewportScissorStateImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
 
     detail::Ptr<void> pWorkMemory;

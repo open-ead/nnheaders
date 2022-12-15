@@ -5,13 +5,13 @@
 
 namespace nn::gfx::detail {
 
-DeviceImpl<NvnApi>::DeviceImpl() {
+DeviceImpl<ApiVariationNvn8>::DeviceImpl() {
     state = State_NotInitialized;
 }
 
-DeviceImpl<NvnApi>::~DeviceImpl() {}
+DeviceImpl<ApiVariationNvn8>::~DeviceImpl() {}
 
-void DeviceImpl<NvnApi>::Initialize(const DeviceInfo& info) {
+void DeviceImpl<ApiVariationNvn8>::Initialize([[maybe_unused]] const DeviceInfo& info) {
     UseMiddleWare();
 
     PFNNVNDEVICEGETPROCADDRESSPROC getProcAddress =
@@ -28,7 +28,7 @@ void DeviceImpl<NvnApi>::Initialize(const DeviceInfo& info) {
 
     pNvnDevice = &nvnDevice;
 
-    NVNboolean result = nvnDeviceInitialize(pNvnDevice, &builder);
+    nvnDeviceInitialize(pNvnDevice, &builder);
     nvnLoadCProcs(pNvnDevice, getProcAddress);
 
     supportedFeatures = Nvn::GetDeviceFeature(pNvnDevice);
@@ -36,7 +36,7 @@ void DeviceImpl<NvnApi>::Initialize(const DeviceInfo& info) {
     state = State_Initialized;
 }
 
-void DeviceImpl<NvnApi>::Finalize() {
+void DeviceImpl<ApiVariationNvn8>::Finalize() {
     nvnDeviceFinalize(pNvnDevice);
     pNvnDevice = nullptr;
     state = State_NotInitialized;

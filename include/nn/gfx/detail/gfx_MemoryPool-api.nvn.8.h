@@ -11,20 +11,20 @@ class MemoryPoolInfo;
 namespace detail {
 
 template <>
-class MemoryPoolImpl<NvnApi> : public DataContainer<MemoryPoolImplData<NvnApi>> {
+class MemoryPoolImpl<ApiVariationNvn8> : public DataContainer<MemoryPoolImplData<ApiVariationNvn8>> {
     NN_NO_COPY(MemoryPoolImpl);
 
 public:
     typedef MemoryPoolInfo InfoType;
 
-    static size_t GetPoolMemoryAlignment(DeviceImpl<NvnApi>*, const InfoType&);
-    static size_t GetPoolMemorySizeGranularity(DeviceImpl<NvnApi>*, const InfoType&);
+    static size_t GetPoolMemoryAlignment(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    static size_t GetPoolMemorySizeGranularity(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
 
     MemoryPoolImpl();
     ~MemoryPoolImpl();
 
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
     void* Map() const;
     void Unmap() const;
     void FlushMappedRange(ptrdiff_t, size_t) const;

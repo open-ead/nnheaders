@@ -743,11 +743,9 @@ ImageFormat Nvn::GetGfxImageFormat(NVNformat nvnFormat) {
     return g_ImageFormatAndPropetyTable[nvnFormat].format;
 }
 
-void Nvn::DebugCallback(NVNdebugCallbackSource source, NVNdebugCallbackType type, int id,
-                        NVNdebugCallbackSeverity severity, const char* message, void*) {
-    static const char* s_DebugCallbackSourceStrings[1];
-    static const char* s_DebugCallbackSeverityStrings[4];
-
+void Nvn::DebugCallback([[maybe_unused]] NVNdebugCallbackSource source, NVNdebugCallbackType type,
+                        [[maybe_unused]] int id, [[maybe_unused]] NVNdebugCallbackSeverity severity,
+                        [[maybe_unused]] const char* message, void*) {
     switch (type) {
     case NVN_DEBUG_CALLBACK_TYPE_API_ERROR:
     case NVN_DEBUG_CALLBACK_TYPE_API_WARNING:
@@ -763,7 +761,7 @@ GlslcDll& GlslcDll::GetInstance() {
     static GlslcDll s_GlslcDll;
 
     if (!s_GlslcDll.IsInitialized()) {
-        bool isSucceeded = s_GlslcDll.Initialize();
+        s_GlslcDll.Initialize();
     }
 
     return s_GlslcDll;

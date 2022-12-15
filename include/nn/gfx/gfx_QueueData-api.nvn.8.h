@@ -8,8 +8,8 @@
 namespace nn::gfx {
 
 template <>
-struct QueueImplData<NvnApi> {
-    detail::Ptr<detail::DeviceImpl<NvnApi>> pNnDevice;
+struct QueueImplData<ApiVariationNvn8> {
+    detail::Ptr<detail::DeviceImpl<ApiVariationNvn8>> pNnDevice;
     detail::Ptr<void> pNvnQueue;
     char nvnQueue[8192];
 

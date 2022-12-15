@@ -13,7 +13,7 @@ class DepthStencilViewInfo;
 
 namespace detail {
 template <>
-class TextureImpl<NvnApi> : public DataContainer<TextureImplData<NvnApi>> {
+class TextureImpl<ApiVariationNvn8> : public DataContainer<TextureImplData<ApiVariationNvn8>> {
     NN_NO_COPY(TextureImpl);
 
 public:
@@ -21,20 +21,20 @@ public:
 
     static const bool IsMemoryPoolRequired;
 
-    static size_t CalculateMipDataAlignment(DeviceImpl<NvnApi>*, const InfoType&);
-    static size_t CalculateMipDataSize(DeviceImpl<NvnApi>*, const InfoType&);
-    static void CalculateMipDataOffsets(ptrdiff_t*, DeviceImpl<NvnApi>*, const InfoType&);
-    static size_t GetRowPitch(DeviceImpl<NvnApi>*, const InfoType&);
+    static size_t CalculateMipDataAlignment(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    static size_t CalculateMipDataSize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    static void CalculateMipDataOffsets(ptrdiff_t*, DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    static size_t GetRowPitch(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
 
     TextureImpl();
     ~TextureImpl();
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&, MemoryPoolImpl<NvnApi>*, ptrdiff_t,
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&, MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t,
                     size_t);
-    void Finalize(DeviceImpl<NvnApi>*);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
 };
 
 template <>
-class TextureViewImpl<NvnApi> : public DataContainer<TextureViewImplData<NvnApi>> {
+class TextureViewImpl<ApiVariationNvn8> : public DataContainer<TextureViewImplData<ApiVariationNvn8>> {
     NN_NO_COPY(TextureViewImpl);
 
 public:
@@ -43,12 +43,12 @@ public:
     TextureViewImpl();
 
     ~TextureViewImpl();
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
 };
 
 template <>
-class ColorTargetViewImpl<NvnApi> : public DataContainer<ColorTargetViewImplData<NvnApi>> {
+class ColorTargetViewImpl<ApiVariationNvn8> : public DataContainer<ColorTargetViewImplData<ApiVariationNvn8>> {
     NN_NO_COPY(ColorTargetViewImpl);
 
 public:
@@ -57,12 +57,12 @@ public:
     ColorTargetViewImpl();
 
     ~ColorTargetViewImpl();
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
 };
 
 template <>
-class DepthStencilViewImpl<NvnApi> : public DataContainer<DepthStencilViewImplData<NvnApi>> {
+class DepthStencilViewImpl<ApiVariationNvn8> : public DataContainer<DepthStencilViewImplData<ApiVariationNvn8>> {
     NN_NO_COPY(DepthStencilViewImpl);
 
 public:
@@ -70,8 +70,8 @@ public:
 
     DepthStencilViewImpl();
     ~DepthStencilViewImpl();
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
 };
 
 }  // namespace detail

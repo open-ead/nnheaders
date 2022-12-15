@@ -7,7 +7,7 @@
 namespace nn::gfx {
 
 template <>
-struct PipelineImplData<NvnApi> {
+struct PipelineImplData<ApiVariationNvn8> {
     enum PipelineType { PipelineType_Graphics, PipelineType_Compute };
     enum State { State_NotInitialized, State_Initialized };
     enum Flag { Flag_HasTessellationState };
@@ -18,13 +18,13 @@ struct PipelineImplData<NvnApi> {
     char reserved;
     Bit32 memorySize;
 
-    detail::VertexStateImpl<NvnApi>::DataType nnVertexState;
-    detail::BlendStateImpl<NvnApi>::DataType nnBlendState;
-    detail::RasterizerStateImpl<NvnApi>::DataType nnRasterizerState;
-    detail::DepthStencilStateImpl<NvnApi>::DataType nnDepthStencilState;
-    detail::TessellationStateImpl<NvnApi>::DataType nnTessellationState;
+    detail::VertexStateImpl<ApiVariationNvn8>::DataType nnVertexState;
+    detail::BlendStateImpl<ApiVariationNvn8>::DataType nnBlendState;
+    detail::RasterizerStateImpl<ApiVariationNvn8>::DataType nnRasterizerState;
+    detail::DepthStencilStateImpl<ApiVariationNvn8>::DataType nnDepthStencilState;
+    detail::TessellationStateImpl<ApiVariationNvn8>::DataType nnTessellationState;
 
-    detail::Ptr<const detail::ShaderImpl<NvnApi>> pShader;
+    detail::Ptr<const detail::ShaderImpl<ApiVariationNvn8>> pShader;
     detail::Ptr<void> pWorkMemory;
 
     detail::Ptr<void> userPtr;

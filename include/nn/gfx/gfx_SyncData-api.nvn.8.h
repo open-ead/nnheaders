@@ -7,10 +7,10 @@
 namespace nn::gfx {
 
 template <>
-struct FenceImplData<NvnApi> {
+struct FenceImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
 
-    detail::Ptr<const detail::DeviceImpl<NvnApi>> pNnDevice;
+    detail::Ptr<const detail::DeviceImpl<ApiVariationNvn8>> pNnDevice;
     detail::Ptr<void> pNvnSync;
     char nvnSync[64];
     Bit8 state;
@@ -18,10 +18,10 @@ struct FenceImplData<NvnApi> {
 };
 
 template <>
-struct SemaphoreImplData<NvnApi> {
+struct SemaphoreImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
 
-    detail::Ptr<const detail::DeviceImpl<NvnApi>> pNnDevice;
+    detail::Ptr<const detail::DeviceImpl<ApiVariationNvn8>> pNnDevice;
     detail::Ptr<void> pNvnSync;
     char nvnSync[64];
     Bit8 state;

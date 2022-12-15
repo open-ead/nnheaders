@@ -14,7 +14,7 @@ namespace {
 
 void SetupTextureBuilder(NVNtextureBuilder* pBuilder, NVNdevice* pDevice,
                          const BufferTextureViewInfo& info) {
-    const BufferImpl<NvnApi>* pBuffer = info.GetBufferPtr();
+    const BufferImpl<ApiVariationNvn8>* pBuffer = info.GetBufferPtr();
     NVNbuffer* pNvnBuffer = pBuffer->ToData()->pNvnBuffer;
     NVNformat nvnFormat = Nvn::GetImageFormat(info.GetImageFormat());
 
@@ -36,7 +36,8 @@ void SetupTextureBuilder(NVNtextureBuilder* pBuilder, NVNdevice* pDevice,
 }
 }  // namespace
 
-size_t BufferImpl<NvnApi>::GetBufferAlignment(DeviceImpl<NvnApi>* pDevice, const BufferInfo& info) {
+size_t BufferImpl<ApiVariationNvn8>::GetBufferAlignment(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                                        const BufferInfo& info) {
     int gpuAccessFlag = info.GetGpuAccessFlags();
     int alignment = 8;
 
@@ -76,15 +77,17 @@ size_t BufferImpl<NvnApi>::GetBufferAlignment(DeviceImpl<NvnApi>* pDevice, const
     return alignment;
 }
 
-BufferImpl<NvnApi>::BufferImpl() {
+BufferImpl<ApiVariationNvn8>::BufferImpl() {
     state = State_NotInitialized;
 }
 
-BufferImpl<NvnApi>::~BufferImpl() {}
+BufferImpl<ApiVariationNvn8>::~BufferImpl() {}
 
-void BufferImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const BufferInfo& info,
-                                    MemoryPoolImpl<NvnApi>* pMemoryPool, ptrdiff_t memoryPoolOffset,
-                                    size_t memoryPoolSize) {
+void BufferImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                              const BufferInfo& info,
+                                              MemoryPoolImpl<ApiVariationNvn8>* pMemoryPool,
+                                              ptrdiff_t memoryPoolOffset,
+                                              [[maybe_unused]] size_t memoryPoolSize) {
     NVNbufferBuilder builder;
 
     nvnBufferBuilderSetDefaults(&builder);
@@ -94,7 +97,7 @@ void BufferImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const BufferInf
 
     pNvnBuffer = &nvnBuffer;
 
-    NVNboolean isBufferOk = nvnBufferInitialize(pNvnBuffer, &builder);
+    nvnBufferInitialize(pNvnBuffer, &builder);
 
     int nvnMemoryPoolFlags = nvnMemoryPoolGetFlags(pMemoryPool->ToData()->pNvnMemoryPool);
 
@@ -103,37 +106,39 @@ void BufferImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const BufferInf
     state = State_Initialized;
 }
 
-void BufferImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void BufferImpl<ApiVariationNvn8>::Finalize(DeviceImpl<ApiVariationNvn8>*) {
     nvnBufferFinalize(pNvnBuffer);
     pNvnBuffer = nullptr;
     state = State_NotInitialized;
 }
 
-void* BufferImpl<NvnApi>::Map() const {
+void* BufferImpl<ApiVariationNvn8>::Map() const {
     return nvnBufferMap(pNvnBuffer);
 }
 
-void BufferImpl<NvnApi>::Unmap() const {}
+void BufferImpl<ApiVariationNvn8>::Unmap() const {}
 
-void BufferImpl<NvnApi>::FlushMappedRange(ptrdiff_t offset, size_t flushSize) const {
+void BufferImpl<ApiVariationNvn8>::FlushMappedRange(ptrdiff_t offset, size_t flushSize) const {
     if (flags.GetBit(Flag_CpuCached)) {
         nvnBufferFlushMappedRange(pNvnBuffer, offset, flushSize);
     }
 }
 
-void BufferImpl<NvnApi>::InvalidateMappedRange(ptrdiff_t offset, size_t invalidateSize) const {
+void BufferImpl<ApiVariationNvn8>::InvalidateMappedRange(ptrdiff_t offset,
+                                                         size_t invalidateSize) const {
     if (flags.GetBit(Flag_CpuCached)) {
         nvnBufferInvalidateMappedRange(pNvnBuffer, offset, invalidateSize);
     }
 }
 
-void BufferImpl<NvnApi>::GetGpuAddress(GpuAddress* pOutGpuAddress) const {
+void BufferImpl<ApiVariationNvn8>::GetGpuAddress(GpuAddress* pOutGpuAddress) const {
     pOutGpuAddress->ToData()->value = nvnBufferGetAddress(pNvnBuffer);
     pOutGpuAddress->ToData()->impl = 0;
 }
 
-size_t BufferTextureViewImpl<NvnApi>::GetOffsetAlignment(DeviceImpl<NvnApi>* pDevice,
-                                                         const BufferTextureViewInfo& info) {
+size_t
+BufferTextureViewImpl<ApiVariationNvn8>::GetOffsetAlignment(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                                            const BufferTextureViewInfo& info) {
     NVNtextureBuilder builder;
     SetupTextureBuilder(&builder, pDevice->ToData()->pNvnDevice, info);
 
@@ -142,26 +147,26 @@ size_t BufferTextureViewImpl<NvnApi>::GetOffsetAlignment(DeviceImpl<NvnApi>* pDe
     return alignment;
 }
 
-BufferTextureViewImpl<NvnApi>::BufferTextureViewImpl() {
+BufferTextureViewImpl<ApiVariationNvn8>::BufferTextureViewImpl() {
     state = State_NotInitialized;
 }
 
-BufferTextureViewImpl<NvnApi>::~BufferTextureViewImpl() {}
+BufferTextureViewImpl<ApiVariationNvn8>::~BufferTextureViewImpl() {}
 
-void BufferTextureViewImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice,
-                                               const BufferTextureViewInfo& info) {
+void BufferTextureViewImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                                         const BufferTextureViewInfo& info) {
     pNvnTexture = &nvnTexture;
 
     NVNtextureBuilder builder;
     SetupTextureBuilder(&builder, pDevice->ToData()->pNvnDevice, info);
 
-    NVNboolean result = nvnTextureInitialize(pNvnTexture, &builder);
+    nvnTextureInitialize(pNvnTexture, &builder);
 
     flags.SetBit(Flag_Shared, false);
     state = State_Initialized;
 }
 
-void BufferTextureViewImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void BufferTextureViewImpl<ApiVariationNvn8>::Finalize(DeviceImpl<ApiVariationNvn8>*) {
     nvnTextureFinalize(pNvnTexture);
     pNvnTexture = nullptr;
     state = State_NotInitialized;

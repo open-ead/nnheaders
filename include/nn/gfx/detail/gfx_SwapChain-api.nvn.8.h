@@ -10,7 +10,7 @@ class SwapChainInfo;
 namespace detail {
 
 template <>
-class SwapChainImpl<NvnApi> : public DataContainer<SwapChainImplData<NvnApi>> {
+class SwapChainImpl<ApiVariationNvn8> : public DataContainer<SwapChainImplData<ApiVariationNvn8>> {
     NN_NO_COPY(SwapChainImpl);
 
 public:
@@ -18,21 +18,21 @@ public:
 
     static const bool IsMemoryPoolRequired = true;
 
-    static size_t GetScanBufferAlignment(DeviceImpl<NvnApi>*, const InfoType&);
-    static size_t CalculateScanBufferSize(DeviceImpl<NvnApi>*, const InfoType&);
+    static size_t GetScanBufferAlignment(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    static size_t CalculateScanBufferSize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
 
     SwapChainImpl();
     ~SwapChainImpl();
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&, MemoryPoolImpl<NvnApi>*, ptrdiff_t,
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&, MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t,
                     size_t);
-    void Finalize(DeviceImpl<NvnApi>*);
-    int GetScanBufferViews(TColorTargetView<NvnApi>**, int);
-    int GetScanBuffers(TTexture<NvnApi>**, int);
-    AcquireScanBufferResult AcquireNextScanBufferIndex(int*, SemaphoreImpl<NvnApi>*,
-                                                       FenceImpl<NvnApi>*);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
+    int GetScanBufferViews(TColorTargetView<ApiVariationNvn8>**, int);
+    int GetScanBuffers(TTexture<ApiVariationNvn8>**, int);
+    AcquireScanBufferResult AcquireNextScanBufferIndex(int*, SemaphoreImpl<ApiVariationNvn8>*,
+                                                       FenceImpl<ApiVariationNvn8>*);
     int AcquireNextScanBufferIndex();
-    ColorTargetViewImpl<NvnApi>* AcquireNextScanBufferView();
-    TextureImpl<NvnApi>* AcquireNextScanBuffer();
+    ColorTargetViewImpl<ApiVariationNvn8>* AcquireNextScanBufferView();
+    TextureImpl<ApiVariationNvn8>* AcquireNextScanBuffer();
 };
 
 }  // namespace detail

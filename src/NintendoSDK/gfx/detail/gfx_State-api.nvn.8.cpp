@@ -11,11 +11,12 @@
 
 namespace nn::gfx::detail {
 
-RasterizerStateImpl<NvnApi>::RasterizerStateImpl() {}
+RasterizerStateImpl<ApiVariationNvn8>::RasterizerStateImpl() {}
 
-RasterizerStateImpl<NvnApi>::~RasterizerStateImpl() {}
+RasterizerStateImpl<ApiVariationNvn8>::~RasterizerStateImpl() {}
 
-void RasterizerStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const InfoType& info) {
+void RasterizerStateImpl<ApiVariationNvn8>::Initialize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice, const InfoType& info) {
     NVNpolygonState* pPolygonState = reinterpret_cast<NVNpolygonState*>(&nvnPolygonState);
     NVNmultisampleState* pMultisampleState =
         reinterpret_cast<NVNmultisampleState*>(&nvnMultisampleState);
@@ -59,32 +60,34 @@ void RasterizerStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const 
     state = State_Initialized;
 }
 
-void RasterizerStateImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void RasterizerStateImpl<ApiVariationNvn8>::Finalize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice) {
     state = State_NotInitialized;
 }
 
-size_t BlendStateImpl<NvnApi>::GetRequiredMemorySize(const InfoType& info) {
+size_t BlendStateImpl<ApiVariationNvn8>::GetRequiredMemorySize(const InfoType& info) {
     return 8 * info.GetBlendTargetCount();
 }
 
-BlendStateImpl<NvnApi>::BlendStateImpl() {}
+BlendStateImpl<ApiVariationNvn8>::BlendStateImpl() {}
 
-BlendStateImpl<NvnApi>::~BlendStateImpl() {}
+BlendStateImpl<ApiVariationNvn8>::~BlendStateImpl() {}
 
-void BlendStateImpl<NvnApi>::SetMemory(void* p, size_t s) {
+void BlendStateImpl<ApiVariationNvn8>::SetMemory(void* p, size_t s) {
     pNvnBlendStateData = p;
     memorySize = s;
 }
 
-void* BlendStateImpl<NvnApi>::GetMemory() {
+void* BlendStateImpl<ApiVariationNvn8>::GetMemory() {
     return pNvnBlendStateData;
 }
 
-void* BlendStateImpl<NvnApi>::GetMemory() const {
+void* BlendStateImpl<ApiVariationNvn8>::GetMemory() const {
     return pNvnBlendStateData;
 }
 
-void BlendStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const InfoType& info) {
+void BlendStateImpl<ApiVariationNvn8>::Initialize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice, const InfoType& info) {
     auto pColorState = reinterpret_cast<NVNcolorState*>(&nvnColorState);
     auto pChannelMaskState = reinterpret_cast<NVNchannelMaskState*>(&nvnChannelMaskState);
     NVNblendState* pBlendStateData = pNvnBlendStateData;
@@ -138,44 +141,45 @@ void BlendStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const InfoT
     state = State_Initialized;
 }
 
-void BlendStateImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>* device) {
+void BlendStateImpl<ApiVariationNvn8>::Finalize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice) {
     state = State_NotInitialized;
 }
 
-DepthStencilStateImpl<NvnApi>::DepthStencilStateImpl() {}
+DepthStencilStateImpl<ApiVariationNvn8>::DepthStencilStateImpl() {}
 
-DepthStencilStateImpl<NvnApi>::~DepthStencilStateImpl() {}
+DepthStencilStateImpl<ApiVariationNvn8>::~DepthStencilStateImpl() {}
 
-void DepthStencilStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>*,
-                                               const DepthStencilStateInfo& info) {
-    auto pnDepth = reinterpret_cast<NVNdepthStencilState*>(&nvnDepthStencilState);
+void DepthStencilStateImpl<ApiVariationNvn8>::Initialize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice, const DepthStencilStateInfo& info) {
+    auto pDepthStencilState = reinterpret_cast<NVNdepthStencilState*>(&nvnDepthStencilState);
 
     flag = info.ToData()->flag;
 
-    nvnDepthStencilStateSetDefaults(pnDepth);
-    nvnDepthStencilStateSetDepthTestEnable(pnDepth, info.IsDepthTestEnabled());
-    nvnDepthStencilStateSetDepthWriteEnable(pnDepth, info.IsDepthWriteEnabled());
-    nvnDepthStencilStateSetStencilTestEnable(pnDepth, info.IsStencilTestEnabled());
+    nvnDepthStencilStateSetDefaults(pDepthStencilState);
+    nvnDepthStencilStateSetDepthTestEnable(pDepthStencilState, info.IsDepthTestEnabled());
+    nvnDepthStencilStateSetDepthWriteEnable(pDepthStencilState, info.IsDepthWriteEnabled());
+    nvnDepthStencilStateSetStencilTestEnable(pDepthStencilState, info.IsStencilTestEnabled());
 
-    nvnDepthStencilStateSetDepthFunc(pnDepth,
+    nvnDepthStencilStateSetDepthFunc(pDepthStencilState,
                                      Nvn::GetDepthFunction(info.GetDepthComparisonFunction()));
 
     nvnDepthStencilStateSetStencilFunc(
-        pnDepth, NVN_FACE_BACK,
+        pDepthStencilState, NVN_FACE_BACK,
         Nvn::GetStencilFunction(info.GetBackStencilStateInfo().GetComparisonFunction()));
 
     nvnDepthStencilStateSetStencilOp(
-        pnDepth, NVN_FACE_BACK,
+        pDepthStencilState, NVN_FACE_BACK,
         Nvn::GetStencilOperation(info.GetBackStencilStateInfo().GetStencilFailOperation()),
         Nvn::GetStencilOperation(info.GetBackStencilStateInfo().GetDepthFailOperation()),
         Nvn::GetStencilOperation(info.GetBackStencilStateInfo().GetDepthPassOperation()));
 
     nvnDepthStencilStateSetStencilFunc(
-        pnDepth, NVN_FACE_FRONT,
+        pDepthStencilState, NVN_FACE_FRONT,
         Nvn::GetStencilFunction(info.GetFrontStencilStateInfo().GetComparisonFunction()));
 
     nvnDepthStencilStateSetStencilOp(
-        pnDepth, NVN_FACE_FRONT,
+        pDepthStencilState, NVN_FACE_FRONT,
         Nvn::GetStencilOperation(info.GetFrontStencilStateInfo().GetStencilFailOperation()),
         Nvn::GetStencilOperation(info.GetFrontStencilStateInfo().GetDepthFailOperation()),
         Nvn::GetStencilOperation(info.GetFrontStencilStateInfo().GetDepthPassOperation()));
@@ -188,11 +192,12 @@ void DepthStencilStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>*,
     state = State_Initialized;
 }
 
-void DepthStencilStateImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void DepthStencilStateImpl<ApiVariationNvn8>::Finalize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice) {
     state = State_NotInitialized;
 }
 
-size_t VertexStateImpl<NvnApi>::GetRequiredMemorySize(const InfoType& info) {
+size_t VertexStateImpl<ApiVariationNvn8>::GetRequiredMemorySize(const InfoType& info) {
     int maxSlot = -1;
     const VertexAttributeStateInfo* pAttribStates = info.GetVertexAttributeStateInfoArray();
 
@@ -211,25 +216,26 @@ size_t VertexStateImpl<NvnApi>::GetRequiredMemorySize(const InfoType& info) {
     return size_t(8) * info.GetVertexBufferCount() + size_t(4) * (maxSlot + 1);
 }
 
-VertexStateImpl<NvnApi>::VertexStateImpl() {}
+VertexStateImpl<ApiVariationNvn8>::VertexStateImpl() {}
 
-VertexStateImpl<NvnApi>::~VertexStateImpl() {}
+VertexStateImpl<ApiVariationNvn8>::~VertexStateImpl() {}
 
-void VertexStateImpl<NvnApi>::SetMemory(void* p, size_t s) {
+void VertexStateImpl<ApiVariationNvn8>::SetMemory(void* p, size_t s) {
     pNvnVertexStreamState = p;
     memorySize = s;
 }
 
-void* VertexStateImpl<NvnApi>::GetMemory() {
+void* VertexStateImpl<ApiVariationNvn8>::GetMemory() {
     return pNvnVertexStreamState;
 }
 
-const void* VertexStateImpl<NvnApi>::GetMemory() const {
+const void* VertexStateImpl<ApiVariationNvn8>::GetMemory() const {
     return pNvnVertexStreamState;
 }
 
-void VertexStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const VertexStateInfo& info,
-                                         const ShaderImpl<NvnApi>* pVertexShader) {
+void VertexStateImpl<ApiVariationNvn8>::Initialize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice, const VertexStateInfo& info,
+    const ShaderImpl<ApiVariationNvn8>* pVertexShader) {
     vertexStreamStateCount = info.GetVertexBufferCount();
     pNvnVertexAttribState = nn::util::BytePtr(pNvnVertexStreamState.ptr)
                                 .Advance(size_t(8) * info.GetVertexBufferCount())
@@ -291,53 +297,55 @@ void VertexStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const Vert
     state = State_Initialized;
 }
 
-void VertexStateImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>* device) {
+void VertexStateImpl<ApiVariationNvn8>::Finalize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice) {
     state = State_NotInitialized;
 }
 
-TessellationStateImpl<NvnApi>::TessellationStateImpl() {
+TessellationStateImpl<ApiVariationNvn8>::TessellationStateImpl() {
     state = State_NotInitialized;
 }
 
-TessellationStateImpl<NvnApi>::~TessellationStateImpl() {}
+TessellationStateImpl<ApiVariationNvn8>::~TessellationStateImpl() {}
 
-void TessellationStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice,
-                                               const TessellationStateInfo& info) {
+void TessellationStateImpl<ApiVariationNvn8>::Initialize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice, const TessellationStateInfo& info) {
     patchSize = info.GetPatchControlPointCount();
     state = State_Initialized;
 }
 
-void TessellationStateImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void TessellationStateImpl<ApiVariationNvn8>::Finalize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice) {
     state = State_NotInitialized;
 }
 
-size_t
-ViewportScissorStateImpl<NvnApi>::GetRequiredMemorySize(const ViewportScissorStateInfo& info) {
+size_t ViewportScissorStateImpl<ApiVariationNvn8>::GetRequiredMemorySize(
+    const ViewportScissorStateInfo& info) {
     int extraViewportCount = info.GetViewportCount() - 1;
     return size_t(40) * extraViewportCount;
 }
 
-ViewportScissorStateImpl<NvnApi>::ViewportScissorStateImpl() {
+ViewportScissorStateImpl<ApiVariationNvn8>::ViewportScissorStateImpl() {
     state = State_NotInitialized;
 }
 
-ViewportScissorStateImpl<NvnApi>::~ViewportScissorStateImpl() {}
+ViewportScissorStateImpl<ApiVariationNvn8>::~ViewportScissorStateImpl() {}
 
-void ViewportScissorStateImpl<NvnApi>::SetMemory(void* pMemory, size_t size) {
+void ViewportScissorStateImpl<ApiVariationNvn8>::SetMemory(void* pMemory, size_t size) {
     pWorkMemory = pMemory;
     memorySize = size;
 }
 
-void* ViewportScissorStateImpl<NvnApi>::GetMemory() {
+void* ViewportScissorStateImpl<ApiVariationNvn8>::GetMemory() {
     return pWorkMemory;
 }
 
-const void* ViewportScissorStateImpl<NvnApi>::GetMemory() const {
+const void* ViewportScissorStateImpl<ApiVariationNvn8>::GetMemory() const {
     return pWorkMemory;
 }
 
-void ViewportScissorStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice,
-                                                  const ViewportScissorStateInfo& info) {
+void ViewportScissorStateImpl<ApiVariationNvn8>::Initialize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice, const ViewportScissorStateInfo& info) {
     flag = info.ToData()->flag;
     viewportCount = info.GetViewportCount();
 
@@ -401,7 +409,8 @@ void ViewportScissorStateImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice,
 
     state = State_Initialized;
 }
-void ViewportScissorStateImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void ViewportScissorStateImpl<ApiVariationNvn8>::Finalize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice) {
     state = State_NotInitialized;
 }
 

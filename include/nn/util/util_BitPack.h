@@ -28,9 +28,8 @@ struct BitPack {
     bool IsAllBitOn(int) const;
     bool IsAllBitOff(int) const;
 
-    bool IsAnyBitOn(int mask) const { return (storage & mask) == mask; }
-
-    bool IsAnyBitOff(int mask) const { return (storage & mask) != mask; }
+    bool IsAnyBitOn(int mask) const { return static_cast<int>(storage & mask) == mask; }
+    bool IsAnyBitOff(int mask) const { return static_cast<int>(storage & mask) != mask; }
 
     // todo: figure out how BitWidth would be used
     template <int BitPos, int BitWidth, class T>

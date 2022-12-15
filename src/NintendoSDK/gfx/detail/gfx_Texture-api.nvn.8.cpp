@@ -101,7 +101,7 @@ size_t CalculateMipDataOffsetSize(ptrdiff_t* pMipOffsets, const TextureInfo& inf
     ChannelFormat channelFormat = GetChannelFormat(info.GetImageFormat());
     size_t size = 0;
 
-    for (size_t mipLevel = 0; mipLevel < info.GetMipCount(); ++mipLevel) {
+    for (size_t mipLevel = 0; mipLevel < static_cast<size_t>(info.GetMipCount()); ++mipLevel) {
         if (pMipOffsets) {
             pMipOffsets[mipLevel] = size;
         }
@@ -115,27 +115,29 @@ size_t CalculateMipDataOffsetSize(ptrdiff_t* pMipOffsets, const TextureInfo& inf
 
 }  // namespace
 
-size_t TextureImpl<NvnApi>::CalculateMipDataAlignment(DeviceImpl<NvnApi>* pNnDevice,
-                                                      const TextureInfo& info) {
+size_t
+TextureImpl<ApiVariationNvn8>::CalculateMipDataAlignment(DeviceImpl<ApiVariationNvn8>* pNnDevice,
+                                                         const TextureInfo& info) {
     NVNtextureBuilder builder;
     SetupTextureBuilder(&builder, pNnDevice->ToData()->pNvnDevice, info);
     return nvnTextureBuilderGetStorageAlignment(&builder);
 }
 
-size_t TextureImpl<NvnApi>::CalculateMipDataSize(DeviceImpl<NvnApi>* pNnDevice,
-                                                 const TextureInfo& info) {
+size_t TextureImpl<ApiVariationNvn8>::CalculateMipDataSize(DeviceImpl<ApiVariationNvn8>* pNnDevice,
+                                                           const TextureInfo& info) {
     NVNtextureBuilder builder;
     SetupTextureBuilder(&builder, pNnDevice->ToData()->pNvnDevice, info);
     return nvnTextureBuilderGetStorageSize(&builder);
 }
 
-void TextureImpl<NvnApi>::CalculateMipDataOffsets(ptrdiff_t* pMipOffsets,
-                                                  DeviceImpl<NvnApi>* pNnDevice,
-                                                  const TextureInfo& info) {
+void TextureImpl<ApiVariationNvn8>::CalculateMipDataOffsets(
+    ptrdiff_t* pMipOffsets, [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pNnDevice,
+    const TextureInfo& info) {
     CalculateMipDataOffsetSize(pMipOffsets, info);
 }
 
-size_t TextureImpl<NvnApi>::GetRowPitch(DeviceImpl<NvnApi>* pDevice, const TextureInfo& info) {
+size_t TextureImpl<ApiVariationNvn8>::GetRowPitch(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                                  const TextureInfo& info) {
     int stride;
     nvnDeviceGetInteger(
         pDevice->ToData()->pNvnDevice,
@@ -148,15 +150,16 @@ size_t TextureImpl<NvnApi>::GetRowPitch(DeviceImpl<NvnApi>* pDevice, const Textu
     return nn::util::align_up(row, stride);
 }
 
-TextureImpl<NvnApi>::TextureImpl() {
+TextureImpl<ApiVariationNvn8>::TextureImpl() {
     state = State_NotInitialized;
 }
 
-TextureImpl<NvnApi>::~TextureImpl() {}
+TextureImpl<ApiVariationNvn8>::~TextureImpl() {}
 
-void TextureImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const TextureInfo& info,
-                                     MemoryPoolImpl<NvnApi>* pMemoryPool,
-                                     ptrdiff_t memoryPoolOffset, size_t memoryPoolSize) {
+void TextureImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                               const TextureInfo& info,
+                                               MemoryPoolImpl<ApiVariationNvn8>* pMemoryPool,
+                                               ptrdiff_t memoryPoolOffset, size_t memoryPoolSize) {
     NVNtextureBuilder textureBuilder;
     SetupTextureBuilder(&textureBuilder, pDevice->ToData()->pNvnDevice, info);
     nvnTextureBuilderSetStorage(&textureBuilder, pMemoryPool->ToData()->pNvnMemoryPool,
@@ -167,26 +170,27 @@ void TextureImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const TextureI
 
     pNvnTexture = &nvnTexture;
 
-    NVNboolean isTextureOK = nvnTextureInitialize(pNvnTexture, &textureBuilder);
+    nvnTextureInitialize(pNvnTexture, &textureBuilder);
 
     flags.SetBit(Flag_Shared, false);
     state = State_Initialized;
 }
 
-void TextureImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void TextureImpl<ApiVariationNvn8>::Finalize(DeviceImpl<ApiVariationNvn8>*) {
     nvnTextureFinalize(pNvnTexture);
     pNvnTexture = nullptr;
     state = State_NotInitialized;
 }
 
-TextureViewImpl<NvnApi>::TextureViewImpl() {
+TextureViewImpl<ApiVariationNvn8>::TextureViewImpl() {
     state = State_NotInitialized;
 }
 
-TextureViewImpl<NvnApi>::~TextureViewImpl() {}
+TextureViewImpl<ApiVariationNvn8>::~TextureViewImpl() {}
 
-void TextureViewImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>*, const TextureViewInfo& info) {
-    const TextureImpl<NvnApi>* pSourceTexture = info.GetTexturePtr();
+void TextureViewImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>*,
+                                                   const TextureViewInfo& info) {
+    const TextureImpl<ApiVariationNvn8>* pSourceTexture = info.GetTexturePtr();
 
     pNvnTexture = pSourceTexture->ToData()->pNvnTexture;
     pNvnTextureView = &nvnTextureView;
@@ -230,20 +234,21 @@ void TextureViewImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>*, const TextureViewI
     state = State_Initialized;
 }
 
-void TextureViewImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void TextureViewImpl<ApiVariationNvn8>::Finalize(DeviceImpl<ApiVariationNvn8>*) {
     state = State_NotInitialized;
     pNvnTexture = nullptr;
     pNvnTextureView = nullptr;
 }
 
-ColorTargetViewImpl<NvnApi>::ColorTargetViewImpl() {
+ColorTargetViewImpl<ApiVariationNvn8>::ColorTargetViewImpl() {
     state = State_NotInitialized;
 }
 
-ColorTargetViewImpl<NvnApi>::~ColorTargetViewImpl() {}
+ColorTargetViewImpl<ApiVariationNvn8>::~ColorTargetViewImpl() {}
 
-void ColorTargetViewImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>*, const ColorTargetViewInfo& info) {
-    const TextureImpl<NvnApi>* pSourceTexture = info.GetTexturePtr();
+void ColorTargetViewImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>*,
+                                                       const ColorTargetViewInfo& info) {
+    const TextureImpl<ApiVariationNvn8>* pSourceTexture = info.GetTexturePtr();
 
     pNvnTexture = pSourceTexture->ToData()->pNvnTexture;
     pNvnTextureView = &nvnTextureView;
@@ -260,21 +265,21 @@ void ColorTargetViewImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>*, const ColorTar
     state = State_Initialized;
 }
 
-void ColorTargetViewImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void ColorTargetViewImpl<ApiVariationNvn8>::Finalize(DeviceImpl<ApiVariationNvn8>*) {
     state = State_NotInitialized;
     pNvnTexture = nullptr;
     pNvnTextureView = nullptr;
 }
 
-DepthStencilViewImpl<NvnApi>::DepthStencilViewImpl() {
+DepthStencilViewImpl<ApiVariationNvn8>::DepthStencilViewImpl() {
     state = State_NotInitialized;
 }
 
-DepthStencilViewImpl<NvnApi>::~DepthStencilViewImpl() {}
+DepthStencilViewImpl<ApiVariationNvn8>::~DepthStencilViewImpl() {}
 
-void DepthStencilViewImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>*,
-                                              const DepthStencilViewInfo& info) {
-    const TextureImpl<NvnApi>* pSourceTexture = info.GetTexturePtr();
+void DepthStencilViewImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>*,
+                                                        const DepthStencilViewInfo& info) {
+    const TextureImpl<ApiVariationNvn8>* pSourceTexture = info.GetTexturePtr();
 
     pNvnTexture = pSourceTexture->ToData()->pNvnTexture;
     pNvnTextureView = &nvnTextureView;
@@ -290,15 +295,16 @@ void DepthStencilViewImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>*,
     state = State_Initialized;
 }
 
-void DepthStencilViewImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void DepthStencilViewImpl<ApiVariationNvn8>::Finalize(DeviceImpl<ApiVariationNvn8>*) {
     state = State_NotInitialized;
     pNvnTexture = nullptr;
     pNvnTextureView = nullptr;
 }
 
 template <>
-void GetImageFormatProperty<NvnApi>(ImageFormatProperty* pOutImageFormatProperty,
-                                    DeviceImpl<NvnApi>* pDevice, ImageFormat imageFormat) {
+void GetImageFormatProperty<ApiVariationNvn8>(
+    ImageFormatProperty* pOutImageFormatProperty,
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice, ImageFormat imageFormat) {
     NVNformat nvnFormat = Nvn::GetImageFormat(imageFormat);
     Nvn::GetImageFormatProperty(pOutImageFormatProperty, nvnFormat);
 }

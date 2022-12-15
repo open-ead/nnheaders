@@ -5,5 +5,5 @@
 
 namespace nn::gfx::detail {
 template <>
-class RootSignatureImpl<NvnApi> : public RootSignatureImplCommon<NvnApi> {};
+class RootSignatureImpl<ApiVariationNvn8> : public RootSignatureImplCommon<ApiVariationNvn8> {};
 }  // namespace nn::gfx::detail

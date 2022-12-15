@@ -80,9 +80,9 @@ void GetNvnCopyStride(ptrdiff_t* pRowStride, ptrdiff_t* pImageStride,
     *pImageStride = imageStride;
 }
 
-void SetTextureAndSampler(CommandBufferImpl<NvnApi>* pNnCb, ShaderStage stage, int slot,
+void SetTextureAndSampler(CommandBufferImpl<ApiVariationNvn8>* pNnCb, ShaderStage stage, int slot,
                           unsigned int nvnTextureID, unsigned int nvnSamplerID) {
-    const DeviceImpl<NvnApi>* pNnDevice = pNnCb->ToData()->pNnDevice;
+    const DeviceImpl<ApiVariationNvn8>* pNnDevice = pNnCb->ToData()->pNnDevice;
     NVNtextureHandle textureHandle =
         nvnDeviceGetTextureHandle(pNnDevice->ToData()->pNvnDevice, nvnTextureID, nvnSamplerID);
 
@@ -90,23 +90,23 @@ void SetTextureAndSampler(CommandBufferImpl<NvnApi>* pNnCb, ShaderStage stage, i
                                 slot, textureHandle);
 }
 
-void CommandBufferMemoryCallbackProcedure(NVNcommandBuffer* pNvnCommandBuffer,
+void CommandBufferMemoryCallbackProcedure([[maybe_unused]] NVNcommandBuffer* pNvnCommandBuffer,
                                           NVNcommandBufferMemoryEvent event, size_t minSize,
                                           void* pCallbackData) {
-    auto pThis = static_cast<CommandBufferImpl<NvnApi>*>(pCallbackData);
-    CommandBufferImpl<NvnApi>::DataType& obj = pThis->ToData();
+    auto pThis = static_cast<CommandBufferImpl<ApiVariationNvn8>*>(pCallbackData);
+    CommandBufferImpl<ApiVariationNvn8>::DataType& obj = pThis->ToData();
 
-    auto pCommandBuffer = reinterpret_cast<TCommandBuffer<NvnApi>*>(pThis);
+    auto pCommandBuffer = reinterpret_cast<TCommandBuffer<ApiVariationNvn8>*>(pThis);
     OutOfMemoryEventArg arg{minSize};
 
     switch (event) {
     case NVN_COMMAND_BUFFER_MEMORY_EVENT_OUT_OF_COMMAND_MEMORY:
-        reinterpret_cast<CommandBufferImpl<NvnApi>::OutOfMemoryEventCallback>(
+        reinterpret_cast<CommandBufferImpl<ApiVariationNvn8>::OutOfMemoryEventCallback>(
             obj.pOutOfCommandMemoryCallback.ptr)(pCommandBuffer, arg);
         break;
 
     case NVN_COMMAND_BUFFER_MEMORY_EVENT_OUT_OF_CONTROL_MEMORY:
-        reinterpret_cast<CommandBufferImpl<NvnApi>::OutOfMemoryEventCallback>(
+        reinterpret_cast<CommandBufferImpl<ApiVariationNvn8>::OutOfMemoryEventCallback>(
             obj.pOutOfControlMemoryCallback.ptr)(pCommandBuffer, arg);
         break;
 
@@ -118,27 +118,30 @@ void CommandBufferMemoryCallbackProcedure(NVNcommandBuffer* pNvnCommandBuffer,
 
 }  // namespace
 
-size_t CommandBufferImpl<NvnApi>::GetCommandMemoryAlignment(DeviceImpl<NvnApi>* pDevice) {
+size_t CommandBufferImpl<ApiVariationNvn8>::GetCommandMemoryAlignment(
+    DeviceImpl<ApiVariationNvn8>* pDevice) {
     int align;
     nvnDeviceGetInteger(pDevice->ToData()->pNvnDevice,
                         NVN_DEVICE_INFO_COMMAND_BUFFER_COMMAND_ALIGNMENT, &align);
     return align;
 }
 
-size_t CommandBufferImpl<NvnApi>::GetControlMemoryAlignment(DeviceImpl<NvnApi>* pDevice) {
+size_t CommandBufferImpl<ApiVariationNvn8>::GetControlMemoryAlignment(
+    DeviceImpl<ApiVariationNvn8>* pDevice) {
     int align;
     nvnDeviceGetInteger(pDevice->ToData()->pNvnDevice,
                         NVN_DEVICE_INFO_COMMAND_BUFFER_CONTROL_ALIGNMENT, &align);
     return align;
 }
 
-CommandBufferImpl<NvnApi>::CommandBufferImpl() {
+CommandBufferImpl<ApiVariationNvn8>::CommandBufferImpl() {
     state = State_NotInitialized;
 }
 
-CommandBufferImpl<NvnApi>::~CommandBufferImpl() {}
+CommandBufferImpl<ApiVariationNvn8>::~CommandBufferImpl() {}
 
-void CommandBufferImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const InfoType& info) {
+void CommandBufferImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                                     [[maybe_unused]] const InfoType& info) {
     pNnDevice = pDevice;
     NVNdevice* pNvnDevice = pDevice->ToData()->pNvnDevice;
 
@@ -161,7 +164,8 @@ void CommandBufferImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const In
     state = State_Initialized;
 }
 
-void CommandBufferImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>* unused) {
+void CommandBufferImpl<ApiVariationNvn8>::Finalize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice) {
     if (hNvnCommandBuffer != 0) {
         nvnDeviceFinalizeCommandHandle(pNnDevice->ToData()->pNvnDevice, hNvnCommandBuffer);
         hNvnCommandBuffer = 0;
@@ -171,28 +175,28 @@ void CommandBufferImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>* unused) {
     state = State_NotInitialized;
 }
 
-void CommandBufferImpl<NvnApi>::AddCommandMemory(MemoryPoolImpl<NvnApi>* pool, ptrdiff_t ptr,
-                                                 size_t size) {
+void CommandBufferImpl<ApiVariationNvn8>::AddCommandMemory(MemoryPoolImpl<ApiVariationNvn8>* pool,
+                                                           ptrdiff_t ptr, size_t size) {
     nvnCommandBufferAddCommandMemory(pNvnCommandBuffer, pool->ToData()->pNvnMemoryPool, ptr, size);
 }
 
-void CommandBufferImpl<NvnApi>::AddControlMemory(void* ptr, size_t size) {
+void CommandBufferImpl<ApiVariationNvn8>::AddControlMemory(void* ptr, size_t size) {
     nvnCommandBufferAddControlMemory(pNvnCommandBuffer, ptr, size);
 }
 
-void CommandBufferImpl<NvnApi>::SetOutOfCommandMemoryEventCallback(
+void CommandBufferImpl<ApiVariationNvn8>::SetOutOfCommandMemoryEventCallback(
     OutOfMemoryEventCallback callback) {
     pOutOfCommandMemoryCallback = reinterpret_cast<void (*)()>(callback);
 }
 
-void CommandBufferImpl<NvnApi>::SetOutOfControlMemoryEventCallback(
+void CommandBufferImpl<ApiVariationNvn8>::SetOutOfControlMemoryEventCallback(
     OutOfMemoryEventCallback callback) {
     pOutOfControlMemoryCallback = reinterpret_cast<void (*)()>(callback);
 }
 
-void CommandBufferImpl<NvnApi>::Reset() {}
+void CommandBufferImpl<ApiVariationNvn8>::Reset() {}
 
-void CommandBufferImpl<NvnApi>::Begin() {
+void CommandBufferImpl<ApiVariationNvn8>::Begin() {
     if (hNvnCommandBuffer != 0) {
         nvnDeviceFinalizeCommandHandle(pNnDevice->ToData()->pNvnDevice, hNvnCommandBuffer);
         hNvnCommandBuffer = 0;
@@ -202,69 +206,71 @@ void CommandBufferImpl<NvnApi>::Begin() {
     state = State_Begun;
 }
 
-void CommandBufferImpl<NvnApi>::End() {
+void CommandBufferImpl<ApiVariationNvn8>::End() {
     hNvnCommandBuffer = nvnCommandBufferEndRecording(pNvnCommandBuffer);
     state = State_Initialized;
 }
 
-void CommandBufferImpl<NvnApi>::Dispatch(int a, int b, int c) {
+void CommandBufferImpl<ApiVariationNvn8>::Dispatch(int a, int b, int c) {
     nvnCommandBufferDispatchCompute(pNvnCommandBuffer, a, b, c);
 }
 
-void CommandBufferImpl<NvnApi>::Draw(PrimitiveTopology primitiveTopology, int vertexCount,
-                                     int vertexOffset) {
+void CommandBufferImpl<ApiVariationNvn8>::Draw(PrimitiveTopology primitiveTopology, int vertexCount,
+                                               int vertexOffset) {
     nvnCommandBufferDrawArrays(pNvnCommandBuffer, Nvn::GetDrawPrimitive(primitiveTopology),
                                vertexOffset, vertexCount);
 }
 
-void CommandBufferImpl<NvnApi>::Draw(PrimitiveTopology primitiveTopology,
-                                     int vertexCountPerInstance, int vertexOffset,
-                                     int instanceCount, int baseInstance) {
+void CommandBufferImpl<ApiVariationNvn8>::Draw(PrimitiveTopology primitiveTopology,
+                                               int vertexCountPerInstance, int vertexOffset,
+                                               int instanceCount, int baseInstance) {
     nvnCommandBufferDrawArraysInstanced(pNvnCommandBuffer, Nvn::GetDrawPrimitive(primitiveTopology),
                                         vertexOffset, vertexCountPerInstance, baseInstance,
                                         instanceCount);
 }
 
-void CommandBufferImpl<NvnApi>::DrawIndexed(PrimitiveTopology primitiveTopology,
-                                            IndexFormat indexFormat,
-                                            const GpuAddress& indexBufferAddress, int indexCount,
-                                            int baseVertex) {
+void CommandBufferImpl<ApiVariationNvn8>::DrawIndexed(PrimitiveTopology primitiveTopology,
+                                                      IndexFormat indexFormat,
+                                                      const GpuAddress& indexBufferAddress,
+                                                      int indexCount, int baseVertex) {
     nvnCommandBufferDrawElementsBaseVertex(pNvnCommandBuffer,
                                            Nvn::GetDrawPrimitive(primitiveTopology),
                                            Nvn::GetIndexFormat(indexFormat), indexCount,
                                            Nvn::GetBufferAddress(indexBufferAddress), baseVertex);
 }
 
-void CommandBufferImpl<NvnApi>::DrawIndexed(PrimitiveTopology primitiveTopology,
-                                            IndexFormat indexFormat,
-                                            const GpuAddress& indexBufferAddress,
-                                            int indexCountPerInstance, int baseVertex,
-                                            int instanceCount, int baseInstance) {
+void CommandBufferImpl<ApiVariationNvn8>::DrawIndexed(PrimitiveTopology primitiveTopology,
+                                                      IndexFormat indexFormat,
+                                                      const GpuAddress& indexBufferAddress,
+                                                      int indexCountPerInstance, int baseVertex,
+                                                      int instanceCount, int baseInstance) {
     nvnCommandBufferDrawElementsInstanced(
         pNvnCommandBuffer, Nvn::GetDrawPrimitive(primitiveTopology),
         Nvn::GetIndexFormat(indexFormat), indexCountPerInstance,
         Nvn::GetBufferAddress(indexBufferAddress), baseVertex, baseInstance, instanceCount);
 }
 
-void CommandBufferImpl<NvnApi>::DispatchIndirect(const GpuAddress& addr) {
+void CommandBufferImpl<ApiVariationNvn8>::DispatchIndirect(const GpuAddress& addr) {
     nvnCommandBufferDispatchComputeIndirect(pNvnCommandBuffer, Nvn::GetBufferAddress(addr));
 }
 
-void CommandBufferImpl<NvnApi>::DrawIndirect(PrimitiveTopology top, const GpuAddress& addr) {
+void CommandBufferImpl<ApiVariationNvn8>::DrawIndirect(PrimitiveTopology top,
+                                                       const GpuAddress& addr) {
     nvnCommandBufferDrawArraysIndirect(pNvnCommandBuffer, Nvn::GetDrawPrimitive(top),
                                        Nvn::GetBufferAddress(addr));
 }
 
-void CommandBufferImpl<NvnApi>::DrawIndexedIndirect(PrimitiveTopology top, IndexFormat index,
-                                                    const GpuAddress& addr1,
-                                                    const GpuAddress& addr2) {
+void CommandBufferImpl<ApiVariationNvn8>::DrawIndexedIndirect(PrimitiveTopology top,
+                                                              IndexFormat index,
+                                                              const GpuAddress& addr1,
+                                                              const GpuAddress& addr2) {
     nvnCommandBufferDrawElementsIndirect(pNvnCommandBuffer, Nvn::GetDrawPrimitive(top),
                                          Nvn::GetIndexFormat(index), Nvn::GetBufferAddress(addr1),
                                          Nvn::GetBufferAddress(addr2));
 }
 
-void CommandBufferImpl<NvnApi>::SetPipeline(const PipelineImpl<NvnApi>* pPipe) {
-    const PipelineImplData<NvnApi>& pipe = pPipe->ToData();
+void CommandBufferImpl<ApiVariationNvn8>::SetPipeline(const PipelineImpl<ApiVariationNvn8>* pPipe) {
+    const PipelineImplData<ApiVariationNvn8>& pipe = pPipe->ToData();
 
     if (pipe.nnPipelineType == pipe.PipelineType_Graphics) {
         SetRasterizerState(nn::gfx::DataToAccessor(pipe.nnRasterizerState));
@@ -280,8 +286,9 @@ void CommandBufferImpl<NvnApi>::SetPipeline(const PipelineImpl<NvnApi>* pPipe) {
     SetShader(pipe.pShader, ShaderStageBit_All);
 }
 
-void CommandBufferImpl<NvnApi>::SetRasterizerState(const RasterizerStateImpl<NvnApi>* pRast) {
-    const RasterizerStateImplData<NvnApi>& rast = pRast->ToData();
+void CommandBufferImpl<ApiVariationNvn8>::SetRasterizerState(
+    const RasterizerStateImpl<ApiVariationNvn8>* pRast) {
+    const RasterizerStateImplData<ApiVariationNvn8>& rast = pRast->ToData();
 
     nvnCommandBufferBindPolygonState(
         pNvnCommandBuffer, reinterpret_cast<const NVNpolygonState*>(&rast.nvnPolygonState));
@@ -305,8 +312,9 @@ void CommandBufferImpl<NvnApi>::SetRasterizerState(const RasterizerStateImpl<Nvn
     }
 }
 
-void CommandBufferImpl<NvnApi>::SetBlendState(const BlendStateImpl<NvnApi>* pBlendState) {
-    const BlendStateImplData<NvnApi>& blendState = pBlendState->ToData();
+void CommandBufferImpl<ApiVariationNvn8>::SetBlendState(
+    const BlendStateImpl<ApiVariationNvn8>* pBlendState) {
+    const BlendStateImplData<ApiVariationNvn8>& blendState = pBlendState->ToData();
     const NVNblendState* pBlendStates = blendState.pNvnBlendStateData;
 
     for (int i = 0, targetCount = blendState.targetCount; i < targetCount; ++i) {
@@ -321,8 +329,9 @@ void CommandBufferImpl<NvnApi>::SetBlendState(const BlendStateImpl<NvnApi>* pBle
     nvnCommandBufferSetBlendColor(pNvnCommandBuffer, blendState.nvnBlendConstant);
 }
 
-void CommandBufferImpl<NvnApi>::SetDepthStencilState(const DepthStencilStateImpl<NvnApi>* pDepth) {
-    const DepthStencilStateImplData<NvnApi>& depth = pDepth->ToData();
+void CommandBufferImpl<ApiVariationNvn8>::SetDepthStencilState(
+    const DepthStencilStateImpl<ApiVariationNvn8>* pDepth) {
+    const DepthStencilStateImplData<ApiVariationNvn8>& depth = pDepth->ToData();
 
     nvnCommandBufferBindDepthStencilState(
         pNvnCommandBuffer,
@@ -338,8 +347,9 @@ void CommandBufferImpl<NvnApi>::SetDepthStencilState(const DepthStencilStateImpl
         nvnCommandBufferSetDepthBounds(pNvnCommandBuffer, false, 0.0f, 1.0f);
 }
 
-void CommandBufferImpl<NvnApi>::SetVertexState(const VertexStateImpl<NvnApi>* pVert) {
-    const VertexStateImplData<NvnApi>& vert = pVert->ToData();
+void CommandBufferImpl<ApiVariationNvn8>::SetVertexState(
+    const VertexStateImpl<ApiVariationNvn8>* pVert) {
+    const VertexStateImplData<ApiVariationNvn8>& vert = pVert->ToData();
 
     nvnCommandBufferBindVertexAttribState(pNvnCommandBuffer, vert.vertexAttributeStateCount,
                                           vert.pNvnVertexAttribState);
@@ -347,13 +357,15 @@ void CommandBufferImpl<NvnApi>::SetVertexState(const VertexStateImpl<NvnApi>* pV
                                           vert.pNvnVertexStreamState);
 }
 
-void CommandBufferImpl<NvnApi>::SetTessellationState(const TessellationStateImpl<NvnApi>* pTess) {
-    const TessellationStateImplData<NvnApi>& tess = pTess->ToData();
+void CommandBufferImpl<ApiVariationNvn8>::SetTessellationState(
+    const TessellationStateImpl<ApiVariationNvn8>* pTess) {
+    const TessellationStateImplData<ApiVariationNvn8>& tess = pTess->ToData();
 
     nvnCommandBufferSetPatchSize(pNvnCommandBuffer, tess.patchSize);
 }
 
-void CommandBufferImpl<NvnApi>::SetShader(const ShaderImpl<NvnApi>* pShader, int stageBits) {
+void CommandBufferImpl<ApiVariationNvn8>::SetShader(const ShaderImpl<ApiVariationNvn8>* pShader,
+                                                    int stageBits) {
     NVNprogram* pProgram = nullptr;
     int shaderStageBits = 0;
 
@@ -370,9 +382,9 @@ void CommandBufferImpl<NvnApi>::SetShader(const ShaderImpl<NvnApi>* pShader, int
     nvnCommandBufferBindProgram(pNvnCommandBuffer, pProgram, shaderStageBits);
 }
 
-void CommandBufferImpl<NvnApi>::SetRenderTargets(
-    int colorTargetCount, const ColorTargetViewImpl<NvnApi>* const* ppColorTargets,
-    const DepthStencilViewImpl<NvnApi>* pDepthStencil) {
+void CommandBufferImpl<ApiVariationNvn8>::SetRenderTargets(
+    int colorTargetCount, const ColorTargetViewImpl<ApiVariationNvn8>* const* ppColorTargets,
+    const DepthStencilViewImpl<ApiVariationNvn8>* pDepthStencil) {
     const int MaxRenderTarget = 8;
 
     NVNtexture* pNvnColorTargets[MaxRenderTarget];
@@ -395,15 +407,17 @@ void CommandBufferImpl<NvnApi>::SetRenderTargets(
                                      pNvnColorTargetViews, pDepthTarget, pDepthTargetView);
 }
 
-void CommandBufferImpl<NvnApi>::SetVertexBuffer(int bufferIndex, const GpuAddress& vertexBuffer,
-                                                ptrdiff_t stride, size_t size) {
+void CommandBufferImpl<ApiVariationNvn8>::SetVertexBuffer(int bufferIndex,
+                                                          const GpuAddress& vertexBuffer,
+                                                          [[maybe_unused]] ptrdiff_t stride,
+                                                          size_t size) {
     nvnCommandBufferBindVertexBuffer(pNvnCommandBuffer, bufferIndex,
                                      Nvn::GetBufferAddress(vertexBuffer), size);
 }
 
-void CommandBufferImpl<NvnApi>::SetViewportScissorState(
-    const ViewportScissorStateImpl<NvnApi>* pView) {
-    const ViewportScissorStateImplData<NvnApi>& view = pView->ToData();
+void CommandBufferImpl<ApiVariationNvn8>::SetViewportScissorState(
+    const ViewportScissorStateImpl<ApiVariationNvn8>* pView) {
+    const ViewportScissorStateImplData<ApiVariationNvn8>& view = pView->ToData();
 
     nvnCommandBufferSetDepthRange(pNvnCommandBuffer, view.depthRange[0], view.depthRange[1]);
     nvnCommandBufferSetViewports(pNvnCommandBuffer, 0, 1, view.viewport);
@@ -425,19 +439,19 @@ void CommandBufferImpl<NvnApi>::SetViewportScissorState(
     }
 }
 
-void CommandBufferImpl<NvnApi>::CopyBuffer(BufferImpl<NvnApi>* pDstBuffer, ptrdiff_t dstOffset,
-                                           const BufferImpl<NvnApi>* pSrcBuffer,
-                                           ptrdiff_t srcOffset, size_t size) {
+void CommandBufferImpl<ApiVariationNvn8>::CopyBuffer(BufferImpl<ApiVariationNvn8>* pDstBuffer,
+                                                     ptrdiff_t dstOffset,
+                                                     const BufferImpl<ApiVariationNvn8>* pSrcBuffer,
+                                                     ptrdiff_t srcOffset, size_t size) {
     NVNbufferAddress src = nvnBufferGetAddress(pSrcBuffer->ToData()->pNvnBuffer) + srcOffset;
     NVNbufferAddress dst = nvnBufferGetAddress(pDstBuffer->ToData()->pNvnBuffer) + dstOffset;
     nvnCommandBufferCopyBufferToBuffer(pNvnCommandBuffer, src, dst, size, NVN_COPY_FLAGS_NONE);
 }
 
-void CommandBufferImpl<NvnApi>::CopyImage(TextureImpl<NvnApi>* pDstTexture,
-                                          const TextureSubresource& dstSubresource, int dstOffsetU,
-                                          int dstOffsetV, int dstOffsetW,
-                                          const TextureImpl<NvnApi>* pSrcTexture,
-                                          const TextureCopyRegion& srcCopyRegion) {
+void CommandBufferImpl<ApiVariationNvn8>::CopyImage(
+    TextureImpl<ApiVariationNvn8>* pDstTexture, const TextureSubresource& dstSubresource,
+    int dstOffsetU, int dstOffsetV, int dstOffsetW,
+    const TextureImpl<ApiVariationNvn8>* pSrcTexture, const TextureCopyRegion& srcCopyRegion) {
     NVNtextureTarget target = nvnTextureGetTarget(pSrcTexture->ToData()->pNvnTexture);
 
     int srcV;
@@ -479,9 +493,9 @@ void CommandBufferImpl<NvnApi>::CopyImage(TextureImpl<NvnApi>* pDstTexture,
                                          &dstView, &dstRegion, NVN_COPY_FLAGS_NONE);
 }
 
-void CommandBufferImpl<NvnApi>::CopyBufferToImage(TextureImpl<NvnApi>* pDstTexture,
-                                                  const BufferImpl<NvnApi>* pSrcBuffer,
-                                                  const BufferTextureCopyRegion& copyRegion) {
+void CommandBufferImpl<ApiVariationNvn8>::CopyBufferToImage(
+    TextureImpl<ApiVariationNvn8>* pDstTexture, const BufferImpl<ApiVariationNvn8>* pSrcBuffer,
+    const BufferTextureCopyRegion& copyRegion) {
     NVNtextureTarget target = nvnTextureGetTarget(pDstTexture->ToData()->pNvnTexture);
 
     const TextureCopyRegion& dstRegion = copyRegion.GetTextureCopyRegion();
@@ -519,9 +533,9 @@ void CommandBufferImpl<NvnApi>::CopyBufferToImage(TextureImpl<NvnApi>* pDstTextu
                                         NVN_COPY_FLAGS_NONE);
 }
 
-void CommandBufferImpl<NvnApi>::CopyImageToBuffer(BufferImpl<NvnApi>* pDstBuffer,
-                                                  const TextureImpl<NvnApi>* pSrcTexture,
-                                                  const BufferTextureCopyRegion& copyRegion) {
+void CommandBufferImpl<ApiVariationNvn8>::CopyImageToBuffer(
+    BufferImpl<ApiVariationNvn8>* pDstBuffer, const TextureImpl<ApiVariationNvn8>* pSrcTexture,
+    const BufferTextureCopyRegion& copyRegion) {
     NVNtextureTarget target = nvnTextureGetTarget(pSrcTexture->ToData()->pNvnTexture);
 
     const TextureCopyRegion& srcRegion = copyRegion.GetTextureCopyRegion();
@@ -557,10 +571,9 @@ void CommandBufferImpl<NvnApi>::CopyImageToBuffer(BufferImpl<NvnApi>* pDstBuffer
                                         &view, &region, bufferAddress, NVN_COPY_FLAGS_NONE);
 }
 
-void CommandBufferImpl<NvnApi>::CopyBufferToImage(TextureImpl<NvnApi>* pDstTexture,
-                                                  const TextureCopyRegion& dstRegion,
-                                                  const BufferImpl<NvnApi>* pSrcBuffer,
-                                                  ptrdiff_t srcOffset) {
+void CommandBufferImpl<ApiVariationNvn8>::CopyBufferToImage(
+    TextureImpl<ApiVariationNvn8>* pDstTexture, const TextureCopyRegion& dstRegion,
+    const BufferImpl<ApiVariationNvn8>* pSrcBuffer, ptrdiff_t srcOffset) {
     NVNtextureTarget target = nvnTextureGetTarget(pDstTexture->ToData()->pNvnTexture);
 
     int offsetY;
@@ -591,10 +604,9 @@ void CommandBufferImpl<NvnApi>::CopyBufferToImage(TextureImpl<NvnApi>* pDstTextu
                                         NVN_COPY_FLAGS_NONE);
 }
 
-void CommandBufferImpl<NvnApi>::CopyImageToBuffer(BufferImpl<NvnApi>* pDstBuffer,
-                                                  ptrdiff_t dstOffset,
-                                                  const TextureImpl<NvnApi>* pSrcTexture,
-                                                  const TextureCopyRegion& srcRegion) {
+void CommandBufferImpl<ApiVariationNvn8>::CopyImageToBuffer(
+    BufferImpl<ApiVariationNvn8>* pDstBuffer, ptrdiff_t dstOffset,
+    const TextureImpl<ApiVariationNvn8>* pSrcTexture, const TextureCopyRegion& srcRegion) {
     NVNtextureTarget target = nvnTextureGetTarget(pSrcTexture->ToData()->pNvnTexture);
 
     int offsetY;
@@ -624,10 +636,10 @@ void CommandBufferImpl<NvnApi>::CopyImageToBuffer(BufferImpl<NvnApi>* pDstBuffer
                                         &view, &region, bufferAddress, NVN_COPY_FLAGS_NONE);
 }
 
-void CommandBufferImpl<NvnApi>::BlitImage(TextureImpl<NvnApi>* pDstTexture,
-                                          const TextureCopyRegion& dstCopyRegion,
-                                          const TextureImpl<NvnApi>* pSrcTexture,
-                                          const TextureCopyRegion& srcCopyRegion, int copyFlags) {
+void CommandBufferImpl<ApiVariationNvn8>::BlitImage(
+    TextureImpl<ApiVariationNvn8>* pDstTexture, const TextureCopyRegion& dstCopyRegion,
+    const TextureImpl<ApiVariationNvn8>* pSrcTexture, const TextureCopyRegion& srcCopyRegion,
+    int copyFlags) {
     NVNtextureTarget dstTarget = nvnTextureGetTarget(pDstTexture->ToData()->pNvnTexture);
 
     int dstV;
@@ -675,22 +687,23 @@ void CommandBufferImpl<NvnApi>::BlitImage(TextureImpl<NvnApi>* pDstTexture,
                                          &dstView, &dstRegion, nvnCopyFlags);
 }
 
-void CommandBufferImpl<NvnApi>::ClearBuffer(BufferImpl<NvnApi>* pBuffer, ptrdiff_t offset,
-                                            size_t size, uint32_t value) {
+void CommandBufferImpl<ApiVariationNvn8>::ClearBuffer(BufferImpl<ApiVariationNvn8>* pBuffer,
+                                                      ptrdiff_t offset, size_t size,
+                                                      uint32_t value) {
     NVNbufferAddress bufferAddress = nvnBufferGetAddress(pBuffer->ToData()->pNvnBuffer) + offset;
     nvnCommandBufferClearBuffer(pNvnCommandBuffer, bufferAddress, size, value);
 }
 
-void CommandBufferImpl<NvnApi>::ClearColor(ColorTargetViewImpl<NvnApi>* pColorTarget, float r,
-                                           float g, float b, float a,
-                                           const TextureArrayRange* pArrayRange) {
-    ClearColorValue clearColor{r, g, b, a};
+void CommandBufferImpl<ApiVariationNvn8>::ClearColor(
+    ColorTargetViewImpl<ApiVariationNvn8>* pColorTarget, float r, float g, float b, float a,
+    const TextureArrayRange* pArrayRange) {
+    ClearColorValue clearColor{{r, g, b, a}};
     ClearColorTarget(pColorTarget, clearColor, pArrayRange);
 }
 
-void CommandBufferImpl<NvnApi>::ClearColorTarget(ColorTargetViewImpl<NvnApi>* pColorTarget,
-                                                 const ClearColorValue& clearColor,
-                                                 const TextureArrayRange* pArrayRange) {
+void CommandBufferImpl<ApiVariationNvn8>::ClearColorTarget(
+    ColorTargetViewImpl<ApiVariationNvn8>* pColorTarget, const ClearColorValue& clearColor,
+    const TextureArrayRange* pArrayRange) {
     const NVNtexture* const pNvnTexture = pColorTarget->ToData()->pNvnTexture;
     const NVNtextureView* const pNvnTextureView = pColorTarget->ToData()->pNvnTextureView;
 
@@ -737,10 +750,9 @@ void CommandBufferImpl<NvnApi>::ClearColorTarget(ColorTargetViewImpl<NvnApi>* pC
                                  clearColor.valueFloat, NVN_CLEAR_COLOR_MASK_RGBA);
 }
 
-void CommandBufferImpl<NvnApi>::ClearDepthStencil(DepthStencilViewImpl<NvnApi>* pDepthStencil,
-                                                  float depth, int stencil,
-                                                  DepthStencilClearMode clearMode,
-                                                  const TextureArrayRange* pArrayRange) {
+void CommandBufferImpl<ApiVariationNvn8>::ClearDepthStencil(
+    DepthStencilViewImpl<ApiVariationNvn8>* pDepthStencil, float depth, int stencil,
+    DepthStencilClearMode clearMode, [[maybe_unused]] const TextureArrayRange* pArrayRange) {
     const NVNtexture* const pNvnTexture = pDepthStencil->ToData()->pNvnTexture;
     const NVNtextureView* const pNvnTextureView = pDepthStencil->ToData()->pNvnTextureView;
 
@@ -764,17 +776,18 @@ void CommandBufferImpl<NvnApi>::ClearDepthStencil(DepthStencilViewImpl<NvnApi>* 
     }
 }
 
-void CommandBufferImpl<NvnApi>::Resolve(TextureImpl<NvnApi>* pDstTexture, int dstMipLevel,
-                                        int dstStartArrayIndex,
-                                        const ColorTargetViewImpl<NvnApi>* pSrcColorTarget,
-                                        const TextureArrayRange* pSrcArrayRange) {
+void CommandBufferImpl<ApiVariationNvn8>::Resolve(
+    TextureImpl<ApiVariationNvn8>* pDstTexture, [[maybe_unused]] int dstMipLevel,
+    [[maybe_unused]] int dstStartArrayIndex,
+    const ColorTargetViewImpl<ApiVariationNvn8>* pSrcColorTarget,
+    [[maybe_unused]] const TextureArrayRange* pSrcArrayRange) {
     const NVNtexture* pSrcNvnTexture = pSrcColorTarget->ToData()->pNvnTexture;
 
     nvnCommandBufferDownsample(pNvnCommandBuffer, pSrcNvnTexture,
                                pDstTexture->ToData()->pNvnTexture);
 }
 
-void CommandBufferImpl<NvnApi>::FlushMemory(int gpuAccessFlags) {
+void CommandBufferImpl<ApiVariationNvn8>::FlushMemory(int gpuAccessFlags) {
     int barrier = 0;  // const value of 1 in dwarf
     barrier |= (gpuAccessFlags & (GpuAccess_Image | GpuAccess_QueryBuffer | GpuAccess_DepthStencil |
                                   GpuAccess_ColorBuffer | GpuAccess_UnorderedAccessBuffer)) ?
@@ -785,7 +798,7 @@ void CommandBufferImpl<NvnApi>::FlushMemory(int gpuAccessFlags) {
     }
 }
 
-void CommandBufferImpl<NvnApi>::InvalidateMemory(int gpuAccessFlags) {
+void CommandBufferImpl<ApiVariationNvn8>::InvalidateMemory(int gpuAccessFlags) {
     int barrier = 0;
 
     barrier |=
@@ -809,23 +822,23 @@ void CommandBufferImpl<NvnApi>::InvalidateMemory(int gpuAccessFlags) {
     }
 }
 
-void CommandBufferImpl<NvnApi>::CallCommandBuffer(
-    const CommandBufferImpl<NvnApi>* pNestedCommandBuffer) {
+void CommandBufferImpl<ApiVariationNvn8>::CallCommandBuffer(
+    const CommandBufferImpl<ApiVariationNvn8>* pNestedCommandBuffer) {
     NVNcommandHandle nvnCommandHandle = pNestedCommandBuffer->ToData()->hNvnCommandBuffer;
 
     nvnCommandBufferCallCommands(pNvnCommandBuffer, 1, &nvnCommandHandle);
 }
 
-void CommandBufferImpl<NvnApi>::CopyCommandBuffer(
-    const CommandBufferImpl<NvnApi>* pNestedCommandBuffer) {
+void CommandBufferImpl<ApiVariationNvn8>::CopyCommandBuffer(
+    const CommandBufferImpl<ApiVariationNvn8>* pNestedCommandBuffer) {
     NVNcommandHandle nvnCommandHandle = pNestedCommandBuffer->ToData()->hNvnCommandBuffer;
 
     nvnCommandBufferCopyCommands(pNvnCommandBuffer, 1, &nvnCommandHandle);
 }
 
-void CommandBufferImpl<NvnApi>::SetBufferStateTransition(BufferImpl<NvnApi>*, int oldState,
-                                                         int oldStageBits, int newState,
-                                                         int newStageBits) {
+void CommandBufferImpl<ApiVariationNvn8>::SetBufferStateTransition(
+    BufferImpl<ApiVariationNvn8>*, int oldState, [[maybe_unused]] int oldStageBits, int newState,
+    int newStageBits) {
     int barrier = 0;
 
     if ((oldState & (BufferState_QueryBuffer | BufferState_UnorderedAccessBuffer)) ||
@@ -852,10 +865,9 @@ void CommandBufferImpl<NvnApi>::SetBufferStateTransition(BufferImpl<NvnApi>*, in
     nvnCommandBufferBarrier(pNvnCommandBuffer, barrier);
 }
 
-void CommandBufferImpl<NvnApi>::SetTextureStateTransition(TextureImpl<NvnApi>*,
-                                                          const TextureSubresourceRange*,
-                                                          int oldState, int oldStageBits,
-                                                          int newState, int newStageBits) {
+void CommandBufferImpl<ApiVariationNvn8>::SetTextureStateTransition(
+    TextureImpl<ApiVariationNvn8>*, const TextureSubresourceRange*, int oldState,
+    [[maybe_unused]] int oldStageBits, int newState, int newStageBits) {
     int barrier = 0;
 
     if ((oldState &
@@ -883,8 +895,8 @@ void CommandBufferImpl<NvnApi>::SetTextureStateTransition(TextureImpl<NvnApi>*,
     nvnCommandBufferBarrier(pNvnCommandBuffer, barrier);
 }
 
-void CommandBufferImpl<NvnApi>::SetDescriptorPool(
-    const DescriptorPoolImpl<NvnApi>* pDescriptorPool) {
+void CommandBufferImpl<ApiVariationNvn8>::SetDescriptorPool(
+    const DescriptorPoolImpl<ApiVariationNvn8>* pDescriptorPool) {
     switch (pDescriptorPool->ToData()->descriptorPoolType) {
     case DescriptorPoolType_TextureView:
         nvnCommandBufferSetTexturePool(pNvnCommandBuffer,
@@ -899,63 +911,65 @@ void CommandBufferImpl<NvnApi>::SetDescriptorPool(
     }
 }
 
-void CommandBufferImpl<NvnApi>::SetRootSignature(PipelineType pipelineType,
-                                                 RootSignatureImpl<NvnApi>* pRootSignature) {
+void CommandBufferImpl<ApiVariationNvn8>::SetRootSignature(
+    [[maybe_unused]] PipelineType pipelineType,
+    RootSignatureImpl<ApiVariationNvn8>* pRootSignature) {
     pGfxRootSignature = pRootSignature;
 }
 
-void CommandBufferImpl<NvnApi>::SetRootBufferDescriptorTable(
+void CommandBufferImpl<ApiVariationNvn8>::SetRootBufferDescriptorTable(
     PipelineType pipelineType, int indexDescriptorTable,
     const DescriptorSlot& startBufferDescriptorSlot) {
-    nn::gfx::detail::SetRootBufferDescriptorTable<NvnApi>(
+    nn::gfx::detail::SetRootBufferDescriptorTable<ApiVariationNvn8>(
         this, pipelineType, indexDescriptorTable, startBufferDescriptorSlot,
-        DescriptorPoolImpl<NvnApi>::GetDescriptorSlotIncrementSize(pNnDevice,
-                                                                   DescriptorPoolType_BufferView));
+        DescriptorPoolImpl<ApiVariationNvn8>::GetDescriptorSlotIncrementSize(
+            pNnDevice, DescriptorPoolType_BufferView));
 }
 
-void CommandBufferImpl<NvnApi>::SetRootTextureAndSamplerDescriptorTable(
+void CommandBufferImpl<ApiVariationNvn8>::SetRootTextureAndSamplerDescriptorTable(
     PipelineType pipelineType, int indexDescriptorTable,
     const DescriptorSlot& startTextureDescriptorSlot,
     const DescriptorSlot& startSamplerDescriptorSlot) {
     nn::gfx::detail::SetRootTextureAndSamplerDescriptorTable(
         this, pipelineType, indexDescriptorTable, startTextureDescriptorSlot,
         startSamplerDescriptorSlot,
-        DescriptorPoolImpl<NvnApi>::GetDescriptorSlotIncrementSize(pNnDevice,
-                                                                   DescriptorPoolType_TextureView),
-        DescriptorPoolImpl<NvnApi>::GetDescriptorSlotIncrementSize(pNnDevice,
-                                                                   DescriptorPoolType_Sampler));
+        DescriptorPoolImpl<ApiVariationNvn8>::GetDescriptorSlotIncrementSize(
+            pNnDevice, DescriptorPoolType_TextureView),
+        DescriptorPoolImpl<ApiVariationNvn8>::GetDescriptorSlotIncrementSize(
+            pNnDevice, DescriptorPoolType_Sampler));
 }
 
-void CommandBufferImpl<NvnApi>::SetRootConstantBuffer(PipelineType pipelineType,
-                                                      int indexDynamicDescriptor,
-                                                      const GpuAddress& constantBufferAddress,
-                                                      size_t size) {
+void CommandBufferImpl<ApiVariationNvn8>::SetRootConstantBuffer(
+    PipelineType pipelineType, int indexDynamicDescriptor, const GpuAddress& constantBufferAddress,
+    size_t size) {
     nn::gfx::detail::SetRootConstantBuffer(this, pipelineType, indexDynamicDescriptor,
                                            constantBufferAddress, size);
 }
 
-void CommandBufferImpl<NvnApi>::SetRootUnorderedAccessBuffer(
+void CommandBufferImpl<ApiVariationNvn8>::SetRootUnorderedAccessBuffer(
     PipelineType pipelineType, int indexDynamicDescriptor,
     const GpuAddress& unorderedAccessBufferAddress, size_t size) {
     nn::gfx::detail::SetRootUnorderedAccessBuffer(this, pipelineType, indexDynamicDescriptor,
                                                   unorderedAccessBufferAddress, size);
 }
 
-void CommandBufferImpl<NvnApi>::SetRootTextureAndSampler(
+void CommandBufferImpl<ApiVariationNvn8>::SetRootTextureAndSampler(
     PipelineType pipelineType, int indexDynamicDescriptor,
-    const TextureViewImpl<NvnApi>* pTextureView, const SamplerImpl<NvnApi>* pSampler) {
+    const TextureViewImpl<ApiVariationNvn8>* pTextureView,
+    const SamplerImpl<ApiVariationNvn8>* pSampler) {
     nn::gfx::detail::SetRootTextureAndSampler(this, pipelineType, indexDynamicDescriptor,
                                               pTextureView, pSampler);
 }
 
-void CommandBufferImpl<NvnApi>::BeginQuery(QueryTarget target) {
+void CommandBufferImpl<ApiVariationNvn8>::BeginQuery(QueryTarget target) {
     if (target != QueryTarget_ComputeShaderInvocations) {
         NVNcounterType counterType = Nvn::GetCounterType(target);
         nvnCommandBufferResetCounter(pNvnCommandBuffer, counterType);
     }
 }
 
-void CommandBufferImpl<NvnApi>::EndQuery(const GpuAddress& dstBufferAddress, QueryTarget target) {
+void CommandBufferImpl<ApiVariationNvn8>::EndQuery(const GpuAddress& dstBufferAddress,
+                                                   QueryTarget target) {
     if (target != QueryTarget_ComputeShaderInvocations) {
         NVNcounterType counterType = Nvn::GetCounterType(target);
         nvnCommandBufferReportCounter(pNvnCommandBuffer, counterType,
@@ -963,21 +977,22 @@ void CommandBufferImpl<NvnApi>::EndQuery(const GpuAddress& dstBufferAddress, Que
     }
 }
 
-void CommandBufferImpl<NvnApi>::WriteTimestamp(const GpuAddress& dstBufferAddress) {
+void CommandBufferImpl<ApiVariationNvn8>::WriteTimestamp(const GpuAddress& dstBufferAddress) {
     nvnCommandBufferReportCounter(pNvnCommandBuffer, NVN_COUNTER_TYPE_TIMESTAMP,
                                   Nvn::GetBufferAddress(dstBufferAddress));
 }
 
-void CommandBufferImpl<NvnApi>::SetDepthBounds(float minDepthBounds, float maxDepthBounds) {
+void CommandBufferImpl<ApiVariationNvn8>::SetDepthBounds(float minDepthBounds,
+                                                         float maxDepthBounds) {
     nvnCommandBufferSetDepthBounds(pNvnCommandBuffer, true, minDepthBounds, maxDepthBounds);
 }
 
-void CommandBufferImpl<NvnApi>::SetLineWidth(float lineWidth) {
+void CommandBufferImpl<ApiVariationNvn8>::SetLineWidth(float lineWidth) {
     nvnCommandBufferSetLineWidth(pNvnCommandBuffer, lineWidth);
 }
 
-void CommandBufferImpl<NvnApi>::SetViewports(int firstViewport, int viewportCount,
-                                             const ViewportStateInfo* pViewports) {
+void CommandBufferImpl<ApiVariationNvn8>::SetViewports(int firstViewport, int viewportCount,
+                                                       const ViewportStateInfo* pViewports) {
     const int maxViewports = 16;
 
     float viewports[maxViewports * 4];
@@ -1000,8 +1015,8 @@ void CommandBufferImpl<NvnApi>::SetViewports(int firstViewport, int viewportCoun
     nvnCommandBufferSetDepthRanges(pNvnCommandBuffer, firstViewport, viewportCount, depthRanges);
 }
 
-void CommandBufferImpl<NvnApi>::SetScissors(int firstScissor, int scissorCount,
-                                            const ScissorStateInfo* pScissors) {
+void CommandBufferImpl<ApiVariationNvn8>::SetScissors(int firstScissor, int scissorCount,
+                                                      const ScissorStateInfo* pScissors) {
     const int maxScissors = 16;
 
     int scissors[maxScissors * 4];
@@ -1019,8 +1034,8 @@ void CommandBufferImpl<NvnApi>::SetScissors(int firstScissor, int scissorCount,
     nvnCommandBufferSetScissors(pNvnCommandBuffer, firstScissor, scissorCount, scissors);
 }
 
-void CommandBufferImpl<NvnApi>::SetConstantBuffer(int slot, ShaderStage stage,
-                                                  const DescriptorSlot& constantBufferDescriptor) {
+void CommandBufferImpl<ApiVariationNvn8>::SetConstantBuffer(
+    int slot, ShaderStage stage, const DescriptorSlot& constantBufferDescriptor) {
     nn::util::ConstBytePtr pDescriptor(ToPtr<void*>(constantBufferDescriptor));
     NVNbufferAddress address = *pDescriptor.Get<NVNbufferAddress>();
     size_t size = *pDescriptor.Advance(8).Get<size_t>();
@@ -1029,7 +1044,7 @@ void CommandBufferImpl<NvnApi>::SetConstantBuffer(int slot, ShaderStage stage,
                                       size);
 }
 
-void CommandBufferImpl<NvnApi>::SetUnorderedAccessBuffer(
+void CommandBufferImpl<ApiVariationNvn8>::SetUnorderedAccessBuffer(
     int slot, ShaderStage stage, const DescriptorSlot& unorderedAccessBufferDescriptor) {
     nn::util::ConstBytePtr pDescriptor(ToPtr<void*>(unorderedAccessBufferDescriptor));
     NVNbufferAddress address = *pDescriptor.Get<NVNbufferAddress>();
@@ -1039,46 +1054,47 @@ void CommandBufferImpl<NvnApi>::SetUnorderedAccessBuffer(
                                       size);
 }
 
-void CommandBufferImpl<NvnApi>::SetTextureAndSampler(int slot, ShaderStage stage,
-                                                     const DescriptorSlot& textureDescriptor,
-                                                     const DescriptorSlot& samplerDescriptor) {
+void CommandBufferImpl<ApiVariationNvn8>::SetTextureAndSampler(
+    int slot, ShaderStage stage, const DescriptorSlot& textureDescriptor,
+    const DescriptorSlot& samplerDescriptor) {
     detail::SetTextureAndSampler(this, stage, slot, textureDescriptor.ToData()->value,
                                  samplerDescriptor.ToData()->value);
 }
 
-void CommandBufferImpl<NvnApi>::SetTexture(int slot, ShaderStage stage,
-                                           const DescriptorSlot& textureDescriptor) {
+void CommandBufferImpl<ApiVariationNvn8>::SetTexture(int slot, ShaderStage stage,
+                                                     const DescriptorSlot& textureDescriptor) {
     NVNtextureHandle textureHandle = nvnDeviceGetTexelFetchHandle(
         pNnDevice->ToData()->pNvnDevice, textureDescriptor.ToData()->value);
 
     nvnCommandBufferBindTexture(pNvnCommandBuffer, Nvn::GetShaderStage(stage), slot, textureHandle);
 }
 
-void CommandBufferImpl<NvnApi>::SetImage(int slot, ShaderStage stage,
-                                         const DescriptorSlot& imageDescriptor) {
+void CommandBufferImpl<ApiVariationNvn8>::SetImage(int slot, ShaderStage stage,
+                                                   const DescriptorSlot& imageDescriptor) {
     NVNtextureHandle imageHandle =
         nvnDeviceGetImageHandle(pNnDevice->ToData()->pNvnDevice, imageDescriptor.ToData()->value);
 
     nvnCommandBufferBindImage(pNvnCommandBuffer, Nvn::GetShaderStage(stage), slot, imageHandle);
 }
 
-void CommandBufferImpl<NvnApi>::SetConstantBuffer(int slot, ShaderStage stage,
-                                                  const GpuAddress& constantBufferAddress,
-                                                  size_t size) {
+void CommandBufferImpl<ApiVariationNvn8>::SetConstantBuffer(int slot, ShaderStage stage,
+                                                            const GpuAddress& constantBufferAddress,
+                                                            size_t size) {
     nvnCommandBufferBindUniformBuffer(pNvnCommandBuffer, Nvn::GetShaderStage(stage), slot,
                                       Nvn::GetBufferAddress(constantBufferAddress), size);
 }
 
-void CommandBufferImpl<NvnApi>::SetUnorderedAccessBuffer(
+void CommandBufferImpl<ApiVariationNvn8>::SetUnorderedAccessBuffer(
     int slot, ShaderStage stage, const GpuAddress& unorderedAccessBufferAddress, size_t size) {
     nvnCommandBufferBindStorageBuffer(pNvnCommandBuffer, Nvn::GetShaderStage(stage), slot,
                                       Nvn::GetBufferAddress(unorderedAccessBufferAddress), size);
 }
 
-void CommandBufferImpl<NvnApi>::SetTextureAndSampler(int, ShaderStage,
-                                                     const TextureViewImpl<NvnApi>*,
-                                                     const SamplerImpl<NvnApi>*) {}
+void CommandBufferImpl<ApiVariationNvn8>::SetTextureAndSampler(
+    int, ShaderStage, const TextureViewImpl<ApiVariationNvn8>*,
+    const SamplerImpl<ApiVariationNvn8>*) {}
 
-void CommandBufferImpl<NvnApi>::SetImage(int, ShaderStage, const TextureViewImpl<NvnApi>*) {}
+void CommandBufferImpl<ApiVariationNvn8>::SetImage(int, ShaderStage,
+                                                   const TextureViewImpl<ApiVariationNvn8>*) {}
 
 }  // namespace nn::gfx::detail

@@ -9,7 +9,7 @@
 namespace nn::gfx {
 
 template <>
-struct CommandBufferImplData<NvnApi> {
+struct CommandBufferImplData<ApiVariationNvn8> {
     enum Flag { Flag_Shared, Flag_ConservativeRasterSupported };
 
     enum State { State_NotInitialized, State_Initialized, State_Begun };
@@ -17,8 +17,8 @@ struct CommandBufferImplData<NvnApi> {
     Bit8 state;
     nn::util::BitPack8 flags;
     char reserved[6];
-    detail::Ptr<detail::DeviceImpl<NvnApi>> pNnDevice;
-    detail::Ptr<const detail::RootSignatureImpl<NvnApi>> pGfxRootSignature;
+    detail::Ptr<detail::DeviceImpl<ApiVariationNvn8>> pNnDevice;
+    detail::Ptr<const detail::RootSignatureImpl<ApiVariationNvn8>> pGfxRootSignature;
 
     struct {
         char reserved[160];

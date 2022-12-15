@@ -17,7 +17,7 @@ int Nvn::GetFirstScanBufferIndex() {
 }
 
 void Nvn::SetPackagedTextureDataImpl(NVNtextureBuilder*, const TextureInfo&,
-                                     MemoryPoolImpl<NvnApi>*, ptrdiff_t, size_t) {}
+                                     MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t, size_t) {}
 
 void Nvn::SetTextureViewFormat(NVNtextureView* pTextureView, NVNformat value, const NVNtexture*) {
     nvnTextureViewSetFormat(pTextureView, value);

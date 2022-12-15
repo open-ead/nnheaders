@@ -21,24 +21,24 @@ class ScissorStateInfo;
 namespace detail {
 
 template <>
-class CommandBufferImpl<NvnApi> : public DataContainer<CommandBufferImplData<NvnApi>> {
+class CommandBufferImpl<ApiVariationNvn8> : public DataContainer<CommandBufferImplData<ApiVariationNvn8>> {
     NN_NO_COPY(CommandBufferImpl);
 
 public:
     typedef CommandBufferInfo InfoType;
 
-    typedef void (*OutOfMemoryEventCallback)(TCommandBuffer<NvnApi>*, const OutOfMemoryEventArg&);
+    typedef void (*OutOfMemoryEventCallback)(TCommandBuffer<ApiVariationNvn8>*, const OutOfMemoryEventArg&);
 
-    static size_t GetCommandMemoryAlignment(DeviceImpl<NvnApi>*);
-    static size_t GetControlMemoryAlignment(DeviceImpl<NvnApi>*);
+    static size_t GetCommandMemoryAlignment(DeviceImpl<ApiVariationNvn8>*);
+    static size_t GetControlMemoryAlignment(DeviceImpl<ApiVariationNvn8>*);
 
     CommandBufferImpl();
     ~CommandBufferImpl();
 
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
 
-    void AddCommandMemory(MemoryPoolImpl<NvnApi>*, ptrdiff_t, size_t);
+    void AddCommandMemory(MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t, size_t);
     void AddControlMemory(void*, size_t);
 
     void SetOutOfCommandMemoryEventCallback(OutOfMemoryEventCallback);
@@ -57,53 +57,53 @@ public:
     void DrawIndirect(PrimitiveTopology, const GpuAddress&);
     void DrawIndexedIndirect(PrimitiveTopology, IndexFormat, const GpuAddress&, const GpuAddress&);
 
-    void SetPipeline(const PipelineImpl<NvnApi>*);
-    void SetRenderTargets(int, const ColorTargetViewImpl<NvnApi>* const*,
-                          const DepthStencilViewImpl<NvnApi>*);
+    void SetPipeline(const PipelineImpl<ApiVariationNvn8>*);
+    void SetRenderTargets(int, const ColorTargetViewImpl<ApiVariationNvn8>* const*,
+                          const DepthStencilViewImpl<ApiVariationNvn8>*);
     void SetVertexBuffer(int, const GpuAddress&, ptrdiff_t, size_t);
-    void SetViewportScissorState(const ViewportScissorStateImpl<NvnApi>*);
+    void SetViewportScissorState(const ViewportScissorStateImpl<ApiVariationNvn8>*);
 
-    void CopyBuffer(BufferImpl<NvnApi>*, ptrdiff_t, const BufferImpl<NvnApi>*, ptrdiff_t, size_t);
-    void CopyImage(TextureImpl<NvnApi>*, const TextureSubresource&, int, int, int,
-                   const TextureImpl<NvnApi>*, const TextureCopyRegion&);
-    void CopyBufferToImage(TextureImpl<NvnApi>*, const BufferImpl<NvnApi>*,
+    void CopyBuffer(BufferImpl<ApiVariationNvn8>*, ptrdiff_t, const BufferImpl<ApiVariationNvn8>*, ptrdiff_t, size_t);
+    void CopyImage(TextureImpl<ApiVariationNvn8>*, const TextureSubresource&, int, int, int,
+                   const TextureImpl<ApiVariationNvn8>*, const TextureCopyRegion&);
+    void CopyBufferToImage(TextureImpl<ApiVariationNvn8>*, const BufferImpl<ApiVariationNvn8>*,
                            const BufferTextureCopyRegion&);
-    void CopyBufferToImage(TextureImpl<NvnApi>*, const TextureCopyRegion&,
-                           const BufferImpl<NvnApi>*, ptrdiff_t);
-    void CopyImageToBuffer(BufferImpl<NvnApi>*, const TextureImpl<NvnApi>*,
+    void CopyBufferToImage(TextureImpl<ApiVariationNvn8>*, const TextureCopyRegion&,
+                           const BufferImpl<ApiVariationNvn8>*, ptrdiff_t);
+    void CopyImageToBuffer(BufferImpl<ApiVariationNvn8>*, const TextureImpl<ApiVariationNvn8>*,
                            const BufferTextureCopyRegion&);
-    void CopyImageToBuffer(BufferImpl<NvnApi>*, ptrdiff_t, const TextureImpl<NvnApi>*,
+    void CopyImageToBuffer(BufferImpl<ApiVariationNvn8>*, ptrdiff_t, const TextureImpl<ApiVariationNvn8>*,
                            const TextureCopyRegion&);
-    void BlitImage(TextureImpl<NvnApi>*, const TextureCopyRegion&, const TextureImpl<NvnApi>*,
+    void BlitImage(TextureImpl<ApiVariationNvn8>*, const TextureCopyRegion&, const TextureImpl<ApiVariationNvn8>*,
                    const TextureCopyRegion&, int);
-    void ClearBuffer(BufferImpl<NvnApi>*, ptrdiff_t, size_t, uint32_t);
-    void ClearColor(ColorTargetViewImpl<NvnApi>*, float, float, float, float,
+    void ClearBuffer(BufferImpl<ApiVariationNvn8>*, ptrdiff_t, size_t, uint32_t);
+    void ClearColor(ColorTargetViewImpl<ApiVariationNvn8>*, float, float, float, float,
                     const TextureArrayRange*);
-    void ClearColorTarget(ColorTargetViewImpl<NvnApi>*, const ClearColorValue&,
+    void ClearColorTarget(ColorTargetViewImpl<ApiVariationNvn8>*, const ClearColorValue&,
                           const TextureArrayRange*);
-    void ClearDepthStencil(DepthStencilViewImpl<NvnApi>*, float, int, DepthStencilClearMode,
+    void ClearDepthStencil(DepthStencilViewImpl<ApiVariationNvn8>*, float, int, DepthStencilClearMode,
                            const TextureArrayRange*);
 
-    void Resolve(TextureImpl<NvnApi>*, int, int, const ColorTargetViewImpl<NvnApi>*,
+    void Resolve(TextureImpl<ApiVariationNvn8>*, int, int, const ColorTargetViewImpl<ApiVariationNvn8>*,
                  const TextureArrayRange*);
     void FlushMemory(int);
     void InvalidateMemory(int);
 
-    void CallCommandBuffer(const CommandBufferImpl<NvnApi>*);
-    void CopyCommandBuffer(const CommandBufferImpl<NvnApi>*);
+    void CallCommandBuffer(const CommandBufferImpl<ApiVariationNvn8>*);
+    void CopyCommandBuffer(const CommandBufferImpl<ApiVariationNvn8>*);
 
-    void SetBufferStateTransition(BufferImpl<NvnApi>*, int, int, int, int);
-    void SetTextureStateTransition(TextureImpl<NvnApi>*, const TextureSubresourceRange*, int, int,
+    void SetBufferStateTransition(BufferImpl<ApiVariationNvn8>*, int, int, int, int);
+    void SetTextureStateTransition(TextureImpl<ApiVariationNvn8>*, const TextureSubresourceRange*, int, int,
                                    int, int);
-    void SetDescriptorPool(const DescriptorPoolImpl<NvnApi>*);
-    void SetRootSignature(PipelineType, RootSignatureImpl<NvnApi>*);
+    void SetDescriptorPool(const DescriptorPoolImpl<ApiVariationNvn8>*);
+    void SetRootSignature(PipelineType, RootSignatureImpl<ApiVariationNvn8>*);
     void SetRootBufferDescriptorTable(PipelineType, int, const DescriptorSlot&);
     void SetRootTextureAndSamplerDescriptorTable(PipelineType, int, const DescriptorSlot&,
                                                  const DescriptorSlot&);
     void SetRootConstantBuffer(PipelineType, int, const GpuAddress&, size_t);
     void SetRootUnorderedAccessBuffer(PipelineType, int, const GpuAddress&, size_t);
-    void SetRootTextureAndSampler(PipelineType, int, const TextureViewImpl<NvnApi>*,
-                                  const SamplerImpl<NvnApi>*);
+    void SetRootTextureAndSampler(PipelineType, int, const TextureViewImpl<ApiVariationNvn8>*,
+                                  const SamplerImpl<ApiVariationNvn8>*);
 
     void BeginQuery(QueryTarget);
     void EndQuery(const GpuAddress&, QueryTarget);
@@ -122,16 +122,16 @@ public:
 
     void SetConstantBuffer(int, ShaderStage, const GpuAddress&, size_t);
     void SetUnorderedAccessBuffer(int, ShaderStage, const GpuAddress&, size_t);
-    void SetTextureAndSampler(int, ShaderStage, const TextureViewImpl<NvnApi>*,
-                              const SamplerImpl<NvnApi>*);
-    void SetImage(int, ShaderStage, const TextureViewImpl<NvnApi>*);
+    void SetTextureAndSampler(int, ShaderStage, const TextureViewImpl<ApiVariationNvn8>*,
+                              const SamplerImpl<ApiVariationNvn8>*);
+    void SetImage(int, ShaderStage, const TextureViewImpl<ApiVariationNvn8>*);
 
-    void SetShader(const ShaderImpl<NvnApi>*, int);
-    void SetRasterizerState(const RasterizerStateImpl<NvnApi>*);
-    void SetBlendState(const BlendStateImpl<NvnApi>*);
-    void SetDepthStencilState(const DepthStencilStateImpl<NvnApi>*);
-    void SetVertexState(const VertexStateImpl<NvnApi>*);
-    void SetTessellationState(const TessellationStateImpl<NvnApi>*);
+    void SetShader(const ShaderImpl<ApiVariationNvn8>*, int);
+    void SetRasterizerState(const RasterizerStateImpl<ApiVariationNvn8>*);
+    void SetBlendState(const BlendStateImpl<ApiVariationNvn8>*);
+    void SetDepthStencilState(const DepthStencilStateImpl<ApiVariationNvn8>*);
+    void SetVertexState(const VertexStateImpl<ApiVariationNvn8>*);
+    void SetTessellationState(const TessellationStateImpl<ApiVariationNvn8>*);
 };
 
 }  // namespace detail

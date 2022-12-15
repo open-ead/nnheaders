@@ -8,7 +8,7 @@
 namespace nn::gfx {
 
 template <>
-struct BufferImplData<NvnApi> {
+struct BufferImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
 
     enum Flag { Flag_Shared, Flag_CpuCached };
@@ -22,7 +22,7 @@ struct BufferImplData<NvnApi> {
 };
 
 template <>
-struct BufferTextureViewImplData<NvnApi> {
+struct BufferTextureViewImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
     enum Flag { Flag_Shared };
 

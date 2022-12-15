@@ -26,10 +26,11 @@ struct SinCosSample {
 
 extern SinCosSample SinCosSampleTable[4];
 
-// todo:
+/* todo:
 inline float ModPi(float x) {
     float factor;
     float roundedQuotient;
 }
+*/
 
 };  // namespace nn::util::detail

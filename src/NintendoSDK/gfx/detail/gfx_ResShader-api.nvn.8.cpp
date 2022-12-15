@@ -13,9 +13,8 @@ namespace nn::gfx {
 namespace detail {
 
 template <>
-size_t
-ResShaderProgramImpl::NvnGetRecommendedScrachMemorySize<NvnApi>(const ResShaderProgram* pThis,
-                                                                DeviceImpl<NvnApi>* pDevice) {
+size_t ResShaderProgramImpl::NvnGetRecommendedScrachMemorySize<ApiVariationNvn8>(
+    const ResShaderProgram* pThis, DeviceImpl<ApiVariationNvn8>* pDevice) {
     static detail::Ptr<const void> ShaderInfoData::*s_pStageCodes[] = {
         &ShaderInfoData::pVertexShaderCode, &ShaderInfoData::pHullShaderCode,
         &ShaderInfoData::pDomainShaderCode, &ShaderInfoData::pGeometryShaderCode,
@@ -56,17 +55,13 @@ ResShaderProgramImpl::NvnGetRecommendedScrachMemorySize<NvnApi>(const ResShaderP
 }
 
 template <>
-void ResShaderContainerImpl::Initialize<NvnApi>(ResShaderContainer* pThis,
-                                                DeviceImpl<NvnApi>* pDevice,
-                                                MemoryPoolImpl<NvnApi>* pMemoryPool,
-                                                ptrdiff_t memoryPoolOffset, size_t memoryPoolSize) {
+void ResShaderContainerImpl::Initialize<ApiVariationNvn8>(
+    ResShaderContainer* pThis, DeviceImpl<ApiVariationNvn8>* pDevice,
+    MemoryPoolImpl<ApiVariationNvn8>* pMemoryPool, ptrdiff_t memoryPoolOffset,
+    [[maybe_unused]] size_t memoryPoolSize) {
     ResShaderContainer::value_type& data = pThis->ToData();
     NvnShaderPool* pShaderPool = static_cast<NvnShaderPool*>(data.pShaderBinaryPool.Get());
     MemoryPoolInfo& memoryPoolInfo = DataToAccessor(pShaderPool->memoryPoolInfo);
-
-    // seems to be used with an assert
-    int majorVersion, minorVersion, minMajorVersion, minMinorVersion, maxMajorVersion,
-        maxMinorVersion;
 
     NVNbufferAddress headAddress;
 
@@ -78,7 +73,7 @@ void ResShaderContainerImpl::Initialize<NvnApi>(ResShaderContainer* pThis,
         headAddress += offset;
     } else {
         auto pInternalMemoryPool =
-            static_cast<MemoryPoolImpl<NvnApi>*>(pShaderPool->pMemoryPool.Get());
+            static_cast<MemoryPoolImpl<ApiVariationNvn8>*>(pShaderPool->pMemoryPool.Get());
         pInternalMemoryPool->Initialize(pDevice, memoryPoolInfo);
         pShaderPool->pCurrentMemoryPool.Set(pInternalMemoryPool);
         headAddress = nvnMemoryPoolGetBufferAddress(pInternalMemoryPool->ToData()->pNvnMemoryPool);
@@ -106,13 +101,13 @@ void ResShaderContainerImpl::Initialize<NvnApi>(ResShaderContainer* pThis,
 }
 
 template <>
-void ResShaderContainerImpl::Finalize<NvnApi>(ResShaderContainer* pThis,
-                                              DeviceImpl<NvnApi>* pDevice) {
+void ResShaderContainerImpl::Finalize<ApiVariationNvn8>(ResShaderContainer* pThis,
+                                                        DeviceImpl<ApiVariationNvn8>* pDevice) {
     ResShaderContainer::value_type& data = pThis->ToData();
     NvnShaderPool* pShaderPool = static_cast<NvnShaderPool*>(data.pShaderBinaryPool.Get());
 
     auto pCurrentMemoryPool =
-        static_cast<MemoryPoolImpl<NvnApi>*>(pShaderPool->pCurrentMemoryPool.Get());
+        static_cast<MemoryPoolImpl<ApiVariationNvn8>*>(pShaderPool->pCurrentMemoryPool.Get());
 
     if (pCurrentMemoryPool == pShaderPool->pMemoryPool.Get()) {
         pCurrentMemoryPool->Finalize(pDevice);
@@ -123,10 +118,9 @@ void ResShaderContainerImpl::Finalize<NvnApi>(ResShaderContainer* pThis,
 }  // namespace detail
 
 template <>
-size_t
-NvnGetMaxRecommendedScratchMemorySize<NvnApi>(TDevice<NvnApi>* pDevice,
-                                              const ResShaderFile* const* ppResShaderFileArray,
-                                              int shaderFileCount) {
+size_t NvnGetMaxRecommendedScratchMemorySize<ApiVariationNvn8>(
+    TDevice<ApiVariationNvn8>* pDevice, const ResShaderFile* const* ppResShaderFileArray,
+    int shaderFileCount) {
     static detail::Ptr<const void> ShaderInfoData::*s_pStageCodes[] = {
         &ShaderInfoData::pVertexShaderCode, &ShaderInfoData::pHullShaderCode,
         &ShaderInfoData::pDomainShaderCode, &ShaderInfoData::pGeometryShaderCode,

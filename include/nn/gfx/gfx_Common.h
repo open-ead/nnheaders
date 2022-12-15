@@ -13,8 +13,8 @@ namespace nn::gfx {
 enum LowLevelApi { LowLevelApi_Common = 0 };
 
 // todo: seems to be named ApiVariationNvn8
-using NvnApi = ApiVariation<ApiType<4>, ApiVersion<8>>;
-using DefaultApi = NvnApi;
+using ApiVariationNvn8 = ApiVariation<ApiType<4>, ApiVersion<8>>;
+using DefaultApi = ApiVariationNvn8;
 
 struct OutOfMemoryEventArg {
     size_t minRequiredSize;

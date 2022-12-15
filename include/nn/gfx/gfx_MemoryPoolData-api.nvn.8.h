@@ -8,7 +8,7 @@
 namespace nn::gfx {
 
 template <>
-struct MemoryPoolImplData<NvnApi> {
+struct MemoryPoolImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
     enum Flag { Flag_Shared };
 

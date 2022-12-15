@@ -11,18 +11,18 @@ class ShaderInfo;
 namespace detail {
 
 template <>
-class ShaderImpl<NvnApi> : public DataContainer<ShaderImplData<NvnApi>> {
+class ShaderImpl<ApiVariationNvn8> : public DataContainer<ShaderImplData<ApiVariationNvn8>> {
     NN_NO_COPY(ShaderImpl);
 
 public:
     typedef ShaderInfo InfoType;
 
-    static size_t GetBinaryCodeAlignment(DeviceImpl<NvnApi>*);
+    static size_t GetBinaryCodeAlignment(DeviceImpl<ApiVariationNvn8>*);
 
     ShaderImpl();
     ~ShaderImpl();
-    ShaderInitializeResult Initialize(DeviceImpl<NvnApi>*, const InfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
+    ShaderInitializeResult Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
     int GetInterfaceSlot(ShaderStage, ShaderInterfaceType, const char*) const;
     void GetWorkGroupSize(int*, int*, int*) const;
 };

@@ -10,7 +10,7 @@ class SamplerInfo;
 
 namespace detail {
 template <>
-class SamplerImpl<NvnApi> : public DataContainer<SamplerImplData<NvnApi>> {
+class SamplerImpl<ApiVariationNvn8> : public DataContainer<SamplerImplData<ApiVariationNvn8>> {
     NN_NO_COPY(SamplerImpl);
 
 public:
@@ -18,8 +18,8 @@ public:
 
     SamplerImpl();
     ~SamplerImpl();
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
 };
 
 }  // namespace detail

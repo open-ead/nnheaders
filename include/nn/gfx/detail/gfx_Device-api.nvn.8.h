@@ -16,7 +16,7 @@ class DeviceInfo;
 namespace detail {
 
 template <>
-class DeviceImpl<NvnApi> : public DataContainer<DeviceImplData<NvnApi>> {
+class DeviceImpl<ApiVariationNvn8> : public DataContainer<DeviceImplData<ApiVariationNvn8>> {
     NN_NO_COPY(DeviceImpl);
 
 public:

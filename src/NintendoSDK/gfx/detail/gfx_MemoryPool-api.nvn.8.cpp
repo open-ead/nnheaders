@@ -7,22 +7,24 @@
 
 namespace nn::gfx::detail {
 
-size_t MemoryPoolImpl<NvnApi>::GetPoolMemoryAlignment(DeviceImpl<NvnApi>*, const MemoryPoolInfo&) {
+size_t MemoryPoolImpl<ApiVariationNvn8>::GetPoolMemoryAlignment(DeviceImpl<ApiVariationNvn8>*,
+                                                                const MemoryPoolInfo&) {
     return 0x1000;
 }
 
-size_t MemoryPoolImpl<NvnApi>::GetPoolMemorySizeGranularity(DeviceImpl<NvnApi>*,
-                                                            const MemoryPoolInfo&) {
+size_t MemoryPoolImpl<ApiVariationNvn8>::GetPoolMemorySizeGranularity(DeviceImpl<ApiVariationNvn8>*,
+                                                                      const MemoryPoolInfo&) {
     return 0x1000;
 }
 
-MemoryPoolImpl<NvnApi>::MemoryPoolImpl() {
+MemoryPoolImpl<ApiVariationNvn8>::MemoryPoolImpl() {
     state = State_NotInitialized;
 }
 
-MemoryPoolImpl<NvnApi>::~MemoryPoolImpl() {}
+MemoryPoolImpl<ApiVariationNvn8>::~MemoryPoolImpl() {}
 
-void MemoryPoolImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const MemoryPoolInfo& info) {
+void MemoryPoolImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                                  const MemoryPoolInfo& info) {
     int memoryPoolFlags = Nvn::GetMemoryPoolFlags(info.GetMemoryPoolProperty());
 
     pNvnMemoryPool = &nvnMemoryPool;
@@ -33,29 +35,29 @@ void MemoryPoolImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice, const Memor
     nvnMemoryPoolBuilderSetDefaults(&builder);
     nvnMemoryPoolBuilderSetFlags(&builder, memoryPoolFlags);
     nvnMemoryPoolBuilderSetStorage(&builder, info.GetPoolMemory(), info.GetPoolMemorySize());
-    NVNboolean isMemoryPoolOk = nvnMemoryPoolInitialize(pNvnMemoryPool, &builder);
+    nvnMemoryPoolInitialize(pNvnMemoryPool, &builder);
 
     flags.SetBit(Flag_Shared, false);
     state = State_Initialized;
 }
 
-void MemoryPoolImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>*) {
+void MemoryPoolImpl<ApiVariationNvn8>::Finalize(DeviceImpl<ApiVariationNvn8>*) {
     nvnMemoryPoolFinalize(pNvnMemoryPool);
     pMemory = nullptr;
     state = State_NotInitialized;
 }
 
-void* MemoryPoolImpl<NvnApi>::Map() const {
+void* MemoryPoolImpl<ApiVariationNvn8>::Map() const {
     return nvnMemoryPoolMap(pNvnMemoryPool);
 }
 
-void MemoryPoolImpl<NvnApi>::Unmap() const {}
+void MemoryPoolImpl<ApiVariationNvn8>::Unmap() const {}
 
-void MemoryPoolImpl<NvnApi>::FlushMappedRange(ptrdiff_t offset, size_t size) const {
+void MemoryPoolImpl<ApiVariationNvn8>::FlushMappedRange(ptrdiff_t offset, size_t size) const {
     nvnMemoryPoolFlushMappedRange(pNvnMemoryPool, offset, size);
 }
 
-void MemoryPoolImpl<NvnApi>::InvalidateMappedRange(ptrdiff_t offset, size_t size) const {
+void MemoryPoolImpl<ApiVariationNvn8>::InvalidateMappedRange(ptrdiff_t offset, size_t size) const {
     nvnMemoryPoolInvalidateMappedRange(pNvnMemoryPool, offset, size);
 }
 

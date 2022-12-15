@@ -10,7 +10,7 @@ class QueueInfo;
 namespace detail {
 
 template <>
-class QueueImpl<NvnApi> : public DataContainer<QueueImplData<NvnApi>> {
+class QueueImpl<ApiVariationNvn8> : public DataContainer<QueueImplData<ApiVariationNvn8>> {
     NN_NO_COPY(QueueImpl);
 
 public:
@@ -18,15 +18,15 @@ public:
 
     QueueImpl();
     ~QueueImpl();
-    void Initialize(DeviceImpl<NvnApi>*, const InfoType&);
-    void Finalize(DeviceImpl<NvnApi>*);
-    void ExecuteCommand(CommandBufferImpl<NvnApi>*, FenceImpl<NvnApi>*);
+    void Initialize(DeviceImpl<ApiVariationNvn8>*, const InfoType&);
+    void Finalize(DeviceImpl<ApiVariationNvn8>*);
+    void ExecuteCommand(CommandBufferImpl<ApiVariationNvn8>*, FenceImpl<ApiVariationNvn8>*);
     void Flush() const;
     void Sync() const;
-    void SetSemaphore(SemaphoreImpl<NvnApi>*);
-    void SyncSemaphore(const SemaphoreImpl<NvnApi>*);
-    void CopyToScanBuffer(SwapChainImpl<NvnApi>*, const ColorTargetViewImpl<NvnApi>*);
-    void Present(SwapChainImpl<NvnApi>*, int);
+    void SetSemaphore(SemaphoreImpl<ApiVariationNvn8>*);
+    void SyncSemaphore(const SemaphoreImpl<ApiVariationNvn8>*);
+    void CopyToScanBuffer(SwapChainImpl<ApiVariationNvn8>*, const ColorTargetViewImpl<ApiVariationNvn8>*);
+    void Present(SwapChainImpl<ApiVariationNvn8>*, int);
 };
 
 }  // namespace detail

@@ -265,15 +265,10 @@ ImageDimension GetImageDimension(ImageStorageDimension imageStorageDimension, bo
 }
 
 bool CheckBinaryTarget(const ResShaderContainerData& resShaderContainer, int lowLevelApi,
-                       int apiVersion) {
-    const char* s_LowLevelApiToStringTable[6];
-
+                       [[maybe_unused]] int apiVersion) {
     int targetApi = resShaderContainer.targetApiType;
 
     if (targetApi == 3) {
-        // some logging?
-        const char* pTargetApiString;
-
         targetApi = 4;
     }
 

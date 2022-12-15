@@ -7,7 +7,7 @@
 namespace nn::gfx {
 
 template <>
-struct ShaderImplData<NvnApi> {
+struct ShaderImplData<ApiVariationNvn8> {
     enum State { State_NotInitialized, State_Initialized };
     enum Flag { Flag_SeparationEnable, Flag_ResShader, Flag_Shared };
 

@@ -71,7 +71,7 @@ public:
     static void GetImageFormatProperty(ImageFormatProperty*, NVNformat);
     static int GetFirstScanBufferIndex();
     static void SetPackagedTextureDataImpl(NVNtextureBuilder*, const TextureInfo&,
-                                           MemoryPoolImpl<NvnApi>*, ptrdiff_t, size_t);
+                                           MemoryPoolImpl<ApiVariationNvn8>*, ptrdiff_t, size_t);
     static void SetTextureViewFormat(NVNtextureView*, NVNformat, const NVNtexture*);
     static void DebugCallback(NVNdebugCallbackSource, NVNdebugCallbackType, int,
                               NVNdebugCallbackSeverity, const char*, void*);

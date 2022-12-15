@@ -19,8 +19,8 @@ const size_t g_DescriptorSlotIncrementSize[3] = {16, 1, 1};
 
 }  // namespace
 
-size_t DescriptorPoolImpl<NvnApi>::CalculateDescriptorPoolSize(DeviceImpl<NvnApi>* pDevice,
-                                                               const DescriptorPoolInfo& info) {
+size_t DescriptorPoolImpl<ApiVariationNvn8>::CalculateDescriptorPoolSize(
+    DeviceImpl<ApiVariationNvn8>* pDevice, const DescriptorPoolInfo& info) {
     switch (info.GetDescriptorPoolType()) {
     case DescriptorPoolType_TextureView: {
         int reservedTextures = 0;
@@ -52,8 +52,8 @@ size_t DescriptorPoolImpl<NvnApi>::CalculateDescriptorPoolSize(DeviceImpl<NvnApi
     }
 }
 
-size_t DescriptorPoolImpl<NvnApi>::GetDescriptorPoolAlignment(DeviceImpl<NvnApi>* pDevice,
-                                                              const DescriptorPoolInfo& info) {
+size_t DescriptorPoolImpl<ApiVariationNvn8>::GetDescriptorPoolAlignment(
+    DeviceImpl<ApiVariationNvn8>* pDevice, const DescriptorPoolInfo& info) {
     switch (info.GetDescriptorPoolType()) {
     case DescriptorPoolType_TextureView: {
         int textureDescriptorSize = 0;
@@ -78,18 +78,19 @@ size_t DescriptorPoolImpl<NvnApi>::GetDescriptorPoolAlignment(DeviceImpl<NvnApi>
     }
 }
 
-ptrdiff_t DescriptorPoolImpl<NvnApi>::GetDescriptorSlotIncrementSize(DeviceImpl<NvnApi>* pDevice,
-                                                                     DescriptorPoolType type) {
+ptrdiff_t DescriptorPoolImpl<ApiVariationNvn8>::GetDescriptorSlotIncrementSize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice, DescriptorPoolType type) {
     return g_DescriptorSlotIncrementSize[type];
 }
 
-DescriptorPoolImpl<NvnApi>::DescriptorPoolImpl() {}
-DescriptorPoolImpl<NvnApi>::~DescriptorPoolImpl() {}
+DescriptorPoolImpl<ApiVariationNvn8>::DescriptorPoolImpl() {}
+DescriptorPoolImpl<ApiVariationNvn8>::~DescriptorPoolImpl() {}
 
-void DescriptorPoolImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice,
-                                            const DescriptorPoolInfo& info,
-                                            MemoryPoolImpl<NvnApi>* pMemoryPool,
-                                            ptrdiff_t memoryPoolOffset, size_t memoryPoolSize) {
+void DescriptorPoolImpl<ApiVariationNvn8>::Initialize(DeviceImpl<ApiVariationNvn8>* pDevice,
+                                                      const DescriptorPoolInfo& info,
+                                                      MemoryPoolImpl<ApiVariationNvn8>* pMemoryPool,
+                                                      ptrdiff_t memoryPoolOffset,
+                                                      [[maybe_unused]] size_t memoryPoolSize) {
     descriptorPoolType = info.GetDescriptorPoolType();
     slotCount = info.GetSlotCount();
 
@@ -127,7 +128,8 @@ void DescriptorPoolImpl<NvnApi>::Initialize(DeviceImpl<NvnApi>* pDevice,
     state = State_Initialized;
 }
 
-void DescriptorPoolImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>* pDevice) {
+void DescriptorPoolImpl<ApiVariationNvn8>::Finalize(
+    [[maybe_unused]] DeviceImpl<ApiVariationNvn8>* pDevice) {
     switch (descriptorPoolType) {
     case DescriptorPoolType_TextureView:
         nvnTexturePoolFinalize(pDescriptorPool);
@@ -144,16 +146,17 @@ void DescriptorPoolImpl<NvnApi>::Finalize(DeviceImpl<NvnApi>* pDevice) {
     state = State_NotInitialized;
 }
 
-void DescriptorPoolImpl<NvnApi>::BeginUpdate() {
+void DescriptorPoolImpl<ApiVariationNvn8>::BeginUpdate() {
     state = State_Begun;
 }
 
-void DescriptorPoolImpl<NvnApi>::EndUpdate() {
+void DescriptorPoolImpl<ApiVariationNvn8>::EndUpdate() {
     state = State_Initialized;
 }
 
-void DescriptorPoolImpl<NvnApi>::SetBufferView(int indexSlot, const GpuAddress& gpuAddress,
-                                               size_t size) {
+void DescriptorPoolImpl<ApiVariationNvn8>::SetBufferView(int indexSlot,
+                                                         const GpuAddress& gpuAddress,
+                                                         size_t size) {
     nn::util::BytePtr pSlot(pDescriptorPool,
                             g_DescriptorSlotIncrementSize[descriptorPoolType] * indexSlot);
 
@@ -161,34 +164,36 @@ void DescriptorPoolImpl<NvnApi>::SetBufferView(int indexSlot, const GpuAddress& 
     *pSlot.Advance(sizeof(NVNbufferAddress)).Get<size_t>() = size;
 }
 
-void DescriptorPoolImpl<NvnApi>::SetSampler(int indexSlot, const SamplerImpl<NvnApi>* pSampler) {
+void DescriptorPoolImpl<ApiVariationNvn8>::SetSampler(
+    int indexSlot, const SamplerImpl<ApiVariationNvn8>* pSampler) {
     nvnSamplerPoolRegisterSampler(pDescriptorPool, indexSlot, pSampler->ToData()->pNvnSampler);
 }
 
-void DescriptorPoolImpl<NvnApi>::SetTextureView(int indexSlot,
-                                                const TextureViewImpl<NvnApi>* pTextureView) {
+void DescriptorPoolImpl<ApiVariationNvn8>::SetTextureView(
+    int indexSlot, const TextureViewImpl<ApiVariationNvn8>* pTextureView) {
     nvnTexturePoolRegisterTexture(pDescriptorPool, indexSlot, pTextureView->ToData()->pNvnTexture,
                                   pTextureView->ToData()->pNvnTextureView);
 }
 
-void DescriptorPoolImpl<NvnApi>::SetImage(int indexSlot, const TextureViewImpl<NvnApi>* pImage) {
+void DescriptorPoolImpl<ApiVariationNvn8>::SetImage(
+    int indexSlot, const TextureViewImpl<ApiVariationNvn8>* pImage) {
     nvnTexturePoolRegisterImage(pDescriptorPool, indexSlot, pImage->ToData()->pNvnTexture,
                                 pImage->ToData()->pNvnTextureView);
 }
-void DescriptorPoolImpl<NvnApi>::SetBufferTextureView(
-    int indexSlot, const BufferTextureViewImpl<NvnApi>* pBufferTexture) {
+void DescriptorPoolImpl<ApiVariationNvn8>::SetBufferTextureView(
+    int indexSlot, const BufferTextureViewImpl<ApiVariationNvn8>* pBufferTexture) {
     nvnTexturePoolRegisterTexture(pDescriptorPool, indexSlot, pBufferTexture->ToData()->pNvnTexture,
                                   nullptr);
 }
 
-void DescriptorPoolImpl<NvnApi>::SetBufferImage(int indexSlot,
-                                                const BufferTextureViewImpl<NvnApi>* pBufferImage) {
+void DescriptorPoolImpl<ApiVariationNvn8>::SetBufferImage(
+    int indexSlot, const BufferTextureViewImpl<ApiVariationNvn8>* pBufferImage) {
     nvnTexturePoolRegisterImage(pDescriptorPool, indexSlot, pBufferImage->ToData()->pNvnTexture,
                                 nullptr);
 }
 
-void DescriptorPoolImpl<NvnApi>::GetDescriptorSlot(DescriptorSlot* pOutDescriptorSlot,
-                                                   int indexSlot) const {
+void DescriptorPoolImpl<ApiVariationNvn8>::GetDescriptorSlot(DescriptorSlot* pOutDescriptorSlot,
+                                                             int indexSlot) const {
     switch (descriptorPoolType) {
     case DescriptorPoolType_TextureView:
     case DescriptorPoolType_Sampler:
@@ -206,7 +211,8 @@ void DescriptorPoolImpl<NvnApi>::GetDescriptorSlot(DescriptorSlot* pOutDescripto
     }
 }
 
-int DescriptorPoolImpl<NvnApi>::GetDescriptorSlotIndex(const DescriptorSlot& descriptorSlot) const {
+int DescriptorPoolImpl<ApiVariationNvn8>::GetDescriptorSlotIndex(
+    const DescriptorSlot& descriptorSlot) const {
     if (descriptorPoolType == DescriptorPoolType_BufferView) {
         return static_cast<int>(
                    nn::util::ConstBytePtr(pDescriptorPool.ptr)

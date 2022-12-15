@@ -9,22 +9,22 @@
 
 namespace nn::gfx::util {
 template <>
-void SetMemoryPoolDebugLabel<NvnApi>(TMemoryPool<NvnApi>* pMemoryPool, const char* label) {
+void SetMemoryPoolDebugLabel<ApiVariationNvn8>(TMemoryPool<ApiVariationNvn8>* pMemoryPool, const char* label) {
     nvnMemoryPoolSetDebugLabel(pMemoryPool->ToData()->pNvnMemoryPool, label);
 }
 
 template <>
-void SetBufferDebugLabel<NvnApi>(TBuffer<NvnApi>* pBuffer, const char* label) {
+void SetBufferDebugLabel<ApiVariationNvn8>(TBuffer<ApiVariationNvn8>* pBuffer, const char* label) {
     nvnBufferSetDebugLabel(pBuffer->ToData()->pNvnBuffer, label);
 }
 
 template <>
-void SetTextureDebugLabel<NvnApi>(TTexture<NvnApi>* pTexture, const char* label) {
+void SetTextureDebugLabel<ApiVariationNvn8>(TTexture<ApiVariationNvn8>* pTexture, const char* label) {
     nvnTextureSetDebugLabel(pTexture->ToData()->pNvnTexture, label);
 }
 
 template <>
-void SetSamplerDebugLabel<NvnApi>(TSampler<NvnApi>* pSampler, const char* label) {
+void SetSamplerDebugLabel<ApiVariationNvn8>(TSampler<ApiVariationNvn8>* pSampler, const char* label) {
     nvnSamplerSetDebugLabel(pSampler->ToData()->pNvnSampler, label);
 }
 
