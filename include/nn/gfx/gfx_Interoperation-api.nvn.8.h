@@ -15,12 +15,13 @@ class TInteroperation<ApiVariationNvn8> {
     static void ConvertToGfxDescriptorPool(TDescriptorPool<ApiVariationNvn8>*, NVNtexturePool*);
     static void ConvertToGfxDescriptorPool(TDescriptorPool<ApiVariationNvn8>*, NVNsamplerPool*);
     static void ConvertToGfxBuffer(TBuffer<ApiVariationNvn8>*, NVNbuffer*);
-    static void ConvertToGfxCommandBuffer(TCommandBuffer<ApiVariationNvn8>*, TDevice<ApiVariationNvn8>*,
-                                          NVNcommandBuffer*);
+    static void ConvertToGfxCommandBuffer(TCommandBuffer<ApiVariationNvn8>*,
+                                          TDevice<ApiVariationNvn8>*, NVNcommandBuffer*);
     static void ConvertToGfxSampler(TSampler<ApiVariationNvn8>*, NVNsampler*);
     static void ConvertToGfxShader(TShader<ApiVariationNvn8>*, NVNprogram*, bool, int);
     static void ConvertToGfxTexture(TTexture<ApiVariationNvn8>*, NVNtexture*);
-    static void ConvertToGfxTextureView(TTextureView<ApiVariationNvn8>*, NVNtexture*, NVNtextureView*);
+    static void ConvertToGfxTextureView(TTextureView<ApiVariationNvn8>*, NVNtexture*,
+                                        NVNtextureView*);
     static void ConvertToGfxColorTargetView(TColorTargetView<ApiVariationNvn8>*, NVNtexture*,
                                             NVNtextureView*);
     static void ConvertToGfxDepthStencilView(TDepthStencilView<ApiVariationNvn8>*, NVNtexture*,
