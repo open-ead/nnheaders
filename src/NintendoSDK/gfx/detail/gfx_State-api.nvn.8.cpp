@@ -41,7 +41,7 @@ void RasterizerStateImpl<ApiVariationNvn8>::Initialize(
     nvnSampleMask = info.GetMultisampleStateInfo().GetSampleMask();
     nvnMultisampleStateSetDefaults(pMultisampleState);
     nvnMultisampleStateSetMultisampleEnable(pMultisampleState, info.IsMultisampleEnabled());
-#if NN_VER > 351
+#if NN_SDK_VER > 351
     int sampleCount = info.GetMultisampleStateInfo().GetSampleCount();
     nvnMultisampleStateSetSamples(pMultisampleState, (sampleCount > 1) ? sampleCount : 0);
 #else
@@ -106,7 +106,7 @@ void BlendStateImpl<ApiVariationNvn8>::Initialize(
     for (int index = 0; index < info.GetBlendTargetCount(); ++index) {
         int infoIndex = (info.IsIndependentBlendEnabled()) ? index : 0;
 
-#if NN_VER > 351
+#if NN_SDK_VER > 351
         nvnColorStateSetBlendEnable(pColorState, index, pBlendInfo[infoIndex].IsBlendEnabled());
 #else
         nvnColorStateSetBlendEnable(pColorState, index, pBlendInfo[index].IsBlendEnabled());

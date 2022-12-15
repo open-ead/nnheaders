@@ -726,7 +726,7 @@ nn::util::BitPack32 Nvn::GetDeviceFeature(const NVNdevice* device) {
     nvnDeviceGetInteger(device, NVN_DEVICE_INFO_SUPPORTS_FRAGMENT_SHADER_INTERLOCK, &supported);
     feature.SetBit(NvnDeviceFeature_SupportFragmentShaderInterlock, supported);
 
-#if NN_VER > 351
+#if NN_SDK_VER > 351
     nvnDeviceGetInteger(device, NVN_DEVICE_INFO_SUPPORTS_DEBUG_LAYER, &supported);
     feature.SetBit(NvnDeviceFeature_SupportsDebugLayer, supported);
 #endif

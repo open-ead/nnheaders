@@ -27,8 +27,12 @@ void ReferSymbol(const void*);
 }  // namespace util
 }  // namespace nn
 
-#ifndef NN_VER
-#define NN_VER 0
+#ifndef NN_SDK_VER
+#define NN_SDK_VER 0
+#endif
+
+#ifndef NN_WARE_VER
+#define NN_WARE_VER 0
 #endif
 
 #define NN_MIDDLEWARE(var, company, name)                                                          \
