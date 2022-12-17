@@ -2,6 +2,8 @@
 
 namespace nn::util {
 
+typedef uint32_t AngleIndex;
+
 struct Float2 {
     union {
         float v[2];

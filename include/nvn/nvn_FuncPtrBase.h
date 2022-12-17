@@ -1,4 +1,4 @@
-// todo: confirm existance of this file
+// todo: confirm existence of this file
 
 #pragma once
 

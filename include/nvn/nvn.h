@@ -171,7 +171,7 @@ typedef struct {
 } NVNvertexAttribState;
 
 typedef struct {
-    char reserved[0x4];
+    char reserved[0x8];
 } NVNvertexStreamState;
 
 typedef struct {
@@ -347,6 +347,15 @@ typedef enum {
 
     NVN_DEVICE_FLAG_LARGE = 0x7FFFFFFF
 } NVNdeviceFlagBits;
+
+enum NVNclearColorMask {
+    NVN_CLEAR_COLOR_MASK_R_BIT = 0x1,
+    NVN_CLEAR_COLOR_MASK_G_BIT = 0x2,
+    NVN_CLEAR_COLOR_MASK_B_BIT = 0x4,
+    NVN_CLEAR_COLOR_MASK_A_BIT = 0x8,
+    NVN_CLEAR_COLOR_MASK_RGBA = 0xF,
+    NVN_CLEAR_COLOR_MASK_LARGE = 0x7FFFFFFF
+};
 
 typedef enum {
     NVN_DEBUG_CALLBACK_SOURCE_API = 0x0,
@@ -630,6 +639,18 @@ typedef enum {
 } NVNshaderStage;
 
 typedef enum {
+    NVN_SHADER_STAGE_VERTEX_BIT = 0x1,
+    NVN_SHADER_STAGE_FRAGMENT_BIT = 0x2,
+    NVN_SHADER_STAGE_GEOMETRY_BIT = 0x4,
+    NVN_SHADER_STAGE_TESS_CONTROL_BIT = 0x8,
+    NVN_SHADER_STAGE_TESS_EVALUATION_BIT = 0x10,
+    NVN_SHADER_STAGE_COMPUTE_BIT = 0x20,
+    NVN_SHADER_STAGE_ALL_GRAPHICS_BITS = 31,
+
+    NVN_SHADER_STAGE_BITS_LARGE = 0x7FFFFFFF
+} NVNshaderStageBits;
+
+typedef enum {
     NVN_EVENT_WAIT_MODE_EQUAL = 0x0,
     NVN_EVENT_WAIT_MODE_GEQUAL_WRAP = 0x1,
 
@@ -739,6 +760,18 @@ typedef enum {
 
     NVN_TEXTURE_FLAGS_LARGE = 0x7FFFFFFF
 } NVNtextureFlags;
+
+typedef enum {
+    NVN_BARRIER_ORDER_PRIMITIVES_BIT = 0x1,
+    NVN_BARRIER_ORDER_FRAGMENTS_BIT = 0x2,
+    NVN_BARRIER_ORDER_FRAGMENTS_TILED_BIT = 0x4,
+    NVN_BARRIER_ORDER_INDIRECT_DATA_BIT = 0x8,
+    NVN_BARRIER_INVALIDATE_TEXTURE_BIT = 0x10,
+    NVN_BARRIER_INVALIDATE_SHADER_BIT = 0x20,
+    NVN_BARRIER_INVALIDATE_TEXTURE_DESCRIPTOR_BIT = 0x40,
+    NVN_BARRIER_INVALIDATE_ZCULL_BIT = 0x80,
+    NVN_BARRIER_BITS_LARGE = 0x7FFFFFFF
+} NVNbarrierBits;
 
 typedef enum {
     NVN_TEXTURE_TARGET_1D = 0x0,
@@ -1062,6 +1095,16 @@ typedef enum {
     NVN_CONDITIONAL_RENDER_MODE_LARGE = 0x7FFFFFFF
 } NVNconditionalRenderMode;
 
+typedef enum {
+    NVN_COPY_FLAGS_NONE = 0x0,
+    NVN_COPY_FLAGS_LINEAR_FILTER_BIT = 0x1,
+    NVN_COPY_FLAGS_ENGINE_2D_BIT = 0x2,
+    NVN_COPY_FLAGS_MIRROR_X_BIT = 0x4,
+    NVN_COPY_FLAGS_MIRROR_Y_BIT = 0x8,
+    NVN_COPY_FLAGS_MIRROR_Z_BIT = 0x10,
+    NVN_COPY_FLAGS_LARGE = 0x7FFFFFFF
+} NVNcopyFlags;
+
 #ifdef __cplusplus
 }
 #endif
@@ -1076,7 +1119,7 @@ typedef void (*PFNNVNDEBUGCALLBACKPROC)(NVNdebugCallbackSource source, NVNdebugC
 typedef void (*PFNNVNWALKDEBUGDATABASECALLBACKPROC)(void*, void*);
 
 typedef void (*PFNNVNDEVICEBUILDERSETDEFAULTSPROC)(NVNdeviceBuilder*);
-typedef void (*PFNNVNDEVICEBUILDERSETFLAGSPROC)(NVNdeviceBuilder*, NVNdeviceFlagBits);
+typedef void (*PFNNVNDEVICEBUILDERSETFLAGSPROC)(NVNdeviceBuilder*, int);
 typedef NVNboolean (*PFNNVNDEVICEINITIALIZEPROC)(NVNdevice*, const NVNdeviceBuilder*);
 typedef void (*PFNNVNDEVICEFINALIZEPROC)(NVNdevice*);
 typedef void (*PFNNVNDEVICESETDEBUGLABELPROC)(NVNdevice*, const char*);
@@ -1160,7 +1203,7 @@ typedef NVNmemoryPoolFlags (*PFNNVNMEMORYPOOLBUILDERGETFLAGSPROC)(const NVNmemor
 typedef NVNboolean (*PFNNVNMEMORYPOOLINITIALIZEPROC)(NVNmemoryPool*, const NVNmemoryPoolBuilder*);
 typedef void (*PFNNVNMEMORYPOOLSETDEBUGLABELPROC)(NVNmemoryPool*, const char*);
 typedef void (*PFNNVNMEMORYPOOLFINALIZEPROC)(NVNmemoryPool*);
-typedef void (*PFNNVNMEMORYPOOLMAPPROC)(const NVNmemoryPool*);
+typedef void* (*PFNNVNMEMORYPOOLMAPPROC)(const NVNmemoryPool*);
 typedef void (*PFNNVNMEMORYPOOLFLUSHMAPPEDRANGEPROC)(const NVNmemoryPool*, ptrdiff_t, size_t);
 typedef void (*PFNNVNMEMORYPOOLINVALIDATEMAPPEDRANGEPROC)(const NVNmemoryPool*, ptrdiff_t, size_t);
 typedef NVNbufferAddress (*PFNNVNMEMORYPOOLGETBUFFERADDRESSPROC)(const NVNmemoryPool*);
@@ -1198,11 +1241,11 @@ typedef size_t (*PFNNVNBUFFERBUILDERGETSIZEPROC)(const NVNbufferBuilder*);
 typedef NVNboolean (*PFNNVNBUFFERINITIALIZEPROC)(NVNbuffer*, const NVNbufferBuilder*);
 typedef void (*PFNNVNBUFFERSETDEBUGLABELPROC)(NVNbuffer*, const char*);
 typedef void (*PFNNVNBUFFERFINALIZEPROC)(NVNbuffer*);
-typedef void (*PFNNVNBUFFERMAPPROC)(const NVNbuffer*);
+typedef void* (*PFNNVNBUFFERMAPPROC)(const NVNbuffer*);
 typedef NVNbufferAddress (*PFNNVNBUFFERGETADDRESSPROC)(const NVNbuffer*);
 typedef void (*PFNNVNBUFFERFLUSHMAPPEDRANGEPROC)(const NVNbuffer*, ptrdiff_t, size_t);
 typedef void (*PFNNVNBUFFERINVALIDATEMAPPEDRANGEPROC)(const NVNbuffer*, ptrdiff_t, size_t);
-typedef NVNmemoryPool (*PFNNVNBUFFERGETMEMORYPOOLPROC)(const NVNbuffer*);
+typedef NVNmemoryPool* (*PFNNVNBUFFERGETMEMORYPOOLPROC)(const NVNbuffer*);
 typedef ptrdiff_t (*PFNNVNBUFFERGETMEMORYOFFSETPROC)(const NVNbuffer*);
 typedef size_t (*PFNNVNBUFFERGETSIZEPROC)(const NVNbuffer*);
 typedef uint64_t (*PFNNVNBUFFERGETDEBUGIDPROC)(const NVNbuffer*);

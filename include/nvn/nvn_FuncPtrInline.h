@@ -10,7 +10,7 @@ static inline void nvnDeviceBuilderSetDefaults(NVNdeviceBuilder* builder) {
     pfnc_nvnDeviceBuilderSetDefaults(builder);
 }
 
-static inline void nvnDeviceBuilderSetFlags(NVNdeviceBuilder* builder, NVNdeviceFlagBits flags) {
+static inline void nvnDeviceBuilderSetFlags(NVNdeviceBuilder* builder, int flags) {
     pfnc_nvnDeviceBuilderSetFlags(builder, flags);
 }
 
@@ -356,8 +356,8 @@ static inline void nvnMemoryPoolFinalize(NVNmemoryPool* pool) {
     pfnc_nvnMemoryPoolFinalize(pool);
 }
 
-static inline void nvnMemoryPoolMap(const NVNmemoryPool* pool) {
-    pfnc_nvnMemoryPoolMap(pool);
+static inline void* nvnMemoryPoolMap(const NVNmemoryPool* pool) {
+    return pfnc_nvnMemoryPoolMap(pool);
 }
 
 static inline void nvnMemoryPoolFlushMappedRange(const NVNmemoryPool* pool, ptrdiff_t offset,
@@ -498,8 +498,8 @@ static inline void nvnBufferFinalize(NVNbuffer* buffer) {
     pfnc_nvnBufferFinalize(buffer);
 }
 
-static inline void nvnBufferMap(const NVNbuffer* buffer) {
-    pfnc_nvnBufferMap(buffer);
+static inline void* nvnBufferMap(const NVNbuffer* buffer) {
+    return pfnc_nvnBufferMap(buffer);
 }
 
 static inline NVNbufferAddress nvnBufferGetAddress(const NVNbuffer* buffer) {
@@ -516,7 +516,7 @@ static inline void nvnBufferInvalidateMappedRange(const NVNbuffer* buffer, ptrdi
     pfnc_nvnBufferInvalidateMappedRange(buffer, offset, size);
 }
 
-static inline NVNmemoryPool nvnBufferGetMemoryPool(const NVNbuffer* buffer) {
+static inline NVNmemoryPool* nvnBufferGetMemoryPool(const NVNbuffer* buffer) {
     return pfnc_nvnBufferGetMemoryPool(buffer);
 }
 
@@ -2023,9 +2023,9 @@ static inline void nvnCommandBufferDiscardDepthStencil(NVNcommandBuffer* cmdBuf)
     pfnc_nvnCommandBufferDiscardDepthStencil(cmdBuf);
 }
 
-static inline void nvnCommandBufferDownsample(NVNcommandBuffer* cmdBuf, const NVNtexture* texture1,
-                                              const NVNtexture* texture2) {
-    pfnc_nvnCommandBufferDownsample(cmdBuf, texture1, texture2);
+static inline void nvnCommandBufferDownsample(NVNcommandBuffer* cmdBuf, const NVNtexture* src,
+                                              const NVNtexture* dst) {
+    pfnc_nvnCommandBufferDownsample(cmdBuf, src, dst);
 }
 
 static inline void nvnCommandBufferTiledDownsample(NVNcommandBuffer* cmdBuf,

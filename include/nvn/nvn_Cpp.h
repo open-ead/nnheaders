@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-// todo: figure out what m_value gets set to by the empty constructor
+// todo: verify ENUM and BITS' void ctor funcitonality
 #define NVN_ENUM(CLASS)                                                                            \
 private:                                                                                           \
     Enum m_value;                                                                                  \
