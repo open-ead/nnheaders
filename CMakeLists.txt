@@ -253,3 +253,13 @@ target_compile_options(NintendoSDK PRIVATE -fno-strict-aliasing)
 target_compile_options(NintendoSDK PRIVATE -fno-exceptions)
 target_compile_options(NintendoSDK PRIVATE -Wall -Wextra)
 target_compile_options(NintendoSDK PRIVATE -Wno-invalid-offsetof)
+
+target_compile_definitions(NintendoSDK PRIVATE
+	NN_SDK_MAJOR=${NN_SDK_MAJOR}
+	NN_SDK_MINOR=${NN_SDK_MINOR}
+	NN_SDK_PATCH=${NN_SDK_PATCH}
+	NN_SDK_TYPE="${NN_SDK_TYPE}"
+	NN_WARE_MAJOR=${NN_WARE_MAJOR}
+	NN_WARE_MINOR=${NN_WARE_MINOR}
+	NN_WARE_PATCH=${NN_WARE_PATCH}
+)
