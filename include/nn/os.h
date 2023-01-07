@@ -21,6 +21,7 @@ namespace os {
 
 namespace detail {
 
+class MultiWaitObjectList;
 struct InterProcessEventType {
     enum State {
         State_NotInitialized = 0,
