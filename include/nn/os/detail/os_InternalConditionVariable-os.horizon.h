@@ -10,7 +10,7 @@ class TimeoutHelper;
 
 class InternalConditionVariableImplByHorizon {
 public:
-    InternalConditionVariableImplByHorizon();
+    InternalConditionVariableImplByHorizon() = default;
     void Initialize();
     void Signal();
     void Broadcast();

@@ -57,6 +57,7 @@ struct EventType {
     nn::os::detail::InternalCriticalSection crit;
     nn::os::detail::InternalConditionVariable condvar;
 };
+static_assert(std::is_trivial<EventType>::value, "EventType non trivial");
 typedef EventType Event;
 
 enum EventClearMode { EventClearMode_ManualClear, EventClearMode_AutoClear };

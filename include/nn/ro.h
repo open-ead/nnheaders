@@ -7,7 +7,7 @@
 
 #include <elf.h>
 #include <nn/types.h>
-#include <nn/util/BinaryTypes.h>
+#include <nn/util/util_BinTypes.h>
 
 namespace nn {
 namespace ro {
