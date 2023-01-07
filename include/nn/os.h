@@ -46,16 +46,15 @@ struct LightEventType {
 
 // https://github.com/misson20000/nn-types/blob/master/nn_os.h
 struct EventType {
-    nn::os::EventType* _x0;
-    nn::os::EventType* _x8;
-    bool isSignaled;
-    bool initiallySignaled;
-    bool shouldAutoClear;
-    bool isInit;
-    u32 signalCounter;
-    u32 signalCounter2;
-    nn::os::detail::InternalCriticalSection crit;
-    nn::os::detail::InternalConditionVariable condvar;
+    util::TypedStorage<detail::MultiWaitObjectList, 16, 8> _multiWaitObjectList;
+    bool _signalState;
+    bool _initiallySignaled;
+    uint8_t _clearMode;
+    uint8_t _state;
+    uint32_t _broadcastCounterLower;
+    uint32_t _broadcastCounterUpper;
+    detail::InternalCriticalSectionStorage _csEvent;
+    detail::InternalConditionVariableStorage _cvSignaled;
 };
 static_assert(std::is_trivial<EventType>::value, "EventType non trivial");
 typedef EventType Event;

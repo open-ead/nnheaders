@@ -6,7 +6,7 @@ namespace nn::os::detail {
 
 class InternalCriticalSectionImplByHorizon {
 public:
-    InternalCriticalSectionImplByHorizon() = default;
+    InternalCriticalSectionImplByHorizon();
     void Initialize();
     void Finalize();
     void Enter();
