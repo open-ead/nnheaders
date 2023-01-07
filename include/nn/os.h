@@ -44,7 +44,6 @@ struct LightEventType {
     std::aligned_storage_t<0xc, 4> storage;
 };
 
-// https://github.com/misson20000/nn-types/blob/master/nn_os.h
 struct EventType {
     util::TypedStorage<detail::MultiWaitObjectList, 16, 8> _multiWaitObjectList;
     bool _signalState;
