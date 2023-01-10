@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <cstdarg>
 #include <nn/types.h>
 
 namespace nn {
@@ -22,6 +23,9 @@ CharacterEncodingResult ConvertStringUtf8ToUtf16Native(u16*, s32, char const*, s
 
 template <s32 size, typename T>
 struct BitFlagSet {};
+
+s32 SNPrintf(char* s, ulong n, const char* format, ...);
+s32 VSNPrintf(char* s, ulong n, const char* format, va_list arg);
 
 void ReferSymbol(const void*);
 }  // namespace util
