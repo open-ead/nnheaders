@@ -1119,6 +1119,30 @@ struct BufferRange {
     uint64_t size;
 };
 
+// forward declarations of nvn types
+class CommandBuffer;
+class Window;
+class WindowBuilder;
+class Sync;
+class MemoryPool;
+class BlendState;
+class ChannelMaskState;
+class ColorState;
+class MultisampleState;
+class PolygonState;
+class DepthStencilState;
+class VertexAttribState;
+class VertexStreamState;
+class Program;
+class Texture;
+class TextureBuilder;
+class TextureView;
+class TexturePool;
+class Sampler;
+class SamplerBuilder;
+class SamplerPool;
+class Event;
+
 typedef void (*GenericFuncPtrFunc)(void);
 typedef void (*DebugCallbackFunc)(DebugCallbackSource::Enum, DebugCallbackType::Enum, int,
                                   DebugCallbackSeverity::Enum, const char*, void*);
