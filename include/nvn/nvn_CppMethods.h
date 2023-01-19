@@ -1517,7 +1517,7 @@ inline void Buffer::Finalize() {
 }
 
 inline void* Buffer::Map() const {
-    pfncpp_nvnBufferMap(this);
+    return pfncpp_nvnBufferMap(this);
 }
 
 inline BufferAddress Buffer::GetAddress() const {
