@@ -1119,7 +1119,7 @@ struct BufferRange {
     uint64_t size;
 };
 
-//forward declarations of nvn types
+// forward declarations of nvn types
 class CommandBuffer;
 class Window;
 class WindowBuilder;
