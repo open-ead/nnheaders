@@ -6,13 +6,21 @@
 #pragma once
 
 #include <nn/types.h>
+#include <nn/util.h>
 #include <sys/socket.h>
+
+struct in_addr;
 
 namespace nn {
 namespace socket {
+
+#if NN_SDK_VER >= NN_MAKE_VER(7, 0, 0)
 struct InAddr {
     u32 addr;
 };
+#else
+using InAddr = ::in_addr;
+#endif
 
 Result Initialize(void* pool, ulong poolSize, ulong allocPoolSize, int concurLimit);
 Result Finalize();
