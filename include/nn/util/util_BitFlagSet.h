@@ -5,13 +5,53 @@
 
 namespace nn::util {
 
+namespace detail {
+
+template <typename Integer>
+void AndEqual(Integer* dest, const Integer* source, int count) {
+    for (int i = 0; i < count; ++i) {
+        dest[i] &= source[i];
+    }
+}
+
+template <typename Integer>
+void OrEqual(Integer* dest, const Integer* source, int count) {
+    for (int i = 0; i < count; ++i) {
+        dest[i] |= source[i];
+    }
+}
+
+template <typename Integer>
+bool Equals(const Integer* dest, const Integer* source, int count) {
+    for (int i = 0; i < count; ++i) {
+        if (dest[i] != source[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+template <typename Integer>
+bool IsAnyOn(const Integer* _storage, int count) {
+    for (int i = 0; i < count; ++i) {
+        if (_storage[i] != 0) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+}  // namespace detail
+
 template <int N, typename Tag>
 struct BitFlagSet {
-    // todo: figure out the condition based off other types
-    typedef typename std::conditional<N == 32, uint32_t, uint64_t>::type StorageT;
+    typedef typename std::conditional<N <= 32, uint32_t, uint64_t>::type StorageT;
 
-    static const int StorageBitCount = 8 * sizeof(StorageT);  // 64 for N == 256
-    static const int StorageCount = N / StorageBitCount;      // 4 for N == 256
+    static const int StorageBitCount = 8 * sizeof(StorageT);
+    // https://stackoverflow.com/a/17974
+    static const int StorageCount = (N + StorageBitCount - 1) / StorageBitCount;
     StorageT _storage[StorageCount];
 
     class Reference {
@@ -43,21 +83,9 @@ struct BitFlagSet {
         Reference(BitFlagSet& set, int index) : m_Set(&set), m_Index(index) {}
     };
 
-    template <int BitIndex>
-    struct Flag {
-    public:
-        static const int Index = BitIndex;
-        // todo: figure out how to make this not break past 63
-        static const BitFlagSet Mask = 1 << Index;
-
-    private:
-        static const int StorageIndex = GetStorageIndex(BitIndex);
-        static const StorageT StorageMask = MakeStorageMask(BitIndex);
-    };
-
     BitFlagSet operator~() const {
         BitFlagSet tmp = *this;
-        temp.Flip();
+        tmp.Flip();
         return tmp;
     }
 
@@ -80,14 +108,12 @@ struct BitFlagSet {
     }
 
     BitFlagSet& operator&=(const BitFlagSet& other) {
-        for (int i = 0; i < StorageCount; ++i) {
-            _storage[i] &= other._storage[i];
-        }
-
+        detail::AndEqual(_storage, other._storage, StorageCount);
         return *this;
     }
 
     BitFlagSet& operator^=(const BitFlagSet& other) {
+        // todo: does this have a detail function
         for (int i = 0; i < StorageCount; ++i) {
             _storage[i] ^= other._storage[i];
         }
@@ -96,31 +122,33 @@ struct BitFlagSet {
     }
 
     BitFlagSet& operator|=(const BitFlagSet& other) {
-        for (int i = 0; i < StorageCount; ++i) {
-            _storage[i] |= other._storage[i];
-        }
-
+        detail::OrEqual(_storage, other._storage, StorageCount);
         return *this;
     }
 
     bool operator==(const BitFlagSet& other) const {
-        for (int i = 0; i < StorageCount; ++i) {
-            if (_storage[i] != other._storage[i]) {
-                return false;
-            }
-        }
-
-        return true;
+        return detail::Equals(_storage, other._storage, StorageCount);
     }
 
-    bool operator!=(const BitFlagSet& other) const { return !(*this == other); }
+    bool operator!=(const BitFlagSet& other) const {
+        return !detail::Equals(_storage, other._storage, StorageCount);
+    }
 
     bool operator[](int index) const { return Test(index); }
-
     Reference operator[](int index) { return Reference(*this, index); }
 
-    bool IsAnyOn() const;
-    int CountPopulation() const;
+    bool IsAnyOn() const { return detail::IsAnyOn(_storage, StorageCount); }
+
+    // https://en.wikichip.org/wiki/population_count
+    int CountPopulation() const {
+        int c = 0;
+        for (int i = 0; i < StorageCount; ++i) {
+            StorageT x = _storage[i];
+            for (; x != 0; x &= x - 1)
+                c++;
+        }
+        return c;
+    }
 
     BitFlagSet& Flip(int index) { return Set(index, !Test(index)); }
 
@@ -128,11 +156,13 @@ struct BitFlagSet {
         for (int i = 0; i < StorageCount; ++i) {
             _storage[i] = ~_storage[i];
         }
+        Truncate();
+
         return *this;
     }
 
-    bool IsAllOn() const;
-    bool IsAllOff() const;
+    bool IsAllOn() const { return CountPopulation() == N; }
+    bool IsAllOff() const { return CountPopulation() == 0; }
 
     BitFlagSet& Reset() {
         for (int i = 0; i < StorageCount; ++i) {
@@ -147,6 +177,8 @@ struct BitFlagSet {
         for (int i = 0; i < StorageCount; ++i) {
             _storage[i] = ~0;
         }
+        Truncate();
+
         return *this;
     }
 
@@ -154,9 +186,30 @@ struct BitFlagSet {
         return SetImpl(GetStorageIndex(index), MakeStorageMask(index), isOn);
     }
 
-    int GetCount() const;
+    template <typename FlagT>
+    BitFlagSet& Set(bool isOn) const {
+        return SetImpl(FlagT::StorageIndex, FlagT::StorageMask, isOn);
+    }
+
+    int GetCount() const { return N; }
 
     bool Test(int index) const { return TestImpl(GetStorageIndex(index), MakeStorageMask(index)); }
+
+    template <typename FlagT>
+    bool Test() const {
+        return TestImpl(FlagT::StorageIndex, FlagT::StorageMask);
+    }
+
+    template <int BitIndex>
+    struct Flag {
+        static const int Index = BitIndex;
+        // todo: figure out how to make this not break past 63
+        static const BitFlagSet Mask = 1 << Index;
+
+    private:
+        static const int StorageIndex = BitIndex / StorageBitCount;
+        static const StorageT StorageMask = StorageT(1) << BitIndex % StorageBitCount;
+    };
 
 private:
     BitFlagSet& SetImpl(int storageIndex, StorageT storageMask, bool isOn) {
@@ -172,13 +225,14 @@ private:
         return _storage[storageIndex] & storageMask;
     }
 
-    // todo: figure out the purpose of this
-    void Truncate();
-    void TruncateIf(std::true_type);
-    void TruncateIf(std::false_type);
+    // this is probably used to to reset the unused bitflags in the last StorageT
+    void Truncate() { TruncateIf(std::integral_constant<bool, N % StorageBitCount>); }
+
+    // todo: figure out an implementation to keep only the valid flags in the last StorageT
+    void TruncateIf(std::true_type) {}
+    void TruncateIf(std::false_type) {}
 
     static int GetStorageIndex(int index) { return index / StorageBitCount; }
-
     static StorageT MakeStorageMask(int index) { return StorageT(1) << index % StorageBitCount; }
 };
 
