@@ -226,7 +226,7 @@ private:
     }
 
     // this is probably used to to reset the unused bitflags in the last StorageT
-    void Truncate() { TruncateIf(std::integral_constant<bool, N % StorageBitCount>); }
+    void Truncate() { TruncateIf(std::integral_constant<bool, N % StorageBitCount>()); }
 
     // todo: figure out an implementation to keep only the valid flags in the last StorageT
     void TruncateIf(std::true_type) {}
