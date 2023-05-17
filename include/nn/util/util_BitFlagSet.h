@@ -15,6 +15,13 @@ void AndEqual(Integer* dest, const Integer* source, int count) {
 }
 
 template <typename Integer>
+void XorEqual(Integer* dest, const Integer* source, int count) {
+    for (int i = 0; i < count; ++i) {
+        dest[i] ^= source[i];
+    }
+}
+
+template <typename Integer>
 void OrEqual(Integer* dest, const Integer* source, int count) {
     for (int i = 0; i < count; ++i) {
         dest[i] |= source[i];
@@ -50,7 +57,6 @@ struct BitFlagSet {
     typedef typename std::conditional<N <= 32, uint32_t, uint64_t>::type StorageT;
 
     static const int StorageBitCount = 8 * sizeof(StorageT);
-    // https://stackoverflow.com/a/17974
     static const int StorageCount = (N + StorageBitCount - 1) / StorageBitCount;
     StorageT _storage[StorageCount];
 
@@ -113,11 +119,7 @@ struct BitFlagSet {
     }
 
     BitFlagSet& operator^=(const BitFlagSet& other) {
-        // todo: does this have a detail function
-        for (int i = 0; i < StorageCount; ++i) {
-            _storage[i] ^= other._storage[i];
-        }
-
+        detail::XorEqual(_storage, other._storage, StorageCount);
         return *this;
     }
 
@@ -182,18 +184,22 @@ struct BitFlagSet {
         return *this;
     }
 
-    BitFlagSet& Set(int index, bool isOn) {
+    BitFlagSet& Set(int index, bool isOn = true) {
+        // todo: add assert to verify index is valid
         return SetImpl(GetStorageIndex(index), MakeStorageMask(index), isOn);
     }
 
     template <typename FlagT>
-    BitFlagSet& Set(bool isOn) const {
+    BitFlagSet& Set(bool isOn = true) const {
         return SetImpl(FlagT::StorageIndex, FlagT::StorageMask, isOn);
     }
 
     int GetCount() const { return N; }
 
-    bool Test(int index) const { return TestImpl(GetStorageIndex(index), MakeStorageMask(index)); }
+    bool Test(int index) const {
+        // todo: add assert to verify index is valid
+        return TestImpl(GetStorageIndex(index), MakeStorageMask(index));
+    }
 
     template <typename FlagT>
     bool Test() const {
@@ -202,13 +208,20 @@ struct BitFlagSet {
 
     template <int BitIndex>
     struct Flag {
-        static const int Index = BitIndex;
-        // todo: figure out how to make this not break past 63
-        static const BitFlagSet Mask = 1 << Index;
+        static_assert(BitIndex < N);
+
+        static constexpr BitFlagSet buildMask() {
+            BitFlagSet tmp{{}};
+            tmp.data[StorageIndex] = StorageMask;
+            return tmp;
+        }
+
+        static constexpr int Index = BitIndex;
+        static constexpr BitFlagSet Mask = buildMask();
 
     private:
-        static const int StorageIndex = BitIndex / StorageBitCount;
-        static const StorageT StorageMask = StorageT(1) << BitIndex % StorageBitCount;
+        static constexpr int StorageIndex = BitIndex / StorageBitCount;
+        static constexpr StorageT StorageMask = StorageT(1) << (BitIndex % StorageBitCount);
     };
 
 private:
@@ -225,15 +238,13 @@ private:
         return _storage[storageIndex] & storageMask;
     }
 
-    // this is probably used to to reset the unused bitflags in the last StorageT
-    void Truncate() { TruncateIf(std::integral_constant<bool, N % StorageBitCount>()); }
+    void Truncate() { TruncateIf(std::integral_constant<bool, (N % StorageBitCount) != 0>{}); }
 
-    // todo: figure out an implementation to keep only the valid flags in the last StorageT
-    void TruncateIf(std::true_type) {}
+    void TruncateIf(std::true_type) { _storage[StorageCount - 1] &= MakeStorageMask(N) - 1; }
     void TruncateIf(std::false_type) {}
 
     static int GetStorageIndex(int index) { return index / StorageBitCount; }
-    static StorageT MakeStorageMask(int index) { return StorageT(1) << index % StorageBitCount; }
+    static StorageT MakeStorageMask(int index) { return StorageT(1) << (index % StorageBitCount); }
 };
 
 }  // namespace nn::util
