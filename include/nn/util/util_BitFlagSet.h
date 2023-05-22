@@ -58,7 +58,7 @@ struct BitFlagSet {
 
     static const int StorageBitCount = 8 * sizeof(StorageT);
     static const int StorageCount = (N + StorageBitCount - 1) / StorageBitCount;
-    StorageT _storage[StorageCount];
+    StorageT _storage[StorageCount]{};
 
     class Reference {
     public:
@@ -208,10 +208,10 @@ struct BitFlagSet {
 
     template <int BitIndex>
     struct Flag {
-        static_assert(BitIndex < N);
+        static_assert(BitIndex < N, "BitIndex < N");
 
         static constexpr BitFlagSet buildMask() {
-            BitFlagSet tmp{{}};
+            BitFlagSet tmp;
             tmp.data[StorageIndex] = StorageMask;
             return tmp;
         }
