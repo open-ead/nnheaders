@@ -3,7 +3,7 @@
 #include <nvn/nvn_Cpp.h>
 
 // todo: figure out where to put this
-nvn::GenericFuncPtrFunc nvnBootstrapLoader(const char*);
+extern "C" nvn::GenericFuncPtrFunc nvnBootstrapLoader(const char*);
 
 namespace nvn {
 
