@@ -20,8 +20,8 @@ namespace mem {
 class StandardAllocator {
 public:
     StandardAllocator();
-    StandardAllocator(void*, u64);
-    StandardAllocator(void*, u64, bool);
+    StandardAllocator(void* address, size_t size);
+    StandardAllocator(void* address, size_t size, bool enableCache);
 
     ~StandardAllocator() {
         if (mIsInitialized) {
@@ -29,19 +29,19 @@ public:
         }
     }
 
-    void Initialize(void* address, u64 size);
-    void Initialize(void* address, u64 size, bool enableCache);
+    void Initialize(void* address, size_t size);
+    void Initialize(void* address, size_t size, bool enableCache);
     void Finalize();
-    void* Reallocate(void* address, u64 newSize);
-    void* Allocate(u64 size);
-    void* Allocate(u64 size, u64 alignment);
+    void* Reallocate(void* address, size_t newSize);
+    void* Allocate(size_t size);
+    void* Allocate(size_t size, size_t alignment);
     void Free(void* address);
 
-    u64 GetSizeOf(const void* address) const;
+    size_t GetSizeOf(const void* address) const;
     void ClearThreadCache() const;
     void CleanUpManagementArea() const;
-    u64 GetTotalFreeSize() const;
-    u64 GetAllocatableSize() const;
+    size_t GetTotalFreeSize() const;
+    size_t GetAllocatableSize() const;
     void Dump() const;
 
     bool mIsInitialized;
