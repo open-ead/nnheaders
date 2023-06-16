@@ -1,12 +1,10 @@
 #pragma once
 
-// Constants found by running nvnDeviceGetInteger for every value in NVNdeviceInfo within Super Mario Odyssey
+// Constants found by running nvnDeviceGetInteger for every value in NVNdeviceInfo within SMO
 
-// TODO: 0x60 and 0x61 of NVNdeviceInfo don't exist in SMO, so those constants have not been added. Please add when found
+// TODO: 0x60 and 0x61 of NVNdeviceInfo don't exist in SMO, so those have not been added.
 // TODO: These constants should probably have a comment explaining each one
 
-#define NVN_DEVICE_API_MAJOR_VERSION 53
-#define NVN_DEVICE_API_MINOR_VERSION 13
 #define NVN_DEVICE_UNIFORM_BUFFER_BINDINGS_PER_STAGE 14
 #define NVN_DEVICE_MAX_UNIFORM_BUFFER_SIZE 65536
 #define NVN_DEVICE_UNIFORM_BUFFER_ALIGNMENT 256
@@ -95,7 +93,6 @@
 #define NVN_DEVICE_SUPPORTS_FRAGMENT_SHADER_INTERLOCK 1
 #define NVN_DEVICE_MAX_TEXTURES_PER_WINDOW 4
 #define NVN_DEVICE_MIN_TEXTURES_PER_WINDOW 2
-#define NVN_DEVICE_SUPPORTS_DEBUG_LAYER 0
 #define NVN_DEVICE_QUEUE_CONTROL_MEMORY_MIN_SIZE 4096
 #define NVN_DEVICE_QUEUE_CONTROL_MEMORY_DEFAULT_SIZE 16384
 #define NVN_DEVICE_QUEUE_CONTROL_MEMORY_GRANULARITY 4096
