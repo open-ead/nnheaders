@@ -26,13 +26,16 @@ add_library(NintendoSDK OBJECT
   include/nn/util/util_BitPack.h
   include/nn/util/util_BytePtr.h
   include/nn/util/util_BitUtil.h
+  include/nn/util/util_IntrusiveList.h
   include/nn/util/util_ResDic.h
   include/nn/util/util_StringView.h
-  include/nn/ui2d/detail/TexCoordArray.h
-  include/nn/ui2d/Layout.h
-  include/nn/ui2d/Parts.h
-  include/nn/ui2d/Pane.h
   include/nn/ui2d/Material.h
+  include/nn/ui2d/Pane.h
+  include/nn/ui2d/ui2d_Animation.h
+  include/nn/ui2d/ui2d_Common.h
+  include/nn/ui2d/ui2d_Layout.h
+  include/nn/ui2d/ui2d_Parts.h
+  include/nn/ui2d/ui2d_Types.h
   include/nn/g3d/BindFuncTable.h
   include/nn/g3d/ModelObj.h
   include/nn/g3d/ResMaterialAnim.h
@@ -79,11 +82,15 @@ add_library(NintendoSDK OBJECT
   include/nn/nex/buffer.h
   include/nn/nex/system.h
   include/nn/nex/hash.h
+  include/nn/nn_Allocator.h
   include/nn/time.h
   include/nn/diag.h
   include/nn/init.h
   include/nn/crypto.h
   include/nn/ssl.h
+  include/nn/font/font_TagProcessorBase.h
+  include/nn/font/font_Types.h
+  include/nn/font/font_Util.h
   include/nn/gfx/detail/gfx_Buffer-api.nvn.8.h
   include/nn/gfx/detail/gfx_CommandBuffer-api.nvn.8.h
   include/nn/gfx/detail/gfx_Common-api.nvn.h
@@ -246,6 +253,8 @@ add_library(NintendoSDK OBJECT
   src/NintendoSDK/gfx/gfx_SyncInfo.cpp
   src/NintendoSDK/gfx/gfx_TextureInfo.cpp
   src/NintendoSDK/nnSdk/util.cpp
+  src/NintendoWare/ui2d/ui2d_Group.cpp
+  src/NintendoWare/ui2d/ui2d_Layout.cpp
 )
 
 target_include_directories(NintendoSDK PUBLIC include/)

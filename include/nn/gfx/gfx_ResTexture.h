@@ -14,24 +14,40 @@ class ResTexture : public nn::util::AccessorBase<ResTextureData> {
 public:
     static const int Signature = 0x49545242;
 
-    static ResTexture* ToAccessor(value_type*);
-    static ResTexture& ToAccessor(value_type&);
-    static const ResTexture* ToAccessor(const value_type*);
-    static const ResTexture& ToAccessor(const value_type&);
+    static ResTexture* ToAccessor(ResTextureData*);
+    static ResTexture& ToAccessor(ResTextureData&);
+    static const ResTexture* ToAccessor(const ResTextureData*);
+    static const ResTexture& ToAccessor(const ResTextureData&);
 
-    TextureInfo* GetTextureInfo();
-    const TextureInfo* GetTextureInfo() const;
-    detail::Caster<void> GetTexture();
-    detail::Caster<const void> GetTexture() const;
-    detail::Caster<void> GetTextureView();
-    detail::Caster<const void> GetTextureView() const;
+    TextureInfo* GetTextureInfo() { return gfx::DataToAccessor(this->textureInfoData); }
+    const TextureInfo* GetTextureInfo() const { return gfx::DataToAccessor(this->textureInfoData); }
+
+    detail::Caster<void> GetTexture() { return detail::Caster<void>(this->pTexture.Get()); }
+
+    detail::Caster<const void> GetTexture() const {
+        return detail::Caster<const void>(this->pTexture.Get());
+    }
+
+    detail::Caster<void> GetTextureView() { return detail::Caster<void>(this->pTextureView.Get()); }
+
+    detail::Caster<const void> GetTextureView() const {
+        return detail::Caster<const void>(this->pTextureView.Get());
+    }
+
     const char* GetName() const;
     size_t GetDataSize() const;
     ResUserData* GetUserData(int);
     const ResUserData* GetUserData(int) const;
     const nn::util::ResDic* GetUserDataDic() const;
-    void SetUserDescriptorSlot(const DescriptorSlot&);
+
+    void SetUserDescriptorSlot(const DescriptorSlot& value) {
+        this->userDescriptorSlot = value.ToData();
+    }
+
     void GetUserDescriptorSlot(DescriptorSlot*) const;
+
+    template <typename TTarget>
+    void Finalize(TDevice<TTarget>* pDevice);
 };
 
 class ResTextureFile : public nn::util::AccessorBase<ResTextureFileData> {
@@ -73,5 +89,11 @@ public:
     template <typename TTarget>
     void Finalize(TDevice<TTarget>*);
 };
+
+template <typename TTarget>
+void ResTexture::Finalize(TDevice<TTarget>* pDevice) {
+    static_cast<TTexture<TTarget>*>(this->pTexture.Get())->Finalize(pDevice);
+    static_cast<TTextureView<TTarget>*>(this->pTextureView.Get())->Finalize(pDevice);
+}
 
 }  // namespace nn::gfx
