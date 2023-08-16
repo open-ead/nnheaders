@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nn/util/MathTypes.h>
+#include <nn/util/util_MathTypes.h>
 
 namespace nn::util::detail {
 // todo: figure out where to put these

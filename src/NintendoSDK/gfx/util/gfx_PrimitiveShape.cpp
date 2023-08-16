@@ -1,8 +1,8 @@
 #include <nn/gfx/util/gfx_PrimitiveShape.h>
 
 #include <nn/types.h>
-#include <nn/util/MathTypes.h>
 #include <nn/util/util_Arithmetic.h>
+#include <nn/util/util_MathTypes.h>
 
 // todo: most of these functions are still non-matching
 // matching should be done using odyssey 1.2 as a base

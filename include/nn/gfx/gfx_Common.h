@@ -23,4 +23,9 @@ union ClearColorValue {
     uint32_t valueUint[4];
 };
 
+template <typename TTarget, template <typename> typename TObject>
+bool IsInitialized(const TObject<TTarget>& obj) {
+    return obj.ToData()->state != obj.DataType::State_NotInitialized;
+}
+
 }  // namespace nn::gfx
