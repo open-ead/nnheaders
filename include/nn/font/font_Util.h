@@ -1,16 +1,44 @@
 #pragma once
 
-namespace nn::font::detail {
+#include <type_traits>
+
+namespace nn::font {
+
+namespace detail {
 
 class RuntimeTypeInfo {
 public:
     const RuntimeTypeInfo* m_ParentTypeInfo;
 
     explicit RuntimeTypeInfo(const RuntimeTypeInfo* parent) : m_ParentTypeInfo(parent) {}
-    bool IsDerivedFrom(const RuntimeTypeInfo*) const;
+    bool IsDerivedFrom(const RuntimeTypeInfo* s_TypeInfo) const {
+        const RuntimeTypeInfo* self = this;
+
+        while (self) {
+            if (self == s_TypeInfo) {
+                return true;
+            }
+
+            self = self->m_ParentTypeInfo;
+        }
+
+        return false;
+    }
 };
 
-}  // namespace nn::font::detail
+}  // namespace detail
+
+template <typename TToPtr, typename TFrom>
+TToPtr DynamicCast(TFrom* obj) {
+    const detail::RuntimeTypeInfo* typeInfoU =
+        std::remove_pointer<TToPtr>::type::GetRuntimeTypeInfoStatic();
+    if (obj && obj->GetRuntimeTypeInfo()->IsDerivedFrom(typeInfoU)) {
+        return static_cast<TToPtr>(obj);
+    }
+    return nullptr;
+}
+
+}  // namespace nn::font
 
 // todo: figure out where to put this
 #define NN_RUNTIME_TYPEINFO_BASE()                                                                 \

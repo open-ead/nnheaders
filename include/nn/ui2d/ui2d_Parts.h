@@ -25,8 +25,10 @@ public:
     Parts(const Parts&);
 
     virtual ~Parts();
-    Layout* GetLayout() const;
-    void SetLayout(Layout*);
+
+    Layout* GetLayout() const { return m_pLayout; }
+    void SetLayout(Layout* pLayout) { m_pLayout = pLayout; }
+
     virtual Pane* FindPaneByNameRecursive(const char*);
     virtual const Pane* FindPaneByNameRecursive(const char*) const;
     virtual Material* FindMaterialByNameRecursive(const char*);

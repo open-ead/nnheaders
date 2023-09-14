@@ -19,7 +19,9 @@ public:
     float bottom;
 
     Rectangle();
-    Rectangle(float, float, float, float);
+
+    Rectangle(float l, float t, float r, float b) : left(l), top(t), right(r), bottom(b) {}
+
     Rectangle(const Rectangle&);
     ~Rectangle();
     float GetWidth() const;
