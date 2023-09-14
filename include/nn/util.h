@@ -59,6 +59,8 @@ void ReferSymbol(const void*);
     static const char var[] __attribute__((section(".api_info"))) = "SDK MW+" company "+" name
 
 // todo: move/rename with more info
+#define NN_UNUSED(x) (void)(x)
+
 #define NN_NO_COPY(CLASS)                                                                          \
     CLASS(const CLASS&) = delete;                                                                  \
     CLASS& operator=(const CLASS&) = delete

@@ -41,12 +41,19 @@ struct BuildResSet {
     const ResTextureList* pTextureList;
     const ResFontList* pFontList;
     const ResMaterialList* pMaterialList;
-    const ResShapeInfoList* pShapeInfoList;
-    const ResCaptureTextureList* pCaptureTextureList;
+    // smo
+    // const ResShapeInfoList* pShapeInfoList;
+
+    // newer
+    // const ResCaptureTextureList* pCaptureTextureList;
+
     ResourceAccessor* pResAccessor;
     Layout* pLayout;
-    bool isFlytOlderThanBinary8200;
-    bool isDetailedCombinerWithVariationVariable;
+
+    // smo
+    // bool isFlytOlderThanBinary8200;
+    // newer
+    // bool isDetailedCombinerWithVariationVariable;
 };
 
 typedef RenderTargetTextureLifetime (*CreateRenderTargetTextureCallback)(
@@ -92,7 +99,8 @@ struct BuildArgSet {
     bool isUtf8;
     // smo
     // uint32_t resourceVersion;
-    bool isViewerInvisibleByParent;
+    // newer
+    // bool isViewerInvisibleByParent;
 };
 
 struct BuildResultInformation {
@@ -155,6 +163,36 @@ enum FrameSpecFlag {
     FrameSpecFlag_FlipR270 = 327680,
     FrameSpecFlag_Normal = 0
 };
+
+template <int StrMax>
+bool EqualsName(const char* pName1, const char* pName2) {
+    for (int i = 0; i < StrMax; ++i) {
+        if (pName1[i] != pName2[i]) {
+            return false;
+        } else if (pName1[i] == '\0') {
+            return true;
+        }
+    }
+    return true;
+}
+
+inline bool EqualsResName(const char* pName1, const char* pName2) {
+    return EqualsName<ResourceNameStrMax>(pName1, pName2);
+}
+
+inline bool EqualsGroupName(const char* pName1, const char* pName2) {
+    return EqualsName<GroupNameStrMax>(pName1, pName2);
+}
+
+inline bool EqualsMaterialName(const char* pName1, const char* pName2) {
+    return EqualsName<28>(pName1, pName2);
+}
+
+inline const char* GetStrTableStr(const void* pStrTable, int index) {
+    auto pOffsets = static_cast<const uint32_t*>(pStrTable);
+    auto pStringPool = static_cast<const char*>(pStrTable);
+    return &pStringPool[pOffsets[index]];
+}
 
 class TexCoordArray {
 public:

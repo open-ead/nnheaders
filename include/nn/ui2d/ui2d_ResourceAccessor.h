@@ -51,7 +51,9 @@ public:
         return FindResourceByName(nullptr, resType, pName);
     }
 
-    virtual void FindResourceByType(ResType, FindResourceByTypeCallback, void*) const = 0;
+    // smo
+    // virtual void FindResourceByType(ResType, FindResourceByTypeCallback, void*) const = 0;
+
     virtual font::Font* AcquireFont(gfx::Device*, const char*) = 0;
     virtual const TextureInfo* AcquireTexture(gfx::Device*, const char*) = 0;
     virtual const ShaderInfo* AcquireShader(gfx::Device*, const char*) = 0;

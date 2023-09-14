@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <nn/font/font_TagProcessorBase.h>
 #include <nn/font/font_Types.h>
 #include <nn/font/font_Util.h>
 #include <nn/gfx/gfx_Device.h>
@@ -15,6 +14,7 @@
 #include <nn/ui2d/ui2d_Animation.h>
 #include <nn/ui2d/ui2d_Common.h>
 #include <nn/ui2d/ui2d_Parts.h>
+#include <nn/ui2d/ui2d_TextBox.h>
 #include <nn/util/util_IntrusiveList.h>
 
 namespace nn {
@@ -32,8 +32,9 @@ struct ResPane;
 class ShaderInfo;
 class CaptureTexture;
 struct ResParts;
-class ResPartsProperty;
-class ResVec2;
+struct ResPartsProperty;
+struct ResVec2;
+struct ResPicture;
 class ResCaptureTexture;
 class ResCaptureTextureOld;
 
@@ -56,8 +57,10 @@ public:
     static FreeFunctionWithUserData GetFreeFunction();
     static void* GetUserDataForAllocator();
     static void SetAllocator(AlignedAllocateFunctionWithUserData, FreeFunctionWithUserData, void*);
-    static void* AllocateMemory(size_t, size_t);
-    static void* AllocateMemory(size_t);
+    static void* AllocateMemory(size_t size, size_t alignment = DefaultAligment);
+
+    // smo
+    // static void* AllocateMemory(size_t size);
     static void FreeMemory(void*);
 
     Layout();
@@ -77,6 +80,7 @@ public:
         void SetDefault();
     };
 
+    /* newer
     struct LayoutBuildContext {
         BuildResSet buildResSet;
         BuildArgSet buildArgSet;
@@ -91,7 +95,8 @@ public:
     };
 
     static void FindResPaneByName(const ResPane**, const ResExtUserDataList**, const void*,
-                                  const char*, const ResPane*);
+                                      const char*, const ResPane*);
+    */
     bool Build(BuildResultInformation*, gfx::Device*, ResourceAccessor*, ControlCreator*,
                TextSearcher*, const void*, const BuildOption&, bool);
     bool Build(BuildResultInformation*, gfx::Device*, ResourceAccessor*, ControlCreator*,
@@ -108,16 +113,38 @@ public:
     void CalculateGlobalMatrix(DrawInfo&, bool);
 
     template <typename T>  // 594
-    T* CreateAnimTransform();
+    T* CreateAnimTransform() {
+        T* const pAnimTrans = AllocateAndConstruct<T>();
+        if (pAnimTrans) {
+            m_AnimTransList.push_back(*pAnimTrans);
+        }
+        return pAnimTrans;
+    }
 
     template <typename T>  // 625
-    T* CreateAnimTransform(gfx::Device*, const void*);
+    T* CreateAnimTransform(gfx::Device* pDevice, const void* pAnimResource) {
+        return CreateAnimTransform<T>(pDevice, AnimResource(pAnimResource));
+    }
 
     template <typename T>  // 649
-    T* CreateAnimTransform(gfx::Device*, const AnimResource&);
+    T* CreateAnimTransform(gfx::Device* pDevice, const AnimResource& animRes) {
+        const ResAnimationBlock* const pAnimBlock = animRes.GetResourceBlock();
+        if (!pAnimBlock) {
+            return nullptr;
+        }
+
+        T* const pAnimTrans = CreateAnimTransform<T>();
+        if (pAnimTrans) {
+            pAnimTrans->SetResource(pDevice, m_pResourceAccessor, pAnimBlock);
+        }
+        return pAnimTrans;
+    }
 
     template <typename T>  // 688
-    T* CreateAnimTransform(gfx::Device*, const char*);
+    T* CreateAnimTransform(gfx::Device* pDevice, const char* pTagName) {
+        const void* pPtr = GetAnimResourceData(pTagName);
+        return CreateAnimTransform<T>(pDevice, pPtr);
+    }
 
     AnimTransformBasic* CreateAnimTransformBasic();
     AnimTransformBasic* CreateAnimTransformBasic(gfx::Device*, const void*);
@@ -158,16 +185,20 @@ public:
     virtual void Draw(DrawInfo&, gfx::CommandBuffer&);
     void DrawCaptureTexture(gfx::Device*, DrawInfo&, gfx::CommandBuffer&);
     bool IsPartsLayout() const;
-    Pane* GetRootPane() const;
-    GroupContainer* GetGroupContainer() const;
+
+    Pane* GetRootPane() const { return m_pRootPane; }
+    GroupContainer* GetGroupContainer() const { return m_pGroupContainer; }
+
     const Size& GetLayoutSize() const;
     const ResourceAccessor* GetResourceAccessor() const;
     ResourceAccessor* GetResourceAccessor();
     const font::Rectangle GetLayoutRect() const;
     const char* GetName() const;
-    virtual void SetTagProcessor(font::TagProcessorBase<uint16_t>*);
-    const AnimTransformList& GetAnimTransformList() const;
-    AnimTransformList& GetAnimTransformList();
+    virtual void SetTagProcessor(TextBox::TagProcessor*);
+
+    const AnimTransformList& GetAnimTransformList() const { return m_AnimTransList; }
+    AnimTransformList& GetAnimTransformList() { return m_AnimTransList; }
+
     const PartsPaneList& GetPartsPaneList() const;
     PartsPaneList& GetPartsPaneList();
     const ResExtUserDataList* GetExtUserDataList() const;
@@ -179,7 +210,11 @@ public:
     const CaptureTexture* FindCaptureTextureByPanePtr(const Pane*) const;
     void ResetFirstFrameCaptureUpdatdFlag();
     void SetGetUserShaderInformationCallback(GetUserShaderInformationFromUserData, void*);
-    void SetGetUserShaderInformationCallback(GetUserShaderInformationFromUserData);
+
+    void SetGetUserShaderInformationCallback(GetUserShaderInformationFromUserData pGet) {
+        m_pGetUserShaderInformationFromUserDataCallback = pGet;
+    }
+
     static void SetRenderTargetTextureManagementCallback(CreateRenderTargetTextureCallback,
                                                          DestroyRenderTargetTextureCallback, void*);
     static void
@@ -194,32 +229,36 @@ public:
     static void* GetRenderTargetTextureCallbackUserData();
     bool CompareCopiedInstanceTest(const Layout&) const;
 
-    template <typename T>  // 1731
-    static T* AllocateAndConstruct();
+    template <typename T, typename... Params>
+    static T* AllocateAndConstruct(Params&&... params) {
+        if (void* pMem = AllocateMemory(sizeof(T))) {
+            return new (pMem) T(std::forward<Params>(params)...);
+        }
+        return nullptr;
+    }
 
-    template <typename T, typename Param1, typename Param2>  // 1819
-    static T* AllocateAndConstruct(Param1, Param2);
-
-    template <typename T, typename Param1, typename Param2>  // 1843
-    static T* AllocateAndConstruct(Param1, Param2, size_t);
-
-    template <typename T, typename Param1, typename Param2, typename Param3>  // 1895
-    static T* AllocateAndConstruct(Param1, Param2, Param3, size_t);
-
-    template <typename T, typename Param1, typename Param2, typename Param3,
-              typename Param4>  // 1951
-    static T* AllocateAndConstruct(Param1, Param2, Param3, Param4, size_t);
-
-    template <typename T, typename Param1, typename Param2, typename Param3, typename Param4,
-              typename Param5>  // 2011
-    static T* AllocateAndConstruct(Param1, Param2, Param3, Param4, Param5, size_t);
-
-    template <typename T, typename Param1, typename Param2, typename Param3, typename Param4,
-              typename Param5, typename Param6>  // 2074
-    static T* AllocateAndConstruct(Param1, Param2, Param3, Param4, Param5, Param6, size_t);
+    template <typename T, typename... Params>
+    static T* AllocateAndConstructAligned(size_t alignment, Params&&... params) {
+        if (void* pMem = AllocateMemory(sizeof(T), alignment)) {
+            return new (pMem) T(std::forward<Params>(params)...);
+        }
+        return nullptr;
+    }
 
     template <typename T>  // 2159
-    static T* NewArray(int);
+    static T* NewArray(int count) {
+        if (void* pMem = AllocateMemory(sizeof(T) * count)) {
+            auto objAry = static_cast<T* const>(pMem);
+
+            for (int i = 0; i < count; ++i) {
+                new (&objAry[i]) T();
+            }
+
+            return objAry;
+        }
+
+        return nullptr;
+    }
 
     template <typename T>  // 2184
     static void DeleteObj(T* pObj) {
@@ -232,6 +271,14 @@ public:
     template <typename T>  // 2201
     static void DeleteArray(T*, int);
 
+    template <typename T>  // 2220
+    static void DeletePrimArray(T* objAry) {
+        if (objAry) {
+            FreeMemory(objAry);
+        }
+    }
+
+    /* newer
     class PartsBuildDataAccessor {
     public:
         PartsBuildDataAccessor(const ResParts*);
@@ -246,22 +293,30 @@ public:
         const ResPartsProperty* m_pPropertyTable;
         const ResParts* m_pResParts;
     };
+    */
 
     class PartsBuildDataSet {
     public:
         PartsBuildDataSet(Parts*, const ResParts*, const BuildResSet*, const ResVec2*);
-        Parts* GetPartsPane() const;
-        const util::Float2& GetMagnify() const;
-        const BuildResSet* GetPropertyBuildResSet() const;
+
+        Parts* GetPartsPane() const { return m_pPartsPane; }
+
+        const util::Float2& GetMagnify() const { return m_Magnify; }
+        const BuildResSet* GetPropertyBuildResSet() const { return m_pPropertyBuildResSet; }
         const ResPartsProperty* FindPartsPropertyFromName(const char*) const;
         const void* GetPropertyResBlock(const ResPartsProperty*) const;
         const ResExtUserDataList* GetExtUserDataListResBlock(bool*, const ResPartsProperty*) const;
         const ResPartsPaneBasicInfo* GetPartsPaneBasicInfoResBlock(const ResPartsProperty*) const;
-        bool IsOverwriting() const;
+        // newer
+        // bool IsOverwriting() const;
 
     private:
-        PartsBuildDataAccessor m_PartsBuildDataAccessor;
+        // newer
+        // PartsBuildDataAccessor m_PartsBuildDataAccessor;
+        int32_t m_PropertyCount;
+        const ResPartsProperty* m_pPropertyTable;
         Parts* m_pPartsPane;
+        const ResParts* m_pResParts;
         const BuildResSet* m_pPropertyBuildResSet;
         util::Float2 m_Magnify;
     };
@@ -269,38 +324,46 @@ public:
 protected:
     virtual bool BuildImpl(BuildResultInformation*, gfx::Device*, const void*, ResourceAccessor*,
                            const BuildArgSet&, const PartsBuildDataSet*);
+    /*newer
     void PrepareBuildArgSet(BuildArgSet&, const BuildArgSet&, const PartsBuildDataSet*);
     void SetByResLayout(LayoutBuildContext&);
     void BuildControl(LayoutBuildContext&, gfx::Device*);
     void BuildPaneByResPane(LayoutBuildContext&, BuildResultInformation*, gfx::Device*,
-                            const PartsBuildDataSet*);
+        const PartsBuildDataSet*);
     void BuildGroup(LayoutBuildContext&);
     void BuildAlignment(LayoutBuildContext&);
+    */
+
     virtual Pane* BuildPartsImpl(BuildResultInformation*, gfx::Device*, const void*,
                                  const PartsBuildDataSet*, BuildArgSet&, BuildResSet&,
                                  const uint32_t);
     void CopyLayoutInstanceImpl(gfx::Device*, const Layout&, Layout*, const char*);
-    void CopyLayoutInstanceImpl(gfx::Device*, const Layout&, Layout*, const char*, const char*);
+    // newer
+    // void CopyLayoutInstanceImpl(gfx::Device*, const Layout&, Layout*, const char*, const char*);
     virtual Pane* BuildPaneObj(BuildResultInformation*, gfx::Device*, uint32_t, const void*,
                                const void*, const BuildArgSet&);
     virtual Layout* BuildPartsLayout(BuildResultInformation*, gfx::Device*, const char*,
                                      const PartsBuildDataSet&, const BuildArgSet&);
-    void SetRootPane(Pane*);
-    void SetGroupContainer(GroupContainer*);
+
+    void SetRootPane(Pane* pPane) { m_pRootPane = pPane; }
+    void SetGroupContainer(GroupContainer* pGroupContainer) { m_pGroupContainer = pGroupContainer; }
+
     void SetLayoutSize(const Size&);
-    void SetName(const char*);
+    void SetName(const char* pName) { m_Name = pName; }
     void SetResourceAccessor(ResourceAccessor*);
     const void* GetLayoutResourceData(const char*) const;
     GroupArrayAnimator* CreateGroupArrayAnimator(gfx::Device*, const AnimResource&, bool);
     virtual void CalculateImpl(DrawInfo&, bool);
 
 private:
+    /* newer
     template <typename T>  // 2493
     void AllocateCaptureTexture(const ResCaptureTextureList*, ResourceAccessor*, const char*);
 
     template <typename T>  // 2495
     void InitializeCaptureTextureList(gfx::Device*, const ResCaptureTextureList*,
                                       const PartsBuildDataSet*);
+    */
 
     const char* GetCaptureTextureName(const ResCaptureTextureList*, const ResCaptureTexture*);
     const char* GetCaptureTextureName(const ResCaptureTextureList*, const ResCaptureTextureOld*);
@@ -312,12 +375,15 @@ private:
     static AlignedAllocateFunctionWithUserData g_pAllocateFunction;
     static FreeFunctionWithUserData g_pFreeFunction;
     static void* g_pUserDataForAllocator;
+
+    /* newer
     static CreateRenderTargetTextureCallback g_pCreateRenderTargetTextureCallback;
     static DestroyRenderTargetTextureCallback g_pDestroyRenderTargetTextureCallback;
     static CreateRenderTargetTextureResourceCallback g_pCreateRenderTargetTextureResourceCallback;
     static DestroyRenderTargetTextureResourceCallback g_pDestroyRenderTargetTextureResourceCallback;
     static void* g_pRenderTargetTextureCallbackUserData;
     static size_t g_CosntantBufferReservedSize;
+    */
 
     AnimTransformList m_AnimTransList;
     Pane* m_pRootPane;

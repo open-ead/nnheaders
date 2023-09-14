@@ -15,7 +15,7 @@ namespace ui2d {
 class Layout;
 
 const int ResourceNameStrMax = 24;
-// const int TexMapMax;
+const int TexMapMax = 3;
 const int TevStageMax = 6;
 const int MatColorMax = 2;
 const int TexImageNameMax = 128;
@@ -52,6 +52,21 @@ static const char* pCombinerUserShaderExtUserData_Rgba[4];
 static const char* pCombinerUserShaderExtUserData_IVec2[4];
 static const char* pCombinerUserShaderExtUserData_Int[4];
 static const char* pCombinerUserShaderExtUserData_Float[4];
+
+namespace detail {
+
+template <typename T>
+bool TestBit(T bits, int pos) {
+    const T mask = static_cast<T>(1 << pos);
+    return bits & mask;
+}
+
+}  // namespace detail
+
+template <typename TToPtr, typename TFrom>
+TToPtr DynamicCast(TFrom* obj) {
+    return font::DynamicCast<TToPtr>(obj);
+}
 
 typedef bool (*RegisterTextureViewSlot)(gfx::DescriptorSlot*, const gfx::TextureView&, void*);
 typedef bool (*RegisterSamplerSlot)(gfx::DescriptorSlot*, const gfx::Sampler&, void*);
@@ -622,7 +637,7 @@ public:
     PlacementTextureInfo() {}
 
     virtual ~PlacementTextureInfo() = default;
-    virtual void Finalize(gfx::Device* pDevice) {}
+    virtual void Finalize(gfx::Device* pDevice) { NN_UNUSED(pDevice); }
 
     void SetSize(int width, int height) {
         m_Size.width = width;
