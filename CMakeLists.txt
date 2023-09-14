@@ -171,23 +171,38 @@ add_library(NintendoSDK OBJECT
   include/nn/oe.h
   include/nn/util.h
   include/nn/image.h
+  include/nn/ui2d/ui2d_Animation.h
+  include/nn/ui2d/ui2d_Animator.h
+  include/nn/ui2d/ui2d_Bounding.h
+  include/nn/ui2d/ui2d_Common.h
+  include/nn/ui2d/ui2d_ControlCreator.h
+  include/nn/ui2d/ui2d_DrawInfo.h
+  include/nn/ui2d/ui2d_GraphicsResource.h
+  include/nn/ui2d/ui2d_Group.h
+  include/nn/ui2d/ui2d_Layout.h
+  include/nn/ui2d/ui2d_Material.h
+  include/nn/ui2d/ui2d_Pane.h
+  include/nn/ui2d/ui2d_Parts.h
+  include/nn/ui2d/ui2d_Picture.h
+  include/nn/ui2d/ui2d_ResourceAccessor.h
+  include/nn/ui2d/ui2d_Resources.h
+  include/nn/ui2d/ui2d_ShaderInfo.h
+  include/nn/ui2d/ui2d_TextBox.h
+  include/nn/ui2d/ui2d_TextSearcher.h
+  include/nn/ui2d/ui2d_Types.h
+  include/nn/ui2d/ui2d_Util.h
+  include/nn/ui2d/ui2d_Window.h
+  include/nn/ui2d/ui2d_WindowFoundation.h
   include/nn/util/AccessorBase.h
-  include/nn/util/MathTypes.h
   include/nn/util/util_Arithmetic.h
   include/nn/util/util_BinTypes.h
   include/nn/util/util_BitPack.h
   include/nn/util/util_BytePtr.h
   include/nn/util/util_BitUtil.h
   include/nn/util/util_IntrusiveList.h
+  include/nn/util/util_MathTypes.h
   include/nn/util/util_ResDic.h
   include/nn/util/util_StringView.h
-  include/nn/ui2d/Material.h
-  include/nn/ui2d/Pane.h
-  include/nn/ui2d/ui2d_Animation.h
-  include/nn/ui2d/ui2d_Common.h
-  include/nn/ui2d/ui2d_Layout.h
-  include/nn/ui2d/ui2d_Parts.h
-  include/nn/ui2d/ui2d_Types.h
   include/nn/g3d/BindFuncTable.h
   include/nn/g3d/ModelObj.h
   include/nn/g3d/ResMaterialAnim.h
@@ -390,8 +405,10 @@ add_library(NintendoSDK OBJECT
   src/NintendoSDK/nvn/nvn_FuncPtrImpl.h
   src/NintendoSDK/nvn/nvn_Impl.cpp
   src/NintendoSDK/nnSdk/util.cpp
+  src/NintendoWare/ui2d/ui2d_Animation.cpp
   src/NintendoWare/ui2d/ui2d_Group.cpp
   src/NintendoWare/ui2d/ui2d_Layout.cpp
+  src/NintendoWare/ui2d/ui2d_Util.cpp
 )
 
 target_include_directories(NintendoSDK PUBLIC include/)

@@ -8,9 +8,7 @@ namespace nn::util {
 typedef uint32_t AngleIndex;
 
 struct Unorm8x4 {
-    union {
-        uint8_t v[4];
-    };
+    uint8_t v[4];
 };
 
 struct Float2 {

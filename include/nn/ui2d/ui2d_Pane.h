@@ -44,41 +44,6 @@ typedef util::IntrusiveList<
     PaneList;
 
 class Pane : public detail::PaneBase {
-    struct CalculateContext {
-        font::RectDrawer* pRectDrawer;
-        const util::MatrixT4x3fType* pViewMtx;
-        util::Float2 locationAdjustScale;
-        float influenceAlpha;
-        bool isLocationAdjust;
-        bool isInvisiblePaneCalculateMtx;
-        bool isAlphaZeroPaneCalculateMtx;
-        bool isInfluenceAlpha;
-        const Layout* pLayout;
-
-        void SetDefault();
-        void Set(const DrawInfo&, const Layout*);
-    };
-
-    typedef CalculateContext CalculateMtxContext;
-
-    Pane* m_pParent;
-    PaneList m_ChildList;
-    util::Float3 m_Translate;
-    util::Float3 m_Rotate;
-    util::Float2 m_Scale;
-    Size m_Size;
-    uint8_t m_Flag;
-    uint8_t m_Alpha;
-    uint8_t m_GlbAlpha;
-    uint8_t m_BasePosition;
-    uint8_t m_FlagEx;
-    uint32_t m_SystemDataFlags;
-    util::MatrixT4x3fType m_GlbMtx;
-    const util::MatrixT4x3fType* m_pUserMtx;
-    const ResExtUserDataList* m_pExtUserDataList;
-    char m_Name[25];
-    char m_UserData[9];
-
 public:
     NN_RUNTIME_TYPEINFO_BASE();
 
@@ -90,7 +55,9 @@ public:
 
     virtual ~Pane();
     virtual void Finalize(gfx::Device*);
-    const char* GetName() const;
+
+    const char* GetName() const { return m_Name; }
+
     void SetName(const char*);
     const char* GetUserData() const;
     void SetUserData(const char*);
@@ -105,7 +72,9 @@ public:
     void SetRotate(const util::Float3&);
     const util::Float2& GetScale() const;
     void SetScale(const util::Float2&);
-    const Size& GetSize() const;
+
+    const Size& GetSize() const { return m_Size; }
+
     void SetSize(const Size&);
     uint8_t GetBasePositionX() const;
     void SetBasePositionX(uint8_t);
@@ -139,17 +108,20 @@ public:
     float GetMaskTexSrtElement(int) const;
     void SetMaskTexSrtElement(int, float);
     Material* GetMaterial() const;
-    virtual Material* GetMaterial(int) const;
     virtual uint8_t GetMaterialCount() const;
+    virtual Material* GetMaterial(int) const;
     uint16_t GetExtUserDataCount() const;
     const ResExtUserData* GetExtUserDataArray() const;
     const ResExtUserData* FindExtUserDataByName(const char*) const;
     ResExtUserData* GetExtUserDataArrayForAnimation() const;
     ResExtUserData* FindExtUserDataByNameForAnimation(const char*) const;
-    Pane* GetParent();
-    const Pane* GetParent() const;
+
+    Pane* GetParent() { return m_pParent; }
+    const Pane* GetParent() const { return m_pParent; }
     const PaneList& GetChildList() const;
-    PaneList& GetChildList();
+
+    PaneList& GetChildList() { return m_ChildList; }
+
     void AppendChild(Pane*);
     void PrependChild(Pane*);
     void InsertChild(Pane*, Pane*);
@@ -169,6 +141,27 @@ public:
     bool IsVisible() const;
     void SetVisible(bool);
     bool IsViewerInvisible() const;
+
+    struct CalculateContext {
+        font::RectDrawer* pRectDrawer;
+        const util::MatrixT4x3fType* pViewMtx;
+        util::Float2 locationAdjustScale;
+        float influenceAlpha;
+        bool isLocationAdjust;
+        bool isInvisiblePaneCalculateMtx;
+        bool isAlphaZeroPaneCalculateMtx;
+        bool isInfluenceAlpha;
+        const Layout* pLayout;
+
+        void SetDefault();
+        void Set(const DrawInfo&, const Layout*);
+    };
+
+    typedef CalculateContext CalculateMtxContext;
+
+    // gone in smo
+    virtual void CalculateMtx(DrawInfo&, CalculateMtxContext&, bool);
+
     virtual void Calculate(DrawInfo&, CalculateMtxContext&, bool);
 
     bool IsUserAllocated() const { return m_Flag & (1 << PaneFlag_UserAllocated); }
@@ -228,6 +221,26 @@ protected:
     int GetMaskShaderSecondBlend(const SystemDataMaskTexture*);
 
 private:
+    Pane* m_pParent;
+    PaneList m_ChildList;
+    util::Float3 m_Translate;
+    util::Float3 m_Rotate;
+    util::Float2 m_Scale;
+    Size m_Size;
+    uint8_t m_Flag;
+    uint8_t m_Alpha;
+    uint8_t m_GlbAlpha;
+    uint8_t m_BasePosition;
+    uint8_t m_FlagEx;
+    uint32_t m_SystemDataFlags;
+    util::MatrixT4x3fType m_GlbMtx;
+    const util::MatrixT4x3fType* m_pUserMtx;
+    const ResExtUserDataList* m_pExtUserDataList;
+    const ResExtUserDataList*
+        m_pAnimatedExtUserDataList;  // removed in newer, GetExtUserDataArrayForAnimation
+    char m_Name[25];
+    char m_UserData[9];
+
     void InitializeParams();
     void AddDynamicSystemExtUserDataAllNewImpl(SystemDataType, void*, int);
     void AddDynamicSystemExtUserDataPartialImpl(SystemDataType, void*, int);
