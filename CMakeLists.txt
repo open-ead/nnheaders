@@ -14,7 +14,6 @@ add_library(NintendoSDK OBJECT
   include/nn/vfx/Heap.h
   include/nn/socket.h
   include/nn/aoc.h
-  include/nn/fs.h
   include/nn/ro.h
   include/nn/oe.h
   include/nn/util.h
@@ -172,6 +171,13 @@ add_library(NintendoSDK OBJECT
   include/nn/gfx/gfx_TextureInfoData.h
   include/nn/gfx/gfx_Types.h
   include/nn/gfx/gfx_VariationBase.h
+  include/nn/fs/fs_bcat.h
+  include/nn/fs/fs_directories.h
+  include/nn/fs/fs_files.h
+  include/nn/fs/fs_mount.h
+  include/nn/fs/fs_rom.h
+  include/nn/fs/fs_save.h
+  include/nn/fs/fs_types.h
   include/nn/vi.h
   include/nn/account.h
   include/nn/audio.h
