@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdlib>
+#include <nn/applet.h>
 #include <nn/types.h>
 
 namespace nn::swkbd {
@@ -88,6 +90,8 @@ enum class DictionaryLang {
     Max_DictionaryLang,
 };
 
+enum class CloseResult { Enter, Cancel };
+
 struct DictionaryInfo {
     u32 offset;
     u16 size;
@@ -131,7 +135,24 @@ struct ShowKeyboardArg {
     long _customizeDicBufSize;
 };
 
-struct String {
+class String {
+public:
+    String(int size) {
+        bufsize = size;
+        strBuf = nullptr;
+    }
+    String(int size, char* buf) {
+        bufsize = size;
+        strBuf = buf;
+    }
+
+    void allocate() { strBuf = (char*)malloc(bufsize); }
+
+    void setBuf(char* buf) { strBuf = buf; }
+
+    const char* cstr() { return strBuf; }
+
+private:
     char* strBuf;
     int bufsize;
 };
@@ -140,6 +161,7 @@ struct UserWord;  // TODO contents missing
 
 ulong GetRequiredWorkBufferSize(bool);
 ulong GetRequiredStringBufferSize();
+nn::applet::ExitReason GetExitReason();
 void MakePreset(KeyboardConfig*, Preset);
 void SetHeaderText(KeyboardConfig*, const char16_t*);
 void SetSubText(KeyboardConfig*, const char16_t*);
@@ -158,6 +180,7 @@ void SetGuideTextUtf8(KeyboardConfig*, const char*);
 void SetInitialText(ShowKeyboardArg*, const char16_t*);
 void SetInitialTextUtf8(ShowKeyboardArg*, const char*);
 void SetUserWordList(ShowKeyboardArg*, const UserWord*, int);
-void ShowKeyboard(String*, const ShowKeyboardArg&);
+int ShowKeyboard(String*, const ShowKeyboardArg&);
 
+extern nn::applet::ExitReason g_ExitReason;
 }  // namespace nn::swkbd
