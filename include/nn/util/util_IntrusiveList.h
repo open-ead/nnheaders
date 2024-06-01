@@ -165,7 +165,11 @@ public:
         }
     }
 
-    iterator insert(const_iterator, reference);
+    iterator insert(const_iterator position, reference node) {
+        ToMutable(position)->LinkPrev(&node);
+        return iterator(&node);
+    }
+
     void splice(const_iterator, IntrusiveListImplementation&);
     void splice(const_iterator, IntrusiveListImplementation&, const_iterator);
     void splice(const_iterator, IntrusiveListImplementation&, const_iterator, const_iterator);
@@ -307,7 +311,12 @@ public:
 
     void clear() { m_Implementation.clear(); }
 
-    iterator insert(const_iterator, reference);
+    iterator insert(const_iterator position, reference value) {
+        detail::IntrusiveListImplementation::iterator result =
+            m_Implementation.insert(position.GetImplementationIterator(), ToNode(value));
+        return result;
+    }
+
     void splice(const_iterator, IntrusiveList&);
     void splice(const_iterator, IntrusiveList&, const_iterator);
     void splice(const_iterator, IntrusiveList&, const_iterator, const_iterator);

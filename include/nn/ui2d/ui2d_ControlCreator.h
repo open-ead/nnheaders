@@ -21,8 +21,10 @@ public:
     void Initialize(const void*, const ResExtUserDataList*);
     const char* GetControlName() const;
     const char* GetControlUserName() const;
-    int GetFunctionalPaneCount() const;
-    int GetFunctionalAnimCount() const;
+
+    int GetFunctionalPaneCount() const { return m_FunctionalPaneCount; }
+    int GetFunctionalAnimCount() const { return m_FunctionalAnimCount; }
+
     const char* GetFunctionalAnimParameterName(int) const;
     const char* GetFunctionalPaneName(int) const;
     const char* FindFunctionalPaneName(const char*) const;

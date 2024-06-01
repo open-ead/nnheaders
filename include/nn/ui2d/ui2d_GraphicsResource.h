@@ -79,7 +79,7 @@ public:
     void RegisterCommonSamplerSlot(RegisterSamplerSlot, void*);
     void UnregisterCommonSamplerSlot(UnregisterSamplerSlot, void*);
     gfx::DescriptorSlot& GetSamplerDescriptorSlot(TexWrap, TexWrap, TexFilter, TexFilter) const;
-    font::RectDrawer& GetFontDrawer();
+    font::RectDrawer& GetFontDrawer() { return m_pFontDrawer; }
     const ShaderInfo* GetCommonShaderInfo() const;
     const gfx::Buffer* GetIndexBuffer() const;
     const gfx::GpuAddress* GetIndexBufferGpuAddress() const;
@@ -100,12 +100,17 @@ private:
     void* m_pUi2dBuildinShader;
     void** m_pConstantBufferMemories;
     void* m_pBufferMemory;
+    // removed in smo
+    void* _unk;
+
     void* m_pRectShaderBinary;
     int32_t m_RectShaderBinarySize;
     size_t m_ConstantBufferAlignment;
+    /* added in smo
     size_t m_VertexBufferAlignment;
     size_t m_IndexBufferAlignment;
-    font::RectDrawer* m_pFontDrawer;
+    */
+    font::RectDrawer m_pFontDrawer;
     gfx::MemoryPool m_MemoryPoolForBuffers;
     gfx::Buffer m_VertexBuffer;
     gfx::GpuAddress m_VertexBufferGpuAddress;

@@ -406,8 +406,12 @@ add_library(NintendoSDK OBJECT
   src/NintendoSDK/nvn/nvn_Impl.cpp
   src/NintendoSDK/nnSdk/util.cpp
   src/NintendoWare/ui2d/ui2d_Animation.cpp
+  src/NintendoWare/ui2d/ui2d_Bounding.cpp
+  src/NintendoWare/ui2d/ui2d_ControlCreator.cpp
   src/NintendoWare/ui2d/ui2d_Group.cpp
   src/NintendoWare/ui2d/ui2d_Layout.cpp
+  src/NintendoWare/ui2d/ui2d_Pane.cpp
+  src/NintendoWare/ui2d/ui2d_ShaderInfo.cpp
   src/NintendoWare/ui2d/ui2d_Util.cpp
 )
 

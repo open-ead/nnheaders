@@ -56,6 +56,17 @@ static const char* pCombinerUserShaderExtUserData_Float[4];
 namespace detail {
 
 template <typename T>
+void SetBit(T* pBits, int pos, bool val) {
+    const T mask = static_cast<T>(1 << pos);
+
+    if (val) {
+        *pBits |= mask;
+    } else {
+        *pBits &= ~mask;
+    }
+}
+
+template <typename T>
 bool TestBit(T bits, int pos) {
     const T mask = static_cast<T>(1 << pos);
     return bits & mask;
@@ -66,6 +77,11 @@ bool TestBit(T bits, int pos) {
 template <typename TToPtr, typename TFrom>
 TToPtr DynamicCast(TFrom* obj) {
     return font::DynamicCast<TToPtr>(obj);
+}
+
+template <typename To, typename From>
+bool IsDerivedFrom(const From* instance) {
+    return font::IsDerivedFrom<To>(instance);
 }
 
 typedef bool (*RegisterTextureViewSlot)(gfx::DescriptorSlot*, const gfx::TextureView&, void*);

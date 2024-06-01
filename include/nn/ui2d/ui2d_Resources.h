@@ -49,9 +49,6 @@ const uint32_t ResourceTypeFont = 'font';
 const uint32_t ResourceTypeShader = 'bgsh';
 const uint32_t ResourceTypeScalableFont = 'scft';
 
-// figure out this class
-struct ResBounding;
-
 struct ResVec2 {
     void Set(float, float);
     operator util::Float2() const;
@@ -192,7 +189,15 @@ struct ResWindowFrameSize {
 class ResExtUserData {
 public:
     ResExtUserData(uint32_t, uint32_t, uint16_t, uint8_t);
-    const char* GetName() const;
+
+    const char* GetName() const {
+        if (m_NameStrOffset != 0) {
+            return util::ConstBytePtr(this, m_NameStrOffset).Get<char>();
+        }
+
+        return nullptr;
+    }
+
     ExtUserDataType GetType() const;
     uint16_t GetCount() const;
     const char* GetString() const;
@@ -243,8 +248,17 @@ struct ResLayout {
     ResVec2 partsSize;
 };
 
+struct ResControl {
+    font::detail::BinaryBlockHeader blockHeader;
+    uint32_t controlUserNameOffset;
+    uint32_t controlFunctionalPaneNamesOffset;
+    uint16_t controlFunctionalPaneCount;
+    uint16_t controlFunctionalAnimCount;
+    uint32_t controlFunctionalPaneParameterNameOffsetsOffset;
+    uint32_t controlFunctionalAnimParameterNameOffsetsOffset;
+};
+
 /*
-1353:   nn::ui2d::ResControl;
 1424:   nn::ui2d::ResFont;
 1448:   nn::ui2d::ResFontList;
 1471:   nn::ui2d::ResTexture;
@@ -297,6 +311,9 @@ struct ResPicture : public ResPane {
     uint8_t texCoordCount;
     uint8_t flags;
 };
+
+// not sure where to place this and seems to downcast in nn::ui2d::Bounding
+struct ResBounding : public ResPane {};
 
 /*
 2383:   nn::ui2d::ResPerCharacterTransform;

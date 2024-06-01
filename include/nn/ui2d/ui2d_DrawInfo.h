@@ -17,6 +17,7 @@ namespace ui2d {
 class DrawInfo;
 class GraphicsResource;
 class Pane;
+class ShaderInfo;
 
 typedef void (*UpdateUserShaderCallback)(const DrawInfo&, Pane*, void*);
 /* newer
@@ -37,19 +38,21 @@ public:
     void Set(const DrawInfo&);
     void ConfigureBeforeDrawing(Layout*);
     void ConfigureAfterDrawing();
-    const util::MatrixT4x3fType& GetViewMtx() const;
+    const util::MatrixT4x3fType& GetViewMtx() const { return m_ViewMtx; }
     void SetViewMtx(const util::MatrixT4x3fType&);
-    bool IsLocationAdjustEnabled() const;
+
+    bool IsLocationAdjustEnabled() const { return m_Flag.isLocationAdjustEnabled; }
+
     void SetLocationAdjustEnabled(bool);
-    const util::Float2& GetLocationAdjustScale() const;
+    const util::Float2& GetLocationAdjustScale() const { return m_LocationAdjustScale; }
     void SetLocationAdjustScale(const util::Float2&);
-    bool IsInvisiblePaneCalculated() const;
+    bool IsInvisiblePaneCalculated() const { return m_Flag.invisiblePaneCalculateMtx; }
     void SetInvisiblePaneCalculated(bool);
-    bool IsAlphaZeroPaneCalculated() const;
+    bool IsAlphaZeroPaneCalculated() const { return m_Flag.alphaZeroPaneCalculateMtx; }
     void SetAlphaZeroPaneCalculated(bool);
     bool IsLeftTopWindowOrigin() const;
     void SetLeftTopWindowOrigin(bool);
-    GraphicsResource* GetGraphicsResource() const;
+    GraphicsResource* GetGraphicsResource() const { return m_pGraphicsResource; }
     void SetGraphicsResource(GraphicsResource*);
     void SetProjectionMtx(const util::MatrixT4x4fType&);
     void SetUi2dConstantBuffer(font::GpuBuffer*);
@@ -90,8 +93,14 @@ public:
 
     const util::MatrixT4x4fType& GetProjectionMtx() const;
     void LoadProjectionMtx(float (*)[4]);
-    const util::MatrixT4x3fType& GetModelViewMtx() const;
-    void SetModelViewMtx(const util::MatrixT4x3fType&);
+
+    const util::MatrixT4x3fType& GetModelViewMtx() const { return m_ModelViewMtx; }
+
+    void SetModelViewMtx(const util::MatrixT4x3fType& m) {
+        m_ModelViewMtx = m;
+        m_ModelViewMtxLoaded = false;
+    }
+
     int GetTexCoordSrc(int) const;
     void SetTexCoordSrc(int, int);
     void LoadMtxModelView(float (*)[4]);
