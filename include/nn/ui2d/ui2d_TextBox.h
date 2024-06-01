@@ -11,8 +11,8 @@ class DispStringBuffer;
 class Font;
 class TextWriter;
 class WideTextWriter;
-struct PerCharacterTransformInfo;
-struct ConstantBufferAdditionalContent;
+class PerCharacterTransformInfo;
+class ConstantBufferAdditionalContent;
 }  // namespace font
 
 namespace ui2d {

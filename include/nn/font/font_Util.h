@@ -38,6 +38,12 @@ TToPtr DynamicCast(TFrom* obj) {
     return nullptr;
 }
 
+template <typename To, typename From>
+bool IsDerivedFrom(const From* instance) {
+    const detail::RuntimeTypeInfo* typeInfoU = To::GetRuntimeTypeInfoStatic();
+    return (instance && instance->GetRuntimeTypeInfo()->IsDerivedFrom(typeInfoU));
+}
+
 }  // namespace nn::font
 
 // todo: figure out where to put this

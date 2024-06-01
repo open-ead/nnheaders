@@ -44,47 +44,48 @@ struct MatMemCount {
 };
 
 // todo: figure out the math
-int CalculateOffsetTexSrtArray(const MatMemCount& bitCount) {
+inline int CalculateOffsetTexSrtArray(const MatMemCount& bitCount) {
+    NN_UNUSED(bitCount);
     return 0;
 }
 
-int CalculateOffsetTexCoordGenArray(const MatMemCount& bitCount) {
+inline int CalculateOffsetTexCoordGenArray(const MatMemCount& bitCount) {
     return CalculateOffsetTexSrtArray(bitCount);
 }
 
-int CalculateOffsetAlphaCompare(const MatMemCount& bitCount) {
+inline int CalculateOffsetAlphaCompare(const MatMemCount& bitCount) {
     return CalculateOffsetTexCoordGenArray(bitCount);
 }
 
-int CalculateOffsetBlendMode(const MatMemCount& bitCount) {
+inline int CalculateOffsetBlendMode(const MatMemCount& bitCount) {
     return CalculateOffsetAlphaCompare(bitCount);
 }
 
-int CalculateOffsetIndirectParameter(const MatMemCount& bitCount) {
+inline int CalculateOffsetIndirectParameter(const MatMemCount& bitCount) {
     return CalculateOffsetBlendMode(bitCount);
 }
 
-int CalculateOffsetTevStageArray(const MatMemCount& bitCount) {
+inline int CalculateOffsetTevStageArray(const MatMemCount& bitCount) {
     return CalculateOffsetIndirectParameter(bitCount);
 }
 
-int CalculateOffsetProjectionTexGen(const MatMemCount& bitCount) {
+inline int CalculateOffsetProjectionTexGen(const MatMemCount& bitCount) {
     return CalculateOffsetTevStageArray(bitCount);
 }
 
-int CalculateOffsetFontShadowParameter(const MatMemCount& bitCount) {
+inline int CalculateOffsetFontShadowParameter(const MatMemCount& bitCount) {
     return CalculateOffsetProjectionTexGen(bitCount);
 }
 
-int CalculateOffsetDetailedCombinerStageInfo(const MatMemCount& bitCount) {
+inline int CalculateOffsetDetailedCombinerStageInfo(const MatMemCount& bitCount) {
     return CalculateOffsetFontShadowParameter(bitCount);
 }
 
-int CalculateOffsetDetailedCombinerStage(const MatMemCount& bitCount) {
+inline int CalculateOffsetDetailedCombinerStage(const MatMemCount& bitCount) {
     return CalculateOffsetDetailedCombinerStageInfo(bitCount);
 }
 
-int CaluculateOffsetCombinerUserShader(const MatMemCount& bitCount) {
+inline int CaluculateOffsetCombinerUserShader(const MatMemCount& bitCount) {
     return CalculateOffsetDetailedCombinerStage(bitCount);
 }
 
@@ -185,6 +186,7 @@ public:
 
     // todo: figure out this function
     void SetColorElement(int colorType, int value) {
+        NN_UNUSED(value);  // temp
         if (colorType < AnimTargetMatColor_MaxAnimTargetMatColor) {
             uint32_t idx = 0;  // no const value
             if (UseDetailedCombinerCap()) {
