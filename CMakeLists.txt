@@ -6,6 +6,7 @@ add_library(NintendoSDK OBJECT
   include/nvn/nvn_FuncPtrInline.h
   include/nvn/nvn.h
   include/nn/types.h
+  include/nn/fs.h
   include/nn/os.h
   include/nn/nifm.h
   include/nn/prepo.h
