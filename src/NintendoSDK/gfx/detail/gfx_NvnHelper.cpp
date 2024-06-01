@@ -2,7 +2,7 @@
 
 #include <nn/gfx/gfx_SwapChainInfo.h>
 #include <nn/gfx/gfx_TextureInfo.h>
-#include <nvn/nvn_FuncPtrImpl.h>
+#include <nvn/nvn_FuncPtrBase.h>
 
 #include <algorithm>
 

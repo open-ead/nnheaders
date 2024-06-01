@@ -1,5 +1,3 @@
-#pragma once
-
 #include <nvn/nvn_FuncPtrBase.h>
 
 #ifdef __cplusplus

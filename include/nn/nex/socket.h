@@ -32,42 +32,37 @@ public:
         Msg_CTrunc = MSG_CTRUNC,
         Msg_WaitAll = MSG_WAITALL,
         Msg_DontWait = MSG_DONTWAIT,
-        Msg_Eof = MSG_EOF,
-        Msg_Notification = MSG_NOTIFICATION,
-        Msg_Nbio = MSG_NBIO,
-        Msg_Compat = MSG_COMPAT,
-        //    Msg_SoCallbck = MSG_SOCALLBCK,
-        //    Msg_NoSignal = MSG_NOSIGNAL,
+        // Msg_Eof = MSG_EOF,
+        // Msg_Notification = MSG_NOTIFICATION,
+        // Msg_Nbio = MSG_NBIO,
+        // Msg_Compat = MSG_COMPAT,
+        // Msg_SoCallbck = MSG_SOCALLBCK,
+        // Msg_NoSignal = MSG_NOSIGNAL,
         Msg_CMsg_CloExec = MSG_CMSG_CLOEXEC
     };
 
     class Socket {
-        virtual void Open(nn::nex::TransportProtocol::Type);
+        virtual bool Open(nn::nex::TransportProtocol::Type);
         virtual void Close();
-        virtual void Bind(ushort&);
-        virtual void RecvFrom(uchar*, ulong, InetAddress*, ulong*,
-                              nn::nex::SocketDriver::_SocketFlag);
-        virtual void SendTo(uchar const*, ulong, nn::nex::SocketDriver::InetAddress const&, ulong*);
+        virtual bool Bind(u16&);
+        virtual s32 RecvFrom(u8*, ulong, InetAddress*, ulong*, nn::nex::SocketDriver::_SocketFlag);
+        virtual s32 SendTo(u8 const*, ulong, nn::nex::SocketDriver::InetAddress const&, ulong*);
     };
 
     class PollInfo {};
 
+    ~SocketDriver() override;
+
     virtual Socket* Create();
     virtual void Delete(Socket*);
-    virtual int Poll(PollInfo*, uint, uint);
+    virtual int Poll(PollInfo*, u32, u32);
     virtual bool CanUseGetAllReceivableSockets();
-    virtual void GetAllReceivableSockets(Socket**, ulong, uint);
-};
-
-class BerkelySocket : public SocketDriver::Socket {};
-
-class BerkeleySocketDriver
-    : SocketDriver {  // inherits SocketDriver and RootObject but not documented
-    virtual ~BerkeleySocketDriver();
+    virtual void GetAllReceivableSockets(Socket**, ulong, u32);
 };
 
 class ClientWebSocketDriver : SocketDriver {
     class ClientWebSocket : Socket {};
+    ~ClientWebSocketDriver() override;
 };
 }  // namespace nex
 }  // namespace nn

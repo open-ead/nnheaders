@@ -85,7 +85,6 @@ public:
     Result IncrementDeliveryCacheFileCount();
     Result DecrementDeliveryCacheFileCount();
     Result IncrementDeliveryCacheDirectoryCount();
-    Result DecrementDeliveryCacheFileCount();
     Result EnumerateDeliveryCacheDirectory(int*, nn::bcat::DirectoryName*, int);
 };
 

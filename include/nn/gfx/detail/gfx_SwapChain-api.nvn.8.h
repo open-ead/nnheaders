@@ -2,6 +2,7 @@
 
 #include <nn/gfx/detail/gfx_DataContainer.h>
 #include <nn/gfx/gfx_Common.h>
+#include <nn/gfx/gfx_SwapChainData-api.nvn.8.h>
 
 namespace nn::gfx {
 
