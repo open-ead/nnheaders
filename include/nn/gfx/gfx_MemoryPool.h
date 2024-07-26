@@ -13,7 +13,10 @@ public:
     typedef MemoryPoolInfo InfoType;
 
     static size_t GetPoolMemoryAlignment(TDevice<TTarget>*, const InfoType&);
-    static size_t GetPoolMemorySizeGranularity(TDevice<TTarget>*, const InfoType&);
+
+    static size_t GetPoolMemorySizeGranularity(TDevice<TTarget>* pDevice, const InfoType& info) {
+        return detail::MemoryPoolImpl<TTarget>::GetPoolMemorySizeGranularity(pDevice, info);
+    }
 
     TMemoryPool();
 
