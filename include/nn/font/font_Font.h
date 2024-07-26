@@ -1,10 +1,47 @@
 #pragma once
 
+#include <nn/gfx/gfx_Buffer.h>
+#include <nn/gfx/gfx_BufferInfo.h>
 #include <nn/gfx/gfx_DescriptorSlot.h>
+#include <nn/gfx/gfx_Enum.h>
+#include <nn/gfx/gfx_MemoryPool.h>
+#include <nn/gfx/gfx_MemoryPoolInfo.h>
 #include <nn/gfx/gfx_Types.h>
 
 namespace nn {
 namespace font {
+
+namespace detail {
+inline size_t GetIndexBufferAlignment(gfx::Device* pDevice) {
+    gfx::BufferInfo info{};
+    info.SetDefault();
+
+    info.SetGpuAccessFlags(gfx::GpuAccess_IndexBuffer);
+
+    return gfx::Buffer::GetBufferAlignment(pDevice, info);
+}
+
+/*
+size_t GetVertexBufferAlignment(gfx::Device* pDevice) {
+    gfx::BufferInfo info;
+}
+
+size_t GetMemoryPoolAlignment(gfx::Device* pDevice) {
+    gfx::MemoryPoolInfo info;
+}
+*/
+
+inline size_t GetPoolMemorySizeGranularity(gfx::Device* pDevice) {
+    gfx::MemoryPoolInfo info{};
+    info.SetDefault();
+
+    info.SetMemoryPoolProperty(gfx::MemoryPoolProperty_GpuCached |
+                               gfx::MemoryPoolProperty_CpuUncached);
+
+    return gfx::MemoryPool::GetPoolMemorySizeGranularity(pDevice, info);
+}
+
+}  // namespace detail
 
 typedef uint16_t TexFmt;
 

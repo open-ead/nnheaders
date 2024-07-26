@@ -14,7 +14,9 @@ public:
 
     static const bool IsMemoryPoolRequired = true;
 
-    static size_t GetBufferAlignment(TDevice<TTarget>*, const InfoType&);
+    static size_t GetBufferAlignment(TDevice<TTarget>* pDevice, const InfoType& info) {
+        return detail::BufferImpl<TTarget>::GetBufferAlignment(pDevice, info);
+    }
 
     TBuffer();
     void Initialize(TDevice<TTarget>*, const InfoType&, TMemoryPool<TTarget>*, ptrdiff_t, size_t);

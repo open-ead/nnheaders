@@ -2,11 +2,13 @@
 
 #include <nn/util.h>
 
+#include <nn/font/font_RectDrawer.h>
 #include <nn/gfx/gfx_Buffer.h>
 #include <nn/gfx/gfx_GpuAddress.h>
 #include <nn/gfx/gfx_MemoryPool.h>
 #include <nn/gfx/gfx_Types.h>
 #include <nn/ui2d/ui2d_ShaderInfo.h>
+#include <nn/ui2d/ui2d_Types.h>
 
 namespace nn {
 
