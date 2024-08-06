@@ -50,7 +50,26 @@ public:
     void SetTexCoord(int, const util::Float2*);
     uint8_t GetFrameCount() const;
     void CalculateFrameSize(WindowFrameSize*);
-    void SetWindowFrameSize(int, int);
+
+    void SetWindowFrameSize(int index, int newSize) {
+        switch (index) {
+        case AnimTargetWindow_FrameTop:
+            m_WindowSize.frameSize.top = newSize;
+            break;
+        case AnimTargetWindow_FrameBottom:
+            m_WindowSize.frameSize.bottom = newSize;
+            break;
+        case AnimTargetWindow_FrameLeft:
+            m_WindowSize.frameSize.left = newSize;
+            break;
+        case AnimTargetWindow_FrameRight:
+            m_WindowSize.frameSize.right = newSize;
+            break;
+        default:
+            break;
+        }
+    }
+
     WindowFrameMode GetWindowFrameMode() const;
     virtual Material* FindMaterialByName(const char*, bool);
     virtual const Material* FindMaterialByName(const char*, bool) const;

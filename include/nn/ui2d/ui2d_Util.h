@@ -27,8 +27,8 @@ class Layout;
 class Pane;
 class Material;
 class ResourceAccessor;
-class ResHermiteKey;
-class ResParameterizedAnim;
+struct ResHermiteKey;
+struct ResParameterizedAnim;
 class ResParameterizedAnimParameter;
 class ResourceTextureInfo;
 class ShaderInfo;
@@ -62,7 +62,9 @@ Pane* ClonePaneTreeWithPartsLayout(const Pane*, Layout*, gfx::Device*, Layout*, 
 bool ComparePaneTreeTest(const Pane*, const Pane*);
 void DrawNullAndBoundingPane(gfx::CommandBuffer&, DrawInfo&, Material&, const Pane*,
                              const util::Unorm8x4&, const util::Unorm8x4&);
+
 float GetHermiteCurveValue(float, const ResHermiteKey*, int);
+
 float GetParameterizedAnimValue(float, float, const ResParameterizedAnim*);
 float GetParameterizedAnimValueAtFrame(float, const ResParameterizedAnimParameter*);
 const ResExtUserData* GetExtUserData(const ResExtUserDataList*, const char*);
@@ -105,5 +107,6 @@ private:
                                      const void*, int*, font::TextureCache*, AcquireFontFunction,
                                      void*, uint32_t);
 };
+
 }  // namespace ui2d
 }  // namespace nn

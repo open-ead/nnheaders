@@ -125,8 +125,30 @@ public:
     bool GetDirtyFlag() const;
     virtual void SetupTextWriter(font::WideTextWriter*);
     virtual void SetupTextWriterUtf8(font::TextWriter*);
-    void SetPerCharacterTransformOffset(float);
-    void SetPerCharacterTransform(int, float);
+
+    // function exists but I'm using it as a helper for AnimatePaneImpl
+    void SetPerCharacterTransformOffset(float value) {
+        m_pPerCharacterTransform->Offset = value;
+        UpdatePTDirty(true);
+    }
+
+    // seems to move to the cpp in smo
+    void SetPerCharacterTransform(int idx, float value); /*{
+        switch (idx) {
+        case AnimTargetPerCharacterTransform_EvalTypeOffset:
+            m_pPerCharacterTransform->Offset = value;
+            break;
+        case AnimTargetPerCharacterTransform_EvalTypeWidth:
+            m_pPerCharacterTransform->Width = value;
+            break;
+
+        default:
+            break;
+        }
+
+        UpdatePTDirty(true);
+    }*/
+
     float GetPerCharacterTransform(int) const;
     bool GetUtf8() const;
     void SetInvisibleBorderEnabled(bool);

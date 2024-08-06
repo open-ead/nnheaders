@@ -124,7 +124,7 @@ void Pane::SetVertexColor(int idx, const util::Unorm8x4& value) {
 }
 
 uint8_t Pane::GetColorElement(int idx) const {
-    if (idx == 16) {
+    if (idx == AnimTargetPaneColor_PaneAlpha) {
         return m_Alpha;
     } else {
         return GetVertexColorElement(idx);
@@ -132,7 +132,7 @@ uint8_t Pane::GetColorElement(int idx) const {
 }
 
 void Pane::SetColorElement(int idx, uint8_t value) {
-    if (idx == 16) {
+    if (idx == AnimTargetPaneColor_PaneAlpha) {
         m_Alpha = value;
     } else {
         SetVertexColorElement(idx, value);
