@@ -77,6 +77,7 @@ public:
     bool IsLocationAdjust() const;
     void SetLocationAdjust(bool);
     const util::Float3& GetTranslate() const;
+
     void SetTranslate(const util::Float3&);
     void SetTranslate(const util::Float2&);
     const util::Float3& GetRotate() const;
@@ -114,8 +115,16 @@ public:
     void SetAlpha(uint8_t);
     uint8_t GetGlobalAlpha() const;
     void SetGlobalAlpha(uint8_t);
+
     float GetSrtElement(int) const;
-    void SetSrtElement(int, float);
+
+    void SetSrtElement(int idx, float value) {
+        auto pSrts = util::BytePtr(&m_Translate).Get<float>();
+        pSrts[idx] = value;
+
+        SetGlbMtxDirty();
+    }
+
     virtual uint8_t GetColorElement(int) const;
     virtual void SetColorElement(int, uint8_t);
     virtual uint8_t GetVertexColorElement(int) const;

@@ -58,12 +58,8 @@ namespace detail {
 template <typename T>
 void SetBit(T* pBits, int pos, bool val) {
     const T mask = static_cast<T>(1 << pos);
-
-    if (val) {
-        *pBits |= mask;
-    } else {
-        *pBits &= ~mask;
-    }
+    *pBits &= ~mask;
+    *pBits |= mask * val;
 }
 
 template <typename T>
@@ -400,8 +396,8 @@ enum AnimTargetPaneColor {
     AnimTargetPaneColor_VertexRbG,
     AnimTargetPaneColor_VertexRbB,
     AnimTargetPaneColor_VertexRbA,
-    AnimTargetPaneColor_MaxVertex,
-    AnimTargetPaneColor_PaneAlpha = 16,
+    AnimTargetPaneColor_PaneAlpha,
+    AnimTargetPaneColor_MaxVertex = AnimTargetPaneColor_PaneAlpha,
     AnimTargetPaneColor_MaxAnimTargetPaneColor
 };
 
@@ -438,7 +434,7 @@ enum AnimTargetMatColor {
 };
 
 enum AnimTargetMatColorFloat {
-    AnimTargetMatColorFloat_BufferR = 28,
+    AnimTargetMatColorFloat_BufferR = AnimTargetMatColor_MaxAnimTargetMatColor,
     AnimTargetMatColorFloat_BufferG,
     AnimTargetMatColorFloat_BufferB,
     AnimTargetMatColorFloat_BufferA,

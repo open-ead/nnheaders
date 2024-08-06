@@ -116,10 +116,14 @@ private:
 class ResAlphaCompare {
 public:
     ResAlphaCompare();
-    ResAlphaCompare(AlphaTest, float);
+    ResAlphaCompare(AlphaTest aFunc, float aRef) {
+        m_AlphaCompareFunc = aFunc;
+        m_AlphaRef = aRef;
+    }
+
     void Set(AlphaTest, float);
     void SetRef(float);
-    AlphaTest GetFunc() const;
+    AlphaTest GetFunc() const { return (AlphaTest)m_AlphaCompareFunc; }
     float GetRef() const;
 
 private:
@@ -191,14 +195,14 @@ public:
     ResExtUserData(uint32_t, uint32_t, uint16_t, uint8_t);
 
     const char* GetName() const {
-        if (m_NameStrOffset != 0) {
-            return util::ConstBytePtr(this, m_NameStrOffset).Get<char>();
+        if (GetNameOffset() != 0) {
+            return util::ConstBytePtr(this, GetNameOffset()).Get<char>();
         }
 
         return nullptr;
     }
 
-    ExtUserDataType GetType() const;
+    ExtUserDataType GetType() const { return static_cast<ExtUserDataType>(m_Type); }
     uint16_t GetCount() const;
     const char* GetString() const;
     const int32_t* GetIntArray() const;
@@ -206,10 +210,19 @@ public:
     int GetSystemDataVersion() const;
     int GetSystemDataCount() const;
     const void* GetSystemData(int) const;
-    void WriteIntValue(int32_t, int);
-    void WriteFloatValue(float, int);
-    uint32_t GetDataOffset() const;
-    uint32_t GetNameOffset() const;
+
+    void WriteIntValue(int32_t value, int index) {
+        auto pValues = util::BytePtr(this, GetDataOffset()).Get<int32_t>();
+        pValues[index] = value;
+    }
+
+    void WriteFloatValue(float value, int index) {
+        auto pValues = util::BytePtr(this, GetDataOffset()).Get<float>();
+        pValues[index] = value;
+    }
+
+    uint32_t GetDataOffset() const { return m_DataOffset; }
+    uint32_t GetNameOffset() const { return m_NameStrOffset; }
 
 private:
     uint32_t m_NameStrOffset;
@@ -263,7 +276,24 @@ struct ResControl {
 1448:   nn::ui2d::ResFontList;
 1471:   nn::ui2d::ResTexture;
 1495:   nn::ui2d::ResTextureList;
-1518:   nn::ui2d::ResTexMap;
+*/
+struct ResTexMap {
+    uint16_t texIdx;
+    uint8_t wrapSflt;
+    uint8_t wrapTflt;
+
+    void SetDefault();
+    TexWrap GetWarpModeS() const;
+    TexWrap GetWarpModeT() const;
+    TexFilter GetMinFilter() const;
+    TexFilter GetMagFilter() const;
+    void SetWarpModeS(uint8_t);
+    void SetWarpModeT(uint8_t);
+    void SetMinFilter(uint8_t);
+    void SetMagFilter(uint8_t);
+};
+
+/*
 1627:   nn::ui2d::ResTexMapAdditionalInfo;
 1631:   nn::ui2d::ResTexMapAdditionalInfo::InfoType;
 1648:   nn::ui2d::ResMaterialResourceCount;
@@ -315,8 +345,16 @@ struct ResPicture : public ResPane {
 // not sure where to place this and seems to downcast in nn::ui2d::Bounding
 struct ResBounding : public ResPane {};
 
+struct ResPerCharacterTransform {
+    float evalTimeOffset;
+    float evalTimeWidth;
+    uint8_t loopType;
+    uint8_t originV;
+    uint8_t hasAnimationInfo;
+    char padding[1];
+};
+
 /*
-2383:   nn::ui2d::ResPerCharacterTransform;
 2413:   nn::ui2d::ResPerCharacterTransformExtended;
 */
 
@@ -535,7 +573,8 @@ struct ResDetailedCombinerStage {
 struct ResDetailedCombinerStageInfo {
 public:
     void SetDefault();
-    void SetConstantColor(uint32_t, ResColor);
+
+    void SetConstantColor(uint32_t idx, ResColor color) { m_ConstColor[idx] = color; }
 
     ResColor GetConstantColor(uint32_t idx) const { return m_ConstColor[idx % 5]; }
 
@@ -600,14 +639,47 @@ struct ResAnimationContent {
     uint8_t count;
     uint8_t type;
     char padding[2];
+
+    /*
+    uint32_t animInfoOffsets;
+    uint32_t fileNameOffsets;
+    */
+};
+
+struct ResAnimationInfo {
+    uint32_t kind;
+    uint8_t count;
+    char padding[3];
+};
+
+struct ResAnimationTarget {
+    uint8_t id;
+    uint8_t target;
+    uint8_t curveType;
+    char padding[1];
+    uint16_t keyCount;
+    char padding2[2];
+    uint32_t keysOffset;
+};
+
+struct ResHermiteKey {
+    float frame;
+    float value;
+    float slope;
+};
+
+struct ResStepKey {
+    float frame;
+    uint16_t value;
+    uint16_t padding[1];
+};
+
+struct ResParameterizedAnim {
+    uint16_t parameterizedAnimCount;
+    char padding[2];
 };
 
 /*
-4080:   nn::ui2d::ResAnimationInfo;
-4124:   nn::ui2d::ResAnimationTarget;
-4157:   nn::ui2d::ResHermiteKey;
-4174:   nn::ui2d::ResStepKey;
-4187:   nn::ui2d::ResParameterizedAnim;
 4202:   nn::ui2d::ResParameterizedAnimParameter;
 4222:   nn::ui2d::SystemDataSimpleAABB;
 4240:   nn::ui2d::SystemDataSimpleOBB;

@@ -5,11 +5,251 @@
 #include <nn/ui2d/ui2d_Material.h>
 #include <nn/ui2d/ui2d_ResourceAccessor.h>
 #include <nn/ui2d/ui2d_Resources.h>
+#include <nn/ui2d/ui2d_Util.h>
+#include <nn/ui2d/ui2d_Window.h>
 
 namespace nn {
 namespace ui2d {
 
+#define SIG(name) const uint32_t name = MakeSig(#name)
+
+SIG(FLPA);
+SIG(FLVI);
+SIG(FLVC);
+SIG(FLCT);
+// SIG(FLWN); added in smo
+
+SIG(FLTS);
+SIG(FLTP);
+SIG(FLFS);
+SIG(FLIM);
+SIG(FLAC);
+SIG(FLMC);
+
 namespace {
+bool RIsSame(float a, float b, float tolerance = 0.001f) {
+    float c = a - b;
+    return c > -tolerance && c < tolerance;
+}
+
+uint16_t GetStepCurveValue(float frame, const ResStepKey* pKeys, uint32_t keySize) {
+    // doesn't match with using ikeyL and ikeyR
+    if (keySize == 1 || frame <= pKeys[0].frame) {
+        return pKeys[0].value;
+    } else if (frame >= pKeys[keySize - 1].frame) {
+        return pKeys[keySize - 1].value;
+    }
+
+    int ikeyL = 0;
+    int ikeyR = keySize - 1;
+
+    while (ikeyL != ikeyR && ikeyL != ikeyR - 1) {
+        int ikeyCenter = (ikeyL + ikeyR) / 2;
+        const ResStepKey& centerKey = pKeys[ikeyCenter];
+
+        if (frame < centerKey.frame) {
+            ikeyR = ikeyCenter;
+        } else {
+            ikeyL = ikeyCenter;
+        }
+    }
+
+    if (RIsSame(frame, pKeys[ikeyR].frame)) {
+        return pKeys[ikeyR].value;
+    }
+
+    return pKeys[ikeyL].value;
+}
+
+void AnimatePaneSrt(Pane* pPane, const ResAnimationInfo* pAnimInfo,
+                    const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+
+        pPane->SetSrtElement(pAnimTarget->target,
+                             GetHermiteCurveValue(frame, pKeys, pAnimTarget->keyCount));
+    }
+}
+
+void AnimateVisibility(Pane* pPane, const ResAnimationInfo* pAnimInfo,
+                       const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResStepKey>();
+
+        pPane->SetVisible(GetStepCurveValue(frame, pKeys, pAnimTarget->keyCount));
+    }
+}
+
+void AnimateVertexColor(Pane* pPane, const ResAnimationInfo* pAnimInfo,
+                        const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+
+        float value = GetHermiteCurveValue(frame, pKeys, pAnimTarget->keyCount);
+        uint8_t u8Val = std::min(std::max(value + 0.5f, 0.0f), 255.0f);
+        pPane->SetColorElement(pAnimTarget->target, u8Val);
+    }
+}
+
+void AnimatePerCharacterTransform(Pane* pPane, const ResAnimationInfo* pAnimInfo,
+                                  const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+
+        float value = GetHermiteCurveValue(frame, pKeys, pAnimTarget->keyCount);
+        static_cast<TextBox*>(pPane)->SetPerCharacterTransformOffset(value);
+        // smo: static_cast<TextBox*>(pPane)->SetPerCharacterTransform(pAnimTarget->target, value);
+    }
+}
+
+/* added in smo
+void AnimateWindow(Pane* pPane, const ResAnimationInfo* pAnimInfo,
+                   const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+
+        float value = GetHermiteCurveValue(frame, pKeys, pAnimTarget->keysOffset);
+        static_cast<Window*>(pPane)->SetWindowFrameSize(pAnimTarget->target, value);
+    }
+}
+
+added after smo
+void AnimateMaskTexSrt(Pane* pPane, const ResAnimationInfo* pAnimInfo,
+                       const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+    }
+}
+*/
+
+void AnimateMaterialColor(Material* pMaterial, const ResAnimationInfo* pAnimInfo,
+                          const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+        float value = GetHermiteCurveValue(frame, pKeys, pAnimTarget->keyCount);
+
+        if (pAnimTarget->target <= AnimTargetMatColor_MaxAnimTargetMatColor) {
+            value += 0.5f;
+            uint8_t val = std::min(std::max(value, 0.0f), 255.0f);
+            pMaterial->SetColorElement(pAnimTarget->target, val);
+        } else {
+            pMaterial->SetColorElementFloat(pAnimTarget->target, value);
+        }
+    }
+}
+
+void AnimateTextureSrt(Material* pMaterial, const ResAnimationInfo* pAnimInfo,
+                       const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+
+        pMaterial->SetTexSrtElement(pAnimTarget->id, pAnimTarget->target,
+                                    GetHermiteCurveValue(frame, pKeys, pAnimTarget->keyCount));
+    }
+}
+
+void AnimateTexturePattern(Material* pMaterial, const ResAnimationInfo* pAnimInfo,
+                           const uint32_t* pAnimTargetOffsets, float frame,
+                           const TextureInfo** texInfos) {
+    for (int j = 0; j < pAnimInfo->count; ++j) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[j]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResStepKey>();
+        const uint16_t fileIdx = GetStepCurveValue(frame, pKeys, pAnimTarget->keyCount);
+
+        if (texInfos[fileIdx]->IsValid())
+            pMaterial->SetTexMap(pAnimTarget->id, texInfos[fileIdx]);
+    }
+}
+
+void AnimateIndirectSrt(Material* pMaterial, const ResAnimationInfo* pAnimInfo,
+                        const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+
+        pMaterial->SetIndirectSrtElement(pAnimTarget->target,
+                                         GetHermiteCurveValue(frame, pKeys, pAnimTarget->keyCount));
+    }
+}
+
+void AnimateAlphaCompare(Material* pMaterial, const ResAnimationInfo* pAnimInfo,
+                         const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+        float value = GetHermiteCurveValue(frame, pKeys, pAnimTarget->keyCount);
+        float val = std::min(std::max(value, 0.0f), 1.0f);
+
+        ResAlphaCompare compare(pMaterial->GetAlphaCompare().GetFunc(), val);
+        pMaterial->SetAlphaCompare(compare);
+    }
+}
+
+void AnimateFontShadow(Material* pMaterial, const ResAnimationInfo* pAnimInfo,
+                       const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+        float value = GetHermiteCurveValue(frame, pKeys, pAnimTarget->keyCount);
+
+        uint8_t value8 = std::min(std::max(value + 0.5f, 0.0f), 255.0f);
+        pMaterial->SetFontShadowParameterElement(pAnimTarget->target, value8);
+    }
+}
+
+void AnimateExtUserData(ResExtUserData* pExtUserData, const ResAnimationInfo* pAnimInfo,
+                        const uint32_t* pAnimTargetOffsets, float frame) {
+    for (int i = 0; i < pAnimInfo->count; ++i) {
+        auto pAnimTarget =
+            util::ConstBytePtr(pAnimInfo, pAnimTargetOffsets[i]).Get<ResAnimationTarget>();
+        auto pKeys = util::ConstBytePtr(pAnimTarget, pAnimTarget->keysOffset).Get<ResHermiteKey>();
+
+        switch (pExtUserData->GetType()) {
+        case ExtUserDataType_Int:
+            pExtUserData->WriteIntValue(GetHermiteCurveValue(frame, pKeys, pAnimTarget->keyCount),
+                                        pAnimTarget->id);
+            break;
+        case ExtUserDataType_Float:
+            pExtUserData->WriteFloatValue(GetHermiteCurveValue(frame, pKeys, pAnimTarget->keyCount),
+                                          pAnimTarget->id);
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+// 427
+const uint32_t* GetAnimInfoOffsets(const ResAnimationContent& animContent) {
+    if (animContent.type == AnimContentType_ExtUserData) {
+        const uint32_t* tableOffsets =
+            util::ConstBytePtr(&animContent, sizeof(ResAnimationContent)).Get<uint32_t>();
+        return util::ConstBytePtr(&animContent, tableOffsets[0]).Get<uint32_t>();
+    }
+
+    return util::ConstBytePtr(&animContent, sizeof(ResAnimationContent)).Get<uint32_t>();
+}
+
 // 443
 const char* GetExtUserDataTargetName(const ResAnimationContent& animContent) {
     if (animContent.type == AnimContentType_ExtUserData) {
@@ -329,7 +569,90 @@ bool AnimTransformBasic::BindPaneImpl(Pane* pTarget, const ResAnimationContent* 
     return true;
 }
 
-// bool AnimTransformBasic::BindMaterialImpl(Material*, const ResAnimationContent*);
+#define IFTEST(statement, ...)                                                                     \
+    if (statement) {                                                                               \
+        isBinding = false;                                                                         \
+        __VA_ARGS__                                                                                \
+    }
+
+bool AnimTransformBasic::BindMaterialImpl(Material* pTarget,
+                                          const ResAnimationContent* pAnimContent) {
+    if (m_BindPairCount >= m_BindPairCountMax) {
+        return false;
+    }
+
+    const uint32_t* animInfoOffsets = GetAnimInfoOffsets(*pAnimContent);
+
+    bool isBinding = true;
+    if (pAnimContent) {
+        for (int j = 0; j < pAnimContent->count; ++j) {
+            const ResAnimationInfo* animInfo =
+                util::ConstBytePtr(pAnimContent, animInfoOffsets[j]).Get<ResAnimationInfo>();
+            const uint32_t* pAnimTargetOffsets =
+                util::ConstBytePtr(animInfo, sizeof(ResAnimationInfo)).Get<uint32_t>();
+
+            for (int k = 0; k < animInfo->count; ++k) {
+                const ResAnimationTarget* pAnimTarget =
+                    util::ConstBytePtr(animInfo, pAnimTargetOffsets[k]).Get<ResAnimationTarget>();
+
+                switch (animInfo->kind) {
+                case FLTS:
+                    IFTEST(pAnimTarget->id >= TexMapMax)
+                    IFTEST(pTarget->GetTexSrtCap() <= pAnimTarget->id)
+                    IFTEST(pAnimTarget->target >= AnimTargetTexSrt_MaxAnimTargetTexSrt)
+                    IFTEST(pAnimTarget->curveType != AnimCurve_Hermite)
+                    break;
+
+                case FLTP: {
+                    IFTEST(!m_pTextures)
+                    IFTEST(pTarget->GetTexMapCount() <= pAnimTarget->id)
+                    IFTEST(pAnimTarget->curveType != AnimCurve_Step)
+                    IFTEST(pAnimTarget->target >= AnimTargetTexPattern_MaxAnimTargetTexPattern)
+
+                    for (int fileIdx = 0; fileIdx < GetAnimResource()->fileCount; ++fileIdx) {
+                        IFTEST(!m_pTextures[fileIdx]->IsValid(), break;)
+                    }
+                } break;
+
+                case FLFS:
+                    IFTEST(!pTarget->IsFontShadowParameterCap())
+                    IFTEST(AnimTargetFontShadow_MaxAnimTargetFontShadow <= pAnimTarget->target)
+                    IFTEST(pAnimTarget->curveType != AnimCurve_Hermite)
+                    break;
+
+                case FLIM:
+                    IFTEST(!pTarget->IsIndirectParameterCap())
+                    IFTEST(pAnimTarget->target >= AnimTargetIndirectSrt_MaxAnimTargetIndirectSrt)
+                    IFTEST(pAnimTarget->curveType != AnimCurve_Hermite)
+                    break;
+
+                case FLAC:
+                    IFTEST(!pTarget->IsAlphaCompareCap())
+                    IFTEST(pAnimTarget->target >= AnimTargetAlphaCompare_MaxAnimTargetAlphaCompare)
+                    IFTEST(pAnimTarget->curveType != AnimCurve_Hermite)
+                    break;
+
+                case FLMC:
+                    IFTEST(pAnimTarget->target >= AnimTargetMatColorFloat_MaxAnimTargetMatColor)
+                    IFTEST(pAnimTarget->curveType != AnimCurve_Hermite)
+                    break;
+
+                default:
+                    break;
+                }
+            }
+        }
+    }
+
+    if (isBinding) {
+        BindPair* pPair = &m_pBindPairs[m_BindPairCount];
+        m_BindPairCount++;
+        pPair->target = pTarget;
+        pPair->animCont = pAnimContent;
+    }
+
+    return true;
+}
 
 bool AnimTransformBasic::BindExtUserDataImpl(ResExtUserData* pTarget,
                                              const ResAnimationContent* pAnimContent) {
@@ -401,11 +724,105 @@ void AnimTransformBasic::AnimateMaterial(Material* pMaterial) {
     }
 }
 
-/*
-void AnimTransformBasic::AnimatePaneImpl(Pane*, const ResAnimationContent*);
-void AnimTransformBasic::AnimateMaterialImpl(Material*, const ResAnimationContent*);
-void AnimTransformBasic::AnimateExtUserDataImpl(ResExtUserData*, const ResAnimationContent*);
-*/
+void AnimTransformBasic::AnimatePaneImpl(Pane* pPane, const ResAnimationContent* pAnimContent) {
+    const uint32_t* animInfoOffsets = GetAnimInfoOffsets(*pAnimContent);
+
+    for (int i = 0; i < pAnimContent->count; ++i) {
+        const ResAnimationInfo* pAnimInfo =
+            util::ConstBytePtr(pAnimContent, animInfoOffsets[i]).Get<ResAnimationInfo>();
+        const uint32_t* pAnimTargetOffsets =
+            util::ConstBytePtr(pAnimInfo, sizeof(ResAnimationInfo)).Get<uint32_t>();
+
+        switch (pAnimInfo->kind) {
+        case FLPA:
+            AnimatePaneSrt(pPane, pAnimInfo, pAnimTargetOffsets, GetFrame());
+            break;
+
+        case FLVI:
+            AnimateVisibility(pPane, pAnimInfo, pAnimTargetOffsets, GetFrame());
+            break;
+
+        case FLVC:
+            AnimateVertexColor(pPane, pAnimInfo, pAnimTargetOffsets, GetFrame());
+            break;
+
+        case FLCT:
+            AnimatePerCharacterTransform(pPane, pAnimInfo, pAnimTargetOffsets, GetFrame());
+            break;
+
+            /* added in smo
+            case FLWN:
+                AnimateWindow(pPane, pAnimInfo, pAnimTargetOffsets, GetFrame());
+                break;
+            */
+
+            /* added after smo
+            case FL:
+                AnimateMaskTexSrt(pPane, pAnimInfo, pAnimTargetOffsets, GetFrame());
+                break;
+            */
+
+        default:
+            break;
+        }
+    }
+}
+
+void AnimTransformBasic::AnimateMaterialImpl(Material* pMaterial,
+                                             const ResAnimationContent* pAnimContent) {
+    const uint32_t* animInfoOffsets = GetAnimInfoOffsets(*pAnimContent);
+
+    for (int i = 0; i < pAnimContent->count; ++i) {
+        const ResAnimationInfo* pAnimInfo =
+            util::ConstBytePtr(pAnimContent, animInfoOffsets[i]).Get<ResAnimationInfo>();
+        const uint32_t* pAnimTargetOffsets =
+            util::ConstBytePtr(pAnimInfo, sizeof(ResAnimationInfo)).Get<uint32_t>();
+
+        switch (pAnimInfo->kind) {
+        case FLMC:
+            AnimateMaterialColor(pMaterial, pAnimInfo, pAnimTargetOffsets, GetFrame());
+            break;
+
+        case FLTS:
+            AnimateTextureSrt(pMaterial, pAnimInfo, pAnimTargetOffsets, GetFrame());
+            break;
+
+        case FLTP:
+            AnimateTexturePattern(pMaterial, pAnimInfo, pAnimTargetOffsets, GetFrame(),
+                                  m_pTextures);
+            break;
+
+        case FLIM:
+            AnimateIndirectSrt(pMaterial, pAnimInfo, pAnimTargetOffsets, GetFrame());
+            break;
+
+        case FLAC:
+            AnimateAlphaCompare(pMaterial, pAnimInfo, pAnimTargetOffsets, GetFrame());
+            break;
+
+        case FLFS:
+            AnimateFontShadow(pMaterial, pAnimInfo, pAnimTargetOffsets, GetFrame());
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+void AnimTransformBasic::AnimateExtUserDataImpl(ResExtUserData* pExtUserData,
+                                                const ResAnimationContent* pAnimContent) {
+    const uint32_t* animInfoOffsets = GetAnimInfoOffsets(*pAnimContent);
+
+    for (int i = 0; i < pAnimContent->count; ++i) {
+        const ResAnimationInfo* pAnimInfo =
+            util::ConstBytePtr(pAnimContent, animInfoOffsets[i]).Get<ResAnimationInfo>();
+        const uint32_t* pAnimTargetOffsets =
+            util::ConstBytePtr(pAnimInfo, sizeof(ResAnimationInfo)).Get<uint32_t>();
+
+        AnimateExtUserData(pExtUserData, pAnimInfo, pAnimTargetOffsets, GetFrame());
+    }
+}
 
 bool AnimTransformBasic::CheckBindAnimationDoubly(const void* target,
                                                   const ResAnimationContent* pAnimContent) const {
@@ -570,7 +987,29 @@ uint16_t AnimResource::CalculateAnimationCount(Pane* pPane, bool bRecursive) con
     return linkNum;
 }
 
-// uint16_t AnimResource::CalculateAnimationCount(Material*) const;
+uint16_t AnimResource::CalculateAnimationCount(Material* pMaterial) const {
+    if (!CheckResource()) {
+        return 0;
+    }
+
+    uint16_t linkNum = 0;
+
+    auto const pAnimContentOffsets =
+        util::ConstBytePtr(m_pResBlock, m_pResBlock->animContOffsetsOffset).Get<uint32_t>();
+
+    for (uint16_t i = 0; i < m_pResBlock->animContCount; ++i) {
+        auto& animContent =
+            *util::ConstBytePtr(m_pResBlock, pAnimContentOffsets[i]).Get<ResAnimationContent>();
+
+        if (animContent.type == AnimContentType_Material) {
+            if (detail::EqualsMaterialName(pMaterial->GetName(), animContent.name)) {
+                linkNum = 1;  // bug?
+            }
+        }
+    }
+
+    return linkNum;
+}
 
 uint16_t AnimResource::CalculateAnimationCount(Group* pGroup, bool bRecursive) const {
     uint16_t linkNum = 0;
