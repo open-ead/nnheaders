@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nn/nex/socket.h>
 #include <nn/types.h>
 
 namespace nn::nex {

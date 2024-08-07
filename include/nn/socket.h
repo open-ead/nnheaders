@@ -16,8 +16,6 @@ struct ResourceStatistics;
 struct InAddr {
     u32 addr;
 }
-#else
-using InAddr = ::in_addr;
 #endif
 
 // taken from https://switchbrew.org/wiki/Sockets_services#BsdBufferConfig
@@ -75,8 +73,15 @@ s32 Poll(pollfd*, ulong, int);
 s32 Fcntl(int, int, ...);
 s32 InetPton(int, const char*, void*);
 const char* InetNtop(int af, const void* src, char* dst, u32 size);
+
+#if NN_SDK_VER >= NN_MAKE_VER(7, 0, 0)
 s32 InetAton(const char* addressStr, InAddr* addressOut);
 char* InetNtoa(InAddr);
+#endif
+
+s32 InetAton(const char* addressStr, in_addr* addressOut);
+char* InetNtoa(in_addr);
+
 u16 InetHtons(u16 val);
 u32 InetHtonl(u32);
 u16 InetNtohs(u16);
@@ -142,8 +147,8 @@ void nnsocketPoll(pollfd*, ulong, int);
 void nnsocketFcntl(int, int, ...);
 void nnsocketInetPton(int, const char*, void*);
 const char* nnsocketInetNtop(int af, const void* src, char* dst, u32 size);
-s32 nnsocketInetAton(const char* addressStr, InAddr* addressOut);
-char* nnsocketInetNtoa(InAddr);
+s32 nnsocketInetAton(const char* addressStr, in_addr* addressOut);
+char* nnsocketInetNtoa(in_addr);
 u16 nnsocketInetHtons(u16 val);
 u32 nnsocketInetHtonl(u32);
 u16 nnsocketInetNtohs(u16);
