@@ -39,10 +39,19 @@ Pane::Pane() {
     SetVisible(true);
 }
 
-/*
-Pane::Pane(const ResPane*, const BuildArgSet&);
-Pane::Pane(const Pane&);
-*/
+Pane::Pane(const ResPane* pBlock, const BuildArgSet& buildArgSet) : detail::PaneBase() {
+    Initialize();
+
+    const ResVec3* translate = &pBlock->translate;
+
+    if (buildArgSet.pOverridePartsPaneBasicInfo) {
+        if (detail::TestBit(buildArgSet.overrideBasicUsageFlag,
+                            BasicOverrideUsageFlag_TranslateEnabled))
+            translate = &buildArgSet.pOverridePartsPaneBasicInfo->translate;
+    }
+}
+
+// Pane::Pane(const Pane&);
 
 void Pane::Initialize() {
     m_pExtUserDataList = nullptr;

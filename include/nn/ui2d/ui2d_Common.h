@@ -110,58 +110,98 @@ struct BuildResultInformation {
     void SetDefault();
 };
 
+// should probably have this has a util function
+#define FLAG(bit) 0x1 << bit
+
 namespace detail {
 enum FrameSpecFlag {
-    FrameSpecFlag_VertexEffectTexcoordEnabled = 0x1,
-    FrameSpecFlag_VertexEffectFrame = 0x2,
-    FrameSpecFlag_VertexEffectTexcoordAlignRight = 0x4,
-    FrameSpecFlag_VertexEffectTexcoordAlignBottom = 0x8,
-    FrameSpecFlag_VertexEffectDotByDotU = 0x10,
-    FrameSpecFlag_VertexEffectDotByDotV = 0x20,
-    FrameSpecFlag_VertexEffectFrameIdShift = 8,
-    FrameSpecFlag_VertexEffectFrameIdMask = 0xf << FrameSpecFlag_VertexEffectFrameIdShift,
-    FrameSpecFlag_VertexEffectTexCoordSwap = 0x10000,
-    FrameSpecFlag_VertexEffectTexCoordHFlip = 0x20000,
-    FrameSpecFlag_VertexEffectTexCoordVFlip = 0x40000,
-    FrameSpecFlag_VertexEffectConstColor = 0x40000000,
+    FrameSpecFlag_VertexEffectTexcoordEnabled = FLAG(0),
+    FrameSpecFlag_VertexEffectFrame = FLAG(1),
+    FrameSpecFlag_VertexEffectTexcoordAlignRight = FLAG(2),
+    FrameSpecFlag_VertexEffectTexcoordAlignBottom = FLAG(3),
+    FrameSpecFlag_VertexEffectDotByDotU = FLAG(4),
+    FrameSpecFlag_VertexEffectDotByDotV = FLAG(5),
 
-    FrameSpecFlag_FrameIdLt = 0,
-    FrameSpecFlag_FrameIdRt = 0x100,
-    FrameSpecFlag_FrameIdLb = 0x200,
-    FrameSpecFlag_FrameIdRb = 0x300,
-    FrameSpecFlag_FrameIdL = 1024,
-    FrameSpecFlag_FrameIdR = 1280,
-    FrameSpecFlag_FrameIdT = 1536,
-    FrameSpecFlag_FrameIdB = 1792,
-    FrameSpecFlag_Frame4IdLt = 2048,
-    FrameSpecFlag_Frame4IdRt = 2304,
-    FrameSpecFlag_Frame4IdLb = 2560,
-    FrameSpecFlag_Frame4IdRb = 2816,
-    FrameSpecFlag_Frame2IdL = 3072,
-    FrameSpecFlag_Frame2IdC = 3328,
-    FrameSpecFlag_Content = 3328,
-    FrameSpecFlag_FrameHorizontalL = 1027,
-    FrameSpecFlag_FrameHorizontalR = 1283,
-    FrameSpecFlag_FrameHorizontalNoContentL = 3091,
-    FrameSpecFlag_FrameHorizontalNoContentR = 1283,
-    FrameSpecFlag_FrameLt = 3,
-    FrameSpecFlag_FrameRt = 259,
-    FrameSpecFlag_FrameLb = 515,
-    FrameSpecFlag_FrameRb = 771,
-    FrameSpecFlag_FrameL = 1067,
-    FrameSpecFlag_FrameR = 1315,
-    FrameSpecFlag_FrameT = 1555,
-    FrameSpecFlag_FrameB = 1815,
-    FrameSpecFlag_Frame4Lt = 2067,
-    FrameSpecFlag_Frame4Rt = 2339,
-    FrameSpecFlag_Frame4Lb = 2603,
-    FrameSpecFlag_Frame4Rb = 2839,
-    FrameSpecFlag_FlipHFlip = 131072,
-    FrameSpecFlag_FlipVFlip = 262144,
-    FrameSpecFlag_FlipR90 = 196608,
-    FrameSpecFlag_FlipR180 = 393216,
-    FrameSpecFlag_FlipR270 = 327680,
-    FrameSpecFlag_Normal = 0
+    FrameSpecFlag_VertexEffectFrameIdShift = 8,
+    FrameSpecFlag_VertexEffectFrameIdMask = 0xF << FrameSpecFlag_VertexEffectFrameIdShift,
+
+    FrameSpecFlag_VertexEffectTexCoordSwap = FLAG(16),
+    FrameSpecFlag_VertexEffectTexCoordHFlip = FLAG(17),
+    FrameSpecFlag_VertexEffectTexCoordVFlip = FLAG(18),
+    FrameSpecFlag_VertexEffectConstColor = FLAG(19),
+
+    FrameSpecFlag_FrameIdLt = 0 << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_FrameIdRt = 1 << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_FrameIdLb = 2 << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_FrameIdRb = 3 << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_FrameIdL = 4 << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_FrameIdR = 5 << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_FrameIdT = 6 << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_FrameIdB = 7 << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_Frame4IdLt = 8 << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_Frame4IdRt = 9 << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_Frame4IdLb = 0xA << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_Frame4IdRb = 0xB << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_Frame2IdL = 0xC << FrameSpecFlag_VertexEffectFrameIdShift,
+    FrameSpecFlag_Frame2IdC = 0xD << FrameSpecFlag_VertexEffectFrameIdShift,
+
+    FrameSpecFlag_Content = FrameSpecFlag_Frame2IdC,
+    FrameSpecFlag_FrameHorizontalL = FrameSpecFlag_FrameIdL | FrameSpecFlag_VertexEffectFrame |
+                                     FrameSpecFlag_VertexEffectTexcoordEnabled,
+    FrameSpecFlag_FrameHorizontalR = FrameSpecFlag_FrameIdR | FrameSpecFlag_VertexEffectFrame |
+                                     FrameSpecFlag_VertexEffectTexcoordEnabled,
+    FrameSpecFlag_FrameHorizontalNoContentL = 0xC13,
+    FrameSpecFlag_FrameHorizontalNoContentR = 0x503,
+
+    FrameSpecFlag_FrameLt = FrameSpecFlag_FrameIdLt | FrameSpecFlag_VertexEffectFrame |
+                            FrameSpecFlag_VertexEffectTexcoordEnabled,
+    FrameSpecFlag_FrameRt = FrameSpecFlag_FrameIdRt | FrameSpecFlag_VertexEffectFrame |
+                            FrameSpecFlag_VertexEffectTexcoordEnabled,
+
+    FrameSpecFlag_FrameLb = FrameSpecFlag_FrameIdLb | FrameSpecFlag_VertexEffectFrame |
+                            FrameSpecFlag_VertexEffectTexcoordEnabled,
+    FrameSpecFlag_FrameRb = FrameSpecFlag_FrameIdRb | FrameSpecFlag_VertexEffectFrame |
+                            FrameSpecFlag_VertexEffectTexcoordEnabled,
+
+    FrameSpecFlag_FrameL = FrameSpecFlag_FrameIdL | FrameSpecFlag_VertexEffectFrame |
+                           FrameSpecFlag_VertexEffectTexcoordEnabled |
+                           FrameSpecFlag_VertexEffectDotByDotV |
+                           FrameSpecFlag_VertexEffectTexcoordAlignBottom,
+    FrameSpecFlag_FrameR = FrameSpecFlag_FrameIdR | FrameSpecFlag_VertexEffectFrame |
+                           FrameSpecFlag_VertexEffectTexcoordEnabled |
+                           FrameSpecFlag_VertexEffectDotByDotV,
+
+    FrameSpecFlag_FrameT = FrameSpecFlag_FrameIdT | FrameSpecFlag_VertexEffectFrame |
+                           FrameSpecFlag_VertexEffectTexcoordEnabled |
+                           FrameSpecFlag_VertexEffectDotByDotU,
+    FrameSpecFlag_FrameB = FrameSpecFlag_FrameIdB | FrameSpecFlag_VertexEffectFrame |
+                           FrameSpecFlag_VertexEffectTexcoordEnabled |
+                           FrameSpecFlag_VertexEffectDotByDotU |
+                           FrameSpecFlag_VertexEffectTexcoordAlignRight,
+
+    FrameSpecFlag_Frame4Lt = FrameSpecFlag_Frame4IdLt | FrameSpecFlag_VertexEffectFrame |
+                             FrameSpecFlag_VertexEffectTexcoordEnabled |
+                             FrameSpecFlag_VertexEffectDotByDotU,
+    FrameSpecFlag_Frame4Rt = FrameSpecFlag_Frame4IdRt | FrameSpecFlag_VertexEffectFrame |
+                             FrameSpecFlag_VertexEffectTexcoordEnabled |
+                             FrameSpecFlag_VertexEffectDotByDotV,
+
+    FrameSpecFlag_Frame4Lb = FrameSpecFlag_Frame4IdLb | FrameSpecFlag_VertexEffectFrame |
+                             FrameSpecFlag_VertexEffectTexcoordEnabled |
+                             FrameSpecFlag_VertexEffectDotByDotV |
+                             FrameSpecFlag_VertexEffectTexcoordAlignBottom,
+    FrameSpecFlag_Frame4Rb = FrameSpecFlag_Frame4IdRb | FrameSpecFlag_VertexEffectFrame |
+                             FrameSpecFlag_VertexEffectTexcoordEnabled |
+                             FrameSpecFlag_VertexEffectDotByDotU |
+                             FrameSpecFlag_VertexEffectTexcoordAlignRight,
+
+    FrameSpecFlag_FlipHFlip = FrameSpecFlag_VertexEffectTexCoordHFlip,
+    FrameSpecFlag_FlipVFlip = FrameSpecFlag_VertexEffectTexCoordVFlip,
+    FrameSpecFlag_FlipR90 = FrameSpecFlag_FlipHFlip | FrameSpecFlag_VertexEffectTexCoordSwap,
+    FrameSpecFlag_FlipR180 = FrameSpecFlag_FlipHFlip | FrameSpecFlag_FlipVFlip,
+    FrameSpecFlag_FlipR270 = FrameSpecFlag_FlipVFlip | FrameSpecFlag_VertexEffectTexCoordSwap,
+
+    FrameSpecFlag_Normal = 0x0
 };
 
 template <int StrMax>

@@ -80,9 +80,10 @@ TryReadNextBlockUserDataIfExist(const font::detail::BinaryFileHeader* const pFil
             *ppDataPtr = pNextDataBlockHead;
             *ppDataBlockHead = pNextDataBlockHead;
 
-            return reinterpret_cast<const ResExtUserDataList*>(pNextDataBlockHead);
+            return static_cast<const ResExtUserDataList*>(*ppDataPtr);
         }
     }
+
     return nullptr;
 }
 
@@ -306,9 +307,8 @@ bool Layout::BuildImpl(BuildResultInformation* pOutBuildResultInformation, gfx::
                        const PartsBuildDataSet* pPartsBuildDataSet) {
     m_pResourceAccessor = pResAcsr;
 
-    auto pFileHead = static_cast<const font::detail::BinaryFileHeader* const>(pLayoutResource);
-    // last 2 parameters are unused
-    font::detail::IsValidBinaryFile(pFileHead, FileSignatureFlyt, 0, 0);
+    auto const pFileHead = static_cast<const font::detail::BinaryFileHeader*>(pLayoutResource);
+    font::detail::IsValidBinaryFile(pFileHead, FileSignatureFlyt);
 
     BuildResSet buildResSet{};
     buildResSet.pResAccessor = pResAcsr;
@@ -351,8 +351,8 @@ bool Layout::BuildImpl(BuildResultInformation* pOutBuildResultInformation, gfx::
     bool firstGroup = false;
     int groupNestLevel = 0;
 
-    const void* pData = static_cast<const uint8_t*>(pLayoutResource) + pFileHead->headerSize;
-    for (int index = 0; index < pFileHead->dataBlocks; ++index) {
+    auto pData = util::ConstBytePtr(pLayoutResource, pFileHead->headerSize).Get();
+    for (int i = 0; i < pFileHead->dataBlocks; ++i) {
         auto pBlock = static_cast<const font::detail::BinaryBlockHeader*>(pData);
         uint32_t kind = pBlock->kind;
 
@@ -365,15 +365,14 @@ bool Layout::BuildImpl(BuildResultInformation* pOutBuildResultInformation, gfx::
             buildArgSet.partsSize.x = pResLyt->partsSize.x;
             buildArgSet.partsSize.y = pResLyt->partsSize.y;
 
-            m_pResExtUserDataList =
-                TryReadNextBlockUserDataIfExist(pFileHead, &index, &pData, &pBlock);
+            m_pResExtUserDataList = TryReadNextBlockUserDataIfExist(pFileHead, &i, &pData, &pBlock);
         } break;
 
         case DataBlockKindControl:
             if (buildArgSet.pControlCreator) {
                 auto pControlData = pData;
                 auto pExtUserDataList =
-                    TryReadNextBlockUserDataIfExist(pFileHead, &index, &pData, &pBlock);
+                    TryReadNextBlockUserDataIfExist(pFileHead, &i, &pData, &pBlock);
 
                 ControlSrc src(pControlData, pExtUserDataList);
                 buildArgSet.pControlCreator->CreateControl(pDevice, this, src);
@@ -393,7 +392,7 @@ bool Layout::BuildImpl(BuildResultInformation* pOutBuildResultInformation, gfx::
             break;
 
             /* smo
-            case 0x31697073:  // 'spi1'
+            case MakeSig("spi1"):
                 buildResSet.pShapeInfoList = static_cast<const ResShapeInfoList*>(pData);
                 break;
             */
@@ -407,7 +406,7 @@ bool Layout::BuildImpl(BuildResultInformation* pOutBuildResultInformation, gfx::
             auto pPartsData = pData;
 
             buildArgSet.pExtUserDataList =
-                TryReadNextBlockUserDataIfExist(pFileHead, &index, &pData, &pBlock);
+                TryReadNextBlockUserDataIfExist(pFileHead, &i, &pData, &pBlock);
 
             if (auto pane = BuildPartsImpl(pOutBuildResultInformation, pDevice, pPartsData,
                                            pPartsBuildDataSet, buildArgSet, buildResSet, kind))
@@ -427,12 +426,10 @@ bool Layout::BuildImpl(BuildResultInformation* pOutBuildResultInformation, gfx::
             if (!firstGroup) {
                 firstGroup = true;
                 SetGroupContainer(AllocateAndConstruct<GroupContainer>());
-            } else {
-                if (GetGroupContainer() && groupNestLevel == 1) {
-                    if (auto group = AllocateAndConstruct<Group>(
-                            static_cast<const ResGroup*>(pData), GetRootPane())) {
-                        GetGroupContainer()->AppendGroup(group);
-                    }
+            } else if (GetGroupContainer() && groupNestLevel == 1) {
+                if (auto group = AllocateAndConstruct<Group>(static_cast<const ResGroup*>(pData),
+                                                             GetRootPane())) {
+                    GetGroupContainer()->AppendGroup(group);
                 }
             }
             break;
@@ -487,7 +484,7 @@ void Layout::CopyLayoutInstanceImpl(gfx::Device* pDevice, const Layout& src, Lay
     const GroupList& src_groups = src.GetGroupContainer()->GetGroupList();
     for (GroupList::const_iterator iter = src_groups.begin(), endIter = src_groups.end();
          iter != endIter; ++iter) {
-        m_pGroupContainer->AppendGroup(AllocateAndConstruct<Group>(*iter, m_pRootPane));
+        m_pGroupContainer->AppendGroup(AllocateAndConstruct<Group>(std::ref(*iter), m_pRootPane));
     }
 
     if (pParentLayout) {
@@ -828,14 +825,15 @@ Pane* Layout::BuildPaneObj(BuildResultInformation* pOutBuildResultInformation, g
     switch (kind) {
     case DataBlockKindPane: {
         auto pResPane = static_cast<const ResPane*>(pBlock);
-        return AllocateAndConstructAligned<Pane>(16, pResPane, buildArgSet);
+        return AllocateAndConstructAligned<Pane>(16, pResPane, std::ref(buildArgSet));
     }
 
     case DataBlockKindPicture: {
         auto pResPic = static_cast<const ResPicture*>(pBlock);
         auto pResPicOverride = static_cast<const ResPicture*>(pOverrideBlock);
         return AllocateAndConstructAligned<Picture>(16, pOutBuildResultInformation, pDevice,
-                                                    pResPic, pResPicOverride, buildArgSet);
+                                                    pResPic, pResPicOverride,
+                                                    std::ref(buildArgSet));
     }
 
     case DataBlockKindTextBox: {
@@ -844,7 +842,7 @@ Pane* Layout::BuildPaneObj(BuildResultInformation* pOutBuildResultInformation, g
         TextBox::InitializeStringParam initStringParam;
         TextBox* textBox = AllocateAndConstructAligned<TextBox>(
             16, pOutBuildResultInformation, pDevice, &initStringParam, pResTextBox,
-            pResTextBoxOverride, buildArgSet);
+            pResTextBoxOverride, std::ref(buildArgSet));
         textBox->InitializeString(pOutBuildResultInformation, pDevice, buildArgSet,
                                   initStringParam);
         return textBox;
@@ -854,20 +852,22 @@ Pane* Layout::BuildPaneObj(BuildResultInformation* pOutBuildResultInformation, g
         auto pResWindow = static_cast<const ResWindow*>(pBlock);
         auto pResWindowOverride = static_cast<const ResWindow*>(pOverrideBlock);
         return AllocateAndConstructAligned<Window>(16, pOutBuildResultInformation, pDevice,
-                                                   pResWindow, pResWindowOverride, buildArgSet);
+                                                   pResWindow, pResWindowOverride,
+                                                   std::ref(buildArgSet));
     }
 
     case DataBlockKindBounding: {
         auto pResBounding = static_cast<const ResBounding*>(pBlock);
         auto pResBoundingOverride = static_cast<const ResBounding*>(pOverrideBlock);
         return AllocateAndConstructAligned<Bounding>(16, pResBounding, pResBoundingOverride,
-                                                     buildArgSet);
+                                                     std::ref(buildArgSet));
     }
 
     case DataBlockKindParts: {
         auto pResParts = static_cast<const ResParts*>(pBlock);
         auto pResPartsOverride = static_cast<const ResParts*>(pOverrideBlock);
-        return AllocateAndConstructAligned<Parts>(16, pResParts, pResPartsOverride, buildArgSet);
+        return AllocateAndConstructAligned<Parts>(16, pResParts, pResPartsOverride,
+                                                  std::ref(buildArgSet));
     }
 
     default:

@@ -27,8 +27,8 @@ struct BinaryBlockHeader {
     uint32_t size;
 };
 
-inline bool IsValidBinaryFile(const BinaryFileHeader* pHeader, uint32_t signature, uint32_t version,
-                              uint16_t minBlocks) {
+inline bool IsValidBinaryFile(const BinaryFileHeader* pHeader, uint32_t signature,
+                              uint32_t version = 0, uint16_t minBlocks = 0) {
     NN_UNUSED(version);
     NN_UNUSED(minBlocks);
 
