@@ -10,6 +10,7 @@
 namespace nn {
 namespace atk {
 class SoundActor;
+class SoundPlayer;
 
 enum MixMode {
 
