@@ -230,17 +230,17 @@ public:
     bool CompareCopiedInstanceTest(const Layout&) const;
 
     template <typename T, typename... Params>
-    static T* AllocateAndConstruct(Params&&... params) {
+    static T* AllocateAndConstruct(Params... params) {
         if (void* pMem = AllocateMemory(sizeof(T))) {
-            return new (pMem) T(std::forward<Params>(params)...);
+            return new (pMem) T(params...);
         }
         return nullptr;
     }
 
     template <typename T, typename... Params>
-    static T* AllocateAndConstructAligned(size_t alignment, Params&&... params) {
+    static T* AllocateAndConstructAligned(size_t alignment, Params... params) {
         if (void* pMem = AllocateMemory(sizeof(T), alignment)) {
-            return new (pMem) T(std::forward<Params>(params)...);
+            return new (pMem) T(params...);
         }
         return nullptr;
     }

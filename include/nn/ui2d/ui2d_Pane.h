@@ -186,7 +186,7 @@ public:
 
     virtual void Calculate(DrawInfo&, CalculateMtxContext&, bool);
 
-    bool IsUserAllocated() const { return m_Flag & (1 << PaneFlag_UserAllocated); }
+    bool IsUserAllocated() const { return detail::TestBit(m_Flag, PaneFlag_UserAllocated); }
     void SetUserAllocated();
 
     void SetExtUserDataList(const ResExtUserDataList* pBlock);

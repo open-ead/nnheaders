@@ -9,7 +9,7 @@ namespace nn {
 namespace ui2d {
 
 template <size_t N>
-constexpr unsigned int MakeSig(const char (&s)[N]) {
+constexpr uint32_t MakeSig(const char (&s)[N]) {
     static_assert(N == 5, "signature must have exactly 4 characters");
     return s[0] | (s[1] << 8) | (s[2] << 16) | (s[3] << 24);
 }
@@ -396,7 +396,15 @@ struct ResWindow : public ResPane {
     uint32_t frameOffsetTableOffset;
 };
 
-// 613:   nn::ui2d::ResPartsPaneBasicInfo;
+struct ResPartsPaneBasicInfo {
+    char userData[8];
+    ResVec3 translate;
+    ResVec3 rotate;
+    ResVec2 scale;
+    ResVec2 size;
+    uint8_t alpha;
+    char padding[3];
+};
 
 struct ResPartsProperty {
     char name[24];
