@@ -14,9 +14,18 @@ public:
     static size_t GetBinaryCodeAlignment(TDevice<TTarget>*);
 
     TShader();
-    ShaderInitializeResult Initialize(TDevice<TTarget>*, const InfoType&);
+
+    ShaderInitializeResult Initialize(TDevice<TTarget>* pDevice, const InfoType& info) {
+        return detail::ShaderImpl<TTarget>::Initialize(pDevice, info);
+    }
+
     void Finalize(TDevice<TTarget>*);
-    int GetInterfaceSlot(ShaderStage, ShaderInterfaceType, const char*) const;
+
+    int GetInterfaceSlot(ShaderStage stage, ShaderInterfaceType shaderInterfaceType,
+                         const char* pName) const {
+        return detail::ShaderImpl<TTarget>::GetInterfaceSlot(stage, shaderInterfaceType, pName);
+    }
+
     void GetWorkGroupSize(int*, int*, int*) const;
     void SetUserPtr(void*);
     void* GetUserPtr();
