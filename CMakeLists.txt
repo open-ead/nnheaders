@@ -306,10 +306,6 @@ target_compile_options(NintendoSDK PRIVATE -fno-exceptions)
 target_compile_options(NintendoSDK PRIVATE -Wall -Wextra)
 target_compile_options(NintendoSDK PRIVATE -Wno-invalid-offsetof)
 
-if(NN_USE_GFX)
-  target_compile_definitions(NintendoSDK PRIVATE NN_USE_GFX)
-endif()
-
 if (NN_API)
   target_compile_definitions(NintendoSDK PRIVATE NN_API_${NN_API})
 endif()
