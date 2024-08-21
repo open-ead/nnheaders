@@ -25,7 +25,7 @@ void ReferSymbol(const void*);
 }  // namespace util
 }  // namespace nn
 
-#define NN_MAKE_VER(major, minor, patch) ((major << 16) | (minor << 8) | (patch))
+#define NN_MAKE_VER(major, minor, patch) (((major) << 16) | ((minor) << 8) | (patch))
 
 #ifdef NN_SDK_MAJOR
 #define NN_SDK_VER NN_MAKE_VER(NN_SDK_MAJOR, NN_SDK_MINOR, NN_SDK_PATCH)
@@ -45,7 +45,9 @@ void ReferSymbol(const void*);
 #define NN_WARE_PATCH 0
 #endif
 
+#ifndef NN_SDK_TYPE
 #define NN_SDK_TYPE "Release"
+#endif
 
 #define NN_STR(s) #s
 #define NN_XSTR(s) NN_STR(s)

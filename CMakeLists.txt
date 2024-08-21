@@ -2,20 +2,18 @@ cmake_minimum_required(VERSION 3.15)
 
 project(NintendoSDK CXX ASM)
 
-set(SDK_TARGET_PLATFORM "NVN" CACHE STRING "Set build type")
-set_property(CACHE SDK_TARGET_PLATFORM PROPERTY STRINGS "NVN")
-set(SDK_${SDK_TARGET_PLATFORM} true)
+set(NN_GFX_TARGET "NVN" CACHE STRING "Set nn::gfx build target")
+set_property(CACHE NN_GFX_TARGET PROPERTY STRINGS "" "NVN")
 
-set(NN_API "C" CACHE STRING "Set build type")
-set_property(CACHE NN_API PROPERTY STRINGS "CPP" "C")
-
-option(NN_USE_GFX "Build and statically link nn::gfx" ON)
+set(NVN_API "C" CACHE STRING "Set NVN platform type")
+set_property(CACHE NVN_API PROPERTY STRINGS "C" "CPP")
 
 set(NN_SOURCES "")
 
-if(NN_USE_GFX)
-  if(NN_API STREQUAL "C")
-    unset(NN_API)
+if(NN_GFX_TARGET)
+  # gfx_NvnHelper.cpp includes the C impl
+	if(NVN_API STREQUAL "C")
+    unset(NVN_API CACHE)
   endif()
 
   set(NN_GFX_SOURCES 
@@ -81,10 +79,6 @@ if(NN_USE_GFX)
     
     src/NintendoSDK/gfx/detail/gfx_CommonHelper.cpp
     src/NintendoSDK/gfx/detail/gfx_CommonHelper.h
-    src/NintendoSDK/gfx/detail/gfx_GlslcFunction.cpp
-    src/NintendoSDK/gfx/detail/gfx_NvnHelper-os.horizon.cpp
-    src/NintendoSDK/gfx/detail/gfx_NvnHelper.cpp
-    src/NintendoSDK/gfx/detail/gfx_NvnHelper.h
     src/NintendoSDK/gfx/util/gfx_PrimitiveShape.cpp
 
     src/NintendoSDK/gfx/gfx_BufferInfo.cpp
@@ -103,7 +97,7 @@ if(NN_USE_GFX)
     src/NintendoSDK/gfx/gfx_TextureInfo.cpp
   )
 
-  if(SDK_NVN)
+  if(NN_GFX_TARGET STREQUAL "NVN")
     list(APPEND NN_GFX_SOURCES
       include/nn/gfx/detail/gfx_Buffer-api.nvn.8.h
       include/nn/gfx/detail/gfx_CommandBuffer-api.nvn.8.h
@@ -141,7 +135,11 @@ if(NN_USE_GFX)
       src/NintendoSDK/gfx/detail/gfx_CommandBuffer-api.nvn.8.cpp
       src/NintendoSDK/gfx/detail/gfx_DescriptorPool-api.nvn.8.cpp
       src/NintendoSDK/gfx/detail/gfx_Device-api.nvn.8-os.horizon.cpp
+	  src/NintendoSDK/gfx/detail/gfx_GlslcFunction.cpp
       src/NintendoSDK/gfx/detail/gfx_MemoryPool-api.nvn.8.cpp
+	  src/NintendoSDK/gfx/detail/gfx_NvnHelper-os.horizon.cpp
+	  src/NintendoSDK/gfx/detail/gfx_NvnHelper.cpp
+	  src/NintendoSDK/gfx/detail/gfx_NvnHelper.h
       src/NintendoSDK/gfx/detail/gfx_ResShader-api.nvn.8.cpp
       src/NintendoSDK/gfx/detail/gfx_Sampler-api.nvn.8.cpp
       src/NintendoSDK/gfx/detail/gfx_Shader-api.nvn.8.cpp
@@ -306,8 +304,8 @@ target_compile_options(NintendoSDK PRIVATE -fno-exceptions)
 target_compile_options(NintendoSDK PRIVATE -Wall -Wextra)
 target_compile_options(NintendoSDK PRIVATE -Wno-invalid-offsetof)
 
-if (NN_API)
-  target_compile_definitions(NintendoSDK PRIVATE NN_API_${NN_API})
+if (NVN_API)
+  target_compile_definitions(NintendoSDK PRIVATE NVN_API_${NVN_API})
 endif()
 
 function(nn_ver ID)
