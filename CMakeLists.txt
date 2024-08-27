@@ -12,7 +12,7 @@ set(NN_SOURCES "")
 
 if(NN_GFX_TARGET)
   # gfx_NvnHelper.cpp includes the C impl
-	if(NVN_API STREQUAL "C")
+  if(NVN_API STREQUAL "C")
     unset(NVN_API CACHE)
   endif()
 
@@ -22,7 +22,7 @@ if(NN_GFX_TARGET)
     include/nn/gfx/detail/gfx_Misc.h
     include/nn/gfx/detail/gfx_RequiredMemory.h
     include/nn/gfx/detail/gfx_ResShaderImpl.h
-  	include/nn/gfx/detail/gfx_RootSignature-api.common.h
+    include/nn/gfx/detail/gfx_RootSignature-api.common.h
     include/nn/gfx/util/gfx_PrimitiveShape.h
 
     include/nn/gfx/gfx_Buffer.h
@@ -135,11 +135,11 @@ if(NN_GFX_TARGET)
       src/NintendoSDK/gfx/detail/gfx_CommandBuffer-api.nvn.8.cpp
       src/NintendoSDK/gfx/detail/gfx_DescriptorPool-api.nvn.8.cpp
       src/NintendoSDK/gfx/detail/gfx_Device-api.nvn.8-os.horizon.cpp
-	  src/NintendoSDK/gfx/detail/gfx_GlslcFunction.cpp
+    src/NintendoSDK/gfx/detail/gfx_GlslcFunction.cpp
       src/NintendoSDK/gfx/detail/gfx_MemoryPool-api.nvn.8.cpp
-	  src/NintendoSDK/gfx/detail/gfx_NvnHelper-os.horizon.cpp
-	  src/NintendoSDK/gfx/detail/gfx_NvnHelper.cpp
-	  src/NintendoSDK/gfx/detail/gfx_NvnHelper.h
+    src/NintendoSDK/gfx/detail/gfx_NvnHelper-os.horizon.cpp
+    src/NintendoSDK/gfx/detail/gfx_NvnHelper.cpp
+    src/NintendoSDK/gfx/detail/gfx_NvnHelper.h
       src/NintendoSDK/gfx/detail/gfx_ResShader-api.nvn.8.cpp
       src/NintendoSDK/gfx/detail/gfx_Sampler-api.nvn.8.cpp
       src/NintendoSDK/gfx/detail/gfx_Shader-api.nvn.8.cpp
