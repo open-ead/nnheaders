@@ -15,7 +15,7 @@ struct ResourceStatistics;
 #if NN_SDK_VER >= NN_MAKE_VER(7, 0, 0)
 struct InAddr {
     u32 addr;
-}
+};
 #endif
 
 // taken from https://switchbrew.org/wiki/Sockets_services#BsdBufferConfig
