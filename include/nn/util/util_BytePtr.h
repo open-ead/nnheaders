@@ -58,7 +58,7 @@ private:
 class ConstBytePtr {
 public:
     explicit ConstBytePtr(const void* ptr) : m_Ptr(ptr) {}
-    ConstBytePtr(const BytePtr&);
+    ConstBytePtr(const BytePtr& ptr) : ConstBytePtr(ptr.Get()) {}
     ConstBytePtr(const void* ptr, ptrdiff_t offset) : ConstBytePtr(ptr) { Advance(offset); }
 
     void Reset(const void*);

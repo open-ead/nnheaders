@@ -1,7 +1,7 @@
 #pragma once
 
-#include <nn/util/MathTypes.h>
 #include <nn/util/detail/util_ArithmeticImpl.h>
+#include <nn/util/util_MathTypes.h>
 
 namespace nn::util {
 

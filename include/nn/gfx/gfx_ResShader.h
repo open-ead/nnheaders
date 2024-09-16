@@ -25,9 +25,17 @@ public:
 
     ShaderInfo* GetShaderInfo() { return DataToAccessor(info); }
     const ShaderInfo* GetShaderInfo() const { return DataToAccessor(info); }
-    detail::Caster<void> GetShader();
-    detail::Caster<const void> GetShader() const;
+    detail::Caster<void> GetShader() { return detail::Caster<void>(pObj.Get()); }
+    detail::Caster<const void> GetShader() const { return detail::Caster<const void>(pObj.Get()); }
     const nngfxToolShaderCompilerShaderReflection* GetShaderCompilerReflection() const;
+
+    template <typename TTarget>
+    ShaderInitializeResult Initialize(TDevice<TTarget>* pDevice) {
+        return static_cast<TShader<TTarget>>(pObj.Get())->Initialize(pDevice, DataToAccessor(info));
+    }
+
+    template <typename TTarget>
+    void Finalize(TDevice<TTarget>*);
 };
 
 class ResShaderVariation : public nn::util::AccessorBase<ResShaderVariationData> {
@@ -78,6 +86,16 @@ public:
     }
 
     static const ResShaderContainer& ToAccessor(const value_type&);
+
+    template <typename TTarget>
+    void Initialize(TDevice<TTarget>* pDevice);
+
+    template <typename TTarget>
+    void Initialize(TDevice<TTarget>* pDevice, TMemoryPool<TTarget>* pMemoryPool,
+                    ptrdiff_t memoryPoolOffset, size_t memoryPoolSize);
+
+    template <typename TTarget>
+    void Finalize(TDevice<TTarget>*);
 
     ResShaderProgram* GetResShaderProgram(int);
     const ResShaderProgram* GetResShaderProgram(int) const;

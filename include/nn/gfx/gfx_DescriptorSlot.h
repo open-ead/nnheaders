@@ -13,12 +13,11 @@ class DescriptorSlot : public detail::DataContainer<DescriptorSlotData> {
     static const uint64_t InvalidValue = 0xFFFFFFFFFFFFFFFF;
 
 public:
-    DescriptorSlot();
+    DescriptorSlot() { Invalidate(); }
 
     void Offset(ptrdiff_t offset) { value += offset; }
-
-    bool IsValid() const;
-    void Invalidate();
+    bool IsValid() const { return this->value == InvalidValue; }
+    void Invalidate() { this->value = InvalidValue; }
 };
 
 }  // namespace nn::gfx
