@@ -1,11 +1,11 @@
 #pragma once
 
+#include <nn/gfx/gfx_ResUserData.h>
 #include <nn/nn_BitTypes.h>
 #include <nn/util/util_BinTypes.h>
 #include <nn/util/util_BinaryFormat.h>
+#include <nn/util/util_MathTypes.h>
 #include <nn/util/util_ResDic.h>
-#include "nn/gfx/gfx_ResUserData.h"
-#include "nn/util/MathTypes.h"
 
 namespace nn::g3d {
 
