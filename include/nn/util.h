@@ -25,13 +25,21 @@ void ReferSymbol(const void*);
 }  // namespace util
 }  // namespace nn
 
-#ifndef NN_SDK_MAJOR
+#define NN_MAKE_VER(major, minor, patch) (((major) << 16) | ((minor) << 8) | (patch))
+
+#ifdef NN_SDK_MAJOR
+#define NN_SDK_VER NN_MAKE_VER(NN_SDK_MAJOR, NN_SDK_MINOR, NN_SDK_PATCH)
+#else
+#define NN_SDK_VER 0
 #define NN_SDK_MAJOR 0
 #define NN_SDK_MINOR 0
 #define NN_SDK_PATCH 0
 #endif
 
-#ifndef NN_WARE_MAJOR
+#ifdef NN_WARE_MAJOR
+#define NN_WARE_VER NN_MAKE_VER(NN_WARE_MAJOR, NN_WARE_MINOR, NN_WARE_PATCH)
+#else
+#define NN_WARE_VER 0
 #define NN_WARE_MAJOR 0
 #define NN_WARE_MINOR 0
 #define NN_WARE_PATCH 0
@@ -41,19 +49,11 @@ void ReferSymbol(const void*);
 #define NN_SDK_TYPE "Release"
 #endif
 
-#ifndef NN_MAKE_VER
-#define NN_MAKE_VER(major, minor, patch) ((major << 16) | (minor << 8) | (patch))
-
-#define NN_SDK_VER NN_MAKE_VER(NN_SDK_MAJOR, NN_SDK_MINOR, NN_SDK_PATCH)
-#define NN_WARE_VER NN_MAKE_VER(NN_WARE_MAJOR, NN_WARE_MINOR, NN_WARE_PATCH)
-
-#define NN_STRINGIFY1(s) #s
-#define NN_STRINGIFY(s) NN_STRINGIFY1(s)
+#define NN_STR(s) #s
+#define NN_XSTR(s) NN_STR(s)
 
 #define NN_SDK_BUILD_STR                                                                           \
-    "-" NN_STRINGIFY(NN_SDK_MAJOR) "_" NN_STRINGIFY(NN_SDK_MINOR) "_" NN_STRINGIFY(                \
-        NN_SDK_PATCH) "-" NN_SDK_TYPE
-#endif
+    "-" NN_XSTR(NN_SDK_MAJOR) "_" NN_XSTR(NN_SDK_MINOR) "_" NN_XSTR(NN_SDK_PATCH) "-" NN_SDK_TYPE
 
 #define NN_MIDDLEWARE(var, company, name)                                                          \
     static const char var[] __attribute__((section(".api_info"))) = "SDK MW+" company "+" name

@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <nn/types.h>
+
 namespace nn {
 namespace g3d {
 typedef void* TextureRef;

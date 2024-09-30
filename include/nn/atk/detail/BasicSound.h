@@ -10,6 +10,7 @@
 namespace nn {
 namespace atk {
 class SoundActor;
+class SoundPlayer;
 
 enum MixMode {
 
@@ -53,7 +54,6 @@ public:
     bool IsMute() const;
     void Update();
     void UpdateParam();
-    void UpdateMoveValue();
     void CalculateVolume() const;
     f32 CalculatePitch() const;
     f32 CalculateLpfFrequency() const;
