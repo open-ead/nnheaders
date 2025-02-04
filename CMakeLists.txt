@@ -231,6 +231,9 @@ add_library(NintendoSDK OBJECT
   include/nn/nex/buffer.h
   include/nn/nex/system.h
   include/nn/nex/hash.h
+  include/nn/nfp.h
+  include/nn/nfp/nfp.h
+  include/nn/nfp/nfp_types.h
   include/nn/time.h
   include/nn/diag.h
   include/nn/init.h
