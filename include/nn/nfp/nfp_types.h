@@ -58,10 +58,14 @@ struct AmiiboDate {
     s8 day;
 };
 
-struct TagInfo {
+struct TagId {
     u8 uuid[10];
     u8 uuidLength;
     char reserved[0x15];
+}
+
+struct TagInfo {
+    TagId id;
     Protocol protocol;
     TagType type;
     char reserved2[0x30];
