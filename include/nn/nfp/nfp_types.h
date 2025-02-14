@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nn/types.h>
+
 namespace nn::nfp {
 
 using DeviceHandle = u64;
