@@ -14,6 +14,8 @@ class ModelObj {
 public:
     SkeletonObj* GetSkeleton() const { return m_Skeleton; }
 
+    s32 GetNumShapes() const { return m_NumShapes; }
+
 private:
     struct InitializeArgument;
 
