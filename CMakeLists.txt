@@ -292,6 +292,7 @@ add_library(NintendoSDK OBJECT
   include/vapours/results/fatal_results.hpp
   include/vapours/results/sm_results.hpp
   include/vapours/results/psc_results.hpp
+  include/vapours/results/nfp_results.hpp
   include/nv.h
 
   src/NintendoSDK/nvn/nvn_CppFuncPtrImpl.h

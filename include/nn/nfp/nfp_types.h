@@ -82,7 +82,8 @@ struct CommonInfo {
 };
 
 struct ModelInfo {
-    u16 characterId;
+    u8 gameId;
+    u8 characterId;
     u8 characterVariant;
     u8 amiiboType;
     u16 modelNumber;
