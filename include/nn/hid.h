@@ -87,11 +87,11 @@ enum class NpadStyleTag {
 #if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
     NpadStyleLager = 11,        // (Sega Genesis controller)
 #endif
+#endif
     // bits 12-28 Reserved
     NpadStyleSystemExt = 29,  // (generic external controller)
     NpadStyleSystem = 30,     // (generic controller)
                               // bit 31 Reserved
-#endif
 };
 
 enum class NpadSystemProperties {
