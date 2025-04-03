@@ -49,12 +49,12 @@ enum class NpadButton {
     RightSR = 27,
     Palma = 28,
     Verification = 29,
-    HandheldLeftB = 30, // (Left B button on NES controllers in Handheld mode)
+    HandheldLeftB = 30,  // (Left B button on NES controllers in Handheld mode)
 #if NN_SDK_VER >= NN_MAKE_VER(12, 0, 0)
-    LeftC = 31,  // (Left C button in N64 controller)
-    UpC = 32,    // (Up C button in N64 controller)
-    RightC = 33, // (Right C button in N64 controller)
-    DownC = 34,  // (Down C button in N64 controller)
+    LeftC = 31,   // (Left C button in N64 controller)
+    UpC = 32,     // (Up C button in N64 controller)
+    RightC = 33,  // (Right C button in N64 controller)
+    DownC = 34,   // (Down C button in N64 controller)
 #endif
 };
 
@@ -68,28 +68,28 @@ enum class NpadAttribute {
 };
 
 enum class NpadStyleTag {
-    NpadStyleFullKey = 0,  // (Pro Controller)
-    NpadStyleHandheld = 1, // (Joy-Con controller in handheld mode)
-    NpadStyleJoyDual = 2,  // (Joy-Con controller in dual mode)
-    NpadStyleJoyLeft = 3,  // (Joy-Con left controller in single mode)
-    NpadStyleJoyRight = 4, // (Joy-Con right controller in single mode)
+    NpadStyleFullKey = 0,   // (Pro Controller)
+    NpadStyleHandheld = 1,  // (Joy-Con controller in handheld mode)
+    NpadStyleJoyDual = 2,   // (Joy-Con controller in dual mode)
+    NpadStyleJoyLeft = 3,   // (Joy-Con left controller in single mode)
+    NpadStyleJoyRight = 4,  // (Joy-Con right controller in single mode)
 #if NN_SDK_VER <= NN_MAKE_VER(3, 5, 1)
     NpadStyleInvalid = 5,
 #else
-    NpadStyleGc = 5,           // (GameCube controller)
-    NpadStylePalma = 6,        // (Poké Ball Plus controller)
-    NpadStyleLark = 7,         // (NES/Famicom controller)
-    NpadStyleHandheldLark = 8, // (NES/Famicom controller in handheld mode)
-    NpadStyleLucia = 9,        // (SNES controller)
-# if NN_SDK_VER >= NN_MAKE_VER(12, 0, 0)
-    NpadStyleLagon = 10, // (N64 controller)
-# endif
-# if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
-    NpadStyleLager = 11, // (Sega Genesis controller)
-# endif
+    NpadStyleGc = 5,            // (GameCube controller)
+    NpadStylePalma = 6,         // (Poké Ball Plus controller)
+    NpadStyleLark = 7,          // (NES/Famicom controller)
+    NpadStyleHandheldLark = 8,  // (NES/Famicom controller in handheld mode)
+    NpadStyleLucia = 9,         // (SNES controller)
+#if NN_SDK_VER >= NN_MAKE_VER(12, 0, 0)
+    NpadStyleLagon = 10,  // (N64 controller)
+#endif
+#if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
+    NpadStyleLager = 11,  // (Sega Genesis controller)
+#endif
     // bits 12-28 Reserved
-    NpadStyleSystemExt = 29, // (generic external controller)
-    NpadStyleSystem = 30,    // (generic controller)
+    NpadStyleSystemExt = 29,  // (generic external controller)
+    NpadStyleSystem = 30,     // (generic controller)
 // bit 31 Reserved
 #endif
 };
@@ -257,7 +257,18 @@ enum class KeyboardKey {
     RightGui = 231,
 };
 
-enum class KeyboardModifier { Control, Shift, LeftAlt, RightAlt, Gui, CapsLock, ScrollLock, NumLock, Katakana, Hiragana };
+enum class KeyboardModifier {
+    Control,
+    Shift,
+    LeftAlt,
+    RightAlt,
+    Gui,
+    CapsLock,
+    ScrollLock,
+    NumLock,
+    Katakana,
+    Hiragana
+};
 
 enum class DebugPadButton { A, B, X, Y, L, R, ZL, ZR, Start, Select, Left, Up, Right, Down };
 
@@ -470,7 +481,13 @@ namespace system {
 typedef u8 UniquePadSerialNumber[0x10];
 typedef u32 BatteryLevel;
 
-enum class UniquePadType { Embedded, FullKeyController, RightController, LeftController, DebugPadController };
+enum class UniquePadType {
+    Embedded,
+    FullKeyController,
+    RightController,
+    LeftController,
+    DebugPadController
+};
 
 enum class UniquePadInterface { Embedded, Rail, Bluetooth, Usb };
 
@@ -543,7 +560,7 @@ struct InputSourceState {
     u64 mTimestamp;
 };
 
-} // namespace system
+}  // namespace system
 
 namespace tmp {
 
@@ -551,7 +568,7 @@ struct SixAxisSensorCountState {
     u8 padding[0x28];
 };
 
-} // namespace tmp
+}  // namespace tmp
 
 namespace detail {
 
@@ -574,7 +591,7 @@ public:
     Atomic mStorage[N + 1];
 };
 
-} // namespace detail
+}  // namespace detail
 
 namespace server {
 
@@ -585,7 +602,7 @@ struct DigitizerSharedMemoryFormat {
     u8 padding[0x1000 - sizeof(DigitizerLifo)];
 };
 
-} // namespace server
+}  // namespace server
 
 namespace detail {
 
@@ -596,7 +613,8 @@ enum class ColorAttribute { Ok, ReadError, NoController };
 typedef AtomicStorage<TouchScreenState<16>> TouchScreenStateAtomicStorage;
 
 typedef nn::util::BitFlagSet<32, AnalogStickCalibrationFlags> AnalogStickCalibrationFlagsSet;
-typedef nn::util::BitFlagSet<32, SixAxisSensorUserCalibrationFlags> SixAxisSensorUserCalibrationFlagsSet;
+typedef nn::util::BitFlagSet<32, SixAxisSensorUserCalibrationFlags>
+    SixAxisSensorUserCalibrationFlagsSet;
 typedef nn::util::BitFlagSet<64, NpadSystemProperties> NpadSystemPropertiesSet;
 typedef nn::util::BitFlagSet<32, NpadSystemButtonProperties> NpadSystemButtonPropertiesSet;
 
@@ -644,18 +662,28 @@ typedef RingLifo<NpadJoyLeftState, 16, AtomicStorage<NpadJoyLeftState>> NpadJoyL
 typedef RingLifo<TouchScreenState<16ul>, 16, TouchScreenStateAtomicStorage> TouchScreenLifo;
 typedef RingLifo<NpadHandheldState, 16, AtomicStorage<NpadHandheldState>> NpadHandheldLifo;
 typedef RingLifo<NpadJoyRightState, 16, AtomicStorage<NpadJoyRightState>> NpadJoyRightLifo;
-typedef RingLifo<tmp::SixAxisSensorCountState, 32, AtomicStorage<tmp::SixAxisSensorCountState>> SixAxisSensorCountStateLifo;
-typedef RingLifo<system::HomeButtonState, 16, AtomicStorage<system::HomeButtonState>> HomeButtonLifo;
-typedef RingLifo<system::NpadSystemState, 16, AtomicStorage<system::NpadSystemState>> NpadSystemLifo;
-typedef RingLifo<system::SleepButtonState, 16, AtomicStorage<system::SleepButtonState>> SleepButtonLifo;
-typedef RingLifo<system::CaptureButtonState, 16, AtomicStorage<system::CaptureButtonState>> CaptureButtonLifo;
-typedef RingLifo<system::NpadSystemExtState, 16, AtomicStorage<system::NpadSystemExtState>> NpadSystemExtLifo;
+typedef RingLifo<tmp::SixAxisSensorCountState, 32, AtomicStorage<tmp::SixAxisSensorCountState>>
+    SixAxisSensorCountStateLifo;
+typedef RingLifo<system::HomeButtonState, 16, AtomicStorage<system::HomeButtonState>>
+    HomeButtonLifo;
+typedef RingLifo<system::NpadSystemState, 16, AtomicStorage<system::NpadSystemState>>
+    NpadSystemLifo;
+typedef RingLifo<system::SleepButtonState, 16, AtomicStorage<system::SleepButtonState>>
+    SleepButtonLifo;
+typedef RingLifo<system::CaptureButtonState, 16, AtomicStorage<system::CaptureButtonState>>
+    CaptureButtonLifo;
+typedef RingLifo<system::NpadSystemExtState, 16, AtomicStorage<system::NpadSystemExtState>>
+    NpadSystemExtLifo;
 typedef RingLifo<UniquePadConfig, 1, AtomicStorage<UniquePadConfig>> UniquePadConfigLifo;
 typedef RingLifo<GestureDummyState, 16, AtomicStorage<GestureDummyState>> GestureLifo;
 typedef RingLifo<InputDetectorState, 1, AtomicStorage<InputDetectorState>> InputDetectorLifo;
-typedef RingLifo<NfcXcdDeviceHandleStateImpl, 1, AtomicStorage<NfcXcdDeviceHandleStateImpl>> NfcXcdDeviceHandleState;
-typedef RingLifo<AnalogStickCalibrationStateImpl, 1, AtomicStorage<AnalogStickCalibrationStateImpl>> AnalogStickCalibrationStateImplLifo;
-typedef RingLifo<SixAxisSensorUserCalibrationState, 1, AtomicStorage<SixAxisSensorUserCalibrationState>> SixAxisSensorUserCalibrationStateLifo;
+typedef RingLifo<NfcXcdDeviceHandleStateImpl, 1, AtomicStorage<NfcXcdDeviceHandleStateImpl>>
+    NfcXcdDeviceHandleState;
+typedef RingLifo<AnalogStickCalibrationStateImpl, 1, AtomicStorage<AnalogStickCalibrationStateImpl>>
+    AnalogStickCalibrationStateImplLifo;
+typedef RingLifo<SixAxisSensorUserCalibrationState, 1,
+                 AtomicStorage<SixAxisSensorUserCalibrationState>>
+    SixAxisSensorUserCalibrationStateLifo;
 typedef RingLifo<SixAxisSensorState, 16, AtomicStorage<SixAxisSensorState>> NpadSixAxisSensorLifo;
 typedef RingLifo<SixAxisSensorState, 32, AtomicStorage<SixAxisSensorState>> SixAxisSensorStateLifo;
 
@@ -820,6 +848,6 @@ struct SharedMemoryHolder {
     SharedMemoryFormat* mAddress;
 };
 
-} // namespace detail
-} // namespace hid
-} // namespace nn
+}  // namespace detail
+}  // namespace hid
+}  // namespace nn
