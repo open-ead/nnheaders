@@ -460,7 +460,7 @@ struct DigitizerState {
 
 struct VibrationDeviceHandle {
     u32 inner;
-}
+};
 
 void InitializeNpad();
 void SetSupportedNpadIdType(const u32*, u64);
