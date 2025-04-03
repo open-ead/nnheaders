@@ -82,15 +82,15 @@ enum class NpadStyleTag {
     NpadStyleHandheldLark = 8,  // (NES/Famicom controller in handheld mode)
     NpadStyleLucia = 9,         // (SNES controller)
 #if NN_SDK_VER >= NN_MAKE_VER(12, 0, 0)
-    NpadStyleLagon = 10,  // (N64 controller)
+    NpadStyleLagon = 10,        // (N64 controller)
 #endif
 #if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
-    NpadStyleLager = 11,  // (Sega Genesis controller)
+    NpadStyleLager = 11,        // (Sega Genesis controller)
 #endif
     // bits 12-28 Reserved
     NpadStyleSystemExt = 29,  // (generic external controller)
     NpadStyleSystem = 30,     // (generic controller)
-// bit 31 Reserved
+                              // bit 31 Reserved
 #endif
 };
 
