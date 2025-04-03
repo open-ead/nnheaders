@@ -286,6 +286,12 @@ enum class GestureAttribute { IsNewTouch = 4, IsDoubleTap = 8 };
 
 enum class SixAxisSensorAttribute { IsConnected, IsInterpolated };
 
+enum class NpadJoyHoldType { Vertical, Horizontal };
+
+enum class NpadJoyDeviceType { Left, Right };
+
+enum class NpadHandheldActivationMode { Dual, Single, None };
+
 enum class NpadJoyAssignmentMode { Dual, Single };
 
 enum class DigitizerAttribute {};
