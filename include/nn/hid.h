@@ -458,6 +458,10 @@ struct DigitizerState {
     u8 padding[0x40];
 };
 
+struct VibrationDeviceHandle {
+    u32 inner;
+}
+
 void InitializeNpad();
 void SetSupportedNpadIdType(const u32*, u64);
 void SetSupportedNpadStyleSet(NpadStyleSet);
