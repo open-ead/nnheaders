@@ -298,6 +298,10 @@ enum class DigitizerAttribute {};
 
 enum class DigitizerButton {};
 
+enum class VibrationDeviceType { Unknown, LinearResonantActuator, GcErm, Erm };
+
+enum class VibrationDevicePosition { None, Left, Right };
+
 typedef nn::util::BitFlagSet<32, NpadAttribute> NpadAttributeSet;
 typedef nn::util::BitFlagSet<64, NpadButton> NpadButtonSet;
 typedef nn::util::BitFlagSet<32, NpadStyleTag> NpadStyleSet;
@@ -464,6 +468,11 @@ struct SixAxisSensorHandle {
 
 struct VibrationDeviceHandle {
     u32 inner;
+};
+
+struct VibrationDeviceInfo {
+    VibrationDeviceType mDeviceType;
+    VibrationDevicePosition mPosition;
 };
 
 void InitializeNpad();
