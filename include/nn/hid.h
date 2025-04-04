@@ -458,6 +458,10 @@ struct DigitizerState {
     u8 padding[0x40];
 };
 
+struct SixAxisSensorHandle {
+    u32 inner;
+};
+
 struct VibrationDeviceHandle {
     u32 inner;
 };
