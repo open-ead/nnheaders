@@ -475,6 +475,13 @@ struct VibrationDeviceInfo {
     VibrationDevicePosition mPosition;
 };
 
+struct VibrationValue {
+    f32 mAmplitudeLow;
+    f32 mFrequencyLow;
+    f32 mAmplitudeHigh;
+    f32 mFrequencyHigh;
+};
+
 void InitializeNpad();
 void SetSupportedNpadIdType(const u32*, u64);
 void SetSupportedNpadStyleSet(NpadStyleSet);
