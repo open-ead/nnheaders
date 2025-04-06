@@ -82,10 +82,10 @@ enum class NpadStyleTag {
     NpadStyleHandheldLark = 8,  // (NES/Famicom controller in handheld mode)
     NpadStyleLucia = 9,         // (SNES controller)
 #if NN_SDK_VER >= NN_MAKE_VER(12, 0, 0)
-    NpadStyleLagon = 10,        // (N64 controller)
+    NpadStyleLagon = 10,  // (N64 controller)
 #endif
 #if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
-    NpadStyleLager = 11,        // (Sega Genesis controller)
+    NpadStyleLager = 11,  // (Sega Genesis controller)
 #endif
 #endif
     // bits 12-28 Reserved
@@ -336,8 +336,9 @@ struct ControllerSupportArg {
 };
 
 struct ControllerSupportResultInfo {
-    int mPlayerCount;
-    int mSelectedId;
+    s32 mPlayerCount;
+    s32 mSelectedId;
+    s32 mResult;
 };
 
 struct NpadControllerColor {
@@ -370,6 +371,11 @@ struct TouchScreenState {
     s32 mCount;
     TouchState mTouches[N];
 };
+
+static_assert(sizeof(TouchScreenState<16>) == 0x290);
+
+using TouchScreen = TouchScreenState<16>;
+static_assert(sizeof(TouchScreen) == 0x290);
 
 struct MouseState {
     u64 mSamplingNumber;
@@ -436,7 +442,7 @@ struct GesturePoint {
     s32 mY;
 };
 
-struct GestureDummyState {
+struct GestureState {
     u64 mSamplingNumber;
     u64 mContextNumber;
     GestureType mType;
@@ -486,7 +492,7 @@ void InitializeNpad();
 void SetSupportedNpadIdType(const u32*, u64);
 void SetSupportedNpadStyleSet(NpadStyleSet);
 NpadStyleSet GetNpadStyleSet(const u32& port);
-int ShowControllerSupport(ControllerSupportResultInfo*, const ControllerSupportArg&);
+s32 ShowControllerSupport(ControllerSupportResultInfo*, const ControllerSupportArg&);
 
 void GetNpadState(NpadFullKeyState*, const u32& port);
 void GetNpadState(NpadHandheldState*, const u32& port);
@@ -494,11 +500,11 @@ void GetNpadState(NpadJoyDualState*, const u32& port);
 void GetNpadState(NpadJoyLeftState*, const u32& port);
 void GetNpadState(NpadJoyRightState*, const u32& port);
 
-void GetNpadStates(NpadFullKeyState*, int, const u32& port);
-void GetNpadStates(NpadHandheldState*, int, const u32& port);
-void GetNpadStates(NpadJoyDualState*, int, const u32& port);
-void GetNpadStates(NpadJoyLeftState*, int, const u32& port);
-void GetNpadStates(NpadJoyRightState*, int, const u32& port);
+void GetNpadStates(NpadFullKeyState*, s32, const u32& port);
+void GetNpadStates(NpadHandheldState*, s32, const u32& port);
+void GetNpadStates(NpadJoyDualState*, s32, const u32& port);
+void GetNpadStates(NpadJoyLeftState*, s32, const u32& port);
+void GetNpadStates(NpadJoyRightState*, s32, const u32& port);
 
 void InitializeMouse();
 void InitializeKeyboard();
@@ -705,7 +711,7 @@ typedef RingLifo<system::CaptureButtonState, 16, AtomicStorage<system::CaptureBu
 typedef RingLifo<system::NpadSystemExtState, 16, AtomicStorage<system::NpadSystemExtState>>
     NpadSystemExtLifo;
 typedef RingLifo<UniquePadConfig, 1, AtomicStorage<UniquePadConfig>> UniquePadConfigLifo;
-typedef RingLifo<GestureDummyState, 16, AtomicStorage<GestureDummyState>> GestureLifo;
+typedef RingLifo<GestureState, 16, AtomicStorage<GestureState>> GestureLifo;
 typedef RingLifo<InputDetectorState, 1, AtomicStorage<InputDetectorState>> InputDetectorLifo;
 typedef RingLifo<NfcXcdDeviceHandleStateImpl, 1, AtomicStorage<NfcXcdDeviceHandleStateImpl>>
     NfcXcdDeviceHandleState;
