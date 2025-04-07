@@ -82,10 +82,10 @@ enum class NpadStyleTag {
     NpadStyleHandheldLark = 8,  // (NES/Famicom controller in handheld mode)
     NpadStyleLucia = 9,         // (SNES controller)
 #if NN_SDK_VER >= NN_MAKE_VER(12, 0, 0)
-    NpadStyleLagon = 10,        // (N64 controller)
+    NpadStyleLagon = 10,  // (N64 controller)
 #endif
 #if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
-    NpadStyleLager = 11,        // (Sega Genesis controller)
+    NpadStyleLager = 11,  // (Sega Genesis controller)
 #endif
 #endif
     // bits 12-28 Reserved
@@ -339,6 +339,19 @@ struct ControllerSupportArg {
     Color4u8 mColors[4];
     u8 mUsingControllerNames;
     char mControllerNames[4][0x81];
+};
+
+struct ControllerSupportArgV2 {
+    u8 mMinPlayerCount;
+    u8 mMaxPlayerCount;
+    u8 mTakeOverConnection;
+    bool mLeftJustify;
+    bool mPermitJoyconDual;
+    bool mSingleMode;
+    bool mUseColors;
+    Color4u8 mColors[8];
+    u8 mUsingControllerNames;
+    char mControllerNames[8][0x81];
 };
 
 struct ControllerSupportResultInfo {
