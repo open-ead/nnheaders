@@ -302,6 +302,12 @@ enum class VibrationDeviceType { Unknown, LinearResonantActuator, GcErm, Erm };
 
 enum class VibrationDevicePosition { None, Left, Right };
 
+enum class NpadLarkType { Invalid, H1, H2, NL, NR };
+
+enum class NpadLuciaType { Invalid, J, E, U };
+
+enum class NpadLagerType { Invalid, J, E, U };
+
 typedef nn::util::BitFlagSet<32, NpadAttribute> NpadAttributeSet;
 typedef nn::util::BitFlagSet<64, NpadButton> NpadButtonSet;
 typedef nn::util::BitFlagSet<32, NpadStyleTag> NpadStyleSet;
@@ -371,11 +377,6 @@ struct TouchScreenState {
     s32 mCount;
     TouchState mTouches[N];
 };
-
-static_assert(sizeof(TouchScreenState<16>) == 0x290);
-
-using TouchScreen = TouchScreenState<16>;
-static_assert(sizeof(TouchScreen) == 0x290);
 
 struct MouseState {
     u64 mSamplingNumber;
@@ -569,9 +570,39 @@ enum class DeviceType {
     System = 31
 };
 
-typedef nn::util::BitFlagSet<32, HomeButton> HomeButtonSet;
-typedef nn::util::BitFlagSet<32, SleepButton> SleepButtonSet;
-typedef nn::util::BitFlagSet<32, CaptureButton> CaptureButtonSet;
+enum class AppletFooterUiType : u8 {
+    None,
+    HandheldNone,
+    HandheldJoyConLeftOnly,
+    HandheldJoyConRightOnly,
+    HandheldLeftJoyConRight,
+    JoyDual,
+    JoyDualLeftOnly,
+    JoyDualRightOnly,
+    JoyLeftHorizontal,
+    JoyLeftVertical,
+    JoyRightHorizontal,
+    JoyRightVertical,
+    SwitchProController,
+    CompatibleProController,
+    CompatibleJoyCon,
+    LarkHvc1,
+    LarkHvc2,
+    LarkNesLeft,
+    LarkNesRight,
+    Lucia,
+    Verification,
+#if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
+    Lagon,
+#endif
+};
+
+enum class AppletFooterUiAttribute {};
+
+typedef nn::util::BitFlagSet<64, HomeButton> HomeButtonSet;
+typedef nn::util::BitFlagSet<64, SleepButton> SleepButtonSet;
+typedef nn::util::BitFlagSet<64, CaptureButton> CaptureButtonSet;
+typedef nn::util::BitFlagSet<32, AppletFooterUiAttribute> AppletFooterUiAttributeSet;
 
 struct HomeButtonState {
     u64 mSamplingNumber;
@@ -617,13 +648,11 @@ public:
 };
 
 template <typename T, s32 N, typename Atomic>
-class RingLifo {
-public:
-    virtual ~RingLifo() = default;
-
+struct RingLifo {
+    u64 mTimestamp;
     u64 mBufferCount = N + 1;
-    u64 mTail;
-    u64 mCount = N;
+    u64 mTail = 0;
+    u64 mCount = 0;
     Atomic mStorage[N + 1];
 };
 
@@ -638,6 +667,16 @@ struct DigitizerSharedMemoryFormat {
     u8 padding[0x1000 - sizeof(DigitizerLifo)];
 };
 
+struct NpadGcTriggerState {
+    u64 mSamplingNumber;
+    u32 mTriggerL;
+    u32 mTriggerR;
+};
+
+struct SixAxisSensorProperties {
+    u8 mFlags;
+};
+
 }  // namespace server
 
 namespace detail {
@@ -647,6 +686,7 @@ enum class SixAxisSensorUserCalibrationFlags {};
 enum class ColorAttribute { Ok, ReadError, NoController };
 
 typedef AtomicStorage<TouchScreenState<16>> TouchScreenStateAtomicStorage;
+typedef AtomicStorage<server::NpadGcTriggerState> NpadGcTriggerStateAtomicStorage;
 
 typedef nn::util::BitFlagSet<32, AnalogStickCalibrationFlags> AnalogStickCalibrationFlagsSet;
 typedef nn::util::BitFlagSet<32, SixAxisSensorUserCalibrationFlags>
@@ -722,6 +762,7 @@ typedef RingLifo<SixAxisSensorUserCalibrationState, 1,
     SixAxisSensorUserCalibrationStateLifo;
 typedef RingLifo<SixAxisSensorState, 16, AtomicStorage<SixAxisSensorState>> NpadSixAxisSensorLifo;
 typedef RingLifo<SixAxisSensorState, 32, AtomicStorage<SixAxisSensorState>> SixAxisSensorStateLifo;
+typedef RingLifo<SixAxisSensorState, 16, NpadGcTriggerStateAtomicStorage> NpadGcTriggerLifo;
 
 struct DebugPadSharedMemoryFormat {
     DebugPadLifo mLifo;
@@ -823,8 +864,22 @@ struct NpadInternalState {
     system::BatteryLevel mBatteryLevelJoyDual;
     system::BatteryLevel mBatteryLevelJoyLeft;
     system::BatteryLevel mBatteryLevelJoyRight;
+#if NN_SDK_VER <= NN_MAKE_VER(8, 1, 0)
     NfcXcdDeviceHandleState mNfcXcdDeviceHandle;
     os::MutexType mMutex;
+#else
+    system::AppletFooterUiAttributeSet mAppletFooterUiAttributes;
+    system::AppletFooterUiType mAppletFooterUiType;
+    u8 padding[0x7b];
+#endif
+    NpadGcTriggerLifo GcTriggerLifo;
+    NpadLarkType mLarkTypeLAndMain;
+    NpadLarkType mLarkTypeR;
+    NpadLuciaType mLuciaType;
+    NpadLagerType mLagerType;
+#if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
+    server::SixAxisSensorProperties mSixAxisSensorProperties[6];
+#endif
 };
 
 struct NpadSharedMemoryEntry {
@@ -841,10 +896,12 @@ struct GestureSharedMemoryFormat {
     u8 padding[0x800 - sizeof(GestureLifo)];
 };
 
-struct SixAxisSensorSharedMemoryFormat {
-    SixAxisSensorCountStateLifo mCountStateLifo;
-    SixAxisSensorStateLifo mStateLifo;
-    u8 padding[0xc28];
+struct ConsoleSixAxisSensorSharedMemoryFormat {
+    u64 mSamplingNumber;
+    bool mIsSevenSixAxisSensorAtRest;
+    u32 mVerticalizationError;
+    f32 mGyroBias[3];
+    u8 padding[0x19e4];
 };
 
 struct SharedMemoryFormat {
@@ -868,9 +925,20 @@ struct SharedMemoryFormat {
 #endif
     NpadSharedMemoryFormat mNpad;
     GestureSharedMemoryFormat mGesture;
-    SixAxisSensorSharedMemoryFormat mSixAxisSensor;
-    u8 padding_3e200[0x1e00];
+#if NN_SDK_VER < NN_MAKE_VER(5, 0, 0)
+    u8 padding_3c200[0x3e00];
+#else
+    ConsoleSixAxisSensorSharedMemoryFormat mConsoleSixAxisSensor;
+#if NN_SDK_VER >= NN_MAKE_VER(16, 0, 0)
+    MouseSharedMemoryFormat mDebugMouse;
+    u8 padding_3e000[0x2000];
+#else
+    u8 padding_3dc00[0x2400];
+#endif
+#endif
 };
+
+static_assert(sizeof(SharedMemoryFormat) == 0x40000);
 
 struct SharedMemoryType {
     u8 padding[0x40];
