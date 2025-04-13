@@ -50,12 +50,10 @@ enum class NpadButton {
     Palma = 28,
     Verification = 29,
     HandheldLeftB = 30,  // (Left B button on NES controllers in Handheld mode)
-#if NN_SDK_VER >= NN_MAKE_VER(12, 0, 0)
-    LeftC = 31,   // (Left C button in N64 controller)
-    UpC = 32,     // (Up C button in N64 controller)
-    RightC = 33,  // (Right C button in N64 controller)
-    DownC = 34,   // (Down C button in N64 controller)
-#endif
+    LeftC = 31,          // [12.0.0+] (Left C button in N64 controller)
+    UpC = 32,            // [12.0.0+] (Up C button in N64 controller)
+    RightC = 33,         // [12.0.0+] (Right C button in N64 controller)
+    DownC = 34,          // [12.0.0+] (Down C button in N64 controller)
 };
 
 enum class NpadAttribute {
@@ -81,17 +79,12 @@ enum class NpadStyleTag {
     NpadStyleLark = 7,          // (NES/Famicom controller)
     NpadStyleHandheldLark = 8,  // (NES/Famicom controller in handheld mode)
     NpadStyleLucia = 9,         // (SNES controller)
-#if NN_SDK_VER >= NN_MAKE_VER(12, 0, 0)
-    NpadStyleLagon = 10,        // (N64 controller)
-#endif
-#if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
-    NpadStyleLager = 11,        // (Sega Genesis controller)
-#endif
-#endif
+    NpadStyleLagon = 10,        // [12.0.0+] (N64 controller)
+    NpadStyleLager = 11,        // [13.0.0+] (Sega Genesis controller)
     // bits 12-28 Reserved
     NpadStyleSystemExt = 29,  // (generic external controller)
     NpadStyleSystem = 30,     // (generic controller)
-                              // bit 31 Reserved
+    // bit 31 Reserved
 };
 
 enum class NpadSystemProperties {
@@ -105,13 +98,9 @@ enum class NpadSystemProperties {
     IsUnsuportedButtonPressedOnNpadSystemExt = 10,
     IsAbxyButtonOriented = 11,
     IsSlSrButtonOriented = 12,
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-    IsPlusAvailable = 13,
-    IsMinusAvailable = 14,
-#endif
-#if NN_SDK_VER >= NN_MAKE_VER(8, 0, 0)
-    IsDirectionalButtonsAvailable = 15,
-#endif
+    IsPlusAvailable = 13,                // [4.0.0+]
+    IsMinusAvailable = 14,               // [4.0.0+]
+    IsDirectionalButtonsAvailable = 15,  // [8.0.0+]
 };
 
 enum class NpadSystemButtonProperties { IsUnintendedHomeButtonInputProtectionEnabled };
@@ -605,9 +594,7 @@ enum class AppletFooterUiType : u8 {
     LarkNesRight,
     Lucia,
     Verification,
-#if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
-    Lagon,
-#endif
+    Lagon,  // [13.0.0+]
 };
 
 enum class AppletFooterUiAttribute {};
@@ -877,7 +864,7 @@ struct NpadInternalState {
     system::BatteryLevel mBatteryLevelJoyDual;
     system::BatteryLevel mBatteryLevelJoyLeft;
     system::BatteryLevel mBatteryLevelJoyRight;
-#if NN_SDK_VER <= NN_MAKE_VER(8, 1, 0)
+#if NN_SDK_VER < NN_MAKE_VER(9, 0, 0)
     NfcXcdDeviceHandleState mNfcXcdDeviceHandle;
     os::MutexType mMutex;
 #else
@@ -890,9 +877,7 @@ struct NpadInternalState {
     NpadLarkType mLarkTypeR;
     NpadLuciaType mLuciaType;
     NpadLagerType mLagerType;
-#if NN_SDK_VER >= NN_MAKE_VER(13, 0, 0)
-    server::SixAxisSensorProperties mSixAxisSensorProperties[6];
-#endif
+    server::SixAxisSensorProperties mSixAxisSensorProperties[6];  // [13.0.0+]
 };
 
 struct NpadSharedMemoryEntry {
@@ -922,7 +907,7 @@ struct SharedMemoryFormat {
     TouchScreenSharedMemoryFormat mTouchScreen;
     MouseSharedMemoryFormat mMouse;
     KeyboardSharedMemoryFormat mKeyboard;
-#if NN_SDK_VER <= NN_MAKE_VER(9, 2, 0)
+#if NN_SDK_VER < NN_MAKE_VER(10, 0, 0)
     BasicXpadSharedMemoryFormat mBasicXpad;
 #else
     server::DigitizerSharedMemoryFormat mDigitizer;
@@ -931,7 +916,7 @@ struct SharedMemoryFormat {
     SleepButtonSharedMemoryFormat mSleepButton;
     CaptureButtonSharedMemoryFormat mCaptureButton;
     InputDetectorSharedMemoryFormat mInputDetector;
-#if NN_SDK_VER <= NN_MAKE_VER(4, 1, 0)
+#if NN_SDK_VER < NN_MAKE_VER(5, 0, 0)
     UniquePadSharedMemoryFormat mUniquePad;
 #else
     u8 padding_5a00[sizeof(UniquePadSharedMemoryFormat)];
