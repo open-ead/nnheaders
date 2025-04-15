@@ -344,7 +344,7 @@ struct ControllerSupportArgV2 {
 };
 
 struct ControllerSupportResultInfo {
-    s32 mPlayerCount;
+    s8 mPlayerCount;
     s32 mSelectedId;
     s32 mResult;
 };
