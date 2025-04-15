@@ -402,8 +402,8 @@ struct BasicXpadState {
     u64 mSamplingNumber;
     BasicXpadAttributeSet mAttributes;
     BasicXpadButtonSet mButtons;
-    AnalogStickState mAnalogStickR;
     AnalogStickState mAnalogStickL;
+    AnalogStickState mAnalogStickR;
 };
 
 struct NpadBaseState {
@@ -427,7 +427,7 @@ struct NpadJoyRightState : NpadBaseState {};
 struct NpadPalmaState : NpadBaseState {};
 
 struct DirectionState {
-    f32 mMat[3][3];
+    f32 mMtx[3][3];
 };
 
 struct SixAxisSensorState {
@@ -457,8 +457,8 @@ struct GestureState {
     f32 mVelocityX;
     f32 mVelocityY;
     GestureAttributeSet mAttributes;
-    s32 mScale;
-    s32 mRotationAngle;
+    f32 mScale;
+    f32 mRotationAngle;
     s32 mPointCount;
     GesturePoint mPoint[4];
 };
@@ -472,11 +472,25 @@ struct DigitizerState {
 };
 
 struct SixAxisSensorHandle {
-    u32 inner;
+    union {
+        u32 typeValue;
+        struct {
+            u8 mNpadStyleIndex;
+            u8 mPlayerNumber;
+            u8 mDeviceIndex;
+        };
+    };
 };
 
 struct VibrationDeviceHandle {
-    u32 inner;
+    union {
+        u32 typeValue;
+        struct {
+            u8 mNpadStyleIndex;
+            u8 mPlayerNumber;
+            u8 mDeviceIndex;
+        };
+    };
 };
 
 struct VibrationDeviceInfo {
@@ -520,7 +534,7 @@ namespace system {
 typedef u8 UniquePadSerialNumber[0x10];
 typedef u32 BatteryLevel;
 
-enum class UniquePadType {
+enum class UniquePadType : u64 {
     Embedded,
     FullKeyController,
     RightController,
@@ -567,8 +581,8 @@ enum class DeviceType {
     HandheldLarkNesLeft,
     HandheldLarkNesRight,
     Lucia,
-    Lagon,
-    Lager,
+    Lagon,  // [12.0.0+]
+    Lager,  // [13.0.0+]
     System = 31
 };
 
@@ -673,8 +687,9 @@ struct NpadGcTriggerState {
     u32 mTriggerR;
 };
 
-struct SixAxisSensorProperties {
-    u8 mFlags;
+enum class SixAxisSensorProperties {
+    IsSixAxisSensorDeviceNewlyAssigned,
+    IsFirmwareUpdateAvailableForSixAxisSensor
 };
 
 }  // namespace server
@@ -822,7 +837,7 @@ struct UniquePadSharedMemoryEntry {
     AnalogStickCalibrationStateImplLifo mAnalogStickCalibrationStateImplLifo[2];
     SixAxisSensorUserCalibrationStateLifo mSixAxisSensorUserCalibrationStateLifo;
     os::MutexType mMutex;
-    u8 padding[0x220];
+    u8 padding[0x400 - 0x1e0];
 };
 
 struct UniquePadSharedMemoryFormat {
@@ -924,16 +939,16 @@ struct SharedMemoryFormat {
     NpadSharedMemoryFormat mNpad;
     GestureSharedMemoryFormat mGesture;
 #if NN_SDK_VER < NN_MAKE_VER(5, 0, 0)
-    u8 padding_3c200[0x3e00];
+    u8 padding_3c200[sizeof(ConsoleSixAxisSensorSharedMemoryFormat)];
 #else
     ConsoleSixAxisSensorSharedMemoryFormat mConsoleSixAxisSensor;
+#endif
 #if NN_SDK_VER >= NN_MAKE_VER(16, 0, 0)
     MouseSharedMemoryFormat mDebugMouse;
-    u8 padding_3e000[0x2000];
 #else
-    u8 padding_3dc00[0x2400];
+    u8 padding_3dc00[sizeof(MouseSharedMemoryFormat)];
 #endif
-#endif
+    u8 padding_3e000[0x2000];
 };
 
 static_assert(sizeof(SharedMemoryFormat) == 0x40000);
