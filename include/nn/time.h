@@ -17,7 +17,9 @@ public:
         ret.nanoseconds = nanoSeconds;
         return ret;
     }
-
+    static TimeSpan FromMilliSeconds(u64 milliseconds) {
+        return FromNanoSeconds(milliseconds * 1000 * 1000);
+    }
     static TimeSpan FromSeconds(u64 seconds) {
         return FromNanoSeconds(seconds * 1000 * 1000 * 1000);
     }

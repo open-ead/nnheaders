@@ -211,26 +211,6 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/SoundArchivePlayer.h
   include/nn/atk/SoundPlayer.h
   include/nn/atk/SoundDataManager.h
-  include/nn/nex/client.h
-  include/nn/nex/RootObject.h
-  include/nn/nex/socket.h
-  include/nn/nex/key.h
-  include/nn/nex/checksum.h
-  include/nn/nex/reference.h
-  include/nn/nex/pseudo.h
-  include/nn/nex/string.h
-  include/nn/nex/instance.h
-  include/nn/nex/ddl.h
-  include/nn/nex/encryption.h
-  include/nn/nex/cache.h
-  include/nn/nex/time.h
-  include/nn/nex/plugin.h
-  include/nn/nex/dynamic.h
-  include/nn/nex/data.h
-  include/nn/nex/auth.h
-  include/nn/nex/buffer.h
-  include/nn/nex/system.h
-  include/nn/nex/hash.h
   include/nn/nfp.h
   include/nn/nfp/nfp.h
   include/nn/nfp/nfp_types.h
