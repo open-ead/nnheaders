@@ -144,17 +144,8 @@ public:
     void GetHash(void* destHash, u64);
     void ProcessLastBlock();
 
-    u64 _x0;
-    u64 _x8;
-    u32 _x10;
-    u128 _x14;
-    u128 _x24;
-    u128 _x34;
-    u32 _x44;
-    u64 _x48;
-    u64 _x50;
-    u64 _x58;
-    u64 _x60;
+    void* filler[13];
+    u32 _68;
 };
 
 class Sha256Impl {
