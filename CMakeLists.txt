@@ -278,7 +278,6 @@ add_library(NintendoSDK OBJECT
   src/NintendoSDK/nvn/nvn_CppFuncPtrImpl.h
   src/NintendoSDK/nvn/nvn_FuncPtrImpl.h
   src/NintendoSDK/nvn/nvn_Impl.cpp
-  src/NintendoSDK/nnSdk/util.cpp
 )
 
 target_include_directories(NintendoSDK PUBLIC include/)
