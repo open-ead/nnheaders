@@ -16,6 +16,8 @@ public:
 
     s32 GetNumShapes() const { return m_NumShapes; }
 
+    s32 get_8c() const { return _8c; }
+
 private:
     struct InitializeArgument;
 
