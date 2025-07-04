@@ -17,11 +17,15 @@ struct ModuleInfo {
     u64 mSize;
 };
 
+enum AssertionType {};
+
 namespace detail {
 // LOG
 void LogImpl(nn::diag::LogMetaData const&, char const*, ...);
 void AbortImpl(char const*, char const*, char const*, s32);
 void AbortImpl(char const*, char const*, char const*, int, Result);
+
+void OnAssertionFailure(nn::diag::AssertionType, char const*, char const*, char const*, int);
 }  // namespace detail
 
 // MODULE / SYMBOL
