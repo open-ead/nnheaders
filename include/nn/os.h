@@ -40,6 +40,8 @@ struct InterProcessEventType {
 }  // namespace detail
 
 struct Tick {
+    Tick(u64 val) : value(val) {}
+
     u64 value;
 };
 
