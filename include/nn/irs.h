@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nn/irs/Rect.h>
 #include <nn/types.h>
 
 namespace nn::irsensor {
@@ -26,13 +27,6 @@ struct IrCameraHandle {
     u8 playerNumber;
     u8 deviceType;
     u8 reserved[2];
-};
-
-struct Rect {
-    u16 x = 0;
-    u16 y = 0;
-    u16 width = 320;
-    u16 height = 240;
 };
 
 IrCameraHandle GetIrCameraHandle(const u32&);
