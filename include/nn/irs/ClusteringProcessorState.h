@@ -7,7 +7,7 @@ namespace nn::irsensor {
 struct ClusteringProcessorState {
     s64 samplingNumber;
     s64 timeStamp;
-    s8 objectCount;
+    u8 objectCount;
     s32 ambientNoiseLevel;
     ClusteringData data[16];
 };

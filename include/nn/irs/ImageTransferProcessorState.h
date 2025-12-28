@@ -6,6 +6,6 @@ namespace nn::irsensor {
 struct ImageTransferProcessorState {
     s64 samplingNumber;
     s32 ambientNoiseLevel;
-    s8 reserved[4];
+    u8 reserved[4];
 };
 }  // namespace nn::irsensor
