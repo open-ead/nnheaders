@@ -3,13 +3,18 @@
 #include <nn/irs/MomentStatistic.h>
 #include <nn/irs/Rect.h>
 #include <nn/types.h>
+#include <nn/util.h>
 
 namespace nn::irsensor {
 struct ClusteringProcessorConfig;
 struct ClusteringProcessorState;
+
+#if NN_SDK_VER <= NN_MAKE_VER(4, 0, 0)
 struct DpdProcessorConfig;
 struct DpdProcessorPointingState;
 struct DpdProcessorState;
+#endif
+
 struct HandAnalysisConfig;
 struct ImageTransferProcessorConfig;
 struct ImageTransferProcessorState;
@@ -62,6 +67,7 @@ Result RunHandAnalysis(const IrCameraHandle& handle, const HandAnalysisConfig& c
 Result RunTeraPluginProcessor(const IrCameraHandle& handle,
                               const TeraPluginProcessorConfig& config);
 
+#if NN_SDK_VER <= NN_MAKE_VER(4, 0, 0)
 void RunDpdProcessor(const IrCameraHandle& handle);
 void GetDpdProcessorDefaultConfig(DpdProcessorConfig* outConfig);
 void RunDpdProcessor(const IrCameraHandle& handle, const DpdProcessorConfig& config);
@@ -69,6 +75,7 @@ Result GetDpdProcessorStates(DpdProcessorPointingState* outStates, s32* outCount
                              const IrCameraHandle& handle);
 Result GetDpdProcessorStates(DpdProcessorState* outStates, s32* outCount, s32,
                              const IrCameraHandle& handle);
+#endif
 
 Result GetTeraPluginProcessorStates(TeraPluginProcessorState* outStates, s32* outCount, s32, long,
                                     u32, s32, const IrCameraHandle& handle);
