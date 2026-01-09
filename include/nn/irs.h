@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nn/irs/MomentStatistic.h>
 #include <nn/irs/Rect.h>
 #include <nn/types.h>
 
@@ -40,8 +41,8 @@ void RunMomentProcessor(const IrCameraHandle& handle, const MomentProcessorConfi
 Result GetMomentProcessorState(MomentProcessorState* outState, const IrCameraHandle& handle);
 Result GetMomentProcessorStates(MomentProcessorState* outStates, s32* outCount, s32,
                                 const IrCameraHandle& handle);
-void* CalculateMomentRegionStatistic(const MomentProcessorState* state, const Rect&, s32, s32, s32,
-                                     s32);  // TODO: change return type
+MomentStatistic CalculateMomentRegionStatistic(const MomentProcessorState* state, const Rect&, s32,
+                                               s32, s32, s32);
 
 void GetClusteringProcessorDefaultConfig(ClusteringProcessorConfig* outConfig);
 void RunClusteringProcessor(const IrCameraHandle& handle, const ClusteringProcessorConfig& config);
