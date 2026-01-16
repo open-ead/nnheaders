@@ -34,6 +34,8 @@ public:
 
     const Bounds& GetBounds() const { return *m_Bounds; }
 
+    s32 get_8c() const { return _8c; }
+
 private:
     struct InitializeArgument;
 
