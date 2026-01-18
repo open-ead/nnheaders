@@ -29,6 +29,7 @@ struct LanguageCode {
 };
 
 bool operator==(nn::settings::LanguageCode const&, nn::settings::LanguageCode const&);
+bool operator==(nn::settings::Language const&, nn::settings::LanguageCode const&);
 
 namespace system {
 struct FirmwareVersion {
