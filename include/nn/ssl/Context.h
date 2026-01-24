@@ -1,11 +1,12 @@
 #pragma once
 
 #include <nn/ssl.h>
+#include <nn/ssl/sf/ISslContext.h>
 #include <nn/types.h>
 
 namespace nn::ssl {
 // TODO: find the size of this struct
-struct Context {
+struct Context : sf::ISslContext {
 public:
     enum SslVersion {
         Auto = 0x01,
