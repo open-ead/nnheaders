@@ -177,14 +177,17 @@ add_library(NintendoSDK OBJECT
   include/nn/util/util_BinTypes.h
   include/nn/util/util_BitPack.h
   include/nn/util/util_BytePtr.h
+  include/nn/util/util_IntrusiveList.h
   include/nn/util/util_BitUtil.h
   include/nn/util/util_ResDic.h
   include/nn/util/util_StringView.h
   include/nn/ui2d/detail/TexCoordArray.h
   include/nn/ui2d/Layout.h
-  include/nn/ui2d/Parts.h
-  include/nn/ui2d/Pane.h
   include/nn/ui2d/Material.h
+  include/nn/ui2d/Pane.h
+  include/nn/ui2d/Parts.h
+  include/nn/ui2d/Types.h
+  include/nn/ui2d/Util.h
   include/nn/g3d/BindFuncTable.h
   include/nn/g3d/ModelObj.h
   include/nn/g3d/ResMaterialAnim.h

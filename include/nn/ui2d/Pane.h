@@ -6,27 +6,12 @@
 #pragma once
 
 #include <nn/font/font_Util.h>
+#include <nn/gfx/gfx_Device.h>
 #include <nn/types.h>
 #include <nn/ui2d/Types.h>
+#include <nn/util.h>
 #include <nn/util/MathTypes.h>
 #include <nn/util/util_IntrusiveList.h>
-
-namespace nn::gfx {
-template <typename TType, typename TVersion>
-class ApiVariation;
-
-template <typename TTarget>
-class TCommandBuffer;
-
-template <typename T>
-class TDevice;
-
-template <int T>
-class ApiType;
-
-template <int T>
-class ApiVersion;
-}  // namespace nn::gfx
 
 namespace nn::util {
 struct Unorm8x4;
@@ -51,7 +36,7 @@ class AnimTransform;
 class Layout;
 class DrawInfo;
 class ResPane;
-class BuildArgSet;
+struct BuildArgSet;
 class Material;
 struct ResExtUserDataList;
 
@@ -70,7 +55,7 @@ public:
     Pane(const Pane&);
 
     virtual ~Pane();
-    virtual void Finalize(gfx::TDevice<gfx::ApiVariation<gfx::ApiType<4>, gfx::ApiVersion<8>>>*);
+    virtual void Finalize(gfx::Device*);
     virtual s32 GetVertexColor(s32);
     virtual void SetVertexColor(s32, util::Unorm8x4 const&);
     virtual u8 GetColorElement(s32);
@@ -87,11 +72,8 @@ public:
     virtual void UnbindAnimation(AnimTransform*, bool);
     virtual void UnbindAnimationSelf(AnimTransform*);
     virtual void Calculate(DrawInfo&, CalculateContext&, bool);
-    virtual void Draw(DrawInfo&,
-                      gfx::TCommandBuffer<gfx::ApiVariation<gfx::ApiType<4>, gfx::ApiVersion<8>>>&);
-    virtual void
-    DrawSelf(DrawInfo&,
-             gfx::TCommandBuffer<gfx::ApiVariation<gfx::ApiType<4>, gfx::ApiVersion<8>>>&);
+    virtual void Draw(DrawInfo&, gfx::CommandBuffer&);
+    virtual void DrawSelf(DrawInfo&, gfx::CommandBuffer&);
 
     void SetName(const char*);
     void SetUserData(const char*);
@@ -138,7 +120,7 @@ public:
 
     const Size& GetSize() const { return mSize; }
     void SetSize(const Size& size) {
-        mSize = size;
+        mSize.Set(size.width, size.height);
         SetGlobalMatrixDirty(true);
     }
 
