@@ -8,7 +8,7 @@ namespace nn::ssl {
 // TODO: find the size of this struct
 struct Context : sf::ISslContext {
 public:
-    enum SslVersion {
+    enum class SslVersion {
         Auto = 0x01,
         v10 = 0x08,
         v11 = 0x10,
@@ -17,9 +17,9 @@ public:
         Auto24 = 0x1000000  // [11.0.0+]
     };
 
-    enum InternalPki { DeviceClientCertDefault = 1 };
+    enum class InternalPki { DeviceClientCertDefault = 1 };
 
-    enum ContextOption { CrlImportDateCheckEnable = 1 };
+    enum class ContextOption { CrlImportDateCheckEnable = 1 };
 
     Context();
     ~Context();
@@ -47,7 +47,7 @@ private:
 // TODO: I'm pretty sure there is inheritance between ContextPrivate and Context
 struct ContextPrivate {
 public:
-    enum SslVersion {
+    enum class SslVersion {
         // TODO
     };
 
