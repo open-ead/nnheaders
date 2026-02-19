@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include <nn/atk/detail/AdvancedWaveSoundRuntime.h>
-#include <nn/atk/detail/SequenceSoundRuntime.h>
-#include <nn/atk/detail/SoundArchiveManager.h>
-#include <nn/atk/detail/StreamSoundRuntime.h>
-#include <nn/atk/detail/WaveSoundRuntime.h>
+#include <nn/atk/detail/atk_AdvancedWaveSoundRuntime.h>
+#include <nn/atk/detail/atk_SequenceSoundRuntime.h>
+#include <nn/atk/detail/atk_SoundArchiveManager.h>
+#include <nn/atk/detail/atk_StreamSoundRuntime.h>
+#include <nn/atk/detail/atk_WaveSoundRuntime.h>
 
 namespace nn {
 namespace atk {
