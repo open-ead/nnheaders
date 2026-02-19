@@ -4,6 +4,8 @@
 #include <nn/atk/detail/atk_Config.h>
 
 namespace nn::atk {
+static u32 gWarningFlag = 0x1f;
+
 enum WaveType {
     WaveType_Invalid = -1,
     WaveType_Nwwav,
