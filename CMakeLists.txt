@@ -179,6 +179,7 @@ add_library(NintendoSDK OBJECT
   include/nn/util/util_BytePtr.h
   include/nn/util/util_IntrusiveList.h
   include/nn/util/util_BitUtil.h
+  include/nn/util/util_IntrusiveList.h
   include/nn/util/util_ResDic.h
   include/nn/util/util_StringUtil.h
   include/nn/util/util_StringView.h
