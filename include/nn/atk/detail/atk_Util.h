@@ -5,7 +5,10 @@
 #include <nn/atk/atk_Global.h>
 #include <nn/atk/detail/atk_BinaryFileFormat.h>
 
-namespace nn::atk::detail {
+namespace nn::atk {
+class SoundArchive;
+
+namespace detail {
 struct Util {
     NN_NO_COPY(Util);
     NN_NO_MOVE(Util);
@@ -135,7 +138,7 @@ struct Util {
     
     WaveArchiveLoadStatus GetWaveArchiveOfBank(class LoadItemInfo* warcLoadInfo, 
                                                bool* isLoadIndividual, void* bankFile, 
-                                               class SoundArchive* arc, class SoundArchiveLoader* mgr);
+                                               SoundArchive* arc, class SoundArchiveLoader* mgr);
     void* GetWaveFileOfWaveSound(void* wsdFile, u32 index, SoundArchive* arc, SoundArchiveLoader* mgr);
     size_t GetByteBySample(size_t samples, SampleFormat format);
     size_t GetSampleByByte(size_t samples, SampleFormat format);
@@ -144,3 +147,4 @@ struct Util {
 };
 
 } // namespace nn::atk::detail
+} // namespace nn::atk
