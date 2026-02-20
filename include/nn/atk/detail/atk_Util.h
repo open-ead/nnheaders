@@ -20,6 +20,8 @@ struct Util {
     };
 
     struct Reference {
+        constexpr static s32 InvalidOffset = -1;
+
         // Id from ElementTypes enum
         u16 typeId;
         u8 padding[2];
@@ -51,6 +53,8 @@ struct Util {
     struct ReferenceWithSizeTable : Table<ReferenceWithSize> {};
 
     struct BitFlag {
+        constexpr static u32 BitNumberMax = 31;
+
         u32 bitFlag;
     };
     static_assert(sizeof(BitFlag) == 0x4);
@@ -134,6 +138,7 @@ struct Util {
                                                class SoundArchive* arc, class SoundArchiveLoader* mgr);
     void* GetWaveFileOfWaveSound(void* wsdFile, u32 index, SoundArchive* arc, SoundArchiveLoader* mgr);
     size_t GetByteBySample(size_t samples, SampleFormat format);
+    size_t GetSampleByByte(size_t samples, SampleFormat format);
     
     bool IsValidMemoryForDsp(void* ptr, size_t size);
 };
