@@ -17,7 +17,7 @@ struct WaveArchiveFile {
     };
     static_assert(sizeof(FileHeader) == 0x2C);
 
-    struct FileBlockBody { /* Unknown structure */ };
+    struct FileBlockBody { /* unknown structure */ };
     struct FileBlock {
         BinaryBlockHeader header;
         FileBlockBody body;
