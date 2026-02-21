@@ -6,6 +6,8 @@
 
 namespace nn::atk::detail {
 struct AdvancedWaveSoundFile {
+    util::BinaryFileHeader fileHeader;
+    
     struct InfoBlockBody {
         u32 offsetToTrackTableReference;
         BinaryTypes::Reference toTrackTable;
@@ -36,8 +38,6 @@ struct AdvancedWaveSoundFile {
         u32 offsetToClipTableReference;
         BinaryTypes::Reference toClipTable;
     };
-
-    util::BinaryFileHeader fileHeader;
 };
 static_assert(sizeof(AdvancedWaveSoundFile) == 0x20);
 
