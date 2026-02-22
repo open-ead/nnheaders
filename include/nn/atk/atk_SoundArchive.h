@@ -175,15 +175,15 @@ public:
     virtual ~SoundArchive();
 
     virtual void* detail_GetFileAddress(ItemId itemId) = 0;
-    virtual size_t detail_GetRequiredStreamBufferSize() = 0;
+    virtual std::size_t detail_GetRequiredStreamBufferSize() const = 0;
     
-    virtual void FileAccessBegin();
-    virtual void FileAccessEnd();
+    virtual void FileAccessBegin() const;
+    virtual void FileAccessEnd() const;
 
     virtual bool IsAddon();
 
-    virtual detail::fnd::FileStream* OpenStream(void* buffer, size_t size, 
-                                                position_t begin, size_t length) = 0;
+    virtual detail::fnd::FileStream* OpenStream(void* buffer, std::size_t size, 
+                                                position_t begin, std::size_t length) const = 0;
 
 private:
     detail::SoundArchiveFileReader* m_pFileReader{};
