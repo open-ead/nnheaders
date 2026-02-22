@@ -5,7 +5,7 @@
 namespace nn::atk {
 class SoundMemoryAllocatable {
 public:
-    typedef void(*DisposeCallback)(void*);
+    using DisposeCallback = void(*)(void*);
 
     virtual ~SoundMemoryAllocatable() = 0;
     virtual void* Allocate(size_t size) = 0;
