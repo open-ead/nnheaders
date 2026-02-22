@@ -1,7 +1,5 @@
 #pragma once
 
-#include <nn/atk/fnd/basis/atkfnd_Config.h>
-#include <nn/atk/fnd/basis/atkfnd_Result.h>
 #include <nn/atk/fnd/io/atkfnd_Stream.h>
 
 namespace nn::atk::detail::fnd {
