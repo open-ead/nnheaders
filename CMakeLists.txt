@@ -224,6 +224,8 @@ add_library(NintendoSDK OBJECT
   include/nn/friends.h
   include/nn/mem.h
 
+  include/nn/audio/audio_Adpcm.h
+
   include/nn/atk/atk_Adpcm.h
   include/nn/atk/atk_AudioRendererPerformanceReader.h
   include/nn/atk/atk_BiquadFilterCallback.h
