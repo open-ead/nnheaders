@@ -2,8 +2,8 @@
 
 #include <nn/atk/atk_Global.h>
 #include <nn/atk/detail/atk_Config.h>
-#include <nn/atk/detail/atk_Util.h>
-#include <nn/atk/detail/fnd/atkfnd_FileStream.h>
+#include <nn/atk/detail/util/atk_Util.h>
+#include <nn/atk/fnd/io/atkfnd_FileStream.h>
 
 namespace nn::atk {
 namespace detail{
