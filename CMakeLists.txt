@@ -225,12 +225,13 @@ add_library(NintendoSDK OBJECT
   include/nn/mem.h
 
   include/nn/audio/audio_Adpcm.h
+  include/nn/audio/audio_Common.h
+  include/nn/audio/audio_VoiceTypes.h
 
   include/nn/atk/atk_Adpcm.h
   include/nn/atk/atk_BiquadFilterCallback.h
   include/nn/atk/atk_FsSoundArchive.h
   include/nn/atk/atk_Global.h
-  include/nn/atk/atk_OutputReceiver.h
   include/nn/atk/atk_SequenceSoundHandle.h
   include/nn/atk/atk_SoundActor.h
   include/nn/atk/atk_SoundArchive.h
@@ -347,6 +348,7 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/submix/atk_ChannelMixVolume.h
   include/nn/atk/submix/atk_FinalMix.h
   include/nn/atk/submix/atk_OutputMixer.h
+  include/nn/atk/submix/atk_OutputReceiver.h
   include/nn/atk/submix/atk_SubMix.h
   include/nn/atk/util/atk_AudioRendererPerformanceReader.h
   include/nn/atk/util/atk_DeviceOutRecorder.h
