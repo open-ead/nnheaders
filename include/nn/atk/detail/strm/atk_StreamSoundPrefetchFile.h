@@ -1,8 +1,7 @@
 #pragma once
 
-#include <nn/atk/detail/atk_Util.h>
-#include <nn/atk/detail/atk_BinaryFileFormat.h>
-#include <nn/atk/detail/atk_StreamSoundFile.h>
+#include <nn/atk/detail/strm/atk_StreamSoundFile.h>
+#include <nn/atk/detail/util/atk_Util.h>
 
 namespace nn::atk::detail {
 class StreamSoundPrefetchFile {
