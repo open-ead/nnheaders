@@ -7,7 +7,7 @@
 namespace nn::atk {
 class BiquadFilterCallback {
 public:
-    typedef BiquadFilterCoefficients Coefficients;
+    using Coefficients = BiquadFilterCoefficients;
 
     virtual ~BiquadFilterCallback();
 };
