@@ -353,7 +353,6 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/util/atk_ProfileReader.h
   include/nn/atk/util/atk_TaskProfileReader.h
   include/nn/atk/fnd/basis/atkfnd_Config.h
-  include/nn/atk/fnd/basis/atkfnd_CriticalSection.h
   include/nn/atk/fnd/basis/atkfnd_FrameHeapImpl.h
   include/nn/atk/fnd/basis/atkfnd_HeapBase.h
   include/nn/atk/fnd/basis/atkfnd_PrimitiveTypes.h
@@ -367,6 +366,7 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/fnd/io/atkfnd_FileStreamProxy.h
   include/nn/atk/fnd/io/atkfnd_Stream.h
   include/nn/atk/fnd/io/atkfnd_StreamCache.h
+  include/nn/atk/fnd/os/atkfnd_CriticalSection.h
   include/nn/atk/fnd/os/atkfnd_Thread.h
 
   include/nvn/nvn_Cpp.h
