@@ -4,8 +4,8 @@
 #include <nn/types.h>
 #include <vapours/results/results_common.hpp>
 
-#include <nn/atk/atk_AudioRendererPerformanceReader.h>
 #include <nn/atk/atk_Global.h>
+#include <nn/atk/util/atk_AudioRendererPerformanceReader.h>
 
 namespace nn::audio {
 struct MemoryPoolType;
