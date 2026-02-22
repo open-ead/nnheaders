@@ -17,7 +17,7 @@ namespace nn::util {
 struct Unorm8x4;
 }
 
-namespace nn::ui2d ::detail {
+namespace nn::ui2d::detail {
 
 class PaneBase {
     NN_NO_COPY(PaneBase);
@@ -54,7 +54,7 @@ public:
     Pane(const ResPane*, const BuildArgSet&);
     Pane(const Pane&);
 
-    virtual ~Pane();
+    ~Pane() override;
     virtual void Finalize(gfx::Device*);
     virtual s32 GetVertexColor(s32);
     virtual void SetVertexColor(s32, util::Unorm8x4 const&);
@@ -143,7 +143,7 @@ protected:
     void SetInfluencedAlpha(bool state) {
         detail::SetBit(&mFlags, PaneFlag_InfluencedAlpha, state);
     }
-    void SetLocationAdjus(bool state) { detail::SetBit(&mFlags, PaneFlag_LocationAdjust, state); }
+    void SetLocationAdjust(bool state) { detail::SetBit(&mFlags, PaneFlag_LocationAdjust, state); }
     void SetUserAllocated(bool state) { detail::SetBit(&mFlags, PaneFlag_UserAllocated, state); }
     void SetGlobalMatrixDirty(bool state) {
         detail::SetBit(&mFlags, PaneFlag_IsGlobalMatrixDirty, state);

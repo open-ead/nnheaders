@@ -26,7 +26,7 @@ void LoadArchiveShader(ShaderInfo*, gfx::Device*, void*, const void*, gfx::Memor
 void FreeArchiveShader(gfx::Device*, ShaderInfo*);
 void ConvertBlendsToArchiveShaderName(char*, s32, s32);
 bool ConvertArchiveShaderNameToBlends(s32*, s32*, const char*);
-s32 SearchShaderVariationIndexFromTable(const void*, s32, s32);
+s16 SearchShaderVariationIndexFromTable(const void*, s32, s32);
 void BindAnimation(AnimTransform*, Group*, bool);
 void UnbindAnimation(AnimTransform*, Group*);
 bool IsContain(const Pane*, const util::Float2&);
@@ -40,7 +40,7 @@ Pane* ClonePaneTreeWithPartsLayout(const Pane*, Layout*, gfx::Device*, Layout*);
 bool ComparePaneTreeTest(const Pane*, const Pane*);
 void DrawNullAndBoundingPane(gfx::CommandBuffer&, DrawInfo&, Material&, const Pane*,
                              const util::Unorm8x4&, const util::Unorm8x4&);
-float GetHermiteCurveValue(float, const ResHermiteKey*, s32);
+f32 GetHermiteCurveValue(float, const ResHermiteKey*, s32);
 const ResExtUserData* GetExtUserData(const ResExtUserDataList*, const char*);
 u64 GetAlignedBufferSize(gfx::Device*, gfx::GpuAccess, u64);
 void SetDefaultShaderId(Material*, s32);
