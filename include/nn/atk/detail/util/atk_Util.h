@@ -22,6 +22,12 @@ struct Util {
         8000, 10240, 12800, 16000
     };
 
+    template <typename Class>
+    class Singleton {
+    public:
+        static Class* GetInstance(); 
+    };
+
     struct Reference {
         constexpr static s32 InvalidOffset = -1;
 
