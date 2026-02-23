@@ -19,10 +19,10 @@ class IntrusiveListBaseNode : IntrusiveListNode {};
 template <typename T1, typename T2 = T1>
 class IntrusiveListBaseNodeTraits {};
 
-template <typename T1, IntrusiveListNode& MemberNode = &T1::m_Link, typename T2 = T1>
+template <typename T1, auto MemberNode, typename T2 = T1>
 class IntrusiveListMemberNodeTraits {};
 
-template <typename T, typename Traits = IntrusiveListMemberNodeTraits<T>>
+template <typename T, typename Traits>
 class IntrusiveList {
 private:
     detail::IntrusiveListImplementation m_Implementation;
