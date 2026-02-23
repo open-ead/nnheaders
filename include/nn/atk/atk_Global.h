@@ -252,7 +252,7 @@ enum OutputMode {
 };
 
 struct OutputMix {
-    float channelGain[24];
+    f32 channelGain[24];
 };
 static_assert(sizeof(OutputMix) == 0x60);
 

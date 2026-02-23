@@ -7,10 +7,10 @@
 #include <nn/atk/detail/atk_VolumeThroughModePacket.h>
 
 namespace nn::atk::detail {
+using SendArray = ValueArray<f32>;
+
 class OutputAdditionalParam {
 public:
-    using SendArray = ValueArray<f32>;
-
     static std::size_t GetRequiredMemSize(SoundInstanceConfig* config);
 
     void Initialize(void* buffer, std::size_t bufferSize, SoundInstanceConfig* config);
