@@ -1,10 +1,16 @@
 #pragma once
 
+#include <nn/util/util_BitFlagSet.h>
+
 #include <nn/atk/detail/voice/atk_LowLevelVoice.h>
 
 namespace nn::atk::detail {
 class Voice {
 public:
+    constexpr static s32 PriorityMin = 0;
+    constexpr static s32 PriorityMax = 255;
+    constexpr static s32 PriorityNoDrop = 255;
+
     Voice();
     ~Voice();
 
@@ -46,4 +52,32 @@ private:
     LowLevelVoice* m_pLowLevelVoice;
 };
 static_assert(sizeof(Voice) == 0xe0);
+
+class VirtualVoiceManager {
+public:
+    constexpr static s32 InvalidVoiceId = -1;
+    
+    constexpr static u32 VirtualVoiceCount = 256;
+    constexpr static u32 VirtualVoiceElementCount = 8;
+
+    static VirtualVoiceManager* GetInstance();
+
+    bool AllocVirtualVoice();
+    void FreeVirtualVoice(u32);
+
+    void Initialize();
+    
+    void UpdateVoiceInfo();
+    
+    s32 GetAllocatedVirtualVoiceCount() const;
+    s32 GetUnreleasedLowLevelVoiceCount() const;
+
+private:
+    u32 m_VirtualVoiceAllocationTable[8];
+    u32 m_VoiceInfoTableRead;
+    LowLevelVoice* m_LowLevelVoiceTable[256];
+    VoiceInfo m_VoiceInfoTable[2][256];
+    util::BitFlagSet<256, void> m_VoiceInfoDirtyTable[2];
+};
+static_assert(sizeof(VirtualVoiceManager) == 0x4868);
 } // namespace nn::atk::voice
