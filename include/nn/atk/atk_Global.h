@@ -414,9 +414,9 @@ namespace detail {
     static_assert(sizeof(WaveInfo) == 0xa0);
 }
 
-// typedef -- SoundFrameUserCallback; 
-// typedef -- SoundThreadUserCallback;
-// typedef -- SoundStopCallback;
+using SoundFrameUserCallback = void(*)(std::uintptr_t); 
+using SoundThreadUserCallback = void(*)(std::uintptr_t);
+using SoundStopCallback = void(*)();
 
 
 
