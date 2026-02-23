@@ -3,6 +3,7 @@
 #include <nn/util/util_BitFlagSet.h>
 
 #include <nn/atk/detail/voice/atk_LowLevelVoice.h>
+#include <nn/atk/detail/util/atk_Util.h>
 
 namespace nn::atk::detail {
 class Voice {
@@ -53,14 +54,12 @@ private:
 };
 static_assert(sizeof(Voice) == 0xe0);
 
-class VirtualVoiceManager {
+class VirtualVoiceManager : Util::Singleton<VirtualVoiceManager> {
 public:
     constexpr static s32 InvalidVoiceId = -1;
     
     constexpr static u32 VirtualVoiceCount = 256;
     constexpr static u32 VirtualVoiceElementCount = 8;
-
-    static VirtualVoiceManager* GetInstance();
 
     bool AllocVirtualVoice();
     void FreeVirtualVoice(u32);
