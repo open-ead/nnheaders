@@ -4,10 +4,11 @@
 
 #include <nn/atk/atk_SoundMemoryAllocatable.h>
 
-namespace nn::atk::detail {
-class PlayerHeap;
+namespace nn::atk {
 class SoundPlayer;
 
+namespace detail {
+class PlayerHeap;
 class CallbackNode {
 private:
     friend PlayerHeap;
@@ -38,6 +39,8 @@ public:
     std::size_t GetFreeSize() const;
 
 private:
+    friend SoundPlayer;
+
     SoundPlayer* m_pPlayer;
     void* m_pStartAddress;
     void* m_pEndAddress;
@@ -49,3 +52,4 @@ private:
 };
 static_assert(sizeof(PlayerHeap) == 0x50);
 } // namespace nn::atk::detail
+} // namespace nn::atk
