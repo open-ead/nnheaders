@@ -3,7 +3,7 @@
 #include <nn/audio/audio_Common.h>
 
 namespace nn::audio {
-struct FinalMixType {
+struct SubMixType {
     MixInfo* _pMixInfo;
 };
 } // namespace nn::audio
