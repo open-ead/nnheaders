@@ -225,7 +225,9 @@ add_library(NintendoSDK OBJECT
   include/nn/mem.h
 
   include/nn/audio/audio_Adpcm.h
+  include/nn/audio/audio_AudioRendererTypes.h
   include/nn/audio/audio_Common.h
+  include/nn/audio/audio_EffectTypes.h
   include/nn/audio/audio_VoiceTypes.h
 
   include/nn/atk/atk_Adpcm.h
