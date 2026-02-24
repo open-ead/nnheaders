@@ -3,7 +3,6 @@
 #include <nn/fs/fs_types.h>
 
 #include <nn/atk/fnd/io/atkfnd_FileStream.h>
-#include <nn/atk/fnd/io/atkfnd_StreamCache.h>
 
 namespace nn::atk::detail::fnd {
 class FileStreamImpl : FileStream {
@@ -16,7 +15,7 @@ public:
         bool IsOpened() const override;
         
         std::size_t Read(void* buf, std::size_t length, FndResult* result) override;
-        std::size_t Write(void* buf, std::size_t length, FndResult* result) override;
+        std::size_t Write(const void* buf, std::size_t length, FndResult* result) override;
         FndResult Seek(position_t offset, SeekOrigin origin) override;
         
         position_t GetCurrentPosition() const override;
@@ -35,7 +34,7 @@ public:
     ~FileStreamImpl() override;
 
     std::size_t Read(void* buf, std::size_t length, FndResult* result) override;
-    std::size_t Write(void* buf, std::size_t length, FndResult* result) override;
+    std::size_t Write(const void* buf, std::size_t length, FndResult* result) override;
     FndResult Seek(position_t offset, fnd::Stream::SeekOrigin origin) override;
     
     bool CanRead() const override;
@@ -44,7 +43,7 @@ public:
 
     void ValidateAlignment(void* buf);
 
-    FndResult Open(char* filePath, AccessMode accessMode);
+    FndResult Open(const char* filePath, AccessMode accessMode) override;
     void Close() override;
 
     bool IsOpened() const override;
@@ -56,19 +55,19 @@ public:
     std::size_t WriteDirect(void* buf, std::size_t length, FndResult* result);
     FndResult SeekDirect(position_t offset, fnd::Stream::SeekOrigin origin);
 
-    virtual void Flush();
+    void Flush() override;
     
-    virtual void EnableCache(void* buffer, std::size_t length);
-    virtual void DisableCache();
-    virtual bool IsCacheEnabled();
+    void EnableCache(void* buffer, std::size_t length) override;
+    void DisableCache() override;
+    bool IsCacheEnabled() const override;
 
-    virtual s32 GetIoBufferAlignment();
+    s32 GetIoBufferAlignment() const override;
 
-    virtual bool CanSetFsAccessLog();
-    virtual void* SetFsAccessLog(FsAccessLog* pFsAccessLog);
+    bool CanSetFsAccessLog() const override;
+    void* SetFsAccessLog(FsAccessLog* pFsAccessLog) override;
 
-    virtual position_t GetCachePosition();
-    virtual std::size_t GetCachedLength();
+    position_t GetCachePosition() override;
+    std::size_t GetCachedLength() override;
 
 private:
     fs::FileHandle m_FileHandle;
