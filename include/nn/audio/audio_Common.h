@@ -5,6 +5,9 @@
 namespace nn::audio {
 using NodeId = uint32_t;
 
+struct EffectInfo {};
+struct MixInfo {};
+
 class VoiceInfoManager {};
 class MixManager {};
 class EffectManager {};
