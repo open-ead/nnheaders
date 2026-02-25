@@ -208,6 +208,7 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/detail/SequenceSoundRuntime.h
   include/nn/atk/detail/SoundArchiveManager.h
   include/nn/atk/detail/AdvancedWaveSoundRuntime.h
+  include/nn/atk/AuxBus.h
   include/nn/atk/SoundArchivePlayer.h
   include/nn/atk/SoundPlayer.h
   include/nn/atk/SoundDataManager.h
