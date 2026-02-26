@@ -62,7 +62,8 @@ public:
 
     class Handler {
     public:
-        virtual ~Handler();
+        virtual ~Handler() = 0;
+        virtual u32 Run(void* param) = 0;
     };
     static_assert(sizeof(Handler) == 0x8);
 
