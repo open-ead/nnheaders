@@ -1,7 +1,5 @@
 #pragma once
 
-#include <nn/types.h>
-
 namespace nn::atk::detail {
 template <typename T1, typename T2>
 class MoveValue {

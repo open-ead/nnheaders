@@ -33,7 +33,8 @@ public:
     public:
         virtual ~SoundFrameCallback();
 
-        void OnEndSoundFrame();
+        virtual void OnBeginSoundFrame();
+        virtual void OnEndSoundFrame();
 
     private:
         friend SoundThread;
