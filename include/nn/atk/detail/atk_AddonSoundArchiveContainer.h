@@ -26,8 +26,9 @@ public:
 
     void SetAddTick(const os::Tick& addTick);
 
-private:
     util::IntrusiveListNode m_ElementLink;
+
+private:
     bool m_IsActive;
     u8 m_Padding[3];
     SoundArchive* m_pSoundArchive;
