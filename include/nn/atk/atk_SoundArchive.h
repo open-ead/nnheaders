@@ -83,7 +83,7 @@ public:
         bool isLoadIndividual;
         u8 padding[3];
     };
-    static_assert(sizeof(WaveArchiveInfo) == 0xC);
+    static_assert(sizeof(WaveArchiveInfo) == 0xc);
 
     struct SoundArchivePlayerInfo {
         s32 sequenceSoundCount;
@@ -105,7 +105,7 @@ public:
         u8 channelPriority;
         bool isReleasePriorityFix;
     };
-    static_assert(sizeof(SequenceSoundInfo) == 0x1C);
+    static_assert(sizeof(SequenceSoundInfo) == 0x1c);
 
     enum StreamFileType {
         StreamFileType_Invalid = 0,
@@ -126,7 +126,7 @@ public:
         u8 channelCount;
         s8 globalChannelIndex[2];
     };
-    static_assert(sizeof(StreamTrackInfo) == 0xE);
+    static_assert(sizeof(StreamTrackInfo) == 0xe);
 
     struct StreamSoundInfo {
         u16 allocateTrackFlags;
@@ -147,7 +147,7 @@ public:
         u32 loopStartFrame;
         u32 loopEndFrame;
     };
-    static_assert(sizeof(StreamSoundInfo2) == 0xC);
+    static_assert(sizeof(StreamSoundInfo2) == 0xc);
 
     struct WaveSoundInfo {
         u32 index;
@@ -155,7 +155,7 @@ public:
         u8 channelPriority;
         bool isReleasePriorityFix;
     };
-    static_assert(sizeof(WaveSoundInfo) == 0xC);
+    static_assert(sizeof(WaveSoundInfo) == 0xc);
 
     struct AdvancedWaveSoundInfo {
         u32 waveArchiveId;
@@ -168,7 +168,7 @@ public:
         u8 decayCurve;
         u8 dopplerFactor;
     };
-    static_assert(sizeof(Sound3DInfo) == 0xC);
+    static_assert(sizeof(Sound3DInfo) == 0xc);
 
     SoundArchive();
 
