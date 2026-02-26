@@ -1,28 +1,50 @@
-/**
- * @file AdvancedWaveSoundRuntime.h
- * @brief Runtime wave sound api.
- */
-
 #pragma once
 
 #include <nn/types.h>
 
-namespace nn {
-namespace atk {
-namespace detail {
+#include <nn/atk/atk_SoundDataManager.h>
+#include <nn/atk/atk_SoundStartable.h>
+#include <nn/atk/detail/atk_AdvancedWaveSound.h>
+#include <nn/atk/detail/atk_StartInfoReader.h>
+#include <nn/atk/submix/atk_OutputReceiver.h>
+
+namespace nn::atk::detail {
 class AdvancedWaveSoundRuntime {
 public:
     AdvancedWaveSoundRuntime();
     ~AdvancedWaveSoundRuntime();
 
-    void Initialize(s32, void**, void const*);
+    void Initialize(s32 soundCount, void** pOutAllocatedAddr, const void* endAddr);
     void Finalize();
+
+    static std::size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo,
+                                             std::size_t alignmentSize);
+
+
     s32 GetActiveCount() const;
-    void SetupUserParam(void**, u64);
+    s32 GetFreeAdvancedWaveSoundCount() const;
+
+    void SetupUserParam(void** startAddr, std::size_t adjustSize);
+    
     void Update();
 
-    u8 _0[0x30];
+    AdvancedWaveSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, 
+                                  s32 ambientPriority, BasicSound::AmbientInfo* ambientArgInfo);
+    AdvancedWaveSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, 
+                                  s32 ambientPriority, BasicSound::AmbientInfo* ambientArgInfo, 
+                                  OutputReceiver* pOutputReceiver);
+
+    SoundStartable::StartResult PrepareImpl(const SoundArchive* pSoundArchive, 
+                                            const SoundDataManager* pSoundDataManager, 
+                                            SoundArchive::ItemId soundId, 
+                                            AdvancedWaveSound* sound, 
+                                            const SoundArchive::SoundInfo* commonInfo, 
+                                            const StartInfoReader& startInfoReader);
+
+    void DumpMemory(const SoundArchive*) const;
+
+private:
+    AdvancedWaveSoundInstanceManager m_InstanceManager;
 };
-}  // namespace detail
-}  // namespace atk
-}  // namespace nn
+static_assert(sizeof(AdvancedWaveSoundRuntime) == 0x38);
+}  // namespace nn::atk::detail

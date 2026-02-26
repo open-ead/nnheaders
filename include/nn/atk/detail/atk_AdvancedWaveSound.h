@@ -29,6 +29,8 @@ public:
     driver::BasicSoundPlayer* GetBasicSoundPlayerHandle();
 
 private:
+    friend AdvancedWaveSoundInstanceManager;
+
     util::IntrusiveListNode m_PriorityLink;
     AdvancedWaveSoundHandle* m_pTempSpecialHandle;
     AdvancedWaveSoundInstanceManager* m_InstanceManager;
