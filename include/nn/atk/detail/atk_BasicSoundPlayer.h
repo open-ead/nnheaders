@@ -25,6 +25,9 @@ public:
     virtual ~BasicSoundPlayer();
     virtual void Initialize(OutputReceiver* pOutputReceiver);
     virtual void Finalize();
+    virtual void Start() = 0;
+    virtual void Stop() = 0;
+    virtual void Pause(bool isPauseEnabled) = 0;
 
     BasicSoundPlayer();
     void SetBiquadFilter(s32 type, f32 value);
