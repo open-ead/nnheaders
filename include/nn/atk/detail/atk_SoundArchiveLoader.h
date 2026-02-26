@@ -33,8 +33,8 @@ public:
     virtual ~SoundArchiveLoader();
     
     virtual void* SetFileAddressToTable(SoundArchive::FileId fileId, const void* address) = 0;
-    virtual void* GetFileAddressFromTable(SoundArchive::FileId fileId) = 0;
-    virtual void* GetFileAddressImpl(SoundArchive::FileId fileId) = 0;
+    virtual void* GetFileAddressFromTable(SoundArchive::FileId fileId) const = 0;
+    virtual void* GetFileAddressImpl(SoundArchive::FileId fileId) const = 0;
 
     void SetSoundArchive(SoundArchive* arc);
 

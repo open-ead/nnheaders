@@ -7,7 +7,7 @@ class DisposeCallback {
 public:
     virtual ~DisposeCallback() = default;
 
-    virtual void InvalidateData(void*,void*) = 0;
+    virtual void InvalidateData(const void* start, const void* end) = 0;
     
 private:
     util::IntrusiveListNode m_DisposeLink;

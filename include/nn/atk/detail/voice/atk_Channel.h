@@ -48,7 +48,7 @@ public:
     public:
         ~Disposer() override;
 
-        void InvalidateData(void* start, void* end);
+        void InvalidateData(const void* start, const void* end) override;
 
     private:
         Channel* m_pChannel;
