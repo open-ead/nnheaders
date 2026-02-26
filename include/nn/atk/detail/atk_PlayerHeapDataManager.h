@@ -22,11 +22,11 @@ public:
     void* SetFileAddress(SoundArchive::FileId fileId, const void* address);
     void* GetFileAddress(SoundArchive::FileId fileId);
 
-    void InvalidateData(void*, void*) override;
+    void InvalidateData(const void* start, const void* end) override;
 
     void* SetFileAddressToTable(SoundArchive::FileId fileId, const void* address) override;
-    void* GetFileAddressFromTable(SoundArchive::FileId fileId) override;
-    void* GetFileAddressImpl(SoundArchive::FileId fileId) override;
+    void* GetFileAddressFromTable(SoundArchive::FileId fileId) const override;
+    void* GetFileAddressImpl(SoundArchive::FileId fileId) const override;
 
 private:
     FileAddress m_FileAddress[9];
