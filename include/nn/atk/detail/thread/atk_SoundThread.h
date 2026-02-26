@@ -49,6 +49,10 @@ public:
     public:
         virtual ~PlayerCallback();
 
+        virtual void OnUpdateFrameSoundThread() = 0;
+        virtual void OnUpdateFrameSoundThreadWithAudioFrameFrequency() = 0;
+        virtual void OnShutdownSoundThread() = 0;
+
     private:
         friend SoundThread;
 
