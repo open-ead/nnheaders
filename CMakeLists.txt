@@ -229,6 +229,7 @@ add_library(NintendoSDK OBJECT
   include/nn/audio/audio_Common.h
   include/nn/audio/audio_EffectTypes.h
   include/nn/audio/audio_FinalMixTypes.h
+  include/nn/audio/audio_PerformanceMetricsTypes.h
   include/nn/audio/audio_SubMixTypes.h
   include/nn/audio/audio_VoiceTypes.h
 
