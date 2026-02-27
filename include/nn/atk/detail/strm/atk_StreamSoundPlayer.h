@@ -311,6 +311,8 @@ private:
     SetupArg m_SetupArg;
     position_t m_PlaySamplePosition;
     position_t m_OriginalPlaySamplePosition;
+
+    static u16 g_TaskRequestIndexCount;
 };
 static_assert(sizeof(StreamSoundPlayer) == 0x11740);
 } // namespace nn::atk::detail::driver
