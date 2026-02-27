@@ -61,7 +61,8 @@ using ProfileReaderList = util::IntrusiveList<ProfileReader,
                             util::IntrusiveListMemberNodeTraits<ProfileReader, 
                                 &ProfileReader::m_Link>>;
 
-class TaskProfile;
+struct TaskProfile;
+
 template <typename T>
 class AtkProfileReader {
 public:
