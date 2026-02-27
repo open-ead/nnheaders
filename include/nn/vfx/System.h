@@ -12,7 +12,7 @@
 namespace nn {
 namespace vfx {
 
-struct Heap;
+class Heap;
 
 class System {
 public:
