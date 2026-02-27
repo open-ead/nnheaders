@@ -38,7 +38,11 @@ public:
     AdvancedWaveSoundPlayer();
     ~AdvancedWaveSoundPlayer() override;
 
-    void Initialize(OutputReceiver* pOutputReceiver) override;
+#if NN_SDK_VER < NN_MAKE_VER(5, 3, 0)
+    bool Initialize() override;
+#else
+    bool Initialize(OutputReceiver* pOutputReceiver) override;
+#endif
     void Finalize() override;
 
     void TearDownPlayer();
