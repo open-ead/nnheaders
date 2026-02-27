@@ -313,6 +313,8 @@ enum SinglePlayType {
     SinglePlayType_PrioritizeNewestWithDuration = SinglePlayType_PrioritizeNewestEffectiveDuration,
 };
 
+struct StreamDataInfo {};
+
 enum UpdateType {
     UpdateType_AudioFrame,
     UpdateType_GameFrame,
