@@ -253,12 +253,19 @@ public:
 
     void RequestLoad(StartInfo* info, SequenceSoundLoader::Arg* arg);
 
+    u64 GetProcessTick(SoundProfile&);
+
+    void PrepareForMidi(const void**, const void**, bool*);
+
     bool TryAllocLoader();
 
     void ChannelCallback(Channel* channel);
     void OnUpdateFrameSoundThread() override;
     void OnUpdateFrameSoundThreadWithAudioFrameFrequency() override;
     void OnShutdownSoundThread() override;
+
+    static void SetSkipIntervalTick(s32);
+    static s32 GetSkipIntervalTick();
 
 private:
     bool m_ReleasePriorityFixFlag;
