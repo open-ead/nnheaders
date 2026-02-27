@@ -4,9 +4,10 @@
 #include <nn/util/util_IntrusiveList.h>
 
 #include <nn/atk/atk_SoundArchive.h>
+#include <nn/atk/detail/atk_BasicSoundPlayer.h>
 #include <nn/atk/detail/atk_MoveValue.h>
-#include <nn/atk/submix/atk_OutputReceiver.h>
 #include <nn/atk/detail/atk_OutputAdditionalParam.h>
+#include <nn/atk/submix/atk_OutputReceiver.h>
 
 namespace nn::atk {
 class SoundActor;
@@ -204,13 +205,16 @@ public:
 
     BasicSound();
     virtual ~BasicSound();
-
+#if NN_SDK_VER < NN_MAKE_VER(5, 3, 0)
     virtual bool Initialize();
+#else
     virtual bool Initialize(OutputReceiver* pOutputReceiver);
+#endif
     virtual void Finalize();
     virtual bool IsPrepared() const = 0;
     virtual bool IsAttachedTempSpecialHandle() = 0;
     virtual void DetachTempSpecialHandle() = 0;
+    virtual driver::BasicSoundPlayer* GetBasicSoundPlayerHandle() = 0;
     virtual void OnUpdatePlayerPriority();
     virtual void UpdateMoveValue();
     virtual void OnUpdateParam();

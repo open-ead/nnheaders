@@ -23,7 +23,11 @@ struct PlayerParamSet {
 class BasicSoundPlayer {
 public:
     virtual ~BasicSoundPlayer();
-    virtual void Initialize(OutputReceiver* pOutputReceiver);
+#if NN_SDK_VER < NN_MAKE_VER(5, 3, 0)
+    virtual bool Initialize();
+#else
+    virtual bool Initialize(OutputReceiver* pOutputReceiver);
+#endif
     virtual void Finalize();
     virtual void Start() = 0;
     virtual void Stop() = 0;

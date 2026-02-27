@@ -21,8 +21,11 @@ public:
     explicit SequenceSound(SequenceSoundInstanceManager& manager);
     ~SequenceSound() override;
 
+#if NN_SDK_VER < NN_MAKE_VER(5, 3, 0)
     bool Initialize() override;
+#else
     bool Initialize(OutputReceiver* pOutputReceiver) override;
+#endif
     void Finalize() override;
 
     void Setup(driver::SequenceTrackAllocator* trackAllocator, u32 allocTracks, 
@@ -76,7 +79,7 @@ public:
 
     bool IsPrepared() const override;
 
-    driver::BasicSoundPlayer* GetBasicSoundPlayerHandle();
+    driver::BasicSoundPlayer* GetBasicSoundPlayerHandle() override;
 
     void OnUpdateParam() override;
 

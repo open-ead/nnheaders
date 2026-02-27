@@ -14,7 +14,11 @@ public:
     explicit AdvancedWaveSound(const AdvancedWaveSoundInstanceManager& manager);
     ~AdvancedWaveSound() override;
 
+#if NN_SDK_VER < NN_MAKE_VER(5, 3, 0)
+    bool Initialize() override;
+#else
     bool Initialize(OutputReceiver* pOutputReceiver) override;
+#endif
     void Finalize() override;
 
     void Prepare(const driver::AdvancedWaveSoundPlayer::PrepareParameter& parameter);
