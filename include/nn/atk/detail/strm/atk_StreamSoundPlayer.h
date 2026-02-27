@@ -128,8 +128,12 @@ public:
     StreamSoundPlayer();
     ~StreamSoundPlayer() override;
 
-    void Initialize();
-    void Initialize(OutputReceiver* pOutputReceiver) override;
+
+#if NN_SDK_VER < NN_MAKE_VER(5, 3, 0)
+    bool Initialize() override;
+#else
+    bool Initialize(OutputReceiver* pOutputReceiver) override;
+#endif
 
     bool TryAllocLoader();
 
