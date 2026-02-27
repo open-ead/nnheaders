@@ -7,8 +7,8 @@ struct SequenceSoundFile {
     struct DataBlock;
     struct LabelBlock;
     struct FileHeader : Util::SoundFileHeader {
-        DataBlock* GetDataBlock();
-        LabelBlock* GetLabelBlock();
+        DataBlock* GetDataBlock() const;
+        LabelBlock* GetLabelBlock() const;
     };
 
     struct LabelInfo {
