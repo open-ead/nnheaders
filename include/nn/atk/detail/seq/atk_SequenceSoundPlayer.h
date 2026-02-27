@@ -252,6 +252,11 @@ public:
 
     bool TryAllocLoader();
 
+    void ChannelCallback(Channel* channel);
+    void OnUpdateFrameSoundThread() override;
+    void OnUpdateFrameSoundThreadWithAudioFrameFrequency() override;
+    void OnShutdownSoundThread() override;
+
 private:
     bool m_ReleasePriorityFixFlag;
     bool m_IsPrepared;
