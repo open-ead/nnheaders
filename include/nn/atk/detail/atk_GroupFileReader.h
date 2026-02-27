@@ -11,7 +11,7 @@ static_assert(sizeof(GroupItemLocationInfo) == 0x10);
 
 class GroupFileReader {
 public:
-    constexpr static u64 SignatureFile = 0x50524746; // FGRP
+    constexpr static s64 SignatureFile = 0x50524746; // FGRP
 
     explicit GroupFileReader(const void* groupFile);
 
