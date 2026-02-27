@@ -10,7 +10,6 @@ public:
     void Initialize(const void* streamSoundFile);
 
     bool IsValidFileHeader(const void* streamSoundFile) const;
-
     bool IsTrackInfoAvailable() const;
     bool IsCrc32CheckAvailable() const;
     bool IsRegionIndexCheckAvailable() const;

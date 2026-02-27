@@ -6,6 +6,7 @@ namespace nn::atk::detail {
 class IRegionInfoReadable {
 public:
     virtual ~IRegionInfoReadable() = default;
+    
     virtual bool ReadRegionInfo(StreamSoundFile::RegionInfo* pInfo, 
                                 u32 regionIndex) const = 0;
 };
