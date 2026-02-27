@@ -1,9 +1,10 @@
 #pragma once
 
 #include <nn/atk/detail/seq/atk_SequenceTrack.h>
-#include <nn/atk/detail/seq/atk_SequenceSoundPlayer.h>
 
 namespace nn::atk::detail::driver {
+class SequenceSoundPlayer;
+
 class SequenceTrackAllocator {
 public:
     virtual ~SequenceTrackAllocator() = default;
