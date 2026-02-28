@@ -6,6 +6,8 @@
 #include <nn/atk/detail/voice/atk_Voice.h>
 
 namespace nn::atk::detail::driver {
+class MultiVoiceManager;
+
 class MultiVoice {
 public:
     struct PreMixVolume {
@@ -139,6 +141,8 @@ public:
                                      position_t offsetSamples, const void* dataAddress);
     
 private:
+    friend MultiVoiceManager;
+
     Voice m_Voice[2];
     s32 m_ChannelCount;
     VoiceCallback m_Callback;
