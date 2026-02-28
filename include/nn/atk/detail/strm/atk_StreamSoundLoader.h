@@ -81,6 +81,9 @@ static_assert(sizeof(FileStreamHookParam) == 0x10);
 namespace driver {
 class StreamSoundPlayer;
 
+class StreamSoundLoader;
+using StreamSoundLoaderManager = LoaderManager<StreamSoundLoader>;
+
 class StreamSoundLoader {
 public:
     class StreamHeaderLoadTask : Task {
@@ -227,6 +230,8 @@ public:
     void UpdateAdpcmInfoForStartOffset(const void*, s32, const BlockInfo&);
 
 private:
+    friend StreamSoundLoaderManager;
+    
     StreamSoundFileLoader m_FileLoader;
     StreamSoundPlayer* m_PlayerHandle;
     fnd::FileStream* m_pFileStream;
@@ -267,7 +272,5 @@ private:
     util::IntrusiveListNode m_LinkForLoaderManager;
 };
 static_assert(sizeof(StreamSoundLoader) == 0x3640);
-
-using StreamSoundLoaderManager = LoaderManager<StreamSoundLoader>;
 } // namespace nn::atk::detail::driver
 } // namespace nn::atk::detail

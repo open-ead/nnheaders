@@ -36,7 +36,7 @@ public:
     SequenceSoundRuntime();
     ~SequenceSoundRuntime();
 
-    void Initialize(s32 soundCount, void** pOutAllocatedAddr, const void* endAddr);
+    bool Initialize(s32 soundCount, void** pOutAllocatedAddr, const void* endAddr);
     void Finalize();
 
     void SetupSequenceTrack(s32 trackCount, void** pOutAllocatedAddr, const void* endAddr);
