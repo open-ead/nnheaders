@@ -1,21 +1,12 @@
 #pragma once
 
 #include <nn/atk/detail/atk_AdvancedWaveSoundPlayer.h>
-#include <nn/atk/detail/atk_BasicSoundPlayer.h>
-#include <nn/atk/detail/atk_DisposeCallback.h>
-#include <nn/atk/detail/thread/atk_Command.h>
 #include <nn/atk/effect/atk_EffectAux.h>
 #include <nn/atk/effect/atk_EffectBase.h>
-#include "nn/atk/atk_Adpcm.h"
-#include "nn/atk/atk_Global.h"
-#include "nn/atk/detail/seq/atk_SequenceSoundPlayer.h"
-#include "nn/atk/detail/strm/atk_StreamSoundLoader.h"
-#include "nn/atk/detail/strm/atk_StreamSoundPlayer.h"
-#include "nn/atk/detail/thread/atk_CommandManager.h"
-#include "nn/atk/detail/voice/atk_MultiVoice.h"
-#include "nn/atk/detail/wsd/atk_WaveSoundLoader.h"
-#include "nn/atk/detail/wsd/atk_WaveSoundPlayer.h"
-#include "nn/atk/submix/atk_OutputReceiver.h"
+#include <nn/atk/detail/seq/atk_SequenceSoundPlayer.h>
+#include <nn/atk/detail/strm/atk_StreamSoundPlayer.h>
+#include <nn/atk/detail/thread/atk_CommandManager.h>
+#include <nn/atk/detail/wsd/atk_WaveSoundPlayer.h>
 
 namespace nn::atk::detail {
 enum DriverCommandId {
