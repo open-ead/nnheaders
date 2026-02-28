@@ -129,7 +129,7 @@ public:
     ~StreamSoundPlayer() override;
 
 
-#if NN_SDK_VER < NN_MAKE_VER(5, 3, 0)
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     bool Initialize() override;
 #else
     bool Initialize(OutputReceiver* pOutputReceiver) override;

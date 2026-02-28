@@ -126,10 +126,10 @@ public:
 
     virtual ~SoundStartable() = 0;
 
-    virtual StartResult detail_SetupSound(SoundHandle* handle, 
-                                          u32 soundId, bool holdFlag,
-                                          const char* soundArchiveName, 
+    virtual StartResult detail_SetupSound(SoundHandle* handle, u32 soundId, 
+                                          bool holdFlag, const char* soundArchiveName,
                                           const StartInfo* startInfo) = 0;
+                                          
     virtual SoundArchive::ItemId detail_GetItemId(char* pString) = 0;
     virtual SoundArchive::ItemId detail_GetItemId(char* pString, const char* soundArchiveName) = 0;
 
