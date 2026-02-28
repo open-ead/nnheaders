@@ -50,7 +50,7 @@ public:
     bool ReadStreamDataInfo(StreamDataInfo*) const;
 
     s32 GetPlayLoopCount() const;
-    position_t GetPlaySamplePosition() const;
+    position_t GetPlaySamplePosition(bool) const;
     f32 GetFilledBufferPercentage() const;
     s32 GetBufferBlockCount(WaveBuffer::Status waveBufferStatus) const;
     s32 GetTotalBufferBlockCount() const;
@@ -61,9 +61,10 @@ public:
 
     driver::BasicSoundPlayer * GetBasicSoundPlayerHandle() override;
 
-    util::IntrusiveListNode m_PriorityLink;
-
 private:
+    friend StreamSoundInstanceManager;
+    
+    util::IntrusiveListNode m_PriorityLink;
     StreamSoundHandle* m_pTempSpecialHandle;
     StreamSoundInstanceManager* m_Manager;
     MoveValue<f32, s32> m_TrackVolume[8];
