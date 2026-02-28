@@ -28,9 +28,9 @@ public:
     bool IsAttachedTempSpecialHandle() override;
     void DetachTempSpecialHandle() override;
 
-    bool IsPrepared();
+    bool IsPrepared() const override;
 
-    driver::BasicSoundPlayer* GetBasicSoundPlayerHandle();
+    driver::BasicSoundPlayer* GetBasicSoundPlayerHandle() override;
 
 private:
     friend AdvancedWaveSoundInstanceManager;
