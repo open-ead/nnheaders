@@ -22,6 +22,9 @@ static_assert(sizeof(SequenceUserProcCallbackParam) == 0x20);
 using SequenceUserProcCallback = void(*)(u16,SequenceUserProcCallbackParam*,void*);
 
 namespace detail::driver {
+class SequenceSoundLoader;
+using SequenceSoundLoaderManager = LoaderManager<SequenceSoundLoader>;
+
 class SequenceSoundLoader {
 public:
     struct LoadInfo {
@@ -98,7 +101,7 @@ public:
     bool TryWait();
 
 private:
-    friend LoaderManager<SequenceSoundLoader>;
+    friend SequenceSoundLoaderManager;
 
     DataLoadTask m_Task;
     FreePlayerHeapTask m_FreePlayerHeapTask;
@@ -106,8 +109,6 @@ private:
     util::IntrusiveListNode m_LinkForLoaderManager;
 };
 static_assert(sizeof(SequenceSoundLoader) == 0x4b0);
-
-using SequenceSoundLoaderManager = LoaderManager<SequenceSoundLoader>;
 
 class SequenceSoundPlayer : BasicSoundPlayer, DisposeCallback, SoundThread::PlayerCallback {
 public:
