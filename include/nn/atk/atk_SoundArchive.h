@@ -9,6 +9,7 @@ namespace nn::atk {
 namespace detail{
 class SoundArchiveFileReader;
 struct SoundArchiveParametersHook;
+struct SoundArchiveFilesHook;
 } // namespace nn::atk::detail
 
 class SoundArchive {

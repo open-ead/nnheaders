@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nn/atk/atk_Adpcm.h>
+#include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/detail/atk_Config.h>
 #include <nn/atk/detail/atk_IStreamDataDecoder.h>
 #include <nn/atk/detail/atk_LoaderManager.h>
@@ -71,7 +72,6 @@ struct LoadDataParam {
 };
 static_assert(sizeof(LoadDataParam) == 0x98);
 
-struct SoundArchiveFilesHook;
 struct FileStreamHookParam {
     SoundArchiveFilesHook* pSoundArchiveFilesHook;
     char* itemLabel;

@@ -83,9 +83,11 @@ public:
 
     void OnUpdateParam() override;
 
-    util::IntrusiveListNode m_PriorityLink;
 
 private:
+    friend SequenceSoundInstanceManager;
+
+    util::IntrusiveListNode m_PriorityLink;
     SequenceSoundHandle* m_pTempSpecialHandle;
     SequenceSoundInstanceManager* m_Manager;
     bool m_InitializeFlag;

@@ -5,7 +5,6 @@
 #include <nn/atk/detail/seq/atk_MmlSequenceTrackAllocator.h>
 #include <nn/atk/detail/seq/atk_SequenceSound.h>
 #include <nn/atk/detail/seq/atk_SequenceSoundFile.h>
-#include <nn/atk/detail/strm/atk_StreamSoundLoader.h>
 
 namespace nn::atk::detail {
 class SequenceSoundRuntime {
