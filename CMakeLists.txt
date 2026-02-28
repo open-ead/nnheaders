@@ -236,6 +236,7 @@ add_library(NintendoSDK OBJECT
   include/nn/audio/audio_SinkTypes.h
   include/nn/audio/audio_SubMixTypes.h
   include/nn/audio/audio_VoiceTypes.h
+  include/nn/audio/audio_WaveBuffer.h
 
   include/nn/atk/atk_Adpcm.h
   include/nn/atk/atk_BiquadFilterCallback.h
