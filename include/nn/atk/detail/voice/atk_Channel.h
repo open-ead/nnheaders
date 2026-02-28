@@ -8,6 +8,8 @@
 #include <nn/atk/detail/voice/atk_MultiVoice.h>
 
 namespace nn::atk::detail::driver {
+class ChannelManager;
+
 class Channel {
 public:
     enum ChannelCallbackStatus {
@@ -95,6 +97,8 @@ public:
     void DetachChannel();
 
 private:
+    friend ChannelManager;
+
     Disposer m_Disposer;
     CurveAdshr m_CurveAdshr;
     CurveLfo m_Lfo[4];
