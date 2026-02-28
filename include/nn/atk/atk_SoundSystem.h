@@ -6,6 +6,7 @@
 
 #include <nn/atk/atk_Global.h>
 #include <nn/atk/util/atk_AudioRendererPerformanceReader.h>
+#include <nn/atk/util/atk_ProfileReader.h>
 
 namespace nn::audio {
 struct MemoryPoolType;
@@ -229,8 +230,8 @@ struct SoundSystem {
 
     static s32 GetDroppedLowLevelVoiceCount();
     
-    // static void RegisterSoundThreadUpdateProfileReader(AtkProfileReader<nn::atk::SoundThreadUpdateProfile>&);
-    // static void UnregisterSoundThreadUpdateProfileReader(AtkProfileReader<nn::atk::SoundThreadUpdateProfile>&);
+    static void RegisterSoundThreadUpdateProfileReader(AtkProfileReader<SoundThreadUpdateProfile>&);
+    static void UnregisterSoundThreadUpdateProfileReader(AtkProfileReader<SoundThreadUpdateProfile>&);
 
     static bool ReadCircularBufferSink(void*, u64);
 
