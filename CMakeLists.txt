@@ -239,6 +239,7 @@ add_library(NintendoSDK OBJECT
   include/nn/audio/audio_MemoryPoolTypes.h
   include/nn/audio/audio_PerformanceMetrics.h
   include/nn/audio/audio_PerformanceMetricsTypes.h
+  include/nn/audio/audio_SampleFormat.h
   include/nn/audio/audio_SubMixTypes.h
   include/nn/audio/audio_VoiceTypes.h
 
