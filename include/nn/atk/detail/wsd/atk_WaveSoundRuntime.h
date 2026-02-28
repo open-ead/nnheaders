@@ -34,7 +34,7 @@ public:
                                             const SoundArchive::SoundInfo* commonInfo, 
                                             const StartInfoReader& startInfoReader);
 
-    void DumpMemory(const SoundArchive*);
+    void DumpMemory(const SoundArchive*) const;
 
 private:
     WaveSoundInstanceManager m_WaveSoundInstanceManager;

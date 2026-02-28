@@ -55,7 +55,7 @@ public:
                                             const SoundArchive::SoundInfo* commonInfo, 
                                             const StartInfoReader& startInfoReader);
 
-    void DumpMemory(const SoundArchive* pSoundArchive);
+    void DumpMemory(const SoundArchive* pSoundArchive) const;
 
 private:
     StreamSoundInstanceManager m_StreamSoundInstanceManager;
