@@ -102,4 +102,17 @@ public:
     void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
 };
 static_assert(sizeof(BiquadFilterBpf2048Nw4fCompatible48k) == 0x8);
+
+namespace driver {
+static BiquadFilterLpf BiquadFilterInstanceLpf {};
+static BiquadFilterHpf BiquadFilterInstanceHpf {};
+static BiquadFilterBpf512 BiquadFilterInstanceBpf512 {};
+static BiquadFilterBpf1024 BiquadFilterInstanceBpf1024 {};
+static BiquadFilterBpf2048 BiquadFilterInstanceBpf2048 {};
+static BiquadFilterLpfNw4fCompatible48k BiquadFilterInstanceLpfNw4fCompatible48k {};
+static BiquadFilterHpfNw4fCompatible48k BiquadFilterInstanceHpfNw4fCompatible48k {};
+static BiquadFilterBpf512Nw4fCompatible48k BiquadFilterInstanceBpf512Nw4fCompatible48k {};
+static BiquadFilterBpf1024Nw4fCompatible48k BiquadFilterInstanceBpf1024Nw4fCompatible48k {};
+static BiquadFilterBpf2048Nw4fCompatible48k BiquadFilterInstanceBpf2048Nw4fCompatible48k {};
+};
 } // namespace nn::atk::detail
