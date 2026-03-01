@@ -8,7 +8,7 @@
 #include <nn/atk/submix/atk_OutputReceiver.h>
 
 namespace nn::atk {
-class OutputMixer : OutputReceiver {
+class OutputMixer : protected OutputReceiver {
 public:
     using EffectList = util::IntrusiveList<EffectBase, 
                             util::IntrusiveListMemberNodeTraits<EffectBase, &EffectBase::m_Link>>;
@@ -36,8 +36,8 @@ public:
 
     void OnChangeOutputMode();
 
-    void AppendEffectImpl(EffectBase* pEffect, s32 bus, void* buffer, size_t bufferSize);
-    void AppendEffectImpl(EffectAux* pEffect, s32 bus, void* buffer, size_t bufferSize);
+    virtual void AppendEffectImpl(EffectBase* pEffect, s32 bus, void* buffer, size_t bufferSize);
+    virtual void AppendEffectImpl(EffectAux* pEffect, s32 bus, void* buffer, size_t bufferSize);
 
     void RemoveEffectImpl(EffectBase* pEffect, s32 bus);
     void RemoveEffectImpl(EffectAux* pEffect, s32 bus);
