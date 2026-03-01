@@ -1,7 +1,5 @@
 #pragma once
 
-#include <nn/types.h>
-
 #include <nn/atk/detail/atk_DisposeCallback.h>
 #include <nn/atk/detail/atk_SoundArchiveLoader.h>
 #include <nn/atk/detail/util/atk_Util.h>
@@ -25,9 +23,9 @@ public:
     SoundDataManager();
     ~SoundDataManager() override;
 
-    std::size_t GetRequiredMemSize(const SoundArchive* arc);
+    size_t GetRequiredMemSize(const SoundArchive* arc) const;
 
-    bool Initialize(const SoundArchive* pArchive, void* buffer, std::size_t size);
+    bool Initialize(const SoundArchive* pArchive, void* buffer, size_t size);
     
     bool CreateTables(void**, const SoundArchive* pArchive, void*);
     
@@ -45,10 +43,10 @@ public:
 
     SoundArchive::FileId detail_GetFileIdFromTable(const void*) const;
 
-    bool SetFileAddressInGroupFile(const void*, std::size_t);
-    void ClearFileAddressInGroupFile(const void*, std::size_t);
+    bool SetFileAddressInGroupFile(const void*, size_t);
+    void ClearFileAddressInGroupFile(const void*, size_t);
 
-    void InvalidateSoundData(const void*, std::size_t);
+    void InvalidateSoundData(const void*, size_t);
 
 private:
     FileTable* m_pFileTable;

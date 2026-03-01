@@ -23,12 +23,12 @@ public:
 
     ~SoundHandle() = default;
 
-    void DetachSound();
-
     void detail_DuplicateHandle(SoundHandle* other);
 
-    void detail_AttachSound(detail::BasicSound* sound);
+    void DetachSound();
+
     void detail_AttachSoundAsTempHandle(detail::BasicSound* sound);
+    void detail_AttachSound(detail::BasicSound* sound);
 
     void CalculateSoundParamCalculationValues(SoundParamCalculationValues* calcValues) const;
 
