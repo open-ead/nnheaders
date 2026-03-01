@@ -1,6 +1,16 @@
 #pragma once
 
 namespace nn::audio {
+enum MemoryPoolState {
+    MemoryPoolState_Invalid,
+    MemoryPoolState_New,
+    MemoryPoolState_RequestDetach,
+    MemoryPoolState_Detached,
+    MemoryPoolState_RequestAttach,
+    MemoryPoolState_Attached,
+    MemoryPoolState_Released,
+};
+
 struct MemoryPoolInfo {};
 
 struct MemoryPoolType {
