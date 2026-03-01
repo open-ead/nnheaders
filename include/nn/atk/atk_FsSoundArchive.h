@@ -19,16 +19,18 @@ public:
     void Close();
     bool Open(const char* path);
 
-    detail::fnd::FileStream* OpenStream(void* buffer, std::size_t size, 
-                                        position_t begin, std::size_t length) const override;
+    bool LoadFileHeader();
 
-    detail::fnd::FileStream* OpenExtStream(void* buffer, std::size_t size, const char* extFilePath,
-                                           void* cacheBuffer, std::size_t cacheSize) const;
+    detail::fnd::FileStream* OpenStream(void* buffer, size_t size, 
+                                        position_t begin, size_t length) const override;
 
-    std::size_t detail_GetRequiredStreamBufferSize() const override;
+    detail::fnd::FileStream* OpenExtStream(void* buffer, size_t size, const char* extFilePath,
+                                           void* cacheBuffer, size_t cacheSize) const override;
 
-    bool LoadHeader(void* buffer, std::size_t size);
-    bool LoadLabelStringData(void* buffer, std::size_t size);
+    size_t detail_GetRequiredStreamBufferSize() const override;
+
+    bool LoadHeader(void* buffer, size_t size);
+    bool LoadLabelStringData(void* buffer, size_t size);
 
     void FileAccessBegin() const override;
     void FileAccessEnd() const override;

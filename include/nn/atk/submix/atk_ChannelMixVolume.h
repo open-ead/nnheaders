@@ -5,6 +5,8 @@
 namespace nn::atk {
 class ChannelMixVolume {
 public:
+    constexpr static u8 ChannelCountMax = 24; 
+
     ChannelMixVolume();
     void InitializeChannelVolume();
 
@@ -20,7 +22,7 @@ public:
 
 private:
     s32 m_ChannelCount;
-    f32 m_ChannelVolume[24];
+    f32 m_ChannelVolume[ChannelCountMax];
 };
-static_assert(sizeof(ChannelMixVolume) == 0x64);
+static_assert(sizeof(ChannelMixVolume) == 4 + ChannelMixVolume::ChannelCountMax * sizeof(f32));
 } // namespace nn::atk

@@ -45,9 +45,9 @@ class ProfileReader {
 public:
     ProfileReader();
 
-    void Record(const SoundProfile& src);
-
     std::size_t Read(SoundProfile*, s32);
+
+    void Record(const SoundProfile& src);
 
     util::IntrusiveListNode m_Link;
 

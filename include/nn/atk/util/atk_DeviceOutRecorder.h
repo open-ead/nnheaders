@@ -62,9 +62,7 @@ public:
         void Finalize();
 
         u32 Push(const s16* sampleBuffer, u32 samples);
-
         u32 Pop(u32);
-
         s64 Peek();
 
         void SetReadBlockSamples(u32 readBlockSamples);
