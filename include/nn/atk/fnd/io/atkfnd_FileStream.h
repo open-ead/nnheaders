@@ -18,7 +18,7 @@ public:
     virtual FndResult Open(const char* filePath, AccessMode openMode);
     virtual void Flush();
     
-    virtual void EnableCache(void* buffer, std::size_t length);
+    virtual void EnableCache(void* buffer, size_t length);
     virtual void DisableCache();
     virtual bool IsCacheEnabled() const;
 
@@ -28,7 +28,7 @@ public:
     virtual void* SetFsAccessLog(FsAccessLog* pFsAccessLog);
 
     virtual position_t GetCachePosition();
-    virtual std::size_t GetCachedLength();
+    virtual size_t GetCachedLength();
 
     ~FileStream() override;
 };
