@@ -147,8 +147,7 @@ enum FsPriority {
     FsPriority_Low,
 };
 
-class AdshrCurve {
-private:
+struct AdshrCurve {
     u8 m_Attack;
     u8 m_Decay;
     u8 m_Sustain;
@@ -323,101 +322,98 @@ enum VolumeThroughModeBitFlag {
 };
 
 namespace detail {
-    enum DecodeMode {
-        DecodeMode_Invalid = -1,
-        DecodeMode_Default,
-        DecodeMode_Cpu,
-        DecodeMode_Accelerator,
-    };
+enum DecodeMode {
+    DecodeMode_Invalid = -1,
+    DecodeMode_Default,
+    DecodeMode_Cpu,
+    DecodeMode_Accelerator,
+};
 
-    struct DspAdpcmLoopParam {
-        u16 loopPredScale;
-        u16 loopYn1;
-        u16 loopYn2;
-    };
-    static_assert(sizeof(DspAdpcmLoopParam) == 0x6);
+struct DspAdpcmLoopParam {
+    u16 loopPredScale;
+    u16 loopYn1;
+    u16 loopYn2;
+};
+static_assert(sizeof(DspAdpcmLoopParam) == 0x6);
 
-    struct OutputBusMixVolume {
-        float volume[2][24];
-    };
-    static_assert(sizeof(OutputBusMixVolume) == 0xc0);
+struct OutputBusMixVolume {
+    float volume[2][24];
+};
+static_assert(sizeof(OutputBusMixVolume) == 0xc0);
 
-    struct OutputParam {
-        float volume;
-        u32 mixMode;
-        MixParameter mixParameter[2];
-        float pan;
-        float span;
-        float send[4];
-    };
-    static_assert(sizeof(OutputParam) == 0x50);
+struct OutputParam {
+    float volume;
+    u32 mixMode;
+    MixParameter mixParameter[2];
+    float pan;
+    float span;
+    float send[4];
+};
+static_assert(sizeof(OutputParam) == 0x50);
 
-    struct SoundInstanceConfig {
-        bool isBusMixVolumeEnabled;
-        bool isVolumeThroughModeEnabled;
-        s32 busCount;
-    };
-    static_assert(sizeof(SoundInstanceConfig) == 8);
+struct SoundInstanceConfig {
+    bool isBusMixVolumeEnabled;
+    bool isVolumeThroughModeEnabled;
+    s32 busCount;
+};
+static_assert(sizeof(SoundInstanceConfig) == 8);
 
-    enum StreamFileType {
-        StreamFileType_Bfstm,
-        StreamFileType_Opus,
-    };
+enum StreamFileType {
+    StreamFileType_Bfstm,
+    StreamFileType_Opus,
+};
 
-    enum VoiceState {
-        VoiceState_Play,
-        VoiceState_Stop,
-        VoiceState_Pause,
-    };
+enum VoiceState {
+    VoiceState_Play,
+    VoiceState_Stop,
+    VoiceState_Pause,
+};
 
-    struct VoiceInfo {
-        VoiceState voiceState;
-        WaveBuffer::Status waveBufferStatus;
-        void* waveBufferTag;
-        u32 playPosition;
-        void* userId;
-    };
-    static_assert(sizeof(VoiceInfo) == 0x20);
+struct VoiceInfo {
+    VoiceState voiceState;
+    WaveBuffer::Status waveBufferStatus;
+    void* waveBufferTag;
+    u32 playPosition;
+    void* userId;
+};
+static_assert(sizeof(VoiceInfo) == 0x20);
 
-    class VoiceParam {
-    private:
-        float m_Volume;
-        float m_Pitch;
-        OutputMix m_TvMix;
-        bool m_MonoFilterFlag;
-        bool m_BiquadFilterFlag;
-        BiquadFilterCoefficients m_BiquadFilterCoefficients;
-        u16 m_MonoFilterCutoff;
-        u8 m_InterpolationType;
-    };
-    static_assert(sizeof(VoiceParam) == 0x78);
+class VoiceParam {
+private:
+    float m_Volume;
+    float m_Pitch;
+    OutputMix m_TvMix;
+    bool m_MonoFilterFlag;
+    bool m_BiquadFilterFlag;
+    BiquadFilterCoefficients m_BiquadFilterCoefficients;
+    u16 m_MonoFilterCutoff;
+    u8 m_InterpolationType;
+};
+static_assert(sizeof(VoiceParam) == 0x78);
 
-    struct WaveInfo {
-        struct ChannelParam {
-            void* dataAddress;
-            s32 dataSize;
-            DspAdpcmParam adpcmParam;
-            DspAdpcmLoopParam adpcmLoopParam;
-        };
-        static_assert(sizeof(ChannelParam) == 0x38);
-
-        SampleFormat sampleFormat;
-        bool loopFlag;
-        s32 channelCount;
-        s32 sampleRate;
-        position_t loopStartFrame;
-        position_t loopEndFrame;
-        position_t originalLoopStartFrame;
-        size_t dataSize;
-        ChannelParam channelParam[2];
+struct WaveInfo {
+    struct ChannelParam {
+        void* dataAddress;
+        s32 dataSize;
+        DspAdpcmParam adpcmParam;
+        DspAdpcmLoopParam adpcmLoopParam;
     };
-    static_assert(sizeof(WaveInfo) == 0xa0);
-}
+    static_assert(sizeof(ChannelParam) == 0x38);
+
+    SampleFormat sampleFormat;
+    bool loopFlag;
+    s32 channelCount;
+    s32 sampleRate;
+    position_t loopStartFrame;
+    position_t loopEndFrame;
+    position_t originalLoopStartFrame;
+    size_t dataSize;
+    ChannelParam channelParam[2];
+};
+static_assert(sizeof(WaveInfo) == 0xa0);
+} // namespace nn::atk::detail
 
 using SoundFrameUserCallback = void(*)(std::uintptr_t); 
 using SoundThreadUserCallback = void(*)(std::uintptr_t);
 using SoundStopCallback = void(*)();
-
-
-
 } // namespace nn::atk
