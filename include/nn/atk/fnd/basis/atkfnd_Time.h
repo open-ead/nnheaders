@@ -7,9 +7,9 @@ class TimeSpan {
 public:
     using TickType = s64;
 
-    os::Tick FromNanoSeconds(TickType);
-    os::Tick FromMicroSeconds(TickType);
-    os::Tick FromMilliSeconds(TickType);
+    static TimeSpan FromNanoSeconds(TickType);
+    static TimeSpan FromMicroSeconds(TickType);
+    static TimeSpan FromMilliSeconds(TickType);
     
     TickType ToNanoSeconds() const;
     TickType ToMicroSeconds() const;
