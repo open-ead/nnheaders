@@ -5,7 +5,6 @@
 namespace nn::os {
 class MessageQueue {
 public:
-private:
     MessageQueueType m_MessageQueue;
 };
 } // namespace nn::os
