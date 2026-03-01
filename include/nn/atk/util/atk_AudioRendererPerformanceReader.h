@@ -2,12 +2,13 @@
 
 #include <atomic>
 
-#include <nn/types.h>
 #include <nn/os.h>
 
 namespace nn::atk {
 class AudioRendererPerformanceReader {
 public:
+    constexpr static u32 PerformanceInfoCountMin = 2;
+
     struct PerformanceInfo {
         void* performanceBuffer;
         size_t performanceBufferSize;
