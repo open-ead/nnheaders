@@ -12,6 +12,20 @@ enum PerformanceEntryType {
     PerformanceEntryType_Count
 };
 
+enum PerformanceDetailType : u8 {
+    PerformanceDetailType_Unknown,
+    PerformanceDetailType_PcmInt16,
+    PerformanceDetailType_Adpcm,
+    PerformanceDetailType_VolumeRamp,
+    PerformanceDetailType_BiquadFilter,
+    PerformanceDetailType_Mix,
+    PerformanceDetailType_Delay,
+    PerformanceDetailType_Aux,
+    PerformanceDetailType_Reverb,
+    PerformanceDetailType_Reverb3d,
+    PerformanceDetailType_PcmFloat
+};
+
 struct PerformanceEntry {
     NodeId id;
     s32 startTime;
