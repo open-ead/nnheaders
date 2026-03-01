@@ -16,6 +16,37 @@ class HardwareManager { // inherits nn::atk::Util::Singleton<HardwareManager>
 public:
     using SubMixList = util::IntrusiveList<SubMix, util::IntrusiveListMemberNodeTraits<SubMix, &SubMix::m_Link>>;
 
+    constexpr static u32 SoundFrameIntervalMsec = 5;
+    constexpr static u32 SoundFrameIntervalUsec = 5000;
+
+    constexpr static u32 DefaultRendererSampleRate = 48000;
+    constexpr static u32 DefaultRendererUserEffectCount = 10;
+    constexpr static u32 DefaultRendererVoiceCountMax = 96;
+
+    constexpr static u32 DefaultRecordingAudioFrameCount = 8;
+
+    constexpr static u32 AtkVoiceCountMax = 192;
+    constexpr static u32 MixerCount = 3;
+    constexpr static u32 ChannelCountMax = 6;
+    constexpr static u32 BusCount = 4;
+
+    constexpr static u32 DefaultRendererSampleCount = 140;
+    constexpr static u32 DefaultRendererMixBufferCount = 30;
+    constexpr static u32 DefaultRendererSubMixCount = 1;
+    constexpr static u32 DefaultRendererSinkCount = 1;
+    constexpr static u32 DefaultRendererPerformanceFrameCount = 0;
+
+    constexpr static u32 DefaultRendererSystemEffectCount = 4;
+
+    constexpr static u32 SubMixCountMax = 2;
+    constexpr static u32 SubMixCountForAdditionalEffect = 1;
+    constexpr static u32 ChannelCountForAdditionalEffect = 2;
+
+    constexpr static u32 AuxBusCountForAdditionalEffect = 2;
+    constexpr static u32 MixBufferCountForAdditionalEffect = 6;
+
+    constexpr static bool DefaultRendererIsVoiceDropEnabled = false;
+
     class EffectAuxListScopedLock {
     public:
         EffectAuxListScopedLock();
@@ -205,14 +236,14 @@ private:
     u8 m_OutputDeviceFlag[32];
     LowLevelVoiceAllocator m_LowLevelVoiceAllocator;
     FinalMix m_FinalMix;
-    SubMix m_SubMix[2];
+    SubMix m_SubMix[SubMixCountMax];
     SubMix m_AdditionalSubMix;
     SubMixList m_SubMixList;
     fnd::CriticalSection m_SubMixListLock;
     audio::AudioRendererParameter m_AudioRendererParameter;
     audio::DeviceSinkType m_Sink;
-    MoveValue<f32, s32> m_AuxUserVolume[3];
-    MoveValue<f32, s32> m_AuxUserVolumeForAdditionalEffect[2];
+    MoveValue<f32, s32> m_AuxUserVolume[MixerCount];
+    MoveValue<f32, s32> m_AuxUserVolumeForAdditionalEffect[AuxBusCountForAdditionalEffect];
     bool m_IsInitializedEffect;
     bool m_IsPresetSubMixEnabled;
     bool m_IsAdditionalEffectEnabled;
