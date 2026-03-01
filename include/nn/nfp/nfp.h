@@ -3,7 +3,7 @@
 #include <nn/types.h>
 
 namespace nn::os {
-class SystemEventType;
+struct SystemEventType;
 }  // namespace nn::os
 
 namespace nn::nfp {

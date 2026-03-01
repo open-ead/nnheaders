@@ -11,7 +11,7 @@ namespace nn {
 namespace g3d {
 class ResLightAnim;
 class ResFogAnim;
-struct BindFuncTable;
+class BindFuncTable;
 
 class ResSceneAnim {
 public:

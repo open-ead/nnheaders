@@ -1,11 +1,8 @@
 #pragma once
 
 #include <nn/gfx/gfx_Device.h>
+#include <nn/gfx/gfx_Types.h>
 #include <nn/util/MathTypes.h>
-
-namespace nn::gfx {
-class MemoryPool;
-}  // namespace nn::gfx
 
 namespace nn::ui2d {
 
