@@ -8,6 +8,8 @@
 #include <nn/atk/atk_Global.h>
 
 namespace nn::atk {
+class OutputMixer;
+
 class EffectBase {
 public:
     enum ChannelMode {
@@ -54,6 +56,8 @@ public:
     bool SetSampleRate(SampleRate sampleRate);
 
 private:
+    friend OutputMixer;
+
     util::IntrusiveListNode m_Link;
     bool m_IsActive;
     SampleRate m_SampleRate;
