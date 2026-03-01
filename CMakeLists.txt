@@ -338,6 +338,7 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/detail/thread/atk_TaskManager.h
   include/nn/atk/detail/thread/atk_TaskThread.h
   include/nn/atk/detail/thread/atk_ThreadInfoReader.h
+  include/nn/atk/detail/thread/atk_VoiceCommand.h
   include/nn/atk/detail/util/atk_CurveAdshr.h
   include/nn/atk/detail/util/atk_CurveLfo.h
   include/nn/atk/detail/util/atk_FrameHeap.h
@@ -350,7 +351,6 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/detail/voice/atk_MultiVoice.h
   include/nn/atk/detail/voice/atk_MultiVoiceManager.h
   include/nn/atk/detail/voice/atk_Voice.h
-  include/nn/atk/detail/voice/atk_VoiceCommand.h
   include/nn/atk/detail/wsd/atk_WaveSound.h
   include/nn/atk/detail/wsd/atk_WaveSoundFile.h
   include/nn/atk/detail/wsd/atk_WaveSoundFileReader.h
