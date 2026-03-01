@@ -2,8 +2,8 @@
 
 #include <atomic>
 
-#include <nn/audio/audio_VoiceTypes.h>
 #include <nn/audio/audio_Common.h>
+#include <nn/audio/audio_VoiceTypes.h>
 
 #include <nn/atk/atk_Adpcm.h>
 #include <nn/atk/atk_Global.h>

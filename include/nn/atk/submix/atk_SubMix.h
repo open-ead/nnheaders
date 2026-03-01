@@ -7,6 +7,10 @@
 #include <nn/atk/submix/atk_OutputMixer.h>
 
 namespace nn::atk {
+namespace detail::driver {
+class HardwareManager;
+};
+
 class SubMix : OutputMixer {
 public:
     class VolumeData {
@@ -159,6 +163,8 @@ public:
     void AddReferenceCount(s32 value) override;
 
 private:
+    friend detail::driver::HardwareManager;
+
     util::IntrusiveListNode m_Link;
     audio::SubMixType m_SubMix;
     std::atomic_uint m_ReferenceCount;
