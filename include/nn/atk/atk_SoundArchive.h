@@ -18,6 +18,16 @@ public:
     using FileId = ItemId;
     using StringId = ItemId;
 
+    constexpr static ItemId InvalidId = -1;
+
+    constexpr static u32 UserParamIndexMax = 3;
+    constexpr static u32 ResultInvalidSoundId = 0;
+    constexpr static u32 InvalidUserParam = -1;
+    constexpr static u32 SequenceBankMax = 4;
+    constexpr static u32 StreamTrackCount = 8;
+
+    constexpr static s32 FilePathMax = 639;
+
     enum SoundType {
         SoundType_Invalid,
         SoundType_Sequence,
@@ -130,6 +140,8 @@ public:
     static_assert(sizeof(StreamTrackInfo) == 0xe);
 
     struct StreamSoundInfo {
+        void Setup();
+
         u16 allocateTrackFlags;
         u16 allocateChannelCount;
         f32 pitch;
@@ -175,23 +187,83 @@ public:
 
     virtual ~SoundArchive();
 
+    bool IsAvailable() const;
+
+    void Initialize(detail::SoundArchiveFileReader* reader);
+    void Finalize();
+
+    s32 GetSoundCount() const;
+    s32 GetPlayerCount() const; 
+    s32 GetSoundGroupCount() const; 
+    s32 GetGroupCount() const; 
+    s32 GetBankCount() const; 
+    s32 GetWaveArchiveCount() const; 
+
+    s32 detail_GetFileCount() const; 
+
+    char* GetItemLabel(ItemId id) const;
+    FileId GetItemFileId(ItemId id) const;
+    FileId GetItemPrefetchFileId(ItemId id) const;
+
+    void* GetSoundUserParam(u32) const;
+
+    bool ReadSoundUserParam(u32*, u32, s32) const;
+
+    u32 GetSoundType(u32) const;
+
+    bool ReadSoundInfo(SoundInfo* info, u32) const;
+    bool ReadSequenceSoundInfo(SequenceSoundInfo* info, u32) const;
+    bool ReadStreamSoundInfo(StreamSoundInfo* info, u32) const;
+
+    bool detail_ReadStreamSoundInfo2(u32, StreamSoundInfo2*) const;
+    bool detail_ReadWaveSoundInfo(u32, WaveSoundInfo*) const;
+    bool detail_ReadAdvancedWaveSoundInfo(u32, AdvancedWaveSoundInfo*) const;
+
+    bool ReadPlayerInfo(PlayerInfo*, u32) const;
+    bool ReadSoundArchivePlayerInfo(SoundArchivePlayerInfo*) const;
+    bool ReadSound3DInfo(Sound3DInfo*, u32) const;
+    bool ReadBankInfo(BankInfo*, u32) const;
+    bool ReadWaveArchiveInfo(u32, WaveArchiveInfo*) const;
+
+    bool detail_ReadSoundGroupInfo(u32, SoundGroupInfo*) const;
+
+    bool ReadGroupInfo(GroupInfo*, u32) const;
+
+    bool detail_ReadFileInfo(u32, FileInfo*) const;
+
+    detail::Util::Table<s32>* detail_GetWaveArchiveIdTable(ItemId id);
+
+    bool detail_OpenFileStream(FileId id, void*, size_t, void*, size_t) const;
+
+    void OpenExtStreamImpl(void*, size_t, const char*, void*, size_t) const;
+
+    char* detail_GetExternalFileFullPath(const char*, char*, size_t) const;
+
+    void SetExternalFileRoot(const char*);
+
+    bool ReadStreamSoundFilePath(char*, size_t, u32);
+
+    void* detail_GetAttachedGroupTable(u32) const;
+
     virtual void* detail_GetFileAddress(ItemId itemId) = 0;
-    virtual std::size_t detail_GetRequiredStreamBufferSize() const = 0;
+    virtual size_t detail_GetRequiredStreamBufferSize() const = 0;
     
     virtual void FileAccessBegin() const;
     virtual void FileAccessEnd() const;
 
     virtual bool IsAddon();
 
-    virtual detail::fnd::FileStream* OpenStream(void* buffer, std::size_t size, 
-                                                position_t begin, std::size_t length) const = 0;
+    virtual detail::fnd::FileStream* OpenStream(void* buffer, size_t size, 
+                                                position_t begin, size_t length) const = 0;
+
+    virtual detail::fnd::FileStream* OpenExtStream(void* buffer, size_t size, const char* extFilePath,
+                                                   void* cacheBuffer, size_t cacheSize) const = 0;
 
 private:
     detail::SoundArchiveFileReader* m_pFileReader{};
     detail::SoundArchiveParametersHook* m_pParametersHook{};
-    char m_ExtFileRoot[639];
+    char m_ExtFileRoot[FilePathMax];
     u32 m_FileBlockOffset;
 };
 static_assert(sizeof(SoundArchive) == 0x2a0);
-
 } // namespace nn::atk::detail
