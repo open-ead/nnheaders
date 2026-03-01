@@ -210,10 +210,10 @@ public:
     void SetAuxBusVolume(AuxBus bus, f32 volume, s32 fadeFrames, s32 subMixIndex);
     f32 GetAuxBusVolume(AuxBus bus, s32 subMixIndex) const;
 
-    void SetMainBusChannelVolumeForAdditionalEffect(f32 send, s32 srcChannel, s32 dstChannel);
+    void SetMainBusChannelVolumeForAdditionalEffect(f32 volume, s32 srcChannel, s32 dstChannel);
     f32 GetMainBusChannelVolumeForAdditionalEffect(s32 srcChannel, s32 dstChannel) const;
 
-    void SetAuxBusChannelVolumeForAdditionalEffect(AuxBus bus, f32 send, s32 srcChannel, s32 dstChannel);
+    void SetAuxBusChannelVolumeForAdditionalEffect(AuxBus bus, f32 volume, s32 srcChannel, s32 dstChannel);
     f32 GetAuxBusChannelVolumeForAdditionalEffect(AuxBus bus, s32 srcChannel, s32 dstChannel) const;
 
     static void FlushDataCache(void* address, size_t length);

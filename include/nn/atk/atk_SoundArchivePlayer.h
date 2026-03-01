@@ -44,39 +44,40 @@ public:
     bool IsAvailable() const;
 
     bool Initialize(const SoundArchive* arc, const SoundDataManager* manager, void* buffer, 
-                    std::size_t size, void* strmBuffer, std::size_t strmBufferSize, 
-                    std::size_t userParamSizePerSound);
+                    size_t size, void* strmBuffer, size_t strmBufferSize, 
+                    size_t userParamSizePerSound);
     bool Initialize(const InitializeParam& param);
 
     void Finalize();
 
     void StopAllSound(s32, bool);
+
     void DisposeInstances();
 
-    static std::size_t GetRequiredMemSize(const SoundArchive* arc);
-    static std::size_t GetRequiredMemSize(const SoundArchive* arc, std::size_t userParamSizePerSound, 
+    static size_t GetRequiredMemSize(const SoundArchive* arc);
+    static size_t GetRequiredMemSize(const SoundArchive* arc, size_t userParamSizePerSound, 
                                           s32 addonSoundArchiveCount);
-    static std::size_t GetRequiredMemSize(const SoundArchive* arc, std::size_t userParamSizePerSound);
-    static std::size_t GetRequiredMemSize(const InitializeParam& param);
+    static size_t GetRequiredMemSize(const SoundArchive* arc, size_t userParamSizePerSound);
+    static size_t GetRequiredMemSize(const InitializeParam& param);
 
-    static std::size_t GetRequiredStreamInstanceSize(const SoundArchive* arc);
+    static size_t GetRequiredStreamInstanceSize(const SoundArchive* arc);
 
-    std::size_t GetRequiredStreamBufferSize(const SoundArchive* arc) const;
-    std::size_t GetRequiredStreamBufferTimes(const SoundArchive* arc) const;
+    size_t GetRequiredStreamBufferSize(const SoundArchive* arc) const;
+    size_t GetRequiredStreamBufferTimes(const SoundArchive* arc) const;
     
-    static std::size_t GetRequiredStreamCacheSize(const SoundArchive* arc, std::size_t);
+    static size_t GetRequiredStreamCacheSize(const SoundArchive* arc, size_t);
 
 
-    bool SetupMram(const SoundArchive* pArc, void* buffer, std::size_t size, 
-                   std::size_t userParamSizePerSound, s32 addonSoundArchiveCount, 
-                   void* streamSoundInstanceBuffer, std::size_t streamSoundInstanceBufferSize);
+    bool SetupMram(const SoundArchive* pArc, void* buffer, size_t size, 
+                   size_t userParamSizePerSound, s32 addonSoundArchiveCount, 
+                   void* streamSoundInstanceBuffer, size_t streamSoundInstanceBufferSize);
 
     bool SetupSoundPlayer(const SoundArchive* pArc, void** pOutAllocatedAddr, const void* endAddr);
     bool SetupAddonSoundArchiveContainer(s32 containerCount, void** pOutAllocatedAddr, const void* endAddr);
     bool SetupUserParamForBasicSound(const SoundArchive::SoundArchivePlayerInfo& playerInfo, 
-                                     void** pOutAllocatedAddr, const void* endAddr, std::size_t);
+                                     void** pOutAllocatedAddr, const void* endAddr, size_t);
 
-    detail::PlayerHeap* CreatePlayerHeap(void** pOutAllocatedAddr, const void* endAddr, std::size_t);
+    detail::PlayerHeap* CreatePlayerHeap(void** pOutAllocatedAddr, const void* endAddr, size_t);
 
     void Update();
                        
@@ -142,30 +143,30 @@ public:
     Result ReadStreamSoundDataInfo(detail::StreamSoundDataInfo*, u32) const;
     Result ReadStreamSoundDataInfo(detail::StreamSoundDataInfo*, const char*) const;
 
-    static std::size_t GetRequiredWorkBufferSizeToReadStreamSoundHeader();
+    static size_t GetRequiredWorkBufferSizeToReadStreamSoundHeader();
 
     Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, 
                                          const char* const*, s32, const SoundArchive*, 
-                                         void*, std::size_t) const;
+                                         void*, size_t) const;
     Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, const char*,
-                                         void*, std::size_t) const;
+                                         void*, size_t) const;
     Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, 
-                                         const char* const*, s32, void*, std::size_t, 
+                                         const char* const*, s32, void*, size_t, 
                                          const char*) const;
     Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*, 
-                                         const char*, void*, std::size_t) const;
+                                         const char*, void*, size_t) const;
     Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*, 
-                                         const char* const*, s32, void*, std::size_t,
+                                         const char* const*, s32, void*, size_t,
                                          const char*) const;
     Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, 
-                                         const char* const*, s32, void*, std::size_t) const;
+                                         const char* const*, s32, void*, size_t) const;
     Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*, 
-                                         const char* const*, s32, void*, std::size_t) const;
+                                         const char* const*, s32, void*, size_t) const;
     Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*, 
-                                         const char*, void*, std::size_t, 
+                                         const char*, void*, size_t, 
                                          const char* soundArchiveName) const;
     Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, const char*, 
-                                         void*, std::size_t, const char* soundArchiveName) const;
+                                         void*, size_t, const char* soundArchiveName) const;
                                       
     void DumpMemory() const;
 
@@ -180,7 +181,6 @@ public:
     SoundArchive::ItemId detail_GetItemId(char* pString) override;
     SoundArchive::ItemId detail_GetItemId(char* pString, const char* soundArchiveName) override;
 
-
 private:
     detail::SoundArchiveManager m_SoundArchiveManager;
     u32 m_SoundPlayerCount;
@@ -189,7 +189,7 @@ private:
     detail::WaveSoundRuntime m_WaveSoundRuntime;
     detail::AdvancedWaveSoundRuntime m_AdvancedWaveSoundRuntime;
     detail::StreamSoundRuntime m_StreamSoundRuntime;
-    std::size_t m_SoundUserParamSize;
+    size_t m_SoundUserParamSize;
     s32 m_ArchiveContainerCount;
     detail::AddonSoundArchiveContainer* m_pArchiveContainers;
     os::Tick m_AddonSoundArchiveLastAddTick;

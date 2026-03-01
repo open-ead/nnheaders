@@ -38,15 +38,24 @@ public:
 
     void detail_SortPriorityList(bool reverse);
 
-    f32 GetSend(s32 subMixBus);
-
     void PauseAllSound(s32, bool);
+    void PauseAllSound(bool, s32);
     void PauseAllSound(bool, s32, PauseMode);
     
     void SetVolume(f32 volume);
     void SetLowPassFilterFrequency(f32 lpfFreq);
     void SetBiquadFilter(s32 biquadFilterType, f32 biquadFilterValue);
     void SetDefaultOutputLine(u32 line);
+
+    void SetMainSend(f32 send);
+    f32 GetMainSend() const;
+
+    void SetEffectSend(AuxBus bus, f32 send);
+    void GetEffectSend(AuxBus bus) const;
+
+    void SetSend(s32 subMixBus, f32 send);
+    f32 GetSend(s32 subMixBus);
+
     void SetOutputVolume(OutputDevice device, f32 volume);
 
     void RemoveSoundList(detail::BasicSound* pSound);
@@ -64,7 +73,7 @@ public:
     void detail_SetPlayableSoundLimit(s32 limit);
     
     bool detail_CanPlaySound(s32 startPriority);
-    bool CanPlaySound(s32);
+    bool CanPlaySound(s32 startPriority);
 
     void detail_AppendPlayerHeap(detail::PlayerHeap* pHeap);
     detail::PlayerHeap* detail_AllocPlayerHeap();
