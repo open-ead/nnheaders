@@ -14,12 +14,12 @@ public:
         void Close() override;
         bool IsOpened() const override;
         
-        std::size_t Read(void* buf, std::size_t length, FndResult* result) override;
-        std::size_t Write(const void* buf, std::size_t length, FndResult* result) override;
+        size_t Read(void* buf, size_t length, FndResult* result) override;
+        size_t Write(const void* buf, size_t length, FndResult* result) override;
         FndResult Seek(position_t offset, SeekOrigin origin) override;
         
         position_t GetCurrentPosition() const override;
-        std::size_t GetSize() const override;
+        size_t GetSize() const override;
         
         bool CanRead() const override;
         bool CanWrite() const override;
@@ -33,8 +33,8 @@ public:
     FileStreamImpl();
     ~FileStreamImpl() override;
 
-    std::size_t Read(void* buf, std::size_t length, FndResult* result) override;
-    std::size_t Write(const void* buf, std::size_t length, FndResult* result) override;
+    size_t Read(void* buf, size_t length, FndResult* result) override;
+    size_t Write(const void* buf, size_t length, FndResult* result) override;
     FndResult Seek(position_t offset, fnd::Stream::SeekOrigin origin) override;
     
     bool CanRead() const override;
@@ -48,16 +48,16 @@ public:
 
     bool IsOpened() const override;
 
-    std::size_t GetSize() const override;
+    size_t GetSize() const override;
     position_t GetCurrentPosition() const override;
 
-    std::size_t ReadDirect(void* buf, std::size_t length, FndResult* result);
-    std::size_t WriteDirect(void* buf, std::size_t length, FndResult* result);
+    size_t ReadDirect(void* buf, size_t length, FndResult* result);
+    size_t WriteDirect(void* buf, size_t length, FndResult* result);
     FndResult SeekDirect(position_t offset, fnd::Stream::SeekOrigin origin);
 
     void Flush() override;
     
-    void EnableCache(void* buffer, std::size_t length) override;
+    void EnableCache(void* buffer, size_t length) override;
     void DisableCache() override;
     bool IsCacheEnabled() const override;
 
@@ -67,13 +67,13 @@ public:
     void* SetFsAccessLog(FsAccessLog* pFsAccessLog) override;
 
     position_t GetCachePosition() override;
-    std::size_t GetCachedLength() override;
+    size_t GetCachedLength() override;
 
 private:
     fs::FileHandle m_FileHandle;
     bool m_IsOpened;
     u8 m_Padding[3];
-    std::size_t m_FileSize;
+    size_t m_FileSize;
     position_t m_CurrentPosition;
     StreamCache m_StreamCache;
     DirectStream m_DirectStream;
