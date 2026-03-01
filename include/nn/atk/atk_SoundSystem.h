@@ -2,15 +2,12 @@
 
 #include <nn/time.h>
 #include <nn/types.h>
+#include <nn/audio/audio_MemoryPoolTypes.h>
 #include <vapours/results/results_common.hpp>
 
 #include <nn/atk/atk_Global.h>
 #include <nn/atk/util/atk_AudioRendererPerformanceReader.h>
 #include <nn/atk/util/atk_ProfileReader.h>
-
-namespace nn::audio {
-struct MemoryPoolType;
-} // namespace nn::audio
 
 namespace nn::atk {
 struct SoundSystem {
