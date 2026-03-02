@@ -2,19 +2,25 @@
 
 #include <atomic>
 
+#include <nn/util.h>
 #include <nn/audio/audio_Common.h>
 #include <nn/audio/audio_VoiceTypes.h>
 
+#include <nn/atk/atk_Adpcm.h>
+#include <nn/atk/atk_Global.h>
 #include <nn/atk/detail/atk_Config.h>
-#include <nn/atk/detail/dsp/atk_Adpcm.h>
 #include <nn/atk/submix/atk_OutputReceiver.h>
-#include <nn/atk/util/atk_Global.h>
 
 namespace nn::atk::detail {
 class Voice;
 
 class alignas(256) LowLevelVoice {
 public:
+    LowLevelVoice();
+    
+    void Initialize();
+    void Finalize();
+
     void FreeAllWaveBuffer();
     
     bool IsAvailable() const;
@@ -26,6 +32,7 @@ public:
 
     void UpdateState(OutputMode outputMode);
     void UpdateStatePlay(bool isRun, OutputMode outputMode);
+    void UpdateStateStop(bool isRun);
     void UpdateStatePause(bool isRun, OutputMode outputMode);
 
     void SetPriority(s32 priority);
@@ -51,9 +58,9 @@ public:
     void UpdateMixVolumeOnSubMix(const OutputMix& outputMix, OutputMode outputMode);
     void UpdateMixVolumeOnFinalMix(const OutputMix& outputMix, OutputMode outputMode);
 
-    void SetVoiceMixVolume(f32, s32);
+    static f32 GetClampedVoiceVolume(f32 volume);
 
-    static f32 GetClampedVoiceVolume(f32);
+    void SetVoiceMixVolume(f32 volume, s32 dstIndex);
 
 private:
     AdpcmParam m_AdpcmParam;
@@ -66,7 +73,9 @@ private:
     u32 m_SampleRate;
     SampleFormat m_SampleFormat;
     position_t m_PlayPosition;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* m_pOutputReceiver;
+#endif
     WaveBuffer* m_WaveBufferListBegin;
     WaveBuffer* m_WaveBufferListEnd;
     WaveBuffer* m_LastAppendBuffer;
@@ -77,6 +86,8 @@ static_assert(sizeof(LowLevelVoice) == 0x100);
 
 class LowLevelVoiceAllocator {
 public:
+    constexpr static u32 Unassigned = -1;
+
     LowLevelVoiceAllocator();
 
     std::size_t GetRequiredMemSize(s32 voiceCount);
@@ -90,7 +101,7 @@ public:
     u64 GetVoiceArrayIndex(LowLevelVoice* pVoice);
     void FreeVoice(LowLevelVoice* pVoice);
 
-    s32* GetDroppedVoiceCount();
+    s32* GetDroppedVoiceCount() const;
 
 private:
     void* m_pVoiceArray{};

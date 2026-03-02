@@ -5,10 +5,10 @@
 #include <nn/os/os_MessageQueue.h>
 #include <nn/util/util_IntrusiveList.h>
 
+#include <nn/atk/atk_Global.h>
 #include <nn/atk/detail/thread/atk_ThreadInfoReader.h>
 #include <nn/atk/fnd/os/atkfnd_Thread.h>
 #include <nn/atk/fnd/os/atkfnd_CriticalSection.h>
-#include <nn/atk/util/atk_Global.h>
 #include <nn/atk/util/atk_AudioRendererPerformanceReader.h>
 #include <nn/atk/util/atk_ProfileReader.h>
 
@@ -19,15 +19,16 @@ struct AtkStateAndParameterUpdateLock {};
 class SoundThread : fnd::Thread::Handler {
 public:
     enum Message {
-        Message_HwCallback = 0x10000000,
-        Message_Shutdown = 0x20000000,
+        Message_HwCallback  = 0x10000000,
+        Message_Shutdown    = 0x20000000,
         Message_ForceWakeup = 0x30000000,
     };
 
     using ProfileFunc = void(*)(os::Tick*);
 
     constexpr static u32 ThreadMessageBuffferSize = 32;
-    constexpr static u64 RendererEventWaitTimeoutMilliSeconds = 100;
+
+    constexpr static u32 RendererEventWaitTimeoutMilliSeconds = 100;
 
     class SoundFrameCallback {
     public:
@@ -106,6 +107,9 @@ public:
     void RegisterSoundThreadUpdateProfileReader(SoundThreadUpdateProfileReader& profileReader);
     void UnregisterSoundThreadUpdateProfileReader(SoundThreadUpdateProfileReader& profileReader);
 
+    void RegisterSoundThreadInfoRecorder(ThreadInfoRecorder& recorder);
+    void UnregisterSoundThreadInfoRecorder(ThreadInfoRecorder& recorder);
+
     void FrameProcess(UpdateType updateType);
 
     void RecordPerformanceInfo(audio::PerformanceInfo* src, os::Tick beginTick, 
@@ -120,7 +124,7 @@ public:
 private:
     fnd::Thread m_Thread;
     os::MessageQueue m_BlockingQueue;
-    std::uintptr_t m_MsgBuffer[32];
+    std::uintptr_t m_MsgBuffer[ThreadMessageBuffferSize];
     u32 m_AxCallbackCounter;
     fnd::CriticalSection m_CriticalSection;
     fnd::CriticalSection m_UpdateAtkStateAndParameterSection;

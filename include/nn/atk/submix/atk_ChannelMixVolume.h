@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nn/atk/util/atk_Global.h>
+#include <nn/atk/atk_Global.h>
 
 namespace nn::atk {
 class ChannelMixVolume {
@@ -8,6 +8,7 @@ public:
     constexpr static u8 ChannelCountMax = 24; 
 
     ChannelMixVolume();
+    
     void InitializeChannelVolume();
 
     explicit ChannelMixVolume(const MixVolume& mixVolume);

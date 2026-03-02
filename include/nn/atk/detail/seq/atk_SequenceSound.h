@@ -10,6 +10,15 @@ using SequenceSoundInstanceManager = SoundInstanceManager<SequenceSound>;
 
 class SequenceSound : BasicSound {
 public:
+    constexpr static u32 BankIndexMin = 0;
+    constexpr static u32 BankIndexMax = 3;
+
+    constexpr static u8 TransposeMin = 192;
+    constexpr static u8 TransposeMax = 63;
+
+    constexpr static u8 VelocityRangeMin = 0;
+    constexpr static u32 VelocityRangeMax = 0x7f00;
+
     struct Resource {
         void* seq;
         void* banks[4];
@@ -57,8 +66,8 @@ public:
     void SetTrackBankIndex(u32 trackBitFlag, s32 bankIndex);
     void SetTrackTranspose(u32 trackBitFlag, s8 transpose);
     void SetTrackVelocityRange(u32 trackBitFlag, u8 range);
-    void SetTrackOutputLine(u32 trackBitFlag, u32 outputLine);
 
+    void SetTrackOutputLine(u32 trackBitFlag, u32 outputLine);
     void ResetTrackOutputLine(u32 trackBitFlag);
 
     bool ReadVariable(s32 varNo, s16* varPtr) const;
@@ -96,5 +105,9 @@ private:
     u8 m_Padding[1];
     driver::SequenceSoundPlayer m_PlayerInstance;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SequenceSound) == 0x5a0);
+#else
+static_assert(sizeof(SequenceSound) == 0x578);
+#endif
 } // namespace nn::atk::detail

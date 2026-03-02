@@ -7,6 +7,7 @@
 namespace nn::atk::detail {
 class AdvancedWaveSound;
 class AdvancedWaveSoundHandle;
+
 using AdvancedWaveSoundInstanceManager = SoundInstanceManager<AdvancedWaveSound>;
 
 class AdvancedWaveSound : BasicSound {
@@ -42,5 +43,9 @@ private:
     bool m_IsInitialized;
     u8 m_Padding[3];
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(AdvancedWaveSound) == 0x9b0);
+#else
+static_assert(sizeof(AdvancedWaveSound) == 0x988);
+#endif
 } // namespace nn::atk::detail

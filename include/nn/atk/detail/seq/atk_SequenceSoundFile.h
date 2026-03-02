@@ -7,6 +7,7 @@ struct SequenceSoundFile {
     struct DataBlock;
     struct LabelBlock;
     struct FileHeader : Util::SoundFileHeader {
+
         DataBlock* GetDataBlock() const;
         LabelBlock* GetLabelBlock() const;
     };
@@ -18,14 +19,15 @@ struct SequenceSoundFile {
     };
 
     struct LabelBlockBody {
-        Util::ReferenceTable labelInfoReferenceTable;
-
+        
         LabelInfo* GetLabelInfo(s32 index) const;
         char* GetLabel(s32 index) const;
         char* GetLabelByOffest(s32 labelOffset) const;
-
+        
         u32 GetOffset(s32 index, u32* offsetPtr) const;
         bool GetOffsetByLabel(char* label, u32* offsetPtr) const;
+        
+        Util::ReferenceTable labelInfoReferenceTable;
     };
 
     struct LabelBlock {

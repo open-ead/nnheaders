@@ -15,14 +15,18 @@ struct AdvancedWaveSoundClipInfo {
 static_assert(sizeof(AdvancedWaveSoundClipInfo) == 0x18);
 
 struct AdvancedWaveSoundTrackInfo {
+    constexpr static u32 AdvancedWaveSoundClipInfoCountMax = 10;
+
     s32 waveSoundClipCount;
-    AdvancedWaveSoundClipInfo waveSoundClipInfo[10];
+    AdvancedWaveSoundClipInfo waveSoundClipInfo[AdvancedWaveSoundClipInfoCountMax];
 };
 static_assert(sizeof(AdvancedWaveSoundTrackInfo) == 0xf4);
 
 struct AdvancedWaveSoundTrackInfoSet {
+    constexpr static u32 AdvancedWaveSoundTrackInfoCountMax = 4;
+
     s32 waveSoundTrackCount;
-    AdvancedWaveSoundTrackInfo waveSoundTrackInfo[4];
+    AdvancedWaveSoundTrackInfo waveSoundTrackInfo[AdvancedWaveSoundTrackInfoCountMax];
 };
 static_assert(sizeof(AdvancedWaveSoundTrackInfoSet) == 0x3d4);
 

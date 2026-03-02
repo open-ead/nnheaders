@@ -34,9 +34,10 @@ public:
 
     constexpr static u32 ErrorPrint = 1;
 
-    constexpr static u8 MIN_ALIGNMENT = 4;
+    constexpr static u32 MIN_ALIGNMENT = 4;
 
     HeapList* FindListContainHeap();
+
     static HeapBase* FindContainHeap(HeapList* pList, const void* memBlock);
     static HeapBase* FindContainHeap(const void* memBlock);
     static HeapBase* FindParentHeap(HeapBase* pChild);
@@ -71,4 +72,7 @@ private:
     u32 m_Attribute;
 };
 static_assert(sizeof(HeapBase) == 0x40);
+
+static u8 sFillVals[12];
+static HeapBase::HeapList sRootList {};
 } // namespace nn::atk::detail::fnd

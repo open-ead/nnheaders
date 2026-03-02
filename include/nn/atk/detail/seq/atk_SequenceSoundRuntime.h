@@ -40,12 +40,12 @@ public:
     void Finalize();
 
     void SetupSequenceTrack(s32 trackCount, void** pOutAllocatedAddr, const void* endAddr);
-    void SetupUserParam(void** pOutAllocatedAddr, std::size_t adjustSize);
+    void SetupUserParam(void** pOutAllocatedAddr, size_t adjustSize);
 
-    static std::size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo, 
-                                             s32 alignment);
-    static std::size_t GetRequiredSequenceTrackMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo, 
-                                                          s32 alignment);
+    static size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo, 
+                                        s32 alignment);
+    static size_t GetRequiredSequenceTrackMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo, 
+                                                     s32 alignment);
     
     bool IsSoundArchiveAvailable() const;
 
@@ -57,10 +57,13 @@ public:
 
     void Update();
 
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     SequenceSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, s32 ambientPriority, 
                               BasicSound::AmbientInfo* ambientArgInfo);
+#else
     SequenceSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, s32 ambientPriority, 
                               BasicSound::AmbientInfo* ambientArgInfo, OutputReceiver* pOutputReceiver);
+#endif
 
     SoundStartable::StartResult PrepareImpl(const SoundArchiveManager::SnapShot& snapShot, 
                                             SoundArchive::ItemId soundId, 

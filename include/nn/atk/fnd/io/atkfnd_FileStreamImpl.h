@@ -41,27 +41,27 @@ public:
     bool CanWrite() const override;
     bool CanSeek() const override;
 
+    void EnableCache(void* buffer, size_t length) override;
+    void DisableCache() override;
+
     void ValidateAlignment(void* buf);
 
     FndResult Open(const char* filePath, AccessMode accessMode) override;
     void Close() override;
+    void Flush() override;
 
     bool IsOpened() const override;
 
     size_t GetSize() const override;
-    position_t GetCurrentPosition() const override;
+    s32 GetIoBufferAlignment() const override;
 
     size_t ReadDirect(void* buf, size_t length, FndResult* result);
-    size_t WriteDirect(void* buf, size_t length, FndResult* result);
+    size_t WriteDirect(const void* buf, size_t length, FndResult* result);
     FndResult SeekDirect(position_t offset, fnd::Stream::SeekOrigin origin);
-
-    void Flush() override;
     
-    void EnableCache(void* buffer, size_t length) override;
-    void DisableCache() override;
+    position_t GetCurrentPosition() const override;
+    
     bool IsCacheEnabled() const override;
-
-    s32 GetIoBufferAlignment() const override;
 
     bool CanSetFsAccessLog() const override;
     void* SetFsAccessLog(FsAccessLog* pFsAccessLog) override;

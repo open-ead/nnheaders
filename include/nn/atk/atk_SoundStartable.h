@@ -88,7 +88,9 @@ public:
         s32 delayCount;
         UpdateType updateType;
         s32 subMixIndex;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
         OutputReceiver* pOutputReceiver; 
+#endif
     };
 
     struct StartResult {

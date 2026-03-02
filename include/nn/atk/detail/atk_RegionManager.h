@@ -2,9 +2,9 @@
 
 #include <nn/types.h>
 
+#include <nn/atk/atk_Adpcm.h>
 #include <nn/atk/detail/atk_Config.h>
 #include <nn/atk/detail/atk_IRegionInfoReadable.h>
-#include <nn/atk/detail/dsp/atk_Adpcm.h>
 
 namespace nn::atk {
 enum StreamRegionCallbackResult {
@@ -43,8 +43,9 @@ public:
     
     bool ChangeRegion(s32 currentRegionNo, IRegionInfoReadable* pRegionReader, 
                       StreamDataInfoDetail* pStreamDataInfo);
-    bool SetRegionInfo(s32 regionNo, IRegionInfoReadable* pRegionReader, 
-                      StreamDataInfoDetail* pStreamDataInfo);
+
+    bool SetRegionInfo(const StreamSoundFile::RegionInfo* pRegionInfo, 
+                       const StreamDataInfoDetail* pStreamDataInfo);
 
     bool TryMoveNextRegion(IRegionInfoReadable* pRegionReader, 
                            StreamDataInfoDetail* pStreamDataInfo);

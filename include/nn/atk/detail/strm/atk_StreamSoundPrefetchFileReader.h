@@ -16,6 +16,7 @@ public:
     ~StreamSoundPrefetchFileReader() override;
 
     void Initialize(const void* streamSoundPrefetchFile);
+    void Finalize();
 
     bool IsValidFileHeader(const void* streamSoundPrefetchFile) const;
 

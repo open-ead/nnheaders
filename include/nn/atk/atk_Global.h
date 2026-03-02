@@ -1,7 +1,7 @@
 #pragma once
 
+#include <nn/atk/atk_Adpcm.h>
 #include <nn/atk/detail/atk_Config.h>
-#include <nn/atk/detail/dsp/atk_Adpcm.h>
 
 namespace nn::atk {
 enum WaveType {
@@ -155,6 +155,9 @@ struct AdshrCurve {
     u8 m_Release;
 };
 static_assert(sizeof(AdshrCurve) == 0x5);
+
+static const AdshrCurve DefaultAdshrCurve = {127, 127, 127, 127, 127};
+static const AdshrCurve WsdDefaultAdshrCurve = {127, 127, 127, 127, 127};
 
 struct BiquadFilterCoefficients {
     s16 b0;
@@ -379,6 +382,11 @@ struct VoiceInfo {
 static_assert(sizeof(VoiceInfo) == 0x20);
 
 class VoiceParam {
+public:
+    VoiceParam();
+
+    void Initialize();
+
 private:
     float m_Volume;
     float m_Pitch;
@@ -411,6 +419,11 @@ struct WaveInfo {
     ChannelParam channelParam[2];
 };
 static_assert(sizeof(WaveInfo) == 0xa0);
+
+static const OutputMix DefaultTvMix{1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 
+                                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 } // namespace nn::atk::detail
 
 using SoundFrameUserCallback = void(*)(std::uintptr_t); 

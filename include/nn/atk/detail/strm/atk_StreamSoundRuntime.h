@@ -7,6 +7,8 @@
 namespace nn::atk::detail {
 class StreamSoundRuntime {
 public:
+    constexpr static u32 DefaultStreamBlockCount = 5;
+
     StreamSoundRuntime();
     ~StreamSoundRuntime();
 
@@ -42,12 +44,13 @@ public:
     void SetupUserParam(void** pOutAllocatedAddr, std::size_t adjustSize);
 
     void Update();
-
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     StreamSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, s32 ambientPriority, 
                             BasicSound::AmbientInfo* ambientArgInfo);
+#else
     StreamSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, s32 ambientPriority, 
                             BasicSound::AmbientInfo* ambientArgInfo, OutputReceiver* pOutputReceiver);                       
-    
+#endif
     SoundStartable::StartResult PrepareImpl(const SoundArchive* pSoundArchive, 
                                             const SoundDataManager* pSoundDataManager, 
                                             SoundArchive::ItemId soundId, 

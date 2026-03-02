@@ -20,7 +20,7 @@ private:
     std::size_t m_BlockSize;
     s32 m_BlockCount;
     s32 m_AllocCount;
-    u8 m_AllocFlags[4];
+    u8 m_AllocFlags[BlockMax / BitPerByte];
 };
 static_assert(sizeof(StreamBufferPool) == 0x28);
 } // namespace nn::atk::detail

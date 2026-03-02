@@ -60,6 +60,14 @@ public:
 
     using Handle = os::ThreadType;
 
+    constexpr static u64 InvalidId = 0xFFFFFFFF;
+
+    constexpr static u32 DefaultThreadPriority = 16;
+    constexpr static u32 MinThreadPriority = 0;
+    constexpr static u32 MaxThreadPriority = 31;
+
+    constexpr static u32 StackAlignment = 4096;
+
     class Handler {
     public:
         virtual ~Handler() = 0;
@@ -68,6 +76,7 @@ public:
     static_assert(sizeof(Handler) == 0x8);
 
     struct RunArgs {
+
         RunArgs();
 
         bool IsValid() const;
@@ -87,7 +96,9 @@ public:
     ~Thread();
 
     bool Run(const RunArgs& args);
+
     void WaitForExit();
+
     void Release();
 
     void SetState(State state);
@@ -104,17 +115,17 @@ public:
 
     static void Sleep(const TimeSpan& timeSpan);
 
-    bool Create(const Handle& handle, const s64& id, const RunArgs& args);
+    bool Create(const Handle& handle, s64& id, const RunArgs& args);
 
     void Detach();
-
-    bool IsTerminated() const;
 
     void SetName(const char* name);
     void SetAffinityMask(s32 idealCoreNumber, AffinityMask value);
 
     void Resume();
     void Join();
+
+    bool IsTerminated() const;
 
 private:
     u32 m_State;

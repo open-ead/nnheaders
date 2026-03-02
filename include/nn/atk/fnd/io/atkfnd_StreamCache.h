@@ -7,6 +7,8 @@ struct FsAccessLog;
 
 class StreamCache {
 public:
+    constexpr static position_t InvalidPosition = -1;
+
     StreamCache();
     StreamCache(Stream* sourceStream, void* buffer, std::size_t length);
 
@@ -23,7 +25,7 @@ public:
 
     void ClearCache();
 
-    std::size_t Write(void* buf, std::size_t length, FndResult* result);
+    std::size_t Write(const void* buf, std::size_t length, FndResult* result);
 
     std::size_t GetWritableCacheLength(std::size_t) const;
 

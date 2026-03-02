@@ -2,12 +2,10 @@
 
 #include <nn/util/util_BinaryFormat.h>
 
-#include <nn/atk/detail/atk_BinaryTypes.h>
+#include <nn/atk/detail/util/atk_BinaryTypes.h>
 
 namespace nn::atk::detail {
-struct AdvancedWaveSoundFile {
-    util::BinaryFileHeader fileHeader;
-    
+struct AdvancedWaveSoundFile {    
     struct WaveSoundTrack;
     struct InfoBlockBody {
         u32 offsetToTrackTableReference;
@@ -47,6 +45,8 @@ struct AdvancedWaveSoundFile {
     static_assert(sizeof(WaveSoundClip) == 0x18);
 
     InfoBlock* GetBlock() const;
+    
+    util::BinaryFileHeader fileHeader;
 };
 static_assert(sizeof(AdvancedWaveSoundFile) == 0x20);
 

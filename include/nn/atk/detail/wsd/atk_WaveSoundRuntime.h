@@ -22,10 +22,13 @@ public:
 
     void Update();
     
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     WaveSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, s32 ambientPriority, 
                           BasicSound::AmbientInfo* ambientArgInfo);
+#else
     WaveSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, s32 ambientPriority, 
                           BasicSound::AmbientInfo* ambientArgInfo, OutputReceiver* pOutputReceiver);
+#endif
 
     SoundStartable::StartResult PrepareImpl(const SoundArchive* pSoundArchive, 
                                             const SoundDataManager* pSoundDataManager, 

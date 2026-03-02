@@ -6,7 +6,7 @@ namespace nn::atk::detail {
 class WaveArchiveFileReader {
 public:
     constexpr static s32 SignatureFile = 0x52415746; // FWAR
-    constexpr static s32 SignatureWarcTable = 0x54415746; //FWAT
+    constexpr static s32 SignatureWarcTable = 0x54415746; // FWAT
 
     struct IndividualLoadTable {
         void* waveFile[1];

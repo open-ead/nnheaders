@@ -8,6 +8,8 @@ struct SoundArchiveParametersHook;
 
 class SoundArchiveFile {
 public:
+    constexpr static u32 BlockCount = 3;
+
     struct FileHeader : BinaryFileHeader {
 
         Util::ReferenceWithSize* GetReferenceBy(u16) const;
@@ -20,7 +22,7 @@ public:
         s32 GetInfoBlockOffset() const;
         s32 GetFileBlockOffset() const;
 
-        Util::ReferenceWithSize toBlocks[3];
+        Util::ReferenceWithSize toBlocks[BlockCount];
     };
     static_assert(sizeof(FileHeader) == 0x38);
 
@@ -53,6 +55,8 @@ public:
         static_assert(sizeof(NodeData) == 0x8);
 
         struct Node {
+            constexpr static u32 FlagLeaf = 1;
+
             u16 flags;
             u16 bit;
             u32 leftIdx;
@@ -328,6 +332,9 @@ public:
     };
 
     struct InternalFileInfo {
+        constexpr static s32 InvalidOffset = -1;
+        constexpr static s32 InvalidSize = -1;
+
         Util::ReferenceWithSize toFileImageFromFileBlockBody;
         Util::Reference toAttachedGroupIdTable;
     };

@@ -27,6 +27,8 @@ public:
 
     void AppendWaveBuffer(WaveBuffer* waveBuffer);
 
+    void FreeAllWaveBuffer();
+
     void UpdateParam();
 
     position_t GetPlayPosition() const;
@@ -43,7 +45,9 @@ private:
     SampleFormat m_SampleFormat;
     u32 m_SampleRate;
     AdpcmParam m_AdpcmParam;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* m_pOutputReceiver;
+#endif
     u32 m_VoiceId;
     position_t m_PlayPosition;
     u32 m_VoiceInfoEnableFlag;
@@ -52,7 +56,11 @@ private:
     WaveBuffer* m_WaveBufferListEnd;
     LowLevelVoice* m_pLowLevelVoice;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(Voice) == 0xe0);
+#else
+static_assert(sizeof(Voice) == 0xd8);
+#endif
 
 class VirtualVoiceManager : Util::Singleton<VirtualVoiceManager> {
 public:
@@ -61,10 +69,10 @@ public:
     constexpr static u32 VirtualVoiceCount = 256;
     constexpr static u32 VirtualVoiceElementCount = 8;
 
+    void Initialize();
+
     bool AllocVirtualVoice();
     void FreeVirtualVoice(u32);
-
-    void Initialize();
     
     void UpdateVoiceInfo();
     
@@ -72,11 +80,11 @@ public:
     s32 GetUnreleasedLowLevelVoiceCount() const;
 
 private:
-    u32 m_VirtualVoiceAllocationTable[8];
+    u32 m_VirtualVoiceAllocationTable[VirtualVoiceElementCount];
     u32 m_VoiceInfoTableRead;
-    LowLevelVoice* m_LowLevelVoiceTable[256];
-    VoiceInfo m_VoiceInfoTable[2][256];
-    util::BitFlagSet<256, void> m_VoiceInfoDirtyTable[2];
+    LowLevelVoice* m_LowLevelVoiceTable[VirtualVoiceCount];
+    VoiceInfo m_VoiceInfoTable[2][VirtualVoiceCount];
+    util::BitFlagSet<VirtualVoiceCount, void> m_VoiceInfoDirtyTable[2];
 };
 static_assert(sizeof(VirtualVoiceManager) == 0x4868);
 } // namespace nn::atk::voice

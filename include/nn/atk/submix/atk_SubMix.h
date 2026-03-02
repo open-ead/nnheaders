@@ -13,20 +13,6 @@ class HardwareManager;
 
 class SubMix : OutputMixer {
 public:
-    class VolumeData {
-    public:
-        VolumeData();
-
-        bool Update();
-
-    private:
-        detail::MoveValue<f32, s32> m_Volume;
-        bool m_IsMute;
-        bool m_IsPrevMute;
-        bool m_IsDirtyFlag;
-    };
-    static_assert(sizeof(VolumeData) == 0x14);
-
     class SubMixParam {
     public:
         SubMixParam();
@@ -62,8 +48,23 @@ public:
         bool m_IsSoundSendClampEnabledArray[24];
     };
     static_assert(sizeof(SubMixParam) == 0x38);
+    
+    class VolumeData {
+    public:
+        VolumeData();
+
+        bool Update();
+
+    private:
+        detail::MoveValue<f32, s32> m_Volume;
+        bool m_IsMute;
+        bool m_IsPrevMute;
+        bool m_IsDirtyFlag;
+    };
+    static_assert(sizeof(VolumeData) == 0x14);
 
     SubMix();
+    
     static size_t GetRequiredMemorySize(s32 srcBusCount, s32 srcChannelCount, 
                                         s32 dstBusCount, s32 dstChannelCount);
     static size_t GetRequiredMemorySize(s32 srcBusCount, s32 srcChannelCount, 

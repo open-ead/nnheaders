@@ -81,6 +81,9 @@ public:
     static_assert(sizeof(GroupInfo) == 0x8);
 
     struct FileInfo {
+        constexpr static u32 InvalidOffset = -1;
+        constexpr static u32 InvalidSize = -1;
+
         u32 fileSize;
         u32 offsetFromFileBlockHead;
         char* externalFilePath;
