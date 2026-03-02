@@ -5,7 +5,7 @@
 namespace nn::atk::detail {
 class SequenceSoundFileReader {
 public:
-    constexpr static s32 SignatureFile = 51455346; // FSEQ
+    constexpr static s32 SignatureFile = 0x51455346; // FSEQ
 
     explicit SequenceSoundFileReader(void* sequenceFile);
 

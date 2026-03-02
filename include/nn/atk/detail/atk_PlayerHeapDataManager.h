@@ -7,6 +7,8 @@
 namespace nn::atk::detail {
 class PlayerHeapDataManager : driver::DisposeCallback, SoundArchiveLoader {
 public:
+    constexpr static u8 FileAddressCount = 9;
+
     struct FileAddress {
         SoundArchive::FileId fileId;
         void* address;
@@ -20,7 +22,7 @@ public:
     void Initialize(const SoundArchive* arc);
 
     void* SetFileAddress(SoundArchive::FileId fileId, const void* address);
-    void* GetFileAddress(SoundArchive::FileId fileId);
+    void* GetFileAddress(SoundArchive::FileId fileId) const;
 
     void InvalidateData(const void* start, const void* end) override;
 

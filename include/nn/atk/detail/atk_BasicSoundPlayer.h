@@ -8,6 +8,8 @@
 
 namespace nn::atk::detail::driver {
 struct PlayerParamSet {
+    void Initialize();
+
     f32 volume;
     f32 pitch;
     f32 lpfFreq;
@@ -37,15 +39,23 @@ public:
 
 private:
     os::Event m_Event;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* m_pOutputReceiver;
+#endif
     bool m_ActiveFlag;
     bool m_StartedFlag;
     bool m_PauseFlag;
     bool m_FinishFlag;
     bool m_IsFinalizedForCannotAllocateResource;
     PlayerParamSet m_PlayerParamSet;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputAdditionalParam* m_pTvAdditionalParam;
+#endif
     PlayerHeapDataManager* m_pPlayerHeapDataManager;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(BasicSoundPlayer) == 0xc0);
+#else
+static_assert(sizeof(BasicSoundPlayer) == 0xb0);
+#endif
 } //namespace nn::atk::detail::driver

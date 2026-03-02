@@ -4,10 +4,15 @@
 
 namespace nn::atk::detail {
 struct GroupFile {
+    struct InfoBlock;
+    struct FileBlock;
+    struct InfoExBlock;
     struct FileHeader : Util::SoundFileHeader {
-        struct InfoBlock* GetInfoBlock();
-        struct FileBlock* GetFileBlock();
-        struct InfoExBlock* GetInfoExBlock();
+
+        InfoBlock* GetInfoBlock() const;
+        FileBlock* GetFileBlock() const;
+        InfoExBlock* GetInfoExBlock() const;
+
     };
 
     struct InfoBlockBody {

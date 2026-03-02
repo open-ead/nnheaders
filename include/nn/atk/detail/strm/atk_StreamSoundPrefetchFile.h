@@ -9,30 +9,33 @@ public:
     struct PrefetchDataBlock;
     struct FileHeader : Util::SoundFileHeader {
         
-        StreamSoundFile::InfoBlock* GetInfoBlock();
+        StreamSoundFile::InfoBlock* GetInfoBlock() const;
+        StreamSoundFile::RegionBlock* GetRegionBlock() const;
+        PrefetchDataBlock* GetPrefetchDataBlock() const;
 
-        u32 GetPrefetchDataBlockSize();
-        PrefetchDataBlock* GetPrefetchDataBlock();
+        u32 GetPrefetchDataBlockSize() const;
         
-        bool HasRegionBlock();
-        u32 GetRegionBlockOffset();
-        u32 GetRegionBlockSize();
-        StreamSoundFile::RegionBlock* GetRegionBlock();
+        bool HasRegionBlock() const;
+        u32 GetRegionBlockSize() const;
+        u32 GetRegionBlockOffset() const;
+
     };
 
     struct PrefetchSample {
-        u8 data[1];
 
         void* GetSampleAddress();
+
+        u8 data[1];
     };
 
     struct PrefetchData {
+        
+        PrefetchSample* GetPrefetchSample();
+
         u32 startFrame;
         u32 prefetchSize;
         u32 reserved[1];
         Util::Reference toPrefetchSample;
-
-        PrefetchSample* GetPrefetchSample();
     };
     static_assert(sizeof(PrefetchData) == 0x14);
 

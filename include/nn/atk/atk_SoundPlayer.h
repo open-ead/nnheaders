@@ -26,7 +26,9 @@ public:
     static_assert(sizeof(OutputParam) == 0x14);
 
     SoundPlayer();
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     explicit SoundPlayer(detail::OutputAdditionalParam* pParam);
+#endif
     ~SoundPlayer();
 
     void StopAllSound(s32 fadeFrames);
@@ -92,8 +94,14 @@ private:
     f32 m_BiquadValue;
     u32 m_OutputLineFlag;
     OutputParam m_TvParam;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     detail::OutputAdditionalParam* m_pOutputAdditionalParam;
+#endif
     bool m_IsFirstComeBased;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SoundPlayer) == 0x88);
+#else
+static_assert(sizeof(SoundPlayer) == 0x78);
+#endif
 }  // namespace nn::atk

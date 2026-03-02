@@ -7,12 +7,17 @@ struct WaveFile {
     struct InfoBlock;
     struct DataBlock;
     struct FileHeader : Util::SoundFileHeader {
-        InfoBlock* GetInfoBlock();
-        DataBlock* GetDataBlock();
+
+        InfoBlock* GetInfoBlock() const;
+        DataBlock* GetDataBlock() const;
+
     };
 
     struct ChannelInfo;
     struct InfoBlockBody {
+
+        ChannelInfo* GetChannelInfo(s32 channelIndex) const;
+
         u8 encoding;
         u8 isLoop;
         u8 padding;
@@ -21,8 +26,6 @@ struct WaveFile {
         u32 loopEndFrame;
         u32 originalLoopStartFrame;
         Util::ReferenceTable channelInfoReferenceTable;
-
-        ChannelInfo* GetChannelInfo(s32 channelIndex);
     };
 
     struct InfoBlock {
@@ -41,8 +44,8 @@ struct WaveFile {
         Util::Reference referToAdpcmInfo;
         u32 reserved;
 
-        void* GetSamplesAddress(void* dataBlockBodyAddress);
-        DspAdpcmInfo* GetDspAdpcmInfo();
+        void* GetSamplesAddress(const void* dataBlockBodyAddress) const;
+        DspAdpcmInfo* GetDspAdpcmInfo() const;
     };
     static_assert(sizeof(ChannelInfo) == 0x14);
 

@@ -81,7 +81,9 @@ public:
 
     void SetSweepParam(f32 sweepPitch, s32 sweepTime, bool autoUpdate);
     void SetBiquadFilter(s32 type, f32 value);
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetTvAdditionalParam(OutputAdditionalParam* param);
+#endif
 
     position_t GetCurrentPlayingSample(bool) const;
 
@@ -117,7 +119,9 @@ private:
     f32 m_BiquadValue;
     u32 m_OutputLineFlag;
     detail::OutputParam m_TvParam;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     detail::OutputAdditionalParam* m_pTvAdditionalParam;
+#endif
     f32 m_UserPitch;
     f32 m_SweepPitch;
     s32 m_SweepCounter;

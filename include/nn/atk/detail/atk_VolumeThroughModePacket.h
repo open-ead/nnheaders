@@ -11,6 +11,8 @@ public:
 
     bool Initialize(void* buffer, std::size_t size, s32 busCount);
 
+    void Finalize();
+
     void Reset();
 
     VolumeThroughModePacket& operator=(const VolumeThroughModePacket& rhs);

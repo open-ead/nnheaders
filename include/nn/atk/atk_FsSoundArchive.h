@@ -13,6 +13,8 @@ public:
         FileAccessMode_InFunction
     };
 
+    constexpr static u32 BufferAlignSize = 64;
+
     FsSoundArchive();
     ~FsSoundArchive() override;
 
@@ -44,7 +46,7 @@ private:
     u8 m_FileAccessMode;
     u8 m_Padding[2];
     u32 m_FileAccessCount;
-    char m_SoundArchiveFullPath[639];
+    char m_SoundArchiveFullPath[SoundArchive::FilePathMax];
     detail::fnd::CriticalSection m_FileOpenCloseLock;
 };
 static_assert(sizeof(FsSoundArchive) == 0x610);

@@ -7,7 +7,7 @@ class DspadpcmReader {
 public:
     DspadpcmReader();
 
-    bool ReadWaveInfo(WaveInfo* info);
+    bool ReadWaveInfo(WaveInfo* info) const;
 
 private:
     void* m_pDspadpcmData;

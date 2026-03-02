@@ -24,7 +24,13 @@ private:
     SoundArchive::StreamSoundInfo2* m_pStrmMetaInfo2;
     SoundStartable::StartInfo::WaveSoundInfo* m_pWsdInfo;
     s32 m_SubMixIndex;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* m_pOutputReceiver;
+#endif
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(StartInfoReader) == 0x58);
+#else
+static_assert(sizeof(StartInfoReader) == 0x50);
+#endif
 } // namespace nn::atk::detail

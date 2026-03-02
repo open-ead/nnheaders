@@ -16,14 +16,18 @@ public:
     static_assert(sizeof(ClipParam) == 0x10);
 
     struct TrackParam {
+        constexpr static u32 ClipParamCountMax = 10;
+
         bool isPlayed;
-        ClipParam clipParam[10];
+        ClipParam clipParam[ClipParamCountMax];
     };
     static_assert(sizeof(TrackParam) == 0xa8);
 
     struct TrackParamSet {
+        constexpr static u32 TrackParamCountMax = 4;
+
         bool isPlayed;
-        TrackParam trackParam[4];
+        TrackParam trackParam[TrackParamCountMax];
     };
     static_assert(sizeof(TrackParamSet) == 0x2a8);
 
@@ -85,5 +89,9 @@ private:
     bool m_IsInitialized;
     bool m_IsRegisterPlayerCallback;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(AdvancedWaveSoundPlayer) == 0x778);
+#else
+static_assert(sizeof(AdvancedWaveSoundPlayer) == 0x768);
+#endif
 } // namespace nn::atk::detail::driver

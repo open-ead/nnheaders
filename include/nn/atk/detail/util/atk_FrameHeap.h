@@ -11,6 +11,8 @@ public:
     using DisposeCallback = void(*)(void*, size_t, void*);
     using HeapCallback = void(*)(void*);
 
+    constexpr static s32 HeapAlign = 64;
+
     class Block {
     public:
         Block();

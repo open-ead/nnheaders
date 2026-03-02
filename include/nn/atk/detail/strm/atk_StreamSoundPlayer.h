@@ -211,13 +211,16 @@ public:
 
     void SetOutputParam(const OutputParam*, const OutputParam&, const TrackData&);
     
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     void ApplyTvOutputParamForMultiChannel(OutputParam* outputParam, 
                                            MultiVoice* MultiVoice, s32 channelIndex, 
                                            MixMode mixMode);
+#else
     void ApplyTvOutputParamForMultiChannel(OutputParam* outputParam, 
                                            OutputAdditionalParam* pOutputAdditionalParam, 
                                            MultiVoice* MultiVoice, s32 channelIndex, 
                                            MixMode mixMode);
+#endif
     
     void MixSettingForOutputParam(OutputParam* outputParam, s32 channelIndex, MixMode mixMode);
     
@@ -317,6 +320,7 @@ private:
     position_t m_OriginalPlaySamplePosition;
 
     static u16 g_TaskRequestIndexCount;
+    static u16 g_AssignNumberCount;
 };
 static_assert(sizeof(StreamSoundPlayer) == 0x11740);
 } // namespace nn::atk::detail::driver

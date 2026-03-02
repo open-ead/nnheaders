@@ -10,7 +10,7 @@ public:
 
     static SampleFormat GetSampleFormat(u8 format);
 
-    WaveFileReader(void* waveFile, s8 waveType);
+    WaveFileReader(const void* waveFile, s8 waveType);
 
     bool IsOriginalLoopAvailable() const;
 

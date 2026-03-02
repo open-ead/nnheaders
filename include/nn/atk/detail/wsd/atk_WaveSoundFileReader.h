@@ -30,6 +30,8 @@ static_assert(sizeof(WaveSoundNoteInfo) == 0x18);
 
 class WaveSoundFileReader {
 public:
+    constexpr static s32 SignatureFile = 0x44535746; // FWSD
+
     explicit WaveSoundFileReader(const void* waveSoundFile);
 
     s32 GetWaveSoundCount() const;

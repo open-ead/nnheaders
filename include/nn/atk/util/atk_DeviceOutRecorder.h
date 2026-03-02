@@ -6,9 +6,9 @@
 #include <nn/os/os_MessageQueue.h>
 #include <nn/util/util_BytePtr.h>
 
-#include <nn/atk/detail/atk_WavOutFileStream.h>
+#include <nn/atk/atk_Global.h>
+#include <nn/atk/detail/util/atk_WavOutFileStream.h>
 #include <nn/atk/fnd/os/atkfnd_Thread.h>
-#include <nn/atk/util/atk_Global.h>
 
 namespace nn::atk {
 class DeviceOutRecorder : detail::fnd::Thread::Handler {
@@ -45,7 +45,7 @@ public:
     };
     static_assert(sizeof(InitializationOptions) == 0x8);
 
-    struct RecorderBuffer {
+    class RecorderBuffer {
         struct WriteState {
             u32 channelIndex;
             u32 writtenSampleCount;
@@ -68,6 +68,7 @@ public:
 
         void SetReadBlockSamples(u32 readBlockSamples);
 
+    private:
         s16* m_SampleBuffer;
         u32 m_MaxBufferSamples;
         u32 m_MaxSamples;

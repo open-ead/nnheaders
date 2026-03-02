@@ -12,6 +12,23 @@ public:
         ParseResult_Finish,
     };
 
+    constexpr static u32 CallStackDepth = 10;
+
+    constexpr static u32 DefaultPriority = 64;
+    constexpr static u32 DefaultBendRange = 2;
+    constexpr static u32 DefaultPortaKey = 60;
+
+    constexpr static s32 InvalidEnvelope = 255;
+    constexpr static s32 MaxEnvelopeValue = 127;
+
+    constexpr static s32 ParserParamSize = 32;
+
+    constexpr static s32 TrackVariableCount = 16;
+
+    constexpr static s32 PauseReleaseValue = 16;
+    constexpr static s32 MuteReleaseValue = 127;
+
+
     struct ParserTrackParam {
         struct CallStack {
             u8 loopFlag;
@@ -27,7 +44,7 @@ public:
         bool noteWaitFlag;
         bool tieFlag;
         bool monophonicFlag;
-        CallStack callStack[10];
+        CallStack callStack[CallStackDepth];
         u8 callStackDepth;
         bool frontBypassFlag;
         bool muteFlag;
@@ -104,6 +121,8 @@ public:
                                     Channel::ChannelCallbackStatus callbackStatus, void* userData);
 
     void SetMute(SequenceMute mute);
+    void ForceMute();
+
     void SetSilence(bool silenceFlag, s32 fadeTimes);
     void SetBiquadFilter(s32 type, f32 value);
     void SetBankIndex(s32 bankIndex);
@@ -112,7 +131,7 @@ public:
     void SetOutputLine(s32 outputLine);
     void SetTvMixParameter(u32 srcChNo, s32 mixChNo, f32 param);
     
-    s16 GetTrackVariable(s32) const;
+    s16 GetTrackVariable(s32 varNo) const;
     void SetTrackVariable(s32 varNo, s16 var);
 
     s16* GetVariablePtr(s32 varNo);
@@ -128,7 +147,7 @@ private:
     f32 m_PanRange;
     OutputParam m_TvParam;
     ParserTrackParam m_ParserTrackParam;
-    s16 m_TrackVariable[16];
+    s16 m_TrackVariable[TrackVariableCount];
     SequenceSoundPlayer* m_pSequenceSoundPlayer;
     Channel* m_pChannelList;
 };
