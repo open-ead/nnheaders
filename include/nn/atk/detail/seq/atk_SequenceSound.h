@@ -108,6 +108,6 @@ private:
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SequenceSound) == 0x5a0);
 #else
-static_assert(sizeof(SequenceSound) == 0x578);
+static_assert(sizeof(SequenceSound) == 0x570);
 #endif
 } // namespace nn::atk::detail

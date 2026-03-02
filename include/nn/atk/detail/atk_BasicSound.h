@@ -151,10 +151,16 @@ struct SoundActorParam {
     f32 tvVolume;
     f32 tvPan;
     f32 lpf;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     s32 biquadFilterType;
     f32 biquadFilterValue;
+#endif
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SoundActorParam) == 0x1c);
+#else
+static_assert(sizeof(SoundActorParam) == 0x14);
+#endif
 
 class BasicSound {
 public:
@@ -435,5 +441,10 @@ private:
 
     static s32 g_LastInstanceId;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(BasicSound) == 0x210);
+#else
+static_assert(sizeof(BasicSound) == 0x1f0);
+#endif
 }  // namespace detail
 }  // namespace nn::atk
