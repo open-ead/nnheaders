@@ -7,6 +7,7 @@
 #include <nn/atk/detail/atk_BasicSoundPlayer.h>
 #include <nn/atk/detail/atk_MoveValue.h>
 #include <nn/atk/detail/atk_OutputAdditionalParam.h>
+#include <nn/atk/submix/atk_ChannelMixVolume.h>
 #include <nn/atk/submix/atk_OutputReceiver.h>
 
 namespace nn::atk {
@@ -241,9 +242,10 @@ public:
     void ForceStop();
     void Pause(bool, s32);
     void Pause(bool, s32, PauseMode pauseMode);
+    
     void Mute(bool, s32);
 
-    void SetAutoStopCounter(s32);
+    void SetAutoStopCounter(s32 autoStopCounter);
 
     void FadeIn(s32);
 
@@ -259,6 +261,9 @@ public:
     u32 CalculateOutLineFlag() const;
     void CalculateBiquadFilter(s32* pBiquadFilterType, f32* pBiquadFilterValue) const;
     void CalculateOutputParam(OutputParam*, OutputDevice) const;
+    void CalculateOutputBusMixVolume(OutputBusMixVolume*, OutputDevice) const;
+
+    bool IsVolumeThroughModeUsed() const;
 
     void ApplyCommonParam(OutputParam&) const;
 
@@ -299,9 +304,6 @@ public:
     u32 GetOutputLine() const;
     void ResetOutputLine();
 
-    void SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditionalParam* addr, 
-                                      OutputAdditionalParam* addrForPlayer);
-
     void SetMixMode(MixMode mode);
     MixMode GetMixMode() const;
 
@@ -317,33 +319,61 @@ public:
     void SetFxSend(AuxBus auxBus, f32 fxSend);
     f32 GetFxSend(AuxBus auxBus) const;
 
+    void SetSend(s32, f32 send);
+    void SetOutputAdditionalSend(OutputDevice device, s32, f32 send);
+
+    f32 GetSend(s32) const;
+    void GetOutputAdditionalSend(OutputDevice device, s32) const;
+
+    void SetVolumeThroughMode(s32, u8);
+    void SetOutputVolumeThroughMode(OutputDevice device, s32, u8);
+
+    void GetVolumeThroughMode(s32);
+    void GetOutputVolumeThroughMode(OutputDevice device, s32) const;
+
+    s32 GetSendBusCount();
+    s32 GetSendChannelCount();
+
+    void SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditionalParam* addr, 
+                                      OutputAdditionalParam* addrForPlayer);
+
     void SetOutputVolume(OutputDevice device, f32 volume);
+    void SetOutputBusMixVolume(OutputDevice, u32, u32, ChannelMixVolume);
     void SetOutputChannelMixParameter(OutputDevice, u32, MixParameter);
     void SetOutputPan(OutputDevice device, f32 pan);
     void SetOutputSurroundPan(OutputDevice device, f32 surroundPan);
     void SetOutputMainSend(OutputDevice device, f32 mainSend);
+    void SetOutputFxSend(OutputDevice device, AuxBus auxBus, f32 fxSend);
     void SetOutputFxSend(OutputDevice device, f32 fxSend);
+    void SetOutputBusMixVolumeEnabled(OutputDevice device, s32, bool);
 
     f32 GetOutputVolume(OutputDevice device) const;
-    MixParameter GetOutputChannelMixParameter(OutputDevice, u32);
+    MixParameter GetOutputChannelMixParameter(OutputDevice, u32) const;
     f32 GetOutputPan(OutputDevice device) const;
     f32 GetOutputSurroundPan(OutputDevice device) const;
     f32 GetOutputMainSend(OutputDevice device) const;
+    f32 GetOutputFxSend(OutputDevice device, AuxBus auxBus) const;
     f32 GetOutputFxSend(OutputDevice device) const;
+
+    bool IsOutputBusMixVolumeEnabled(OutputDevice device, s32) const;
+    void GetOutputBusMixVolume(OutputDevice device, s32, s32) const;
 
     void SetPanMode(PanMode mode);
     void SetPanCurve(PanCurve curve);
     void SetAmbientInfo(AmbientInfo* ambientArgInfo);
     
+    static s32 GetAmbientPriority(const AmbientInfo& ambientInfo, u32 soundId);
+    
+    void SetSetupTick(const os::Tick& tick);
+    void SetSoundArchive(const SoundArchive* soundArchive);
+
     PanMode GetPanMode() const;
     PanCurve GetPanCurve() const;
-    AmbientInfo* GetAmbientInfo() const;
+    AmbientInfo* GetAmbientInfo() const; 
 
-    static s32 GetAmbientPriority(const AmbientInfo& ambientInfo, u32 soundId);
-
-    void SetSetupTick(const os::Tick& tick);
-
-    void SetSoundArchive(const SoundArchive* soundArchive);
+private:
+    friend SoundPlayer;
+    friend ExternalSoundPlayer;
 
     PlayerHeap* m_pPlayerHeap;
     SoundHandle* m_pGeneralHandle;                            

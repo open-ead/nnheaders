@@ -2,9 +2,9 @@
 
 #include <nn/types.h>
 
-#include <nn/atk/atk_Adpcm.h>
 #include <nn/atk/detail/atk_Config.h>
 #include <nn/atk/detail/atk_IRegionInfoReadable.h>
+#include <nn/atk/detail/dsp/atk_Adpcm.h>
 
 namespace nn::atk {
 enum StreamRegionCallbackResult {

@@ -29,6 +29,8 @@ public:
 
     void SetPlayableSoundCount(s32 count);
 
+    bool CanPlaySound();
+
 private:
     SoundList m_SoundList;
     s32 m_PlayableCount;

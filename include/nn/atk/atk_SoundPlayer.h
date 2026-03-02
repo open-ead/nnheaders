@@ -1,6 +1,5 @@
 #pragma once
 
-#include <nn/atk/atk_Global.h>
 #include <nn/util/util_IntrusiveList.h>
 
 #include <nn/atk/detail/atk_BasicSound.h>

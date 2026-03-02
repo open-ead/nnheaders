@@ -5,7 +5,7 @@
 #include <nn/audio/audio_FinalMixTypes.h>
 #include <nn/audio/audio_SubMixTypes.h>
 
-#include <nn/atk/atk_Global.h>
+#include <nn/atk/util/atk_Global.h>
 
 namespace nn::atk {
 class OutputMixer;

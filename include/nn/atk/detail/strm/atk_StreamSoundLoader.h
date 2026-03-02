@@ -1,11 +1,11 @@
 #pragma once
 
-#include <nn/atk/atk_Adpcm.h>
 #include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/detail/atk_Config.h>
 #include <nn/atk/detail/atk_IStreamDataDecoder.h>
 #include <nn/atk/detail/atk_LoaderManager.h>
 #include <nn/atk/detail/atk_RegionManager.h>
+#include <nn/atk/detail/dsp/atk_Adpcm.h>
 #include <nn/atk/detail/strm/atk_StreamSoundFileLoader.h>
 #include <nn/atk/detail/strm/atk_StreamSoundFileReader.h>
 #include <nn/atk/detail/thread/atk_Task.h>
