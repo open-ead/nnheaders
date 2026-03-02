@@ -11,34 +11,51 @@ using SendArray = ValueArray<f32>;
 
 class OutputAdditionalParam {
 public:
-    static std::size_t GetRequiredMemSize(SoundInstanceConfig* config);
+    static std::size_t GetRequiredMemSize(const SoundInstanceConfig& config);
 
-    void Initialize(void* buffer, std::size_t bufferSize, SoundInstanceConfig* config);
+    void Initialize(void* buffer, std::size_t bufferSize, const SoundInstanceConfig& config);
+    void Finalize();
 
     void Reset();
 
     void* GetBufferAddr();
 
     SendArray* GetAdditionalSendAddr();
-    f32 TryGetAdditionalSend(s32 bus);
-    bool IsAdditionalSendEnabled();
+    SendArray* GetAdditionalSendAddr() const;
+
+    f32 TryGetAdditionalSend(s32 bus) const;
+
+    bool IsAdditionalSendEnabled() const;
+
     void TrySetAdditionalSend(s32 bus, f32 send);
 
     BusMixVolumePacket* GetBusMixVolumePacketAddr();
-    f32 GetBusMixVolume(s32 waveChannel, s32 mixChannel);
-    OutputBusMixVolume* GetBusMixVolume();
-    void SetBusMixVolume(OutputBusMixVolume* param);
-    bool IsBusMixVolumeUsed();
+    BusMixVolumePacket* GetBusMixVolumePacketAddr() const;
+
+    f32 GetBusMixVolume(s32 waveChannel, s32 mixChannel) const;
+    OutputBusMixVolume* GetBusMixVolume() const;
+
+    void SetBusMixVolume(s32 waveChannel, s32 mixChannel, f32 volume);
+    void SetBusMixVolume(const OutputBusMixVolume& param);
+
+    bool IsBusMixVolumeUsed() const;
     void SetBusMixVolumeUsed(bool isUsed);
-    bool IsBusMixVolumeEnabledForBus(s32 bus);
+
+    bool IsBusMixVolumeEnabledForBus(s32 bus) const;
     void SetBusMixVolumeEnabledForBus(s32 bus, bool isEnabled);
-    bool IsBusMixVolumeEnabled();
+
+    bool IsBusMixVolumeEnabled() const;
 
     VolumeThroughModePacket* GetVolumeThroughModePacketAddr();
-    f32 GetBinaryVolume();
+    VolumeThroughModePacket* GetVolumeThroughModePacketAddr() const;
+
+    f32 GetBinaryVolume() const;
     void SetBinaryVolume(f32 volume);
-    u8 TryGetVolumeThroughMode(s32 bus);
-    bool IsVolumeThroughModeEnabled();
+
+    u8 TryGetVolumeThroughMode(s32 bus) const;
+    void TrySetVolumeThroughMode(s32 bus, u8 volumeThroughMode);
+    bool IsVolumeThroughModeEnabled() const;
+    
     bool IsVolumeThroughModeUsed();
     void SetVolumeThroughModeUsed(bool isUsed);
 

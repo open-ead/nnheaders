@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nn/atk/atk_Global.h>
+#include <nn/atk/util/atk_Global.h>
 
 namespace nn::atk {
 class ChannelMixVolume {
@@ -24,5 +24,5 @@ private:
     s32 m_ChannelCount;
     f32 m_ChannelVolume[ChannelCountMax];
 };
-static_assert(sizeof(ChannelMixVolume) == 4 + ChannelMixVolume::ChannelCountMax * sizeof(f32));
+static_assert(sizeof(ChannelMixVolume) == 0x64);
 } // namespace nn::atk

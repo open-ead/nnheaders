@@ -2,7 +2,6 @@
 
 #include <nn/os.h>
 
-#include <nn/atk/atk_Global.h>
 #include <nn/atk/submix/atk_OutputReceiver.h>
 #include <nn/atk/detail/atk_OutputAdditionalParam.h>
 #include <nn/atk/detail/atk_PlayerHeapDataManager.h>

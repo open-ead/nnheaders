@@ -1,8 +1,6 @@
 #pragma once
 
-#include <nn/types.h>
-
-#include <nn/atk/atk_Global.h>
+#include <nn/atk/util/atk_Global.h>
 
 namespace nn::atk {
 class BiquadFilterCallback {

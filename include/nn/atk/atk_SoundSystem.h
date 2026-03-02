@@ -5,7 +5,7 @@
 #include <nn/audio/audio_MemoryPoolTypes.h>
 #include <vapours/results/results_common.hpp>
 
-#include <nn/atk/atk_Global.h>
+#include <nn/atk/util/atk_Global.h>
 #include <nn/atk/detail/dsp/atk_HardwareManager.h>
 #include <nn/atk/detail/thread/atk_ThreadInfoReader.h>
 #include <nn/atk/effect/atk_EffectAux.h>

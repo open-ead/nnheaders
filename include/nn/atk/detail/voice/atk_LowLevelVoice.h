@@ -5,10 +5,10 @@
 #include <nn/audio/audio_Common.h>
 #include <nn/audio/audio_VoiceTypes.h>
 
-#include <nn/atk/atk_Adpcm.h>
-#include <nn/atk/atk_Global.h>
 #include <nn/atk/detail/atk_Config.h>
+#include <nn/atk/detail/dsp/atk_Adpcm.h>
 #include <nn/atk/submix/atk_OutputReceiver.h>
+#include <nn/atk/util/atk_Global.h>
 
 namespace nn::atk::detail {
 class Voice;

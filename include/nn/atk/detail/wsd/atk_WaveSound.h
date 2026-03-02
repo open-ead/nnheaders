@@ -1,13 +1,11 @@
 #pragma once
 
+#include <nn/atk/atk_WaveSoundHandle.h>
 #include <nn/atk/detail/atk_BasicSound.h>
 #include <nn/atk/detail/atk_SoundInstanceManager.h>
 #include <nn/atk/detail/wsd/atk_WaveSoundPlayer.h>
 
-namespace nn::atk { 
-class WaveSoundHandle;
-
-namespace detail {
+namespace nn::atk::detail { 
 class WaveSound;
 using WaveSoundInstanceManager = SoundInstanceManager<WaveSound>;
 
@@ -64,4 +62,3 @@ private:
 };
 static_assert(sizeof(WaveSound) == 0x3e0);
 } // namespace nn::atk::detail
-} // namespace nn::atk

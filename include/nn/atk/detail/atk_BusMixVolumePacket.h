@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nn/atk/atk_Global.h>
+#include <nn/atk/util/atk_Global.h>
 
 namespace nn::atk::detail {
 class BusMixVolumePacket {

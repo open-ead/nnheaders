@@ -5,10 +5,10 @@
 #include <nn/os/os_MessageQueue.h>
 #include <nn/util/util_IntrusiveList.h>
 
-#include <nn/atk/atk_Global.h>
 #include <nn/atk/detail/thread/atk_ThreadInfoReader.h>
 #include <nn/atk/fnd/os/atkfnd_Thread.h>
 #include <nn/atk/fnd/os/atkfnd_CriticalSection.h>
+#include <nn/atk/util/atk_Global.h>
 #include <nn/atk/util/atk_AudioRendererPerformanceReader.h>
 #include <nn/atk/util/atk_ProfileReader.h>
 
