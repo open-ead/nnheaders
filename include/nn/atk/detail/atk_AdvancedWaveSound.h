@@ -46,6 +46,6 @@ private:
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(AdvancedWaveSound) == 0x9b0);
 #else
-static_assert(sizeof(AdvancedWaveSound) == 0x988);
+static_assert(sizeof(AdvancedWaveSound) == 0x980);
 #endif
 } // namespace nn::atk::detail
