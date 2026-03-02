@@ -19,6 +19,9 @@ public:
         TaskPriority_High,
     };
 
+    constexpr static u32 PriorityCount = 3;
+    constexpr static u32 ThreadMessageBufferSize = 32;
+
     TaskManager();
     ~TaskManager();
 
@@ -46,11 +49,11 @@ public:
     void CancelWaitTask();
 
 private:
-    TaskList m_TaskList[3];
+    TaskList m_TaskList[PriorityCount];
     bool m_IsWaitTaskCancel;
     fnd::CriticalSection m_CriticalSection;
     os::MessageQueue m_BlockingQueue;
-    std::uintptr_t m_MsgBuffer[32];
+    std::uintptr_t m_MsgBuffer[ThreadMessageBufferSize];
     TaskProfileLogger m_TaskProfileLogger;
 };
 static_assert(sizeof(TaskManager) == 0x1d8);

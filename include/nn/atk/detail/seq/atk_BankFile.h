@@ -6,17 +6,20 @@ namespace nn::atk::detail {
 struct BankFile {
     struct InfoBlock;
     struct FileHeader : Util::SoundFileHeader {
+
         InfoBlock* GetInfoBlock() const;
+        
     };
 
     struct Instrument;
     struct InfoBlockBody {
-        Util::Reference toWaveIdTable;
-        Util::Reference toInstrumentReferenceTable;
 
         Util::WaveIdTable* GetWaveIdTable() const;
         Util::ReferenceTable GetInstrumentReferenceTable() const;
         Instrument* GetInstrument(s32 programNo) const;
+
+        Util::Reference toWaveIdTable;
+        Util::Reference toInstrumentReferenceTable;
     };
     static_assert(sizeof(InfoBlockBody) == 0x10);
 
@@ -28,24 +31,24 @@ struct BankFile {
 
     struct KeyRegion;
     struct Instrument {
-        Util::Reference toKeyRegionChunk;
 
         KeyRegion* GetKeyRegion(u32 key) const;
+
+        Util::Reference toKeyRegionChunk;
     };
     static_assert(sizeof(Instrument) == 0x8);
 
     struct VelocityRegion;
     struct KeyRegion {
-        Util::Reference toVelocityRegionChunk;
 
         VelocityRegion* GetVelocityRegion(u32 velocity) const;
+
+        Util::Reference toVelocityRegionChunk;
     };
     static_assert(sizeof(KeyRegion) == 0x8);
 
     struct RegionParameter;
     struct VelocityRegion {
-        u32 waveIdTableIndex;
-        Util::BitFlag optionParameter;
 
         u8 GetOriginalKey() const;
         u8 GetVolume() const;
@@ -56,6 +59,9 @@ struct BankFile {
         u8 GetInterpolationType() const;
         AdshrCurve* GetAdshrCurve() const;
         RegionParameter* GetRegionParameter() const;
+
+        u32 waveIdTableIndex;
+        Util::BitFlag optionParameter;
     };
     static_assert(sizeof(VelocityRegion) == 0x8);
 };

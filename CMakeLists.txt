@@ -238,7 +238,10 @@ add_library(NintendoSDK OBJECT
   include/nn/audio/audio_VoiceTypes.h
   include/nn/audio/audio_WaveBuffer.h
 
+  include/nn/atk/atk_Adpcm.h
+  include/nn/atk/atk_BiquadFilterCallback.h
   include/nn/atk/atk_FsSoundArchive.h
+  include/nn/atk/atk_Global.h
   include/nn/atk/atk_SequenceSoundHandle.h
   include/nn/atk/atk_SoundActor.h
   include/nn/atk/atk_SoundArchive.h
@@ -260,8 +263,6 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/detail/atk_AdvancedWaveSoundRuntime.h
   include/nn/atk/detail/atk_BasicSound.h
   include/nn/atk/detail/atk_BasicSoundPlayer.h
-  include/nn/atk/detail/atk_BinaryFileFormat.h
-  include/nn/atk/detail/atk_BinaryTypes.h
   include/nn/atk/detail/atk_BusMixVolumePacket.h
   include/nn/atk/detail/atk_Config.h
   include/nn/atk/detail/atk_DisposeCallback.h
@@ -290,14 +291,10 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/detail/atk_StartInfoReader.h
   include/nn/atk/detail/atk_ValueArray.h
   include/nn/atk/detail/atk_VolumeThroughModePacket.h
-  include/nn/atk/detail/atk_WavBinary.h
   include/nn/atk/detail/atk_WaveArchiveFile.h
   include/nn/atk/detail/atk_WaveArchiveFileReader.h
   include/nn/atk/detail/atk_WaveFile.h
-  include/nn/atk/detail/atk_WavOutFileStream.h
   include/nn/atk/detail/debug/atk_Debug.h
-  include/nn/atk/detail/dsp/atk_Adpcm.h
-  include/nn/atk/detail/dsp/atk_BiquadFilterCallback.h
   include/nn/atk/detail/dsp/atk_BiquadFilterPresets.h
   include/nn/atk/detail/dsp/atk_DspadpcmReader.h
   include/nn/atk/detail/dsp/atk_HardwareManager.h
@@ -334,19 +331,23 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/detail/thread/atk_TaskManager.h
   include/nn/atk/detail/thread/atk_TaskThread.h
   include/nn/atk/detail/thread/atk_ThreadInfoReader.h
-  include/nn/atk/detail/thread/atk_VoiceCommand.h
   include/nn/atk/detail/util/atk_CurveAdshr.h
+  include/nn/atk/detail/util/atk_BinaryFileFormat.h
+  include/nn/atk/detail/util/atk_BinaryTypes.h
   include/nn/atk/detail/util/atk_CurveLfo.h
   include/nn/atk/detail/util/atk_FrameHeap.h
   include/nn/atk/detail/util/atk_InstancePool.h
   include/nn/atk/detail/util/atk_MemoryFileStream.h
   include/nn/atk/detail/util/atk_Util.h
+  include/nn/atk/detail/util/atk_WavBinary.h
+  include/nn/atk/detail/util/atk_WavOutFileStream.h
   include/nn/atk/detail/voice/atk_Channel.h
   include/nn/atk/detail/voice/atk_ChannelManager.h
   include/nn/atk/detail/voice/atk_LowLevelVoice.h
   include/nn/atk/detail/voice/atk_MultiVoice.h
   include/nn/atk/detail/voice/atk_MultiVoiceManager.h
   include/nn/atk/detail/voice/atk_Voice.h
+  include/nn/atk/detail/voice/atk_VoiceCommand.h
   include/nn/atk/detail/wsd/atk_WaveSound.h
   include/nn/atk/detail/wsd/atk_WaveSoundFile.h
   include/nn/atk/detail/wsd/atk_WaveSoundFileReader.h
@@ -362,7 +363,6 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/submix/atk_SubMix.h
   include/nn/atk/util/atk_AudioRendererPerformanceReader.h
   include/nn/atk/util/atk_DeviceOutRecorder.h
-  include/nn/atk/util/atk_Global.h
   include/nn/atk/util/atk_ProfileReader.h
   include/nn/atk/util/atk_TaskProfileReader.h
   include/nn/atk/fnd/basis/atkfnd_Config.h

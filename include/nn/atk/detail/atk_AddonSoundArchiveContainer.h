@@ -13,6 +13,8 @@ class AddonSoundArchive;
 namespace detail {
 class AddonSoundArchiveContainer {
 public:
+    constexpr static s32 SoundArchiveNameCountMax = 64;
+
     AddonSoundArchiveContainer();
     ~AddonSoundArchiveContainer();
 
@@ -33,7 +35,7 @@ private:
     u8 m_Padding[3];
     SoundArchive* m_pSoundArchive;
     SoundDataManager* m_pSoundDataManager;
-    char m_SoundArchiveName[64];
+    char m_SoundArchiveName[SoundArchiveNameCountMax];
     os::Tick m_AddTick;
 };
 static_assert(sizeof(AddonSoundArchiveContainer) == 0x70);

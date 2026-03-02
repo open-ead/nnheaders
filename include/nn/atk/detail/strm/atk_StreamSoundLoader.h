@@ -1,11 +1,11 @@
 #pragma once
 
+#include <nn/atk/atk_Adpcm.h>
 #include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/detail/atk_Config.h>
 #include <nn/atk/detail/atk_IStreamDataDecoder.h>
 #include <nn/atk/detail/atk_LoaderManager.h>
 #include <nn/atk/detail/atk_RegionManager.h>
-#include <nn/atk/detail/dsp/atk_Adpcm.h>
 #include <nn/atk/detail/strm/atk_StreamSoundFileLoader.h>
 #include <nn/atk/detail/strm/atk_StreamSoundFileReader.h>
 #include <nn/atk/detail/thread/atk_Task.h>
@@ -37,6 +37,8 @@ struct TrackDataInfos {
 static_assert(sizeof(TrackDataInfos) == 0x70);
 
 struct StreamDataInfoDetail {
+    void SetStreamSoundInfo(const StreamSoundFile::StreamSoundInfo&, bool);
+
     SampleFormat sampleFormat;
     s32 sampleRate;
     bool loopFlag;
@@ -86,6 +88,14 @@ using StreamSoundLoaderManager = LoaderManager<StreamSoundLoader>;
 
 class StreamSoundLoader {
 public:
+    constexpr static size_t DataBlockSizeBase = 0x2000;
+    constexpr static size_t DataBlockSizeMargin = 0x900;
+    constexpr static size_t DataBlockSizeMax = DataBlockSizeBase + DataBlockSizeMargin;
+
+    constexpr static u32 FileStreamBufferSize = 0x200;
+    constexpr static u32 LoadBufferChannelCount = 2;
+    constexpr static size_t LoadBufferSize = 0x5200;
+
     class StreamHeaderLoadTask : Task {
     public:
         StreamHeaderLoadTask();
@@ -162,7 +172,15 @@ public:
     void CancelRequest();
     void RequestClose();
 
+    void RegisterStreamDataDecoderManager(IStreamDataDecoderManager* manager);
+    void UnregisterStreamDataDecoderManager(IStreamDataDecoderManager* manager);
+
     void* detail_SetFsAccessLog(fnd::FsAccessLog* pFsAccessLog);
+
+    position_t detail_GetCurrentPosition();
+    position_t detail_GetCachePosition();
+
+    size_t detail_GetCachedLength();
 
     void RequestLoadHeader();
     void RequestLoadData(void** bufferAddress, u32 bufferBlockIndex, position_t startOffsetSamples,
@@ -187,6 +205,8 @@ public:
     bool SetAdpcmInfo(StreamSoundFileReader& reader, s32 channelCount, AdpcmParam** adpcmParam);
 
     void UpdateLoadingDataBlockIndex();
+
+    IStreamDataDecoderManager* SelectStreamDataDecoderManager(StreamFileType, DecodeMode);
 
     void SetStreamSoundInfoForOpus(const IStreamDataDecoder::DataInfo& dataInfo);
 
@@ -245,7 +265,7 @@ private:
     bool m_IsStreamOpenFailureHalt;
     position_t m_LoopStart;
     position_t m_LoopEnd;
-    char m_FilePath[639];
+    char m_FilePath[SoundArchive::FilePathMax];
     void* m_pExternalData;
     std::size_t m_ExternalDataSize;
     void* m_pCacheBuffer;
@@ -270,6 +290,8 @@ private:
     IStreamDataDecoder* m_pStreamDataDecoder; 
     IStreamDataDecoderManager* m_pStreamDataDecoderManager;
     util::IntrusiveListNode m_LinkForLoaderManager;
+
+    static u8 g_LoadBuffer[LoadBufferSize];
 };
 static_assert(sizeof(StreamSoundLoader) == 0x3640);
 } // namespace nn::atk::detail::driver

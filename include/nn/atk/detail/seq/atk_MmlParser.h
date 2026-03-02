@@ -14,6 +14,12 @@ public:
         SeqArgType_Variable,
     };
 
+    constexpr static u32 PanCenter = 64;
+    constexpr static u32 SurroundPanCenter = PanCenter;
+
+    constexpr static u32 TempoMin = 0;
+    constexpr static u32 TempoMax = 1023;
+
     MmlParser();
     virtual ~MmlParser();
 
@@ -34,6 +40,9 @@ public:
     s16 ReadVar(const u8** ptr) const;
 
     static u32 ParseAllocTrack(const void* baseAddress, u32 seqOffset, u32* allocTrack);
+
+private:
+    static bool* mPrintVarEnabledFlag;
 };
 static_assert(sizeof(MmlParser) == 0x8);
 } // namespace nn::atk::detail::driver

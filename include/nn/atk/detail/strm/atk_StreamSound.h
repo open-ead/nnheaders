@@ -21,9 +21,9 @@ public:
 
     void Setup(const driver::StreamSoundPlayer::SetupArg& arg);
 
-    void Prepare(const driver::StreamSoundPlayer::PrepareArg& arg);
+    void Prepare(const driver::StreamSoundPlayer::PrepareBaseArg& arg);
     void PreparePrefetch(const void* strmPrefetchFile, 
-                         const driver::StreamSoundPlayer::PrepareArg& arg);
+                         const driver::StreamSoundPlayer::PrepareBaseArg& arg);
 
     void UpdateMoveValue() override;
     
@@ -76,5 +76,9 @@ private:
     std::size_t m_CacheSize;
     driver::StreamSoundPlayer m_PlayerInstance;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(StreamSound) == 0x11a40);
+#else
+static_assert(sizeof(StreamSound) == 0x11a00);
+#endif
 } // namespace nn::atk::detail

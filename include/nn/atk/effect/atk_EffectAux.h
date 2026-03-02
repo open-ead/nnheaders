@@ -2,13 +2,14 @@
 
 #include <atomic>
 
+#include <nn/util.h>
 #include <nn/audio/audio_AudioRendererTypes.h>
 #include <nn/audio/audio_EffectTypes.h>
 #include <nn/audio/audio_FinalMixTypes.h>
 #include <nn/audio/audio_SubMixTypes.h>
 #include <nn/util/util_IntrusiveList.h>
 
-#include <nn/atk/util/atk_Global.h>
+#include <nn/atk/atk_Global.h>
 
 namespace nn::atk {
 class OutputMixer;
@@ -45,29 +46,33 @@ public:
 
     std::size_t GetRequiredMemSize(const audio::AudioRendererParameter& parameter) const;
 
-    bool AddEffect(audio::AudioRendererConfig* pConfig, 
-                   const audio::AudioRendererParameter& parameter, 
-                   OutputMixer* pOutputMixer);
-
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     bool AddEffect(audio::AudioRendererConfig* pConfig, 
                    const audio::AudioRendererParameter& parameter, 
                    audio::FinalMixType* pFinalMixType);
+    bool AddEffect(audio::AudioRendererConfig* pConfig, 
+                   const audio::AudioRendererParameter& parameter, 
+                   audio::SubMixType* pSubMixType);
+#else
+    bool AddEffect(audio::AudioRendererConfig* pConfig, 
+                   const audio::AudioRendererParameter& parameter, 
+                   OutputMixer* pOutputMixer);
+#endif
 
     void SplitEffectBuffer(BufferSet* pBufferSet, void* effectBuffer, 
                            std::size_t effectBufferSize);
 
-    bool AddEffect(audio::AudioRendererConfig* pConfig, 
-                   const audio::AudioRendererParameter& parameter, 
-                   audio::SubMixType* pSubMixType);
-
     void SetEffectInputOutput(const s8* input, const s8* output, s32 inputCount, s32 outputCount);
 
-    void RemoveEffect(audio::AudioRendererConfig* pConfig, OutputMixer* pOutputMixer);
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     void RemoveEffect(audio::AudioRendererConfig* pConfig, audio::FinalMixType* pFinalMixType);
     void RemoveEffect(audio::AudioRendererConfig* pConfig, audio::SubMixType* pSubMixType);
+#else
+    void RemoveEffect(audio::AudioRendererConfig* pConfig, OutputMixer* pOutputMixer);
+#endif
 
     bool SetChannelCount(s32 channelCount);
-    bool SetChannelIndex(ChannelIndex* pChannel, s32 channelCount);
+    bool SetChannelIndex(const ChannelIndex* pChannel, s32 channelCount);
 
     s32 GetChannelCount() const;
     void GetChannelIndex(ChannelIndex* pChannel, s32 channelCount) const;

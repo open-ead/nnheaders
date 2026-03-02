@@ -15,7 +15,7 @@ public:
     size_t GetObjectSize(const SoundInstanceConfig& config);
     size_t GetRequiredMemSize(s32 channelCount, const SoundInstanceConfig& config);
 
-    void Initialize(void* mem, size_t memSize, s32 channelCount, const SoundInstanceConfig* config);
+    void Initialize(void* mem, size_t memSize, s32 channelCount, const SoundInstanceConfig& config);
     void Finalize();
 
     void Free(Channel* channel);
@@ -30,10 +30,16 @@ private:
     ChannelList m_ChannelList;
     bool m_IsInitialized;
     s32 m_ChannelCount;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     InstancePool<OutputAdditionalParam>* m_pAdditionalParamPool;
+#endif
     BufferPool* m_pAdditionalParamBufferPool;
     std::size_t m_AdditionalParamBufferSizePerChannel;
     SoundInstanceConfig m_SoundInstanceConfig;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(ChannelManager) == 0x50);
+#else
+static_assert(sizeof(ChannelManager) == 0x48);
+#endif
 } // namespace nn::atk::detail::driver

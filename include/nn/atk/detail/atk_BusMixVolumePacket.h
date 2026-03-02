@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nn/atk/util/atk_Global.h>
+#include <nn/atk/atk_Global.h>
 
 namespace nn::atk::detail {
 class BusMixVolumePacket {
@@ -8,6 +8,7 @@ public:
     static std::size_t GetRequiredMemSize(s32 busCount);
 
     bool Initialize(void* buffer, std::size_t size, s32 busCount);
+    void Finalize();
 
     void Reset();
 

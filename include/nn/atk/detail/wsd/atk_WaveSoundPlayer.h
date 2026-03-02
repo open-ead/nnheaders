@@ -36,7 +36,7 @@ public:
     
     constexpr static u32 PauseReleaseValue = 127;
     constexpr static u32 MuteReleaseValue = 127;
-    constexpr static u8 DefaultPriority = 64;
+    constexpr static u32 DefaultPriority = 64;
 
     struct StartInfo {
         s32 index;
@@ -78,7 +78,7 @@ public:
     void Prepare(const StartInfo& info, const PrepareArg& arg);
     void PrepareForPlayerHeap(const PrepareArg& arg);
 
-    void RequestLoad(const StartInfo& info, const PrepareArg& arg);
+    void RequestLoad(const StartInfo& info, const WaveSoundLoader::Arg& arg);
 
     void Start() override;
     void Stop() override;
@@ -133,6 +133,10 @@ private:
     WaveSoundLoader* m_pLoader;
     WaveSoundLoader::Arg m_LoaderArg;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(WaveSoundPlayer) == 0x1a0);
+#else
+static_assert(sizeof(WaveSoundPlayer) == 0x190);
+#endif
 } // namespace nn::atk::detail::driver
 } // namespace nn::atk::detail

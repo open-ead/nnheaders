@@ -26,9 +26,14 @@ struct TaskProfile {
         u64 GetBeginTick() const;
         u64 GetEndTick() const;
 
+        f32 GetRemainingCachePercentage() const;
+        size_t GetCachedLength() const;
+
+        detail::driver::StreamSoundPlayer* GetStreamSoundPlayer() const;
+
         void SetTick(const os::Tick& beginTick, const os::Tick& endTick);
-        void SetData(os::Tick* beginTick, os::Tick* endTick, 
-                     detail::IStreamDataDecoder::CacheProfile* cacheProfile);
+        void SetData(const os::Tick& beginTick, const os::Tick& endTick, 
+                     const detail::IStreamDataDecoder::CacheProfile& cacheProfile);
 
     private:
         u64 m_BeginTick;
@@ -45,16 +50,23 @@ struct TaskProfile {
         TimeSpan GetTotalTime() const;
         u64 GetBeginTick() const;
         u64 GetEndTick() const;
+
+        f32 GetRemainingCachePercentage() const;
+        size_t GetCachedLength() const;
+
         TimeSpan GetDecodeTime() const;
         s32 GetDecodedSampleCount() const;
+
         TimeSpan GetFsAccessTime();
         std::size_t GetFsReadSize();
     
-        void SetData(os::Tick* beginTick, os::Tick* endTick, 
+        detail::driver::StreamSoundPlayer* GetStreamSoundPlayer() const;
+
+        void SetData(const os::Tick& beginTick, const os::Tick& endTick, 
                      detail::IStreamDataDecoder::DecodeProfile* decodeProfile);
-        void SetData(os::Tick* beginTick, os::Tick* endTick, 
-                     detail::IStreamDataDecoder::DecodeProfile* decodeProfile, 
-                     detail::IStreamDataDecoder::CacheProfile* cacheProfile);
+        void SetData(const os::Tick& beginTick, const os::Tick& endTick, 
+                     const detail::IStreamDataDecoder::DecodeProfile& decodeProfile, 
+                     const detail::IStreamDataDecoder::CacheProfile& cacheProfile);
 
     private:
         u64 m_BeginTick;

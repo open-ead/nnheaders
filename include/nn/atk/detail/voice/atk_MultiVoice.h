@@ -24,13 +24,13 @@ public:
 
     using VoiceCallback = void(*)(MultiVoice*,VoiceCallbackStatus,void*);
 
-    constexpr static u32 UpdateStart = 1;
-    constexpr static u32 UpdatePause = 2;
-    constexpr static u32 UpdateSrc = 4;
-    constexpr static u32 UpdateMix = 8;
-    constexpr static u32 UpdateLpf = 16;
-    constexpr static u32 UpdateBiquad = 32;
-    constexpr static u32 UpdateVe = 64;
+    constexpr static u32 UpdateStart    = 0b0000001;
+    constexpr static u32 UpdatePause    = 0b0000010;
+    constexpr static u32 UpdateSrc      = 0b0000100;
+    constexpr static u32 UpdateMix      = 0b0001000;
+    constexpr static u32 UpdateLpf      = 0b0010000;
+    constexpr static u32 UpdateBiquad   = 0b0100000;
+    constexpr static u32 UpdateVe       = 0b1000000;
 
     constexpr static u32 PriorityNoDrop = 255;
 
@@ -56,7 +56,9 @@ public:
     constexpr static f32 SendMax = 1.0;
 
     explicit MultiVoice();
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     explicit MultiVoice(OutputAdditionalParam* pAdditionalParam);
+#endif
     ~MultiVoice();
 
     bool Alloc(s32 channelCount, s32 priority, VoiceCallback callback, void* callbackData);
@@ -96,32 +98,43 @@ public:
     void SetPriority(s32 priority);
     void SetOutputLine(u32 lineFlag);
     void SetOutputParamImpl(const OutputParam& in, const OutputParam& out);
-    void SetOutputAdditionalParamImpl(SendArray* pAdditionalSend, 
-                                      BusMixVolumePacket* pBusMixVolumePacket, 
-                                      OutputBusMixVolume* pBusMixVolume, 
-                                      VolumeThroughModePacket* pVolumeThroughModePacket);
-    void SetOutputBusMixVolumeImpl(BusMixVolumePacket* in, 
-                                   OutputBusMixVolume* busMixVolume,
-                                   BusMixVolumePacket* out);
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+    void SetOutputAdditionalParamImpl(const SendArray* pAdditionalSend, 
+                                      const BusMixVolumePacket* pBusMixVolumePacket, 
+                                      const OutputBusMixVolume* pBusMixVolume, 
+                                      const VolumeThroughModePacket* pVolumeThroughModePacket);
+#endif
+    void SetOutputBusMixVolumeImpl(const BusMixVolumePacket& in, 
+                                   const OutputBusMixVolume& busMixVolume,
+                                   const BusMixVolumePacket& out);
+    void SetOutputVolumeThroughModePacketImpl(const VolumeThroughModePacket&, 
+                                              const VolumeThroughModePacket&);
     void SetTvParam(const OutputParam& param);
-    void SetTvAdditionalParam(OutputAdditionalParam* param);
-    void SetTvAdditionalParam(SendArray* pAdditionalSend, 
-                              BusMixVolumePacket* pBusMixVolumePacket,
-                              OutputBusMixVolume* pBusMixVolume, 
-                              VolumeThroughModePacket* pVolumeThroughModePacket);
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+    void SetTvAdditionalParam(const OutputAdditionalParam& param);
+    void SetTvAdditionalParam(const SendArray* pAdditionalSend, 
+                              const BusMixVolumePacket* pBusMixVolumePacket,
+                              const OutputBusMixVolume* pBusMixVolume, 
+                              const VolumeThroughModePacket* pVolumeThroughModePacket);
     void SetOutputReceiver(OutputReceiver* pOutputReceiver);
+#endif
     void SetSubMixIndex(s32 subMixIndex);
 
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     void CalcPreMixVolume(PreMixVolume* mix, const OutputParam& param, 
                           s32 channelIndex, OutputDevice device);
+#else
     void CalcPreMixVolume(PreMixVolume* mix, const OutputParam& param, 
                           OutputAdditionalParam* pAdditionalParam, s32 channelIndex,
                           OutputDevice device);
+#endif
     void CalcTvMix(OutputMix* mix, const PreMixVolume& pre);
     void CalcMixImpl(OutputMix* mix, u32 outputDeviceIndex, 
                      const OutputParam& param, const PreMixVolume& pre);
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void CalcMixImpl(OutputMix* mix, u32 outputDeviceIndex, const OutputParam& param,
                      OutputAdditionalParam* pAdditionalParam, const PreMixVolume& pre);
+#endif
 
     MultiVoice* detail_GetSdkVoice(s32) const;
 
@@ -166,12 +179,20 @@ private:
     s32 m_Priority;
     u32 m_OutputLineFlag;
     OutputParam m_TvParam;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputAdditionalParam* m_pTvAdditionalParam;
+#endif
     SampleFormat m_Format;
     std::uintptr_t m_VoiceUser;
     UpdateType m_UpdateType;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* m_pOutputReceiver;
+#endif
     util::IntrusiveListNode m_LinkNode;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(MultiVoice) == 0x298);
+#else
+static_assert(sizeof(MultiVoice) == 0x270);
+#endif
 } // namespace nn::atk::detail

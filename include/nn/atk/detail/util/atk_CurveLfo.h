@@ -3,6 +3,12 @@
 #include <nn/types.h>
 
 namespace nn::atk::detail {
+f32 CurveSine(f32 arg);
+f32 CurveTriangle(f32 arg);
+f32 CurveSaw(f32 arg);
+f32 CurveSquare(f32 arg);
+f32 CurveRandom(f32 arg);
+
 struct CurveLfoParam {
     enum CurveType {
         CurveType_Min,
@@ -19,6 +25,8 @@ struct CurveLfoParam {
         CurveType_Count = 0x80,
     };
 
+    void Initialize();
+
     f32 depth;
     f32 speed;
     u32 delay;
@@ -26,8 +34,6 @@ struct CurveLfoParam {
     u8 curve;
     u8 phase;
     u8 padding[1];
-
-    void Initialize();
 };
 static_assert(sizeof(CurveLfoParam) == 0x10);
 
@@ -37,10 +43,13 @@ public:
 
     static void InitializeCurveTable();
 
+    void RegisterUserCurve(CurveFunc curveFunc, u32);
+    void UnregisterUserCurve(u32);
+
     void Reset();
     void Update(s32 msec);
 
-    f32 GetValue();
+    f32 GetValue() const;
 
 private:
     CurveLfoParam m_Param;
@@ -52,4 +61,6 @@ private:
     u8 m_Padding[2];
 };
 static_assert(sizeof(CurveLfo) == 0x20);
+
+static CurveLfo::CurveFunc g_CurveFuncTable[5];
 } // namespace nn::atk::detail

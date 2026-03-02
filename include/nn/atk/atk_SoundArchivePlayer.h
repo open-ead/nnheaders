@@ -99,7 +99,9 @@ public:
     void AddAddonSoundArchive(const char*, const AddonSoundArchive*, const SoundDataManager*);
     void RemoveAddonSoundArchive(const AddonSoundArchive*);
 
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetDefaultOutputReceiver(OutputReceiver* pOutputReceiver);
+#endif
 
     StartResult detail_SetupSound(SoundHandle* handle, u32 soundId, bool holdFlag,
                                   const char* soundArchiveName, const StartInfo* startInfo) override;
@@ -201,8 +203,14 @@ private:
     bool m_IsEnableWarningPrint;
     bool m_IsInitialized;
     bool m_IsAdvancedWaveSoundEnabled;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* m_pDefaultOutputReceiver;
+#endif
     u8 m_Padding[1];
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SoundArchivePlayer) == 0x310);
+#else
+static_assert(sizeof(SoundArchivePlayer) == 0x300);
+#endif
 }  // namespace nn::atk

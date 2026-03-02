@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nn/util.h>
+
 #include <nn/atk/detail/thread/atk_CommandManager.h>
 #include <nn/atk/detail/voice/atk_LowLevelVoice.h>
 
@@ -9,9 +11,15 @@ struct VoiceCommandPlay : Command {
     SampleFormat sampleFormat;
     u32 sampleRate;
     AdpcmParam adpcmParam;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* pOutputReceiver;
+#endif
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(VoiceCommandPlay) == 0x50);
+#else
+static_assert(sizeof(VoiceCommandPlay) == 0x48);
+#endif
 
 struct VoiceCommandPause : Command {
     u32 voiceId;

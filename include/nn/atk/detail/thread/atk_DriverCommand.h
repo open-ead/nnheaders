@@ -114,10 +114,16 @@ static_assert(sizeof(DriverCommandReply) == 0x20);
 
 struct DriverCommandPlayerInit : Command {
     driver::BasicSoundPlayer* player;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* pOutputReceiver;
+#endif
     bool* availableFlagPtr;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(DriverCommandPlayerInit) == 0x30);
+#else
+static_assert(sizeof(DriverCommandPlayerInit) == 0x28);
+#endif
 
 struct DriverCommandPlayerPanParam : Command {
     driver::BasicSoundPlayer* player;
@@ -433,18 +439,30 @@ struct DriverCommandEffectAux : Command {
 static_assert(sizeof(DriverCommandEffectAux) == 0x40);
 
 struct DriverCommandSubMixApplyDestination : Command {
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* pReceiver;
+#endif
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(DriverCommandSubMixApplyDestination) == 0x20);
+#else
+static_assert(sizeof(DriverCommandSubMixApplyDestination) == 0x18);
+#endif
 
 struct DriverCommandSubMixUpdateMixVolume : Command {
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* pReceiver;
+#endif
     s32 srcBus;
     s32 srcChannel;
     s32 dstBus;
     s32 dstChannel;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(DriverCommandSubMixUpdateMixVolume) == 0x30);
+#else
+static_assert(sizeof(DriverCommandSubMixUpdateMixVolume) == 0x28);
+#endif
 
 struct DriverCommandAuxBusVolume : Command {
     AuxBus bus;
@@ -493,6 +511,8 @@ static_assert(sizeof(DriverCommandVoiceAdpcmParam) == 0x30);
 class DriverCommand : CommandManager {
 public:
     static void ProcessCommandList(Command* commandList);
+
+    DriverCommand();
 
     void Initialize(void* commandBuffer, size_t commandBufferSize);
 

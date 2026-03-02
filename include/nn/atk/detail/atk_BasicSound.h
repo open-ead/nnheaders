@@ -25,6 +25,9 @@ private:
 static_assert(sizeof(OutputAmbientParam) == 0x18);
 
 class SoundAmbientParam {
+public:
+    constexpr static u32 OutputLineFlagInherit = -1;
+    
 private:
     f32 m_Volume;
     f32 m_Pitch;
@@ -334,8 +337,10 @@ public:
     s32 GetSendBusCount();
     s32 GetSendChannelCount();
 
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditionalParam* addr, 
                                       OutputAdditionalParam* addrForPlayer);
+#endif
 
     void SetOutputVolume(OutputDevice device, f32 volume);
     void SetOutputBusMixVolume(OutputDevice, u32, u32, ChannelMixVolume);
@@ -413,10 +418,14 @@ private:
     f32 m_LpfFreq;
     f32 m_BiquadFilterValue;
     u32 m_OutputLineFlag;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* m_pOutputReceiver;
+#endif
     CommonParam m_CommonParam;
     OutputParam m_OutputParam[1];
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputAdditionalParam* m_pOutputAdditionalParam;
+#endif
     void* m_pUserParam;
     std::size_t m_UserParamSize;
     SoundStopCallback m_SoundStopCallback;

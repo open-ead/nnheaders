@@ -28,7 +28,7 @@ using SequenceSoundLoaderManager = LoaderManager<SequenceSoundLoader>;
 class SequenceSoundLoader {
 public:
     struct LoadInfo {
-        LoadInfo(SoundArchive* arc, SoundDataManager* mgr, 
+        LoadInfo(const SoundArchive* arc, const SoundDataManager* mgr, 
                  LoadItemInfo* seq, LoadItemInfo* banks, SoundPlayer* player);
 
         SoundArchive* soundArchive;
@@ -60,6 +60,8 @@ public:
     public:
         DataLoadTask();
         ~DataLoadTask() override;
+
+        void Initialize();
 
         bool TryAllocPlayerHeap();
 
@@ -131,9 +133,10 @@ public:
     constexpr static u32 AllTrackBitFlag = 0x0000FFFF;
 
     constexpr static s32 VariableDefaultValue = -1;
+    
     constexpr static s32 DefaultTimebase = 48;
     constexpr static s32 DefaultTempo = 120;
-    constexpr static u64 DefaultSkipIntervalTick = 0x300;
+    constexpr static u32 DefaultSkipIntervalTick = 16 * DefaultTimebase;
 
     struct ParserPlayerParam {
         u8 priority;
@@ -192,6 +195,9 @@ public:
     void Setup(const SetupArg& arg);
 
     void SetPlayerTrack(s32 trackNo, SequenceTrack* track);
+
+    void ForceTrackMute(u32);
+
     SequenceTrack* GetPlayerTrack(s32 trackNo);
 
     void Start() override;
@@ -208,7 +214,10 @@ public:
     void CallSequenceUserprocCallback(u16 procId, SequenceTrack* track);
 
     s16* GetVariablePtr(s32 varNo);
+
     void GetLocalVariable(s32 varNo) const;
+    static s16 GetGlobalVariable(s32 varNo);
+    
     void SetLocalVariable(s32 varNo, s16 var);
     static void SetGlobalVariable(s32 varNo, s16 var);
 
@@ -243,30 +252,31 @@ public:
 
     void Update();
 
+    bool TryAllocLoader();
+
     void PrepareForPlayerHeap(PrepareArg* arg);
 
     void SkipTick();
     void UpdateTick();
 
-    Channel* NoteOn(u8 bankIndex, NoteOnInfo* noteOnInfo);
+    Channel* NoteOn(u8 bankIndex, const NoteOnInfo& noteOnInfo);
 
-    void Prepare(PrepareArg* arg);
+    void Prepare(const PrepareArg& arg);
 
-    void RequestLoad(StartInfo* info, SequenceSoundLoader::Arg* arg);
+    void RequestLoad(const StartInfo& info, const SequenceSoundLoader::Arg& arg);
 
-    u64 GetProcessTick(SoundProfile&);
+    u64 GetProcessTick(const SoundProfile&);
 
     void PrepareForMidi(const void**, const void**, bool*);
 
-    bool TryAllocLoader();
+    static void SetSkipIntervalTick(s32);
+    static s32 GetSkipIntervalTick();
 
     void ChannelCallback(Channel* channel);
+    
     void OnUpdateFrameSoundThread() override;
     void OnUpdateFrameSoundThreadWithAudioFrameFrequency() override;
     void OnShutdownSoundThread() override;
-
-    static void SetSkipIntervalTick(s32);
-    static s32 GetSkipIntervalTick();
 
 private:
     bool m_ReleasePriorityFixFlag;
@@ -299,6 +309,10 @@ private:
     static s16 m_GlobalVariable[GlobalVariableCount];
     static s32 m_SkipIntervalTickPerFrame;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SequenceSoundPlayer) == 0x368);
+#else
+static_assert(sizeof(SequenceSoundPlayer) == 0x358);
+#endif
 } // namespace nn::atk::detail::driver
 } // namespace nn::atk

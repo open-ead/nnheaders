@@ -9,8 +9,15 @@ public:
 
     void Initialize(const void* streamSoundFile);
 
-    bool IsValidFileHeader(const void* streamSoundFile) const;
+    static bool IsValidFileHeader(const void* streamSoundFile);
+
+    void Finalize();
+
     bool IsTrackInfoAvailable() const;
+    bool IsOriginalLoopAvailable() const;
+
+    static bool IsOriginalLoopAvailableImpl(const StreamSoundFile::FileHeader* header);
+
     bool IsCrc32CheckAvailable() const;
     bool IsRegionIndexCheckAvailable() const;
 

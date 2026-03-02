@@ -3,6 +3,11 @@
 #include <nn/os.h>
 
 namespace nn::atk::detail::fnd {
+class Time {
+public:
+    s64 Current();
+};
+
 class TimeSpan {
 public:
     using TickType = s64;
@@ -19,9 +24,4 @@ private:
     TickType m_TickSpan;
 };
 static_assert(sizeof(TimeSpan) == 0x8);
-
-class Time {
-public:
-    s64 Current();
-};
 } // namespace nn::atk::detail::fnd

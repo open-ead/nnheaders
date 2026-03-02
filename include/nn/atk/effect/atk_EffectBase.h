@@ -1,11 +1,12 @@
 #pragma once
 
+#include <nn/util.h>
 #include <nn/util/util_IntrusiveList.h>
 #include <nn/audio/audio_AudioRendererTypes.h>
 #include <nn/audio/audio_FinalMixTypes.h>
 #include <nn/audio/audio_SubMixTypes.h>
 
-#include <nn/atk/util/atk_Global.h>
+#include <nn/atk/atk_Global.h>
 
 namespace nn::atk {
 class OutputMixer;
@@ -42,13 +43,21 @@ public:
     virtual void OnChangeOutputMode();
     virtual void SetEffectBuffer(void* effectBuffer, std::size_t effectBufferSize);
 
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     bool AddEffect(audio::AudioRendererConfig* pConfig, audio::FinalMixType* pFinalMixType);
     bool AddEffect(audio::AudioRendererConfig* pConfig, audio::SubMixType* pFinalMixType);
+#else
+    bool AddEffect(audio::AudioRendererConfig* pConfig, OutputMixer* pOutputMixer);
+#endif
 
     void SetEffectInputOutput(const s8* input, const s8* output, s32 inputCount, s32 outputCount);
 
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     void RemoveEffect(audio::AudioRendererConfig* pConfig, audio::FinalMixType* pFinalMixType);
     void RemoveEffect(audio::AudioRendererConfig* pConfig, audio::SubMixType* pSubMixType);
+#else
+    void RemoveEffect(audio::AudioRendererConfig* pConfig, OutputMixer* pOutputMixer);
+#endif
 
     static s32 ConvertChannelModeToInt(ChannelMode channelMode);
 

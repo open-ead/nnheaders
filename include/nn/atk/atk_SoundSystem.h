@@ -5,7 +5,7 @@
 #include <nn/audio/audio_MemoryPoolTypes.h>
 #include <vapours/results/results_common.hpp>
 
-#include <nn/atk/util/atk_Global.h>
+#include <nn/atk/atk_Global.h>
 #include <nn/atk/detail/dsp/atk_HardwareManager.h>
 #include <nn/atk/detail/thread/atk_ThreadInfoReader.h>
 #include <nn/atk/effect/atk_EffectAux.h>
@@ -17,6 +17,7 @@ namespace nn::atk {
 struct SoundSystem {
     static bool g_IsInitialized;
     static bool g_IsStreamLoadWait;
+    static bool g_IsEnterSleep;
     static bool g_IsInitializedDriverCommandManager;
     
     static uintptr_t g_LoadThreadStackPtr;
@@ -30,6 +31,9 @@ struct SoundSystem {
 
     static size_t g_SoundThreadCommandBufferSize;
     static size_t g_TaskThreadCommandBufferSize;
+    static size_t g_VoiceCommandBufferSize;
+
+    static uintptr_t g_MemoryPoolForSoundSystem;
 
     static s32 g_RendererSampleRate;
     static s32 g_CustomSubMixSubMixCount;
@@ -52,11 +56,15 @@ struct SoundSystem {
     static bool g_IsBusMixVolumeEnabled;
     static bool g_IsVolumeThroughModeEnabled;
 
+    constexpr static u32 VoiceCountMax = 96;
+    constexpr static u32 WorkMemoryAlignSize = 4;
+    constexpr static u32 VoiceCommandManagerCountMax = 2;
+    constexpr static u32 SoundThreadIntervalUsec = 5000;
+
     constexpr static s32 g_TaskThreadFsPriority = 1;
     constexpr static bool g_IsStreamOpenFailureHalt = true;
     constexpr static bool g_IsTaskThreadEnabled = true;
     constexpr static bool g_IsManagingMemoryPool = true;
-    constexpr static u32 g_VoiceCountMax = 96;
     constexpr static u32 g_UserEffectCount = 10;
     constexpr static bool g_IsSubMixEnabled = true;
     constexpr static bool g_IsPresetSubMixEnabled = true;
@@ -65,6 +73,18 @@ struct SoundSystem {
     constexpr static s32 g_BusCountMax = 4;
 
     struct SoundSystemParam {
+        constexpr static u32 DefaultSoundThreadPriority = 0;
+        constexpr static u32 DefaultTaskThreadPriority = 0;
+        constexpr static u32 DefaultSoundThreadStackSize = 0x4000;
+        constexpr static u32 DefaultTaskThreadStackSize = 0x4000;
+        constexpr static u32 DefaultSoundThreadCommandBufferSize = 0x20000;
+        constexpr static u32 DefaultTaskThreadCommandBufferSize = 0x2000;
+        constexpr static u32 DefaultUserEffectCount = 10;
+        constexpr static u32 DefaultVoiceCountMax = 96;
+        constexpr static u32 DefaultSoundThreadCoreNumber = 0;
+        constexpr static u32 DefaultTaskThreadCoreNumber = 0;
+        constexpr static u32 DefaultRecordingAudioFrameCount = 8;
+
         SoundSystemParam();
 
         s32 soundThreadPriority{4};

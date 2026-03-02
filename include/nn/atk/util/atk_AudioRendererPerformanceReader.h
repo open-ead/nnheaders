@@ -19,7 +19,7 @@ public:
     
     static size_t GetRequiredMemorySize(s32);
 
-    void Initialize(s32, void*, u64);
+    void Initialize(s32, void*, size_t);
     PerformanceInfo* ReadPerformanceInfo();
 
     void Record(const void* performanceFrameBuffer, size_t performanceFrameBufferSize, os::Tick tick);

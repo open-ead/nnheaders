@@ -5,7 +5,7 @@
 #include <nn/audio/audio_MemoryPoolTypes.h>
 #include <nn/audio/audio_SinkTypes.h>
 
-#include <nn/atk/detail/dsp/atk_BiquadFilterCallback.h>
+#include <nn/atk/atk_BiquadFilterCallback.h>
 #include <nn/atk/detail/voice/atk_LowLevelVoice.h>
 #include <nn/atk/submix/atk_FinalMix.h>
 #include <nn/atk/submix/atk_SubMix.h>
@@ -35,13 +35,12 @@ public:
     constexpr static u32 DefaultRendererSubMixCount = 1;
     constexpr static u32 DefaultRendererSinkCount = 1;
     constexpr static u32 DefaultRendererPerformanceFrameCount = 0;
-
     constexpr static u32 DefaultRendererSystemEffectCount = 4;
 
     constexpr static u32 SubMixCountMax = 2;
+
     constexpr static u32 SubMixCountForAdditionalEffect = 1;
     constexpr static u32 ChannelCountForAdditionalEffect = 2;
-
     constexpr static u32 AuxBusCountForAdditionalEffect = 2;
     constexpr static u32 MixBufferCountForAdditionalEffect = 6;
 

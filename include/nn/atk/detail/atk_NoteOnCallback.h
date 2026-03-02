@@ -14,10 +14,16 @@ struct NoteOnInfo {
     s32 priority;
     driver::Channel::ChannelCallback channelCallback;
     void* channelCallbackData;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* pOutputReceiver;
+#endif
     UpdateType updateType;
 };
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(NoteOnInfo) == 0x38);
+#else
+static_assert(sizeof(NoteOnInfo) == 0x30);
+#endif
 
 class NoteOnCallback {
 public:
