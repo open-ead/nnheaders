@@ -1,13 +1,14 @@
 #pragma once
 
 #include <atomic>
+
 #include <nn/os.h>
 #include <nn/os/os_MessageQueue.h>
 #include <nn/util/util_BytePtr.h>
 
-#include <nn/atk/atk_Global.h>
 #include <nn/atk/detail/atk_WavOutFileStream.h>
 #include <nn/atk/fnd/os/atkfnd_Thread.h>
+#include <nn/atk/util/atk_Global.h>
 
 namespace nn::atk {
 class DeviceOutRecorder : detail::fnd::Thread::Handler {
@@ -142,5 +143,5 @@ private:
     util::BytePtr m_WorkBuffer;
     u32 m_WriteBlockPerSamples;
 };
-static_assert(sizeof(DeviceOutRecorder) == 0x310);;
+static_assert(sizeof(DeviceOutRecorder) == 0x310);
 } // namespace nn::atk

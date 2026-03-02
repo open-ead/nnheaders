@@ -2,7 +2,7 @@
 
 #include <nn/util.h>
 
-#include <nn/atk/atk_Global.h>
+#include <nn/atk/util/atk_Global.h>
 #include <nn/atk/detail/atk_BinaryFileFormat.h>
 
 namespace nn::atk {

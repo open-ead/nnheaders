@@ -8,7 +8,7 @@
 #include <nn/audio/audio_SubMixTypes.h>
 #include <nn/util/util_IntrusiveList.h>
 
-#include <nn/atk/atk_Global.h>
+#include <nn/atk/util/atk_Global.h>
 
 namespace nn::atk {
 class OutputMixer;

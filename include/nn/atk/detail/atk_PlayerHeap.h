@@ -28,7 +28,10 @@ public:
     PlayerHeap();
     ~PlayerHeap() override;
 
+    void Destroy();
+
     bool Create(void* startAddress, std::size_t size);
+    
     void Clear();
 
     void* Allocate(std::size_t size) override;

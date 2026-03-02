@@ -5,7 +5,7 @@
 #include <nn/audio/audio_MemoryPoolTypes.h>
 #include <nn/audio/audio_SinkTypes.h>
 
-#include <nn/atk/atk_BiquadFilterCallback.h>
+#include <nn/atk/detail/dsp/atk_BiquadFilterCallback.h>
 #include <nn/atk/detail/voice/atk_LowLevelVoice.h>
 #include <nn/atk/submix/atk_FinalMix.h>
 #include <nn/atk/submix/atk_SubMix.h>

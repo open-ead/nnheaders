@@ -17,22 +17,24 @@ public:
     void Initialize(s32 soundCount, void** pOutAllocatedAddr, const void* endAddr);
     void Finalize();
 
-    static std::size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo,
-                                             std::size_t alignmentSize);
-
+    static size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo,
+                                        size_t alignmentSize);
 
     s32 GetActiveCount() const;
     s32 GetFreeAdvancedWaveSoundCount() const;
 
-    void SetupUserParam(void** startAddr, std::size_t adjustSize);
+    void SetupUserParam(void** startAddr, size_t adjustSize);
     
     void Update();
 
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     AdvancedWaveSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, 
                                   s32 ambientPriority, BasicSound::AmbientInfo* ambientArgInfo);
+#else
     AdvancedWaveSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, 
                                   s32 ambientPriority, BasicSound::AmbientInfo* ambientArgInfo, 
                                   OutputReceiver* pOutputReceiver);
+#endif
 
     SoundStartable::StartResult PrepareImpl(const SoundArchive* pSoundArchive, 
                                             const SoundDataManager* pSoundDataManager, 
