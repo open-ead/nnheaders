@@ -1,7 +1,6 @@
 #pragma once
 
 #include <nn/os.h>
-#include <nn/types.h>
 #include <nn/util/util_IntrusiveList.h>
 
 #include <nn/atk/atk_SoundArchive.h>
