@@ -3,7 +3,7 @@
 #include "nn/types.h"
 
 namespace nn::util::neon {
-class MatrixRowMajor4x3fType;
+struct MatrixRowMajor4x3fType;
 }
 
 namespace nn::g3d {

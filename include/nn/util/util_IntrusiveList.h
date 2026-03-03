@@ -359,4 +359,5 @@ class IntrusiveListMemberNodeTraits {
         return reinterpret_cast<uintptr_t>(&(reinterpret_cast<T*>(0)->*Member));
     }
 };
+
 }  // namespace nn::util

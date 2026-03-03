@@ -9,10 +9,10 @@
 namespace nn {
 namespace vfx {
 
-struct Heap;
+class Heap;
 struct EmitterResource;
 struct EmitterSetResource;
-struct System;
+class System;
 
 namespace detail {
 struct BinaryData;

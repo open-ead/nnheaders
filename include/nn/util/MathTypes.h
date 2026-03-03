@@ -2,45 +2,65 @@
 
 #include <nn/types.h>
 
+namespace nn::util::neon {
+
+struct MatrixRowMajor4x3fType {
+    f32 m[4][3];
+};
+
+struct MatrixColumnMajor4x3fType {
+    f32 m[3][4];
+};
+
+struct MatrixRowMajor4x4fType {
+    f32 m[4][4];
+};
+
+struct MatrixColumnMajor4x4fType {
+    f32 m[4][4];
+};
+
+}  // namespace nn::util::neon
+
 namespace nn::util {
 
 typedef uint32_t AngleIndex;
 
 struct Float2 {
     union {
-        float v[2];
+        f32 v[2];
         struct {
-            float x;
-            float y;
+            f32 x;
+            f32 y;
         };
     };
 };
 
 struct Float3 {
     union {
-        float v[3];
+        f32 v[3];
         struct {
-            float x;
-            float y;
-            float z;
+            f32 x;
+            f32 y;
+            f32 z;
         };
     };
 };
 
 struct Float4 {
     union {
-        float v[4];
+        f32 v[4];
         struct {
-            float x;
-            float y;
-            float z;
-            float w;
+            f32 x;
+            f32 y;
+            f32 z;
+            f32 w;
         };
     };
 };
 
 struct FloatColumnMajor4x3 {
-    float m[3][4];
+    f32 m[3][4];
 };
 
 struct Unorm8x4 {
@@ -50,5 +70,10 @@ struct Unorm8x4 {
 };
 
 typedef Unorm8x4 Color4u8Type;
+
+typedef neon::MatrixRowMajor4x3fType Matrix4x3fType;
+typedef neon::MatrixRowMajor4x4fType Matrix4x4fType;
+typedef neon::MatrixColumnMajor4x3fType MatrixT4x3fType;
+typedef neon::MatrixColumnMajor4x4fType MatrixT4x4fType;
 
 }  // namespace nn::util
