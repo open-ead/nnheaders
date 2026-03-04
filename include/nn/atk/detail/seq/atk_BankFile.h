@@ -64,5 +64,24 @@ struct BankFile {
         Util::BitFlag optionParameter;
     };
     static_assert(sizeof(VelocityRegion) == 0x8);
+
+    struct RegionParameter {
+        u8 originalKey;
+        u8 padding1[3];
+        u8 volume;
+        u8 padding2[3];
+        u8 pan;
+        s8 surroundPan;
+        u8 padding3[2];
+        f32 pitch;
+        bool isIgnoreNoteOff;
+        u8 keyGroup;
+        u8 interpolationType;
+        u8 padding4[1];
+        u32 offset;
+        Util::Reference refToAdshrCurve;
+        AdshrCurve adshrCurve;
+    };
+    static_assert(sizeof(RegionParameter) == 0x28);
 };
 } // namespace nn::atk::detail
