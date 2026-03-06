@@ -10,24 +10,24 @@ public:
     constexpr static position_t InvalidPosition = -1;
 
     StreamCache();
-    StreamCache(Stream* sourceStream, void* buffer, std::size_t length);
+    StreamCache(Stream* sourceStream, void* buffer, size_t length);
 
-    void Initialize(Stream* sourceStream, void* buffer, std::size_t length);
+    void Initialize(Stream* sourceStream, void* buffer, size_t length);
     void Finalize();
 
-    std::size_t Read(void* buf, std::size_t length, FndResult* result, FsAccessLog* log, void* pFileStream);
+    size_t Read(void* buf, size_t length, FndResult* result, FsAccessLog* log, void* pFileStream);
     
     void FlushWriteCache();
     
-    std::size_t GetReadCacheHitLength(std::size_t) const;
+    size_t GetReadCacheHitLength(size_t) const;
 
     FndResult SyncStreamCurrentPosition(position_t position);
 
     void ClearCache();
 
-    std::size_t Write(const void* buf, std::size_t length, FndResult* result);
+    size_t Write(const void* buf, size_t length, FndResult* result);
 
-    std::size_t GetWritableCacheLength(std::size_t) const;
+    size_t GetWritableCacheLength(size_t) const;
 
     FndResult Seek(position_t offset, Stream::SeekOrigin origin);
 
@@ -37,9 +37,9 @@ private:
     Stream* m_Stream{};
     position_t m_CurrentPosition{0};
     void* m_CacheBuffer{};
-    std::size_t m_CacheBufferLength{0};
+    size_t m_CacheBufferLength{0};
     position_t m_CachePosition{-1};
-    std::size_t m_CachedLength{0};
+    size_t m_CachedLength{0};
     u8 m_CacheState{0};
     u8 m_Padding[3];
 };

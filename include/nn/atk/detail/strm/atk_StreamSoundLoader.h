@@ -43,16 +43,16 @@ struct StreamDataInfoDetail {
     s32 sampleRate;
     bool loopFlag;
     position_t loopStart;
-    std::size_t sampleCount;
+    size_t sampleCount;
     position_t originalLoopStart;
     position_t originalLoopEnd;
     bool isRevisionCheckEnabled;
     bool isRegionIndexCheckEnabled;
     u32 revisionValue;
-    std::size_t blockSampleCount;
-    std::size_t blockSize;
-    std::size_t lastBlockSize;
-    std::size_t lastBlockSampleCount;
+    size_t blockSampleCount;
+    size_t blockSize;
+    size_t lastBlockSize;
+    size_t lastBlockSampleCount;
     s32 channelCount;
     s32 trackCount;
     TrackDataInfo trackInfo[8];
@@ -62,10 +62,10 @@ static_assert(sizeof(StreamDataInfoDetail) == 0xd8);
 
 struct LoadDataParam {
     u32 blockIndex;
-    std::size_t samples;
+    size_t samples;
     position_t sampleBegin;
     position_t sampleOffset;
-    std::size_t sampleBytes;
+    size_t sampleBytes;
     bool adpcmContextEnable;
     AdpcmContextNotAligned adpcmContext[16];
     s32 loopCount;
@@ -151,12 +151,12 @@ public:
     static_assert(sizeof(AdpcmInfo) == 0xc0);
 
     struct BlockInfo {
-        std::size_t size;
-        std::size_t samples;
-        std::size_t startOffsetSamples;
-        std::size_t startOffsetSamplesAlign;
-        std::size_t startOffsetByte;
-        std::size_t copyByte;
+        size_t size;
+        size_t samples;
+        size_t startOffsetSamples;
+        size_t startOffsetSamplesAlign;
+        size_t startOffsetByte;
+        size_t copyByte;
 
     };
     static_assert(sizeof(BlockInfo) == 0x30);
@@ -210,14 +210,14 @@ public:
 
     void SetStreamSoundInfoForOpus(const IStreamDataDecoder::DataInfo& dataInfo);
 
-    void LoadData(void** bufferAddress, u32 bufferBlockIndex, std::size_t startOffsetSamples, 
-                  std::size_t prefetchOffsetSamples, TaskProfileLogger& logger);
+    void LoadData(void** bufferAddress, u32 bufferBlockIndex, size_t startOffsetSamples, 
+                  size_t prefetchOffsetSamples, TaskProfileLogger& logger);
     bool LoadData1(DriverCommandStreamSoundLoadData* command, void** bufferAddress, 
-                   u32 bufferBlockIndex, std::size_t startOffsetSamples, 
-                   std::size_t prefetchOffsetSamples, TaskProfileLogger& logger);
+                   u32 bufferBlockIndex, size_t startOffsetSamples, 
+                   size_t prefetchOffsetSamples, TaskProfileLogger& logger);
     bool LoadDataForOpus(DriverCommandStreamSoundLoadData* command, void** bufferAddress, 
-                         u32 bufferBlockIndex, std::size_t startOffsetSamples, 
-                         std::size_t prefetchOffsetSamples, TaskProfileLogger& logger);
+                         u32 bufferBlockIndex, size_t startOffsetSamples, 
+                         size_t prefetchOffsetSamples, TaskProfileLogger& logger);
 
     bool ApplyStartOffset(s64, s32*);
     
@@ -267,9 +267,9 @@ private:
     position_t m_LoopEnd;
     char m_FilePath[SoundArchive::FilePathMax];
     void* m_pExternalData;
-    std::size_t m_ExternalDataSize;
+    size_t m_ExternalDataSize;
     void* m_pCacheBuffer;
-    std::size_t m_CacheSize;
+    size_t m_CacheSize;
     u32 m_LoadingDataBlockIndex;
     u32 m_LastBlockIndex;
     u32 m_LoopStartBlockIndex;

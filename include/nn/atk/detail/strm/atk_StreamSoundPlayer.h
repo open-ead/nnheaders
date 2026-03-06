@@ -60,7 +60,7 @@ public:
 
     struct WaveBufferInfo {
         position_t sampleBegin;
-        std::size_t sampleLength;
+        size_t sampleLength;
         s32 loopCount;
     };
     static_assert(sizeof(WaveBufferInfo) == 0x18);
@@ -78,7 +78,7 @@ public:
         void* regionCallbackArg;
         char filePath[639];
         void* pExternalData;
-        std::size_t externalDataSize;
+        size_t externalDataSize;
         FileStreamHookParam fileStreamHookParam;
     };
     static_assert(sizeof(PrepareBaseArg) == 0x2d0);
@@ -86,7 +86,7 @@ public:
     struct PrepareArg {
         PrepareBaseArg baseArg;
         void* cacheBuffer;
-        std::size_t cacheSize;
+        size_t cacheSize;
     };
     static_assert(sizeof(PrepareArg) == 0x2e0);
 
@@ -131,7 +131,7 @@ public:
 
     struct PrefetchLoadDataParam : LoadDataParam {
         u32 prefetchBlockIndex;
-        std::size_t prefetchBlockBytes;
+        size_t prefetchBlockBytes;
     };
     static_assert(sizeof(PrefetchLoadDataParam) == 0xa8);
 
@@ -206,7 +206,7 @@ public:
     bool LoadStreamData(bool result, const LoadDataParam& loadDataParam, u16 assignNumber);
     bool LoadStreamData(bool result, const LoadDataParam& loadDataParam, u16 assignNumber, 
                         bool usePrefetchFlag, u32 currentPrefetchBlockIndex, 
-                        std::size_t currentPrefetchBlockBytes);
+                        size_t currentPrefetchBlockBytes);
 
     bool IsStoppedByLoadingDelay() const;
 

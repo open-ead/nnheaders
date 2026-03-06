@@ -92,9 +92,9 @@ public:
 
     LowLevelVoiceAllocator();
 
-    std::size_t GetRequiredMemSize(s32 voiceCount);
+    size_t GetRequiredMemSize(s32 voiceCount);
 
-    void Initialize(s32 voiceCount, void* mem, std::size_t memSize);
+    void Initialize(s32 voiceCount, void* mem, size_t memSize);
     void Finalize();
 
     void UpdateAllVoiceState(OutputMode outputMode);

@@ -45,7 +45,7 @@ struct TaskProfile {
         u64 m_EndTick;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
         position_t m_CacheStartPosition;
-        std::size_t m_CachedLength;
+        size_t m_CachedLength;
         position_t m_CacheCurrentPosition;
         detail::driver::StreamSoundPlayer* m_pPlayer;
 #endif
@@ -69,7 +69,7 @@ struct TaskProfile {
         s32 GetDecodedSampleCount() const;
 
         TimeSpan GetFsAccessTime();
-        std::size_t GetFsReadSize();
+        size_t GetFsReadSize();
 
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
         detail::driver::StreamSoundPlayer* GetStreamSoundPlayer() const;
@@ -89,12 +89,12 @@ struct TaskProfile {
         u64 m_EndTick;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
         position_t m_CacheStartPosition;
-        std::size_t m_CachedLength;
+        size_t m_CachedLength;
         position_t m_CacheCurrentPosition;
 #endif
         u64 m_DecodeTick;
         u64 m_FsAccessTick;
-        std::size_t m_FsReadSize;
+        size_t m_FsReadSize;
         s32 m_DecodedSampleCount;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
         detail::driver::StreamSoundPlayer* m_pPlayer;

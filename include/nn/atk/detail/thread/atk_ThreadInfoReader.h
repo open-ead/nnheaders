@@ -12,8 +12,8 @@ public:
 
 private:
     void* m_Buffer;
-    std::size_t m_BufferSize;
-    std::size_t m_WritePosition;
+    size_t m_BufferSize;
+    size_t m_WritePosition;
     std::atomic_ulong m_ReadPosition;
     std::atomic_int m_RecordFrameCount;
     std::atomic_bool m_IsAllocationFailed;

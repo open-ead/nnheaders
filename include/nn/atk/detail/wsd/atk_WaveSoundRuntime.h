@@ -12,13 +12,13 @@ public:
     bool Initialize(s32 soundCount, void** pOutAllocatedAddr, const void* endAddr);
     void Finalize();
 
-    static std::size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo, 
-                                             s32 alignment);
+    static size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo, 
+                                        s32 alignment);
 
     s32 GetActiveCount() const;
     s32 GetFreeWaveSoundCount() const;
 
-    void SetupUserParam(void** startAddr, std::size_t adjustSize);
+    void SetupUserParam(void** startAddr, size_t adjustSize);
 
     void Update();
     

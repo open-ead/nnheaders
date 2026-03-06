@@ -18,7 +18,7 @@ public:
 
     u64 GetCallbackCount() const;
 
-    void Dispose(const void* mem, std::size_t size);
+    void Dispose(const void* mem, size_t size);
 
 private:
     CallbackList m_CallbackList;

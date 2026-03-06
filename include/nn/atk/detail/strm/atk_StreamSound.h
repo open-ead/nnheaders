@@ -73,7 +73,7 @@ private:
     u8 m_Padding[1];
     u32 m_AvailableTrackBitFlag[2];
     void* m_pCacheBuffer;
-    std::size_t m_CacheSize;
+    size_t m_CacheSize;
     driver::StreamSoundPlayer m_PlayerInstance;
 };
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)

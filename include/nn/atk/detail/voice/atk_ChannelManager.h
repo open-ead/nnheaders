@@ -33,7 +33,7 @@ private:
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     InstancePool<OutputAdditionalParam>* m_pAdditionalParamPool;
     BufferPool* m_pAdditionalParamBufferPool;
-    std::size_t m_AdditionalParamBufferSizePerChannel;
+    size_t m_AdditionalParamBufferSizePerChannel;
     SoundInstanceConfig m_SoundInstanceConfig;
 #endif
 };

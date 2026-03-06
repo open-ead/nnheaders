@@ -83,7 +83,7 @@ public:
 
         char* name;
         void* stack;
-        std::size_t stackSize;
+        size_t stackSize;
         s32 idealCoreNumber;
         AffinityMask affinityMask;
         s32 priority;

@@ -13,7 +13,7 @@ public:
 
     void FreeTrack(SequenceTrack* track);
 
-    s32 Create(void* buffer, std::size_t size);
+    s32 Create(void* buffer, size_t size);
 
     void Destroy();
 
