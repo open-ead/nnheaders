@@ -54,7 +54,7 @@ class ProfileReader {
 public:
     ProfileReader();
 
-    std::size_t Read(SoundProfile*, s32);
+    size_t Read(SoundProfile*, s32);
 
     void Record(const SoundProfile& src);
 

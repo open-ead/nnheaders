@@ -67,12 +67,12 @@ public:
 
     ~SoundThread() override;
     
-    bool CreateSoundThread(s32 threadPriority, void* stackBase, std::size_t stackSize, 
+    bool CreateSoundThread(s32 threadPriority, void* stackBase, size_t stackSize, 
                            s32 idealCoreNumber, u32 affinityMask);
 
-    void Initialize(void* performanceFrameBuffer, std::size_t performanceFrameBufferSize, 
+    void Initialize(void* performanceFrameBuffer, size_t performanceFrameBufferSize, 
                     bool isProfilingEnabled);
-    void Initialize(void* performanceFrameBuffer, std::size_t performanceFrameBufferSize, 
+    void Initialize(void* performanceFrameBuffer, size_t performanceFrameBufferSize, 
                     bool isProfilingEnabled, bool isDetailSoundThreadProfilerEnabled,
                     bool isUserThreadRenderingEnabled);
 
@@ -142,7 +142,7 @@ private:
     os::Tick m_LastPerformanceFrameBegin;
     os::Tick m_LastPerformanceFrameEnd;
     void* m_pPerformanceFrameUpdateBuffer[3];
-    std::size_t m_PerformanceFrameUpdateBufferSize;
+    size_t m_PerformanceFrameUpdateBufferSize;
     s32 m_CurrentPerformanceFrameBufferIndex;
     bool m_IsProfilingEnabled;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)

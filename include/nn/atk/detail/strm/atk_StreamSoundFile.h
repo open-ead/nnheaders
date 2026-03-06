@@ -64,9 +64,10 @@ public:
     };
 
     struct TrackInfoTable {
-        Util::ReferenceTable table;
 
         TrackInfo* GetTrackInfo(u32 index) const;
+
+        Util::ReferenceTable table;
     };
 
     struct DspAdpcmChannelInfo {
@@ -76,26 +77,29 @@ public:
     static_assert(sizeof(DspAdpcmChannelInfo) == 0x2c);
 
     struct ChannelInfo {
-        Util::Reference toDetailChannelInfo;
         
         DspAdpcmChannelInfo* GetDspAdpcmChannelInfo() const;
+
+        Util::Reference toDetailChannelInfo;
     };
     static_assert(sizeof(ChannelInfo) == 0x8);
 
     struct ChannelInfoTable {
-        Util::ReferenceTable table;
     
         ChannelInfo* GetChannelInfo(u32 index) const;
+    
+        Util::ReferenceTable table;
     };
 
     struct InfoBlockBody {
-        Util::Reference toStreamSoundInfo;
-        Util::Reference toTrackInfoTable;
-        Util::Reference toChannelInfoTable;
 
         StreamSoundInfo* GetStreamSoundInfo() const;
         TrackInfoTable* GetTrackInfoTable() const;
         ChannelInfoTable* GetChannelInfoTable() const;
+
+        Util::Reference toStreamSoundInfo;
+        Util::Reference toTrackInfoTable;
+        Util::Reference toChannelInfoTable;
     };
     static_assert(sizeof(InfoBlockBody) == 0x18);
 

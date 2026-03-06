@@ -22,7 +22,7 @@ public:
         s32 channelCount;
         s32 sampleRate;
         s32 blockSampleCount;
-        std::size_t blockSize;
+        size_t blockSize;
     };
     static_assert(sizeof(DataInfo) == 0x18);
 
@@ -30,13 +30,13 @@ public:
         os::Tick decodeTick;
         s32 decodedSampleCount;
         os::Tick fsAccessTick;
-        std::size_t fsReadSize;
+        size_t fsReadSize;
     };
     static_assert(sizeof(DecodeProfile) == 0x20);
 
     struct CacheProfile {
         position_t cacheStartPosition;
-        std::size_t cachedLength;
+        size_t cachedLength;
         position_t cacheCurrentPosition;
         driver::StreamSoundPlayer* player; 
     };

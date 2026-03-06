@@ -5,9 +5,9 @@
 namespace nn::atk::detail {
 class PoolImpl {
 public:
-    s32 CreateImpl(void* buffer, std::size_t size, std::size_t objSize);
-    s32 CreateImpl(void* buffer, std::size_t size, std::size_t objSize, 
-                   std::size_t alignment);
+    s32 CreateImpl(void* buffer, size_t size, size_t objSize);
+    s32 CreateImpl(void* buffer, size_t size, size_t objSize, 
+                   size_t alignment);
 
     void DestroyImpl();
 
@@ -20,7 +20,7 @@ public:
 private:
     PoolImpl* m_pNext;
     void* m_pBuffer;
-    std::size_t m_BufferSize;
+    size_t m_BufferSize;
 };
 static_assert(sizeof(PoolImpl) == 0x18);
 

@@ -37,11 +37,11 @@ public:
     virtual void unk5() = 0;
     virtual void unk6() = 0;
     virtual void unk7() = 0;
-    virtual void UpdateBuffer(s32, void**, std::size_t, SampleFormat, s32, OutputMode);
+    virtual void UpdateBuffer(s32, void**, size_t, SampleFormat, s32, OutputMode);
     virtual void GetChannelIndex(ChannelIndex* pChannel, s32 channelCount) const;
     virtual s32 GetChannelSettingCountMax() const;
     virtual void OnChangeOutputMode();
-    virtual void SetEffectBuffer(void* effectBuffer, std::size_t effectBufferSize);
+    virtual void SetEffectBuffer(void* effectBuffer, size_t effectBufferSize);
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     bool AddEffect(audio::AudioRendererConfig* pConfig, audio::FinalMixType* pFinalMixType);
@@ -71,7 +71,7 @@ private:
     bool m_IsActive;
     SampleRate m_SampleRate;
     void* m_EffectBuffer;
-    std::size_t m_EffectBufferSize;
+    size_t m_EffectBufferSize;
 };
 static_assert(sizeof(EffectBase) == 0x30);
 } // namespace nn::atk

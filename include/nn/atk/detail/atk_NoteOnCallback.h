@@ -12,7 +12,7 @@ struct NoteOnInfo {
     s32 length;
     s32 initPan;
     s32 priority;
-    driver::Channel::ChannelCallback channelCallback;
+    Channel::ChannelCallback channelCallback;
     void* channelCallbackData;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* pOutputReceiver;

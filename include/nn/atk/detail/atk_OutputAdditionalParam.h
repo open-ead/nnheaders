@@ -11,9 +11,9 @@ using SendArray = ValueArray<f32>;
 
 class OutputAdditionalParam {
 public:
-    static std::size_t GetRequiredMemSize(const SoundInstanceConfig& config);
+    static size_t GetRequiredMemSize(const SoundInstanceConfig& config);
 
-    void Initialize(void* buffer, std::size_t bufferSize, const SoundInstanceConfig& config);
+    void Initialize(void* buffer, size_t bufferSize, const SoundInstanceConfig& config);
     void Finalize();
 
     void Reset();

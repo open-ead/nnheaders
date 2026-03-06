@@ -46,7 +46,7 @@ public:
         struct StreamSoundInfo {
             char* externalPath;
             void* pExternalData;
-            std::size_t externalDataSize;
+            size_t externalDataSize;
             StreamRegionCallback regionCallback;
             void* regionCallbackArg;
             void* prefetchData;

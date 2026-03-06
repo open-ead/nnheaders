@@ -44,7 +44,7 @@ public:
 
     void ResetChannelIndex();
 
-    std::size_t GetRequiredMemSize(const audio::AudioRendererParameter& parameter) const;
+    size_t GetRequiredMemSize(const audio::AudioRendererParameter& parameter) const;
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     bool AddEffect(audio::AudioRendererConfig* pConfig, 
@@ -60,7 +60,7 @@ public:
 #endif
 
     void SplitEffectBuffer(BufferSet* pBufferSet, void* effectBuffer, 
-                           std::size_t effectBufferSize);
+                           size_t effectBufferSize);
 
     void SetEffectInputOutput(const s8* input, const s8* output, s32 inputCount, s32 outputCount);
 
@@ -85,7 +85,7 @@ public:
     bool IsEnabled() const;
 
     void SetEnabled(bool isEnabled);
-    void SetEffectBuffer(void* effectBuffer, std::size_t effectBufferSize);
+    void SetEffectBuffer(void* effectBuffer, size_t effectBufferSize);
 
     void Update();
 
@@ -100,7 +100,7 @@ private:
     bool m_IsActive;
     bool m_IsEnabled;
     void* m_EffectBuffer;
-    std::size_t m_EffectBufferSize;
+    size_t m_EffectBufferSize;
     s32* m_AuxReadBuffer;
     ChannelIndex m_ChannelSetting[ChannelCountMax];
 };
