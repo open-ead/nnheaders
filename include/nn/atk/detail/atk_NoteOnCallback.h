@@ -19,10 +19,10 @@ struct NoteOnInfo {
 #endif
     UpdateType updateType;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(NoteOnInfo) == 0x38);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(NoteOnInfo) == 0x30);
+#else
+static_assert(sizeof(NoteOnInfo) == 0x38);
 #endif
 
 class NoteOnCallback {

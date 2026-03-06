@@ -60,9 +60,9 @@ private:
     u32 m_ChannelCount;
     driver::WaveSoundPlayer m_PlayerInstance;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(WaveSound) == 0x3e0);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(WaveSound) == 0x3b0);
+#else
+static_assert(sizeof(WaveSound) == 0x3e0);
 #endif
 } // namespace nn::atk::detail

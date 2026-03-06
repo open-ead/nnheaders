@@ -105,9 +105,9 @@ private:
     u8 m_Padding[1];
     driver::SequenceSoundPlayer m_PlayerInstance;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(SequenceSound) == 0x5a0);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SequenceSound) == 0x570);
+#else
+static_assert(sizeof(SequenceSound) == 0x5a0);
 #endif
 } // namespace nn::atk::detail

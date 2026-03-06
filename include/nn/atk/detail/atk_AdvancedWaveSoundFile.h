@@ -8,11 +8,12 @@ namespace nn::atk::detail {
 struct AdvancedWaveSoundFile {    
     struct WaveSoundTrack;
     struct InfoBlockBody {
-        u32 offsetToTrackTableReference;
-        BinaryTypes::Reference toTrackTable;
 
         BinaryTypes::ReferenceTable* GetTrackReferenceTable() const;
         WaveSoundTrack* GetWaveSoundTrack(s32 index) const;
+
+        u32 offsetToTrackTableReference;
+        BinaryTypes::Reference toTrackTable;
     };
     static_assert(sizeof(InfoBlockBody) == 0x8);
 
@@ -24,12 +25,13 @@ struct AdvancedWaveSoundFile {
 
     struct WaveSoundClip;
     struct WaveSoundTrack {
-        u32 offsetToCurveTableReference;
-        u32 offsetToClipTableReference;
-        BinaryTypes::Reference toClipTable;
 
         BinaryTypes::ReferenceTable* GetClipReferenceTable() const;
         WaveSoundClip* GetWaveSoundClip(s32 index) const;
+
+        u32 offsetToCurveTableReference;
+        u32 offsetToClipTableReference;
+        BinaryTypes::Reference toClipTable;
     };
 
     struct WaveSoundClip {

@@ -32,14 +32,14 @@ private:
     s32 m_ChannelCount;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     InstancePool<OutputAdditionalParam>* m_pAdditionalParamPool;
-#endif
     BufferPool* m_pAdditionalParamBufferPool;
     std::size_t m_AdditionalParamBufferSizePerChannel;
     SoundInstanceConfig m_SoundInstanceConfig;
+#endif
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(ChannelManager) == 0x50);
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(ChannelManager) == 0x30);
 #else
-static_assert(sizeof(ChannelManager) == 0x48);
+static_assert(sizeof(ChannelManager) == 0x50);
 #endif
 } // namespace nn::atk::detail::driver

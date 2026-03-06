@@ -71,6 +71,9 @@ public:
         s32 delayTime;
         s32 delayCount;
         UpdateType updateType;
+#if NN_SDK_VER < NN_MAKE_VER(4, 4 ,1)
+        u32 subMixIndex;
+#endif
         StreamRegionCallback regionCallback;
         void* regionCallbackArg;
         char filePath[639];
@@ -105,17 +108,24 @@ public:
         f32 pitch;
         u8 mainSend;
         u8 fxSend[3];
+#if NN_SDK_VER >= NN_MAKE_VER(4, 4 ,1)
         DecodeMode decodeMode;
+#endif
     };
+#if NN_SDK_VER < NN_MAKE_VER(4, 4 ,1)
+    static_assert(sizeof(SetupArg) == 0x98);
+#else
     static_assert(sizeof(SetupArg) == 0xa0);
+#endif
 
     struct PrefetchIndexInfo {
+        
+        void Initialize(const StreamDataInfoDetail& streamDataInfo);
+
         u32 lastBlockIndex;
         position_t loopStartInBlock;
         u32 loopStartBlockIndex;
         s32 loopBlockCount;
-
-        void Initialize(const StreamDataInfoDetail& streamDataInfo);
     };
     static_assert(sizeof(PrefetchIndexInfo) == 0x18);
 
@@ -278,7 +288,9 @@ private:
     bool m_IsStoppedByLoadingDelay;
     bool m_IsRegisterPlayerCallback;
     bool m_UseDelayCount;
+#if NN_SDK_VER >= NN_MAKE_VER(5, 3, 0)
     u8 m_Padding1[2];
+#endif
     s32 m_LoopCounter;
     s32 m_PlayingBlockLoopCounter;
     s32 m_PrepareCounter;
@@ -294,7 +306,9 @@ private:
     s32 m_DelayCount;
     u16 m_AssignNumber;
     u8 m_FileType;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 4 ,1)
     DecodeMode m_DecodeMode;
+#endif
     bool m_LoopFlag;
     u8 m_Padding2[2];
     StreamDataInfoDetail m_StreamDataInfo;
@@ -312,6 +326,9 @@ private:
     StreamChannel m_Channels[16];
     StreamTrack m_Tracks[8];
     UpdateType m_UpdateType;
+#if NN_SDK_VER < NN_MAKE_VER(4, 4 ,1)
+    u32 m_SubMixIndex;
+#endif
     WaveBufferInfo m_WaveBufferInfo[32];
     PrepareArg m_PrepareArg;
     bool m_IsSucceedPrepare;

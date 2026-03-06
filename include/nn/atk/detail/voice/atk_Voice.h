@@ -45,7 +45,9 @@ private:
     SampleFormat m_SampleFormat;
     u32 m_SampleRate;
     AdpcmParam m_AdpcmParam;
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    s32 m_SubMixIndex;
+#else
     OutputReceiver* m_pOutputReceiver;
 #endif
     u32 m_VoiceId;
@@ -56,10 +58,10 @@ private:
     WaveBuffer* m_WaveBufferListEnd;
     LowLevelVoice* m_pLowLevelVoice;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(Voice) == 0xe0);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(Voice) == 0xd8);
+#else
+static_assert(sizeof(Voice) == 0xe0);
 #endif
 
 class VirtualVoiceManager : Util::Singleton<VirtualVoiceManager> {

@@ -26,10 +26,19 @@ struct SoundProfile {
     u32 nwVoiceCount;
     u64 nwFrameProcessTick;
     TimeRange _additionalSubMixProcess;
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    TimeRange _voiceProcessTable[96];
+    audio::NodeId _voiceIdTable[96];
+#else
     TimeRange _voiceProcessTable[192];
     audio::NodeId _voiceIdTable[192];
+#endif
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(SoundProfile) == 0x818);
+#else
 static_assert(sizeof(SoundProfile) == 0xf98);
+#endif
 
 struct SoundThreadUpdateProfile {
     TimeRange soundThreadProcess;
@@ -56,6 +65,11 @@ private:
     s32 m_ProfileBufferRead;
     s32 m_ProfileBufferWrite;
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(ProfileReader) == 0x10318);
+#else
+static_assert(sizeof(ProfileReader) == 0x1f318);
+#endif
 
 using ProfileReaderList = util::IntrusiveList<ProfileReader, 
                             util::IntrusiveListMemberNodeTraits<ProfileReader, 

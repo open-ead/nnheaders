@@ -119,10 +119,10 @@ struct DriverCommandPlayerInit : Command {
 #endif
     bool* availableFlagPtr;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(DriverCommandPlayerInit) == 0x30);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(DriverCommandPlayerInit) == 0x28);
+#else
+static_assert(sizeof(DriverCommandPlayerInit) == 0x30);
 #endif
 
 struct DriverCommandPlayerPanParam : Command {
@@ -343,14 +343,21 @@ struct DriverCommandAdvancedWaveSoundPrepare : Command {
     driver::AdvancedWaveSoundPlayer* player;
     driver::AdvancedWaveSoundPlayer::PrepareParameter parameter;
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(DriverCommandAdvancedWaveSoundPrepare) == 0x40);
+#else
 static_assert(sizeof(DriverCommandAdvancedWaveSoundPrepare) == 0x38);
+#endif
 
 struct DriverCommandStreamSoundSetup : Command {
     driver::StreamSoundPlayer* player;
     driver::StreamSoundPlayer::SetupArg arg;
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(DriverCommandStreamSoundSetup) == 0xb8);
+#else
 static_assert(sizeof(DriverCommandStreamSoundSetup) == 0xc0);
-
+#endif
 struct DriverCommandStreamSoundPrepare : Command {
     driver::StreamSoundPlayer* player;
     driver::StreamSoundPlayer::PrepareArg arg;
@@ -443,10 +450,10 @@ struct DriverCommandSubMixApplyDestination : Command {
     OutputReceiver* pReceiver;
 #endif
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(DriverCommandSubMixApplyDestination) == 0x20);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(DriverCommandSubMixApplyDestination) == 0x18);
+#else
+static_assert(sizeof(DriverCommandSubMixApplyDestination) == 0x20);
 #endif
 
 struct DriverCommandSubMixUpdateMixVolume : Command {
@@ -458,10 +465,10 @@ struct DriverCommandSubMixUpdateMixVolume : Command {
     s32 dstBus;
     s32 dstChannel;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(DriverCommandSubMixUpdateMixVolume) == 0x30);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(DriverCommandSubMixUpdateMixVolume) == 0x28);
+#else
+static_assert(sizeof(DriverCommandSubMixUpdateMixVolume) == 0x30);
 #endif
 
 struct DriverCommandAuxBusVolume : Command {

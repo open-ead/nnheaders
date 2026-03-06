@@ -32,7 +32,9 @@ public:
         position_t current;
         position_t begin;
         position_t end;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
         bool isEnabled;
+#endif
     };
 
     void Initialize();
@@ -63,12 +65,20 @@ private:
     StreamRegionCallback m_StreamRegionCallbackFunc;
     void* m_StreamRegionCallbackArg;
     s32 m_CurrentRegionNo;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     char* m_pCurrentRegionName;
+#endif
     Region m_CurrentRegion;
     position_t m_AdpcmContextForStartOffsetFrame;
     AdpcmContext m_AdpcmContextForStartOffset[16];
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     char m_CurrentRegionName[64];
+#endif
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(RegionManager) == 0x440);
+#else
 static_assert(sizeof(RegionManager) == 0x4c0);
+#endif
 } // namespace nn::atk::detail
 } // namespace nn::atk

@@ -354,5 +354,7 @@ public:
         Util::BitFlag optionParameter;
     };
     static_assert(sizeof(FileInfo) == 0xc);
+
+    struct FileBlock {};
 };
 } // namespace nn::atk::detail

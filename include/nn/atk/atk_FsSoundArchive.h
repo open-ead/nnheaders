@@ -49,5 +49,9 @@ private:
     char m_SoundArchiveFullPath[SoundArchive::FilePathMax];
     detail::fnd::CriticalSection m_FileOpenCloseLock;
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(FsSoundArchive) == 0x618);
+#else
 static_assert(sizeof(FsSoundArchive) == 0x610);
+#endif
 } // namespace nn::atk
