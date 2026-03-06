@@ -64,9 +64,12 @@ public:
     void* GetAttachedGroupTable(u32) const; // unknown return type
 
 private:
-    detail::SoundArchiveFile::FileHeader m_pHeader;
+    detail::SoundArchiveFile::FileHeader m_Header;
     detail::SoundArchiveFile::StringBlockBody* m_pStringBlockBody;
     detail::SoundArchiveFile::InfoBlockBody* m_pInfoBlockBody;
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    detail::SoundArchiveFile::FileBlock* m_pFileBlock;
+#endif
 };
 
 struct SoundArchiveFilesHook {

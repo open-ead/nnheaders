@@ -44,5 +44,9 @@ private:
     driver::WaveSoundLoaderManager m_WaveSoundLoaderManager;
     SoundArchiveFilesHook* m_pSoundArchiveFilesHook;
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(WaveSoundRuntime) == 0x80);
+#else
 static_assert(sizeof(WaveSoundRuntime) == 0x88);
+#endif
 }  // namespace nn::atk::detail

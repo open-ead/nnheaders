@@ -15,10 +15,10 @@ struct VoiceCommandPlay : Command {
     OutputReceiver* pOutputReceiver;
 #endif
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(VoiceCommandPlay) == 0x50);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(VoiceCommandPlay) == 0x48);
+#else
+static_assert(sizeof(VoiceCommandPlay) == 0x50);
 #endif
 
 struct VoiceCommandPause : Command {

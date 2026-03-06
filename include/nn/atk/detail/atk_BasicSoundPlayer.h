@@ -8,6 +8,7 @@
 
 namespace nn::atk::detail::driver {
 struct PlayerParamSet {
+    
     void Initialize();
 
     f32 volume;
@@ -20,6 +21,7 @@ struct PlayerParamSet {
     u32 outputLineFlag;
     OutputParam tvParam;
 };
+static_assert(sizeof(PlayerParamSet) == 0x70);
 
 class BasicSoundPlayer {
 public:
@@ -53,9 +55,9 @@ private:
 #endif
     PlayerHeapDataManager* m_pPlayerHeapDataManager;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(BasicSoundPlayer) == 0xc0);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(BasicSoundPlayer) == 0xb0);
+#else
+static_assert(sizeof(BasicSoundPlayer) == 0xc0);
 #endif
 } //namespace nn::atk::detail::driver

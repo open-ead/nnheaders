@@ -50,11 +50,18 @@ public:
 
 private:
     TaskList m_TaskList[PriorityCount];
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    Task* m_ActiveTask;
+#endif
     bool m_IsWaitTaskCancel;
     fnd::CriticalSection m_CriticalSection;
     os::MessageQueue m_BlockingQueue;
     std::uintptr_t m_MsgBuffer[ThreadMessageBufferSize];
     TaskProfileLogger m_TaskProfileLogger;
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(TaskManager) == 0x1e0);
+#else
 static_assert(sizeof(TaskManager) == 0x1d8);
+#endif
 } // namespace nn::atk::detail

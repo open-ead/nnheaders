@@ -28,9 +28,9 @@ private:
     OutputReceiver* m_pOutputReceiver;
 #endif
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(StartInfoReader) == 0x58);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(StartInfoReader) == 0x50);
+#else
+static_assert(sizeof(StartInfoReader) == 0x58);
 #endif
 } // namespace nn::atk::detail

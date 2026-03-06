@@ -156,10 +156,10 @@ struct SoundActorParam {
     f32 biquadFilterValue;
 #endif
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(SoundActorParam) == 0x1c);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SoundActorParam) == 0x14);
+#else
+static_assert(sizeof(SoundActorParam) == 0x1c);
 #endif
 
 class BasicSound {
@@ -441,10 +441,10 @@ private:
 
     static s32 g_LastInstanceId;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(BasicSound) == 0x210);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(BasicSound) == 0x1f0);
+#else
+static_assert(sizeof(BasicSound) == 0x210);
 #endif
 }  // namespace detail
 }  // namespace nn::atk

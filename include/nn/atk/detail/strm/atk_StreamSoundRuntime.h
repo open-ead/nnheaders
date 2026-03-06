@@ -67,5 +67,9 @@ private:
     SoundArchiveFilesHook* m_pSoundArchiveFilesHook;
     s32 m_StreamBlockCount;
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(StreamSoundRuntime) == 0xb0);
+#else
 static_assert(sizeof(StreamSoundRuntime) == 0xb8);
+#endif
 }  // namespace nn::atk::detail

@@ -93,7 +93,7 @@ public:
     void CallChannelCallback(ChannelCallbackStatus status);
 
     static Channel* AllocChannel(s32 voiceChannelCount, s32 priority, 
-                          ChannelCallback callback, void* callbackData);
+                                 ChannelCallback callback, void* callbackData);
 
     void FreeChannel();
     void DetachChannel();
@@ -118,7 +118,7 @@ private:
     f32 m_UserLpfFreq;
     f32 m_BiquadValue;
     u32 m_OutputLineFlag;
-    detail::OutputParam m_TvParam;
+    OutputParam m_TvParam;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     detail::OutputAdditionalParam* m_pTvAdditionalParam;
 #endif
@@ -129,7 +129,7 @@ private:
     f32 m_InitPan;
     f32 m_InitSurroundPan;
     f32 m_Tune;
-    detail::MoveValue<u8, u16> m_SilenceVolume;
+    MoveValue<u8, u16> m_SilenceVolume;
     f32 m_Cent;
     f32 m_CentPitch;
     s32 m_Length;

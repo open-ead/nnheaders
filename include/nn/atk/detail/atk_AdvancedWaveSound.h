@@ -43,9 +43,9 @@ private:
     bool m_IsInitialized;
     u8 m_Padding[3];
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(AdvancedWaveSound) == 0x9b0);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(AdvancedWaveSound) == 0x980);
+#else
+static_assert(sizeof(AdvancedWaveSound) == 0x9b0);
 #endif
 } // namespace nn::atk::detail
