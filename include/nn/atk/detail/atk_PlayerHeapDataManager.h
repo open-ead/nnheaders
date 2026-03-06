@@ -31,7 +31,7 @@ public:
     void* GetFileAddressImpl(SoundArchive::FileId fileId) const override;
 
 private:
-    FileAddress m_FileAddress[9];
+    FileAddress m_FileAddress[FileAddressCount];
     bool m_IsInitialized;
     bool m_IsFinalized;
 };

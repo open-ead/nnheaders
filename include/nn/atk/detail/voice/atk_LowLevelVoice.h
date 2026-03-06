@@ -73,7 +73,9 @@ private:
     u32 m_SampleRate;
     SampleFormat m_SampleFormat;
     position_t m_PlayPosition;
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    void* _c0; // 0xc0
+#else
     OutputReceiver* m_pOutputReceiver;
 #endif
     WaveBuffer* m_WaveBufferListBegin;

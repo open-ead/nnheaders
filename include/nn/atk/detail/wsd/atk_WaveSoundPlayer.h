@@ -120,11 +120,16 @@ private:
     s32 m_DelayCount;
     s32 m_Release;
     s32 m_WaveSoundParameterFlag;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     bool m_IsContextCalculationSkipMode;
+#endif
     CurveLfoParam m_LfoParam;
     WaveSoundInfo m_WaveSoundInfo;
     Channel* m_pChannel;
     UpdateType m_UpdateType;
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    u32 m_SubMixIndex;
+#endif
     u8 m_ResState;
     bool m_IsInitialized;
     bool m_IsRegisterPlayerCallback;
@@ -133,10 +138,10 @@ private:
     WaveSoundLoader* m_pLoader;
     WaveSoundLoader::Arg m_LoaderArg;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(WaveSoundPlayer) == 0x1a0);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(WaveSoundPlayer) == 0x190);
+#else
+static_assert(sizeof(WaveSoundPlayer) == 0x1a0);
 #endif
 } // namespace nn::atk::detail::driver
 } // namespace nn::atk::detail

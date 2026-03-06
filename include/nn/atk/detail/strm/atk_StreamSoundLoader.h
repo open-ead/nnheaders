@@ -283,16 +283,24 @@ private:
     StreamCloseTask m_StreamCloseTask;
     StreamDataLoadTaskList m_StreamDataLoadTaskList;
     InstancePool<StreamDataLoadTask> m_StreamDataLoadTaskPool;
-    u8 m_StreamDataLoadTaskArea[7936];
+    u8 m_StreamDataLoadTaskArea[0x1f00];
     SampleFormat m_SampleFormat;
     AdpcmInfo m_AdpcmInfo[16];
     u32 m_FileStreamBuffer[128];
     IStreamDataDecoder* m_pStreamDataDecoder; 
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    static IStreamDataDecoderManager* g_pStreamDataDecoderManager;
+#else
     IStreamDataDecoderManager* m_pStreamDataDecoderManager;
+#endif
     util::IntrusiveListNode m_LinkForLoaderManager;
 
     static u8 g_LoadBuffer[LoadBufferSize];
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(StreamSoundLoader) == 0x35c0);
+#else
 static_assert(sizeof(StreamSoundLoader) == 0x3640);
+#endif
 } // namespace nn::atk::detail::driver
 } // namespace nn::atk::detail

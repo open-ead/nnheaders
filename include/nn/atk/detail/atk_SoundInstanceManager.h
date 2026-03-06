@@ -26,7 +26,9 @@ public:
 private:
     void* m_pBuffer;
     std::size_t m_BufferSize;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     SoundInstanceConfig m_SoundInstanceConfig;
+#endif
     PriorityList m_PriorityList;
     PriorityList m_FreeList;
 };

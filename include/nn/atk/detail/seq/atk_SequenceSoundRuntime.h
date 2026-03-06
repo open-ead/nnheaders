@@ -112,5 +112,9 @@ private:
     SoundArchiveManager* m_pSoundArchiveManager;
     SoundArchiveFilesHook* m_pSoundArchiveFilesHook; 
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(SequenceSoundRuntime) == 0xe0);
+#else
 static_assert(sizeof(SequenceSoundRuntime) == 0xe8);
+#endif
 }  // namespace nn::atk::detail

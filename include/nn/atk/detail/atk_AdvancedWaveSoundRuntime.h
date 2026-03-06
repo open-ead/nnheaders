@@ -14,7 +14,7 @@ public:
     AdvancedWaveSoundRuntime();
     ~AdvancedWaveSoundRuntime();
 
-    void Initialize(s32 soundCount, void** pOutAllocatedAddr, const void* endAddr);
+    bool Initialize(s32 soundCount, void** pOutAllocatedAddr, const void* endAddr);
     void Finalize();
 
     static size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo,
@@ -48,5 +48,9 @@ public:
 private:
     AdvancedWaveSoundInstanceManager m_InstanceManager;
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(AdvancedWaveSoundRuntime) == 0x30);
+#else
 static_assert(sizeof(AdvancedWaveSoundRuntime) == 0x38);
+#endif
 }  // namespace nn::atk::detail

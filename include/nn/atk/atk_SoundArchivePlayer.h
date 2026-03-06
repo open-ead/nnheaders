@@ -205,12 +205,12 @@ private:
     bool m_IsAdvancedWaveSoundEnabled;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* m_pDefaultOutputReceiver;
-#endif
     u8 m_Padding[1];
+#endif
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(SoundArchivePlayer) == 0x310);
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(SoundArchivePlayer) == 0x2e0);
 #else
-static_assert(sizeof(SoundArchivePlayer) == 0x300);
+static_assert(sizeof(SoundArchivePlayer) == 0x310);
 #endif
 }  // namespace nn::atk

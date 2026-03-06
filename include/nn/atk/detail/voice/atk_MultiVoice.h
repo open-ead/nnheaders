@@ -190,9 +190,9 @@ private:
 #endif
     util::IntrusiveListNode m_LinkNode;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(MultiVoice) == 0x298);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(MultiVoice) == 0x270);
+#else
+static_assert(sizeof(MultiVoice) == 0x298);
 #endif
 } // namespace nn::atk::detail

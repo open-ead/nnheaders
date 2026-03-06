@@ -145,16 +145,24 @@ private:
     std::size_t m_PerformanceFrameUpdateBufferSize;
     s32 m_CurrentPerformanceFrameBufferIndex;
     bool m_IsProfilingEnabled;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     ProfileFunc m_pSoundThreadProfileFunc;
     bool m_IsUserThreadRenderingEnabled;
+#endif
     ProfileReaderList m_ProfileReaderList;
     AudioRendererPerformanceReader* m_pAudioRendererPerformanceReader;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     SoundThreadInfoRecorderList m_InfoRecorderList;
     fnd::CriticalSection m_LockRecordInfo;
+#endif
     SoundThreadUpdateProfile m_LastUpdateProfile;
     SoundThreadUpdateProfileReaderList m_UpdateProfileReaderList;
     fnd::CriticalSection m_LockUpdateProfile;
     std::atomic_int m_RendererEventWaitTimeMilliSeconds;
 };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+static_assert(sizeof(SoundThread) == 0x4c8);
+#else
 static_assert(sizeof(SoundThread) == 0x508);
+#endif
 } // namespace nn::atk::detail::driver

@@ -34,10 +34,17 @@ public:
     struct PrepareParameter {
         SoundArchive::AdvancedWaveSoundInfo advancedWaveSoundInfo;
         UpdateType updateType;
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+        s32 subMixIndex;
+#endif
         void* pAwsdFile;
         void* pWarcFile;
     };
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    static_assert(sizeof(PrepareParameter) == 0x20);
+#else
     static_assert(sizeof(PrepareParameter) == 0x18);
+#endif
 
     AdvancedWaveSoundPlayer();
     ~AdvancedWaveSoundPlayer() override;
@@ -84,14 +91,17 @@ private:
     void* m_pAwsdFile;
     void* m_pWarcFile;
     UpdateType m_UpdateType;
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    s32 m_SubMixIndex;
+#endif
     u32 m_CurrentTime;
     bool m_IsPrepared;
     bool m_IsInitialized;
     bool m_IsRegisterPlayerCallback;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(AdvancedWaveSoundPlayer) == 0x778);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(AdvancedWaveSoundPlayer) == 0x768);
+#else
+static_assert(sizeof(AdvancedWaveSoundPlayer) == 0x778);
 #endif
 } // namespace nn::atk::detail::driver

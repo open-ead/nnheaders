@@ -9,6 +9,7 @@ struct WaveArchiveFile {
     struct InfoBlock;
     struct FileBlock;
     struct FileHeader : BinaryFileHeader {
+        
         InfoBlock* GetInfoBlock() const;
         u32 GetInfoBlockOffset() const;
 

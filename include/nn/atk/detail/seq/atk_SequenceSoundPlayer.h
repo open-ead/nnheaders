@@ -89,8 +89,8 @@ public:
         Arg m_Arg;
         PlayerHeap* m_pPlayerHeap;
         PlayerHeapDataManager* m_pPlayerHeapDataManager;
-
     };
+    static_assert(sizeof(FreePlayerHeapTask) == 0xc0);
 
     ~SequenceSoundLoader();
 
@@ -309,10 +309,10 @@ private:
     static s16 m_GlobalVariable[GlobalVariableCount];
     static s32 m_SkipIntervalTickPerFrame;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(SequenceSoundPlayer) == 0x368);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SequenceSoundPlayer) == 0x358);
+#else
+static_assert(sizeof(SequenceSoundPlayer) == 0x368);
 #endif
 } // namespace nn::atk::detail::driver
 } // namespace nn::atk

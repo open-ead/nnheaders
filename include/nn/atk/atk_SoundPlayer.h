@@ -99,9 +99,9 @@ private:
 #endif
     bool m_IsFirstComeBased;
 };
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-static_assert(sizeof(SoundPlayer) == 0x88);
-#else
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SoundPlayer) == 0x78);
+#else
+static_assert(sizeof(SoundPlayer) == 0x88);
 #endif
 }  // namespace nn::atk
