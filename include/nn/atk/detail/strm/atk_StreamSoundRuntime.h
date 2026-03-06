@@ -13,35 +13,35 @@ public:
     ~StreamSoundRuntime();
 
     bool Initialize(s32 soundCount, void** pOutAllocatedAddr, const void* endAddr, 
-                    void* streamInstanceBuffer, std::size_t streamInstanceBufferSize);
+                    void* streamInstanceBuffer, size_t streamInstanceBufferSize);
     
-    static std::size_t GetRequiredStreamInstanceSize(s32 soundCount);
+    static size_t GetRequiredStreamInstanceSize(s32 soundCount);
 
     bool SetupStreamBuffer(const SoundArchive* pSoundArchive, void* strmBuffer, 
-                           std::size_t strmBufferSize);
+                           size_t strmBufferSize);
     bool SetupStreamBuffer(const SoundArchive* pSoundArchive, void* strmBuffer, 
-                           std::size_t strmBufferSize, driver::StreamBufferPool* strmBufferPool);
+                           size_t strmBufferSize, driver::StreamBufferPool* strmBufferPool);
 
-    std::size_t GetRequiredStreamBufferSize(const SoundArchive* soundArchive) const;
+    size_t GetRequiredStreamBufferSize(const SoundArchive* soundArchive) const;
     static u32 GetRequiredStreamBufferTimes(const SoundArchive* soundArchive);
 
     bool SetupStreamCacheBuffer(const SoundArchive* pSoundArchive, void* streamCacheBuffer, 
-                                std::size_t streamCacheSize);
+                                size_t streamCacheSize);
 
     void Finalize();
 
-    static std::size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo,
+    static size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo,
                                              s32 alignment);
 
-    static std::size_t GetRequiredStreamCacheSize(const SoundArchive* pSoundArchive, 
-                                                  std::size_t);
+    static size_t GetRequiredStreamCacheSize(const SoundArchive* pSoundArchive, 
+                                                  size_t);
 
     s32 GetActiveCount() const;
     s32 GetActiveChannelCount() const;
     s32 GetActiveTrackCount() const;
     s32 GetFreeCount() const;
 
-    void SetupUserParam(void** pOutAllocatedAddr, std::size_t adjustSize);
+    void SetupUserParam(void** pOutAllocatedAddr, size_t adjustSize);
 
     void Update();
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)

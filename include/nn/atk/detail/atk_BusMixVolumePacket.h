@@ -5,9 +5,9 @@
 namespace nn::atk::detail {
 class BusMixVolumePacket {
 public:
-    static std::size_t GetRequiredMemSize(s32 busCount);
+    static size_t GetRequiredMemSize(s32 busCount);
 
-    bool Initialize(void* buffer, std::size_t size, s32 busCount);
+    bool Initialize(void* buffer, size_t size, s32 busCount);
     void Finalize();
 
     void Reset();

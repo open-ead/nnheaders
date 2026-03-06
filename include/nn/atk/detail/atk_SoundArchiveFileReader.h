@@ -64,11 +64,11 @@ public:
     void* GetAttachedGroupTable(u32) const; // unknown return type
 
 private:
-    detail::SoundArchiveFile::FileHeader m_Header;
-    detail::SoundArchiveFile::StringBlockBody* m_pStringBlockBody;
-    detail::SoundArchiveFile::InfoBlockBody* m_pInfoBlockBody;
+    SoundArchiveFile::FileHeader m_Header;
+    SoundArchiveFile::StringBlockBody* m_pStringBlockBody;
+    SoundArchiveFile::InfoBlockBody* m_pInfoBlockBody;
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    detail::SoundArchiveFile::FileBlock* m_pFileBlock;
+    SoundArchiveFile::FileBlock* m_pFileBlock;
 #endif
 };
 

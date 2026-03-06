@@ -8,7 +8,7 @@ public:
     constexpr static u32 BlockMax = 32;
     constexpr static u8 BitPerByte = 8;
 
-    void Initialize(void* buffer, std::size_t size, s32 blockCount);
+    void Initialize(void* buffer, size_t size, s32 blockCount);
     void Finalize();
 
     void* Alloc();
@@ -16,8 +16,8 @@ public:
 
 private:
     void* m_Buffer;
-    std::size_t m_BufferSize;
-    std::size_t m_BlockSize;
+    size_t m_BufferSize;
+    size_t m_BlockSize;
     s32 m_BlockCount;
     s32 m_AllocCount;
     u8 m_AllocFlags[BlockMax / BitPerByte];

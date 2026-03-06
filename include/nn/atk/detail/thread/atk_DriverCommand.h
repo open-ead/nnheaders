@@ -418,7 +418,7 @@ static_assert(sizeof(DriverCommandStreamSoundTrackMixParameter) == 0x48);
 
 struct DriverCommandInvalidateData : Command {
     void* mem;
-    std::size_t size;
+    size_t size;
 };
 static_assert(sizeof(DriverCommandInvalidateData) == 0x28);
 
@@ -431,7 +431,7 @@ struct DriverCommandEffect : Command {
     s32 bus;
     EffectBase* effect;
     void* effectBuffer;
-    std::size_t effectBufferSize;
+    size_t effectBufferSize;
     OutputMixer* pOutputMixer;
 };
 static_assert(sizeof(DriverCommandEffect) == 0x40);
@@ -440,7 +440,7 @@ struct DriverCommandEffectAux : Command {
     s32 bus;
     EffectAux* effect;
     void* effectBuffer;
-    std::size_t effectBufferSize;
+    size_t effectBufferSize;
     OutputMixer* pOutputMixer;
 };
 static_assert(sizeof(DriverCommandEffectAux) == 0x40);

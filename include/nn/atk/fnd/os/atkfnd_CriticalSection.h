@@ -10,7 +10,7 @@ public:
     void unlock();
     
 private:
-    nn::os::Mutex m_Mutex;
+    os::Mutex m_Mutex;
 };
 static_assert(sizeof(CriticalSection) == 0x20);
 } // namespace nn::atk::detail::fnd

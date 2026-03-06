@@ -41,11 +41,11 @@ struct AudioRendererConfig {
     BehaviorManager* _pBehaviorManager;
     SplitterInfoManager* _pSplitterInfoManager;
     void* _pInParameter;
-    std::size_t _pInParameterSize;
+    size_t _pInParameterSize;
     void* _pOutStatus;
-    std::size_t _pOutStatusSize;
+    size_t _pOutStatusSize;
     void* _pConfigBuffer;
-    std::size_t _configBufferSize;
+    size_t _configBufferSize;
 };
 static_assert(sizeof(AudioRendererConfig) == 0x70);
 

@@ -10,7 +10,7 @@ public:
     PerformanceInfo();
     ~PerformanceInfo();
 
-    void SetBuffer(const void* buffer, std::size_t bufferSize);
+    void SetBuffer(const void* buffer, size_t bufferSize);
     void MoveToNextFrame();
 
     PerformanceEntry* GetEntries(s32*);
@@ -18,7 +18,7 @@ public:
 
 private:
     void* m_Buffer;
-    std::size_t m_BufferSize;
+    size_t m_BufferSize;
     PerformanceFrameHeader* m_Header;
     PerformanceEntry* m_Entries;
     PerformanceDetail* m_Details;

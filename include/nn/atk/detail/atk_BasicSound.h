@@ -205,7 +205,7 @@ public:
     static_assert(sizeof(AmbientInfo) == 0x28);
 
     struct CommonParam {
-        detail::MoveValue<f32, s32> volume;
+        MoveValue<f32, s32> volume;
         MixMode mixMode;
         f32 pan;
         f32 span;
@@ -433,7 +433,7 @@ private:
     OutputAdditionalParam* m_pOutputAdditionalParam;
 #endif
     void* m_pUserParam;
-    std::size_t m_UserParamSize;
+    size_t m_UserParamSize;
     SoundStopCallback m_SoundStopCallback;
     util::IntrusiveListNode m_SoundPlayerPlayLink;
     util::IntrusiveListNode m_SoundPlayerPriorityLink;

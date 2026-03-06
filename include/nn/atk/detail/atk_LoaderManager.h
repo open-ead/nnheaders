@@ -18,7 +18,7 @@ public:
 
 private:
     void* m_pBuffer;
-    std::size_t m_BufferSize;
+    size_t m_BufferSize;
     List m_FreeList;
     List m_FreeReqList;
 };

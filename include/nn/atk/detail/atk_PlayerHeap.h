@@ -30,16 +30,16 @@ public:
 
     void Destroy();
 
-    bool Create(void* startAddress, std::size_t size);
+    bool Create(void* startAddress, size_t size);
     
     void Clear();
 
-    void* Allocate(std::size_t size) override;
-    void* Allocate(std::size_t size, 
-                   SoundMemoryAllocatable::DisposeCallback callback, void* callbackArg) override;
+    void* Allocate(size_t size) override;
+    void* Allocate(size_t size, SoundMemoryAllocatable::DisposeCallback callback, 
+                   void* callbackArg) override;
 
-    std::size_t GetAllocateSize(std::size_t size, bool needMemoryPool) override;
-    std::size_t GetFreeSize() const;
+    size_t GetAllocateSize(size_t size, bool needMemoryPool) override;
+    size_t GetFreeSize() const;
 
 private:
     friend SoundPlayer;
