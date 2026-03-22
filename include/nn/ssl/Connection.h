@@ -1,12 +1,11 @@
 #pragma once
 
-#include <nn/ssl/sf/ISslConnection.h>
 #include <nn/types.h>
 
 namespace nn::ssl {
 struct Context;
 
-struct Connection : sf::ISslConnection {
+class Connection {
 public:
     enum class VerifyOption {
         PeerCa = 1 << 0,
@@ -62,8 +61,8 @@ public:
     Result GetServerCertDetail(ServerCertDetail*, const char*, u32);
     Result Read(char* outBuffer, u32 maxBufferSize);
     Result Read(char* outBuffer, s32* outBufferSize, u32 maxBufferSize);
-    Result Write(const char* outBuffer, u32 maxBufferSize);
-    Result Write(const char* outBuffer, s32* outBufferSize, u32 maxBufferSize);
+    Result Write(const char* buffer, u32 maxBufferSize);
+    Result Write(const char* buffer, s32* outWrittenBufferSize, u32 maxBufferSize);
     Result Pending();
     Result Pending(s32*);
     Result Peek(char* outBuffer, s32* outBufferSize, u32 maxBufferSize);
@@ -78,11 +77,11 @@ public:
     Result GetOption(bool* outValue, OptionType option);
 
 private:
-    u64 connectionId;
-    u64 contextId;
+    u64 mConnectionId;
+    u64 mContextId;
     unsigned char _10[8];
-    const char* serverCertificateBuffer;
-    u32 serverCertificateBufferSize;
+    const char* mServerCertificateBuffer;
+    u32 mServerCertificateBufferSize;
     Result _24;
 };
 }  // namespace nn::ssl

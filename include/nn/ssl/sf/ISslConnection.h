@@ -1,9 +1,6 @@
 #pragma once
 
-namespace nn::sf {
-// TODO: stubbed for now
-class IServiceObject {};
-}  // namespace nn::sf
+#include <nn/sf/IServiceObject.h>
 
 namespace nn::ssl::sf {
 class ISslConnection : public nn::sf::IServiceObject {};

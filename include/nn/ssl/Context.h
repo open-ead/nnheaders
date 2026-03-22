@@ -1,12 +1,11 @@
 #pragma once
 
 #include <nn/ssl.h>
-#include <nn/ssl/sf/ISslContext.h>
 #include <nn/types.h>
 
 namespace nn::ssl {
 // TODO: find the size of this struct
-struct Context : sf::ISslContext {
+class Context {
 public:
     enum class SslVersion {
         Auto = 0x01,
@@ -28,7 +27,7 @@ public:
     Result Destroy();
     Result SetOption(ContextOption option, s32 value);
     Result GetOption(s32* outValue, ContextOption option);
-    Result GetContextId(s64* outId);
+    Result GetContextId(u64* outId);
     Result ImportServerPki(u64* outId, const char* certificateBuffer, u32 certificateBufferSize,
                            CertificateFormat certificateFormat);
     Result ImportClientPki(u64* outId, const char* certificateBuffer,
@@ -41,11 +40,11 @@ public:
                      u32 certificateRevocationListBufferSize);
 
 private:
-    unsigned char padding[8];
+    u64 mContextId;
 };
 
 // TODO: I'm pretty sure there is inheritance between ContextPrivate and Context
-struct ContextPrivate {
+class ContextPrivate {
 public:
     enum class SslVersion {
         // TODO
