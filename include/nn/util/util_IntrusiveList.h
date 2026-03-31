@@ -72,6 +72,7 @@ public:
         typedef difference_type difference_type;
         typedef value_type* pointer;
         typedef value_type& reference;
+        typedef std::bidirectional_iterator_tag iterator_category;
 
         const_iterator(pointer p) : m_Node(p) {}
 
@@ -92,8 +93,10 @@ public:
     class iterator {
     public:
         typedef value_type value_type;
+        typedef difference_type difference_type;
         typedef value_type* pointer;
         typedef value_type& reference;
+        typedef std::bidirectional_iterator_tag iterator_category;
 
         iterator(pointer p) : m_Node(p) {}
 
@@ -197,12 +200,15 @@ public:
     typedef std::reverse_iterator<iterator> reverse_iterator;
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
     typedef int size_type;
+    typedef int difference_type;
 
     class const_iterator {
     public:
         typedef T value_type;
+        typedef difference_type difference_type;
         typedef value_type* pointer;
         typedef value_type& reference;
+        typedef std::bidirectional_iterator_tag iterator_category;
 
         reference operator*() const;
         pointer operator->() const;
@@ -228,8 +234,10 @@ public:
     class iterator {
     public:
         typedef T value_type;
+        typedef difference_type difference_type;
         typedef value_type* pointer;
         typedef value_type& reference;
+        typedef std::bidirectional_iterator_tag iterator_category;
 
         operator const_iterator() const {
             return static_cast<detail::IntrusiveListImplementation::const_iterator>(m_Iterator);
