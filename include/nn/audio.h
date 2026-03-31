@@ -6,149 +6,28 @@
 #pragma once
 
 #include <nn/os.h>
-#include <nn/types.h>
+
+#include <nn/audio/audio_Adpcm.h>
+#include <nn/audio/audio_AudioRendererTypes.h>
+#include <nn/audio/audio_Common.h>
+#include <nn/audio/audio_EffectTypes.h>
+#include <nn/audio/audio_FinalMixTypes.h>
+#include <nn/audio/audio_MemoryPoolTypes.h>
+#include <nn/audio/audio_PerformanceMetrics.h>
+#include <nn/audio/audio_PerformanceMetricsTypes.h>
+#include <nn/audio/audio_SampleFormat.h>
+#include <nn/audio/audio_SinkTypes.h>
+#include <nn/audio/audio_SubMixTypes.h>
+#include <nn/audio/audio_VoiceTypes.h>
+#include <nn/audio/audio_WaveBuffer.h>
 
 namespace nn {
 namespace audio {
 // Common audio
-struct AudioDeviceName {
-    char raw_name[0x100];
-};
-
-static_assert(sizeof(AudioDeviceName) == 0x100);
-
 void AcquireAudioDeviceSwitchNotification(nn::os::SystemEvent* event);
 s32 ListAudioDeviceName(nn::audio::AudioDeviceName* buffer, s32 bufferCount);
 Result SetAudioDeviceOutputVolume(nn::audio::AudioDeviceName const* device, float volume);
 u32 GetActiveChannelCount();
-
-struct AudioRendererConfig {
-    u64* _0;
-    u64* _8;
-    u64* _10;
-    u64* _18;
-    u64* _20;
-    u64* _28;
-    u64* _30;
-    u64* _38;
-    u64* _40;
-    u64* _48;
-    u64* _50;
-};
-
-enum AudioRendererRenderingDevice : u32 {
-    AudioRendererRenderingDevice_Cpu,
-    AudioRendererRenderingDevice_Dsp
-};
-
-enum AudioRendererExecutionMode : u32 {
-    AudioRendererExecutionMode_Manual,
-    AudioRendererExecutionMode_Auto,
-};
-
-enum SampleFormat : u32 {
-    SampleFormat_Invalid,
-    SampleFormat_PcmInt8,
-    SampleFormat_PcmInt16,
-    SampleFormat_PcmInt24,
-    SampleFormat_PcmInt32,
-    SampleFormat_PcmFloat,
-    SampleFormat_Adpcm,
-};
-
-enum MemoryPoolState : u32 {
-    MemoryPoolState_Invalid,
-    MemoryPoolState_New,
-    MemoryPoolState_RequestDetach,
-    MemoryPoolState_Detached,
-    MemoryPoolState_RequestAttach,
-    MemoryPoolState_Attached,
-    MemoryPoolState_Released,
-};
-
-struct AudioRendererParameter {
-    u32 sampleRate;
-    u32 sampleCount;
-    u32 mixBufferCount;
-    u32 subMixCount;
-    u32 voiceCount;
-    u32 sinkCount;
-    u32 effectCount;
-    u32 performanceFrameCount;
-    bool isVoiceDropEnabled;
-    u32 splitterCount;
-    u32 splitterSendChannelCount;
-    AudioRendererRenderingDevice renderingDevice;
-    AudioRendererExecutionMode executionMode;
-    u32 _34;
-    u32 revision;
-};
-
-static_assert(sizeof(AudioRendererParameter) == 0x3C);
-
-struct BiquadFilterParameter {
-    bool enabled;
-    s16 numerator[3];
-    s16 denominator[2];
-};
-
-static_assert(sizeof(BiquadFilterParameter) == 0xC);
-
-struct WaveBuffer {
-    void* buffer;
-    size_t bufferSize;
-    s32 startSampleOffset;
-    s32 endSampleOffset;
-    bool shouldLoop;
-    bool isEndOfStream;
-    void* context;
-    size_t contextSize;
-};
-
-static_assert(sizeof(WaveBuffer) == 0x30);
-
-struct AudioRendererHandle {
-    u64* _0;
-    u64* _8;
-};
-
-struct MemoryPoolType {
-    u64* _0;
-};
-
-struct CircularBufferSinkType {
-    u64* _0;
-};
-
-struct AuxType {
-    u64* _0;
-};
-
-struct DelayType {
-    u64* _0;
-};
-
-struct FinalMixType {
-    u64* _0;
-};
-
-struct SubMixType {
-    u64* _0;
-};
-
-struct VoiceType {
-    u64* _0;
-
-    enum PlayState : u32 {
-        PlayState_Start,
-        PlayState_Stop,
-        PlayState_Pause,
-    };
-};
-
-struct DeviceSinkType {
-    u64* _0;
-};
 
 // Audio Renderer base APIs
 void InitializeAudioRendererParameter(nn::audio::AudioRendererParameter* inParameter);
@@ -210,68 +89,6 @@ size_t
 GetRequiredBufferSizeForPerformanceFrames(nn::audio::AudioRendererParameter const& inParameter);
 void* SetPerformanceFrameBuffer(nn::audio::AudioRendererConfig* config, void* buffer,
                                 size_t bufferSize);
-
-enum PerformanceEntryType : u8 {
-    PerformanceEntryType_Invalid,
-    PerformanceEntryType_Voice,
-    PerformanceEntryType_SubMix,
-    PerformanceEntryType_FinalMix,
-    PerformanceEntryType_Sink
-};
-
-struct PerformanceEntry {
-    s32 nodeId;
-    s32 startTime;
-    s32 processingTime;
-    PerformanceEntryType entryType;
-};
-
-static_assert(sizeof(PerformanceEntry) == 0x10);
-
-enum PerformanceDetailType : u8 {
-    PerformanceDetailType_Unknown,
-    PerformanceDetailType_PcmInt16,
-    PerformanceDetailType_Adpcm,
-    PerformanceDetailType_VolumeRamp,
-    PerformanceDetailType_BiquadFilter,
-    PerformanceDetailType_Mix,
-    PerformanceDetailType_Delay,
-    PerformanceDetailType_Aux,
-    PerformanceDetailType_Reverb,
-    PerformanceDetailType_Reverb3d,
-    PerformanceDetailType_PcmFloat
-};
-
-struct PerformanceDetail {
-    s32 nodeId;
-    s32 startTime;
-    s32 processingTime;
-    PerformanceDetailType detailType;
-    PerformanceEntryType entryType;
-};
-
-static_assert(sizeof(PerformanceDetail) == 0x10);
-
-class PerformanceInfo {
-public:
-    PerformanceInfo();
-    ~PerformanceInfo();
-
-    bool SetBuffer(void const* buffer, size_t bufferSize);
-    bool MoveToNextFrame();
-    s32 GetTotalProcessingTime();
-    PerformanceEntry GetEntries(s32* count);
-    PerformanceDetail GetDetails(s32* count);
-
-private:
-    void* buffer;
-    size_t bufferSize;
-    void* header;
-    PerformanceEntry* entries;
-    PerformanceDetail* details;
-};
-
-static_assert(sizeof(PerformanceInfo) == 0x28);
 
 // Audio Renderer Sink APIs
 Result AddDeviceSink(nn::audio::AudioRendererConfig* config, nn::audio::DeviceSinkType* sink,

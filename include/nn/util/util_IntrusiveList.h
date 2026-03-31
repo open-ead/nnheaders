@@ -338,6 +338,15 @@ private:
     detail::IntrusiveListImplementation m_Implementation;
 };
 
+template <class HolderT, class T = HolderT>
+class IntrusiveListBaseNode : IntrusiveListNode {};
+
+template <class HolderT, class T = HolderT>
+class IntrusiveListBaseNodeTraits {
+public:
+    using BaseNodeType = IntrusiveListBaseNode<HolderT>;
+};
+
 template <class HolderT, IntrusiveListNode HolderT::*Member, class T = HolderT>
 class IntrusiveListMemberNodeTraits {
     friend class IntrusiveList<T, IntrusiveListMemberNodeTraits>;

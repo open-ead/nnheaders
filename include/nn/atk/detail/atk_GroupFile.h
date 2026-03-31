@@ -1,0 +1,60 @@
+#pragma once
+
+#include <nn/atk/detail/util/atk_Util.h>
+
+namespace nn::atk::detail {
+struct GroupFile {
+    struct InfoBlock;
+    struct FileBlock;
+    struct InfoExBlock;
+    struct FileHeader : Util::SoundFileHeader {
+
+        InfoBlock* GetInfoBlock() const;
+        FileBlock* GetFileBlock() const;
+        InfoExBlock* GetInfoExBlock() const;
+
+    };
+
+    struct InfoBlockBody {
+        Util::ReferenceTable referenceTableOfGroupItemInfo;
+    };
+
+    struct InfoBlock {
+        BinaryBlockHeader header;
+        InfoBlockBody body;
+    };
+
+    struct FileBlockBody {/* unknown structure */};
+
+    struct FileBlock {
+        BinaryBlockHeader header;
+        FileBlockBody body;
+    };
+
+    struct InfoExBlockBody {
+        Util::ReferenceTable referenceTableOfGroupItemInfoEx;
+    };
+
+    struct InfoExBlock {
+        BinaryBlockHeader header;
+        InfoExBlockBody body;
+    };
+
+    struct GroupItemInfo {
+        constexpr static s32 OffsetForLink = -1;
+        constexpr static s32 SizeForLink = -1;
+
+        u32 fileId;
+        Util::ReferenceWithSize embeddedItemInfo;
+    };
+    static_assert(sizeof(GroupItemInfo) == 0x10);
+
+    struct GroupItemInfoEx {
+        u32 itemId;
+        u32 loadFlag;
+    };
+    static_assert(sizeof(GroupItemInfoEx) == 0x8);
+
+};
+
+} // namespace nn::atk::detail
