@@ -38,7 +38,7 @@ void CloseFile(FileHandle handle);
     position:   Position within the file to be read.
     size:       How many bytes to read from file.
 */
-Result ReadFile(FileHandle handle, long position, void* buffer, ulong size);
+Result ReadFile(FileHandle handle, long position, void* buffer, size size);
 
 /*
     Read file at a location, with additional options.
@@ -56,7 +56,7 @@ Result ReadFile(FileHandle handle, long position, void* buffer, const ReadOption
     position:   Position within the file to be read.
     size:       How many bytes to read from file.
 */
-Result ReadFile(ulong* bytesRead, FileHandle handle, long position, void* buffer);
+Result ReadFile(u64* bytesRead, FileHandle handle, long position, void* buffer);
 
 /*
     Read file at a location, with an output amount of bytes read, and additional options.
@@ -66,7 +66,7 @@ Result ReadFile(ulong* bytesRead, FileHandle handle, long position, void* buffer
     size:       How many bytes to read from file.
     option:     Additional options for reading, see ReadOption.
 */
-Result ReadFile(ulong* bytesRead, FileHandle handle, long position, void* buffer,
+Result ReadFile(u64* bytesRead, FileHandle handle, long position, void* buffer,
                 const ReadOption& option);
 
 Result ReadFile(u64* outSize, FileHandle handle, s64 offset, void* buffer, u64 bufferSize,
@@ -99,8 +99,8 @@ Result WriteFile(FileHandle handle, s64 position, void const* buffer, u64 size,
 */
 Result FlushFile(FileHandle handle);
 
-// Result GetSaveDataTimeStamp(nn::time::PosixTime *,ulong);
-// Result GetSaveDataTimeStamp(nn::time::PosixTime*, nn::fs::SaveDataSpaceId, ulong);
+// Result GetSaveDataTimeStamp(nn::time::PosixTime *,u64);
+// Result GetSaveDataTimeStamp(nn::time::PosixTime*, nn::fs::SaveDataSpaceId, u64);
 Result GetFileTimeStampForDebug(nn::fs::FileTimeStamp*, const char*);
 
 Result DeleteFile(const char* path);

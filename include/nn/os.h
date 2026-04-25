@@ -215,7 +215,7 @@ struct UserExceptionInfo {
 
     CpuRegister FAR;  ///< Fault Address Register.
 };
-void SetUserExceptionHandler(void (*)(UserExceptionInfo*), void*, ulong, UserExceptionInfo*);
+void SetUserExceptionHandler(void (*)(UserExceptionInfo*), void*, u64, UserExceptionInfo*);
 
 // OTHER
 void GenerateRandomBytes(void*, u64);
