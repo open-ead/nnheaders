@@ -123,7 +123,10 @@ struct KeyboardConfig {
     s32 userDictionaryOffset;
     s32 userDictionaryNum;
     bool isUseTextCheck;
+
+#if NN_SDK_VER < NN_MAKE_VER(6, 0, 0)
     void* textCheckCallback;
+#endif
 
 #if NN_SDK_VER >= NN_MAKE_VER(3, 0, 0)
     s32 separateTextPos[0x8];
@@ -135,9 +138,10 @@ struct KeyboardConfig {
 #endif
 
 #if NN_SDK_VER >= NN_MAKE_VER(8, 0, 0)
-    u8 _3c1;
+    u8 isCancelButtonDisabled;
     u8 filler[0xd];
     Trigger trigger;
+    u8 filler2[0x4];
 #endif
 };
 

@@ -5,9 +5,10 @@
 namespace nn::applet {
 enum class ExitReason { Normal = 0, Canceled = 1, Abnormal = 2, Unexpected = 10 };
 
+// https://switchbrew.org/wiki/Applet_Manager_services#AppletId
 enum class AppletId {
     None = 0x00,
-    application = 0x01,
+    Application = 0x01,
     OverlayApplet = 0x02,
     SystemAppletMenu = 0x03,
     SystemApplication = 0x04,
@@ -28,13 +29,18 @@ enum class AppletId {
     LibraryAppletLoginShare = 0x18,
     LibraryAppletWifiWebAuth = 0x19,
     LibraryAppletMyPage = 0x1A,
+    LibraryAppletGift = 0x1B,
+    LibraryAppletUserMigration = 0x1C,
+    // NOTE: more entries exist in later versions
+
 };
 
-enum class AppletMode {
+// https://switchbrew.org/wiki/Applet_Manager_services#LibraryAppletMode
+enum class LibraryAppletMode {
     AllForeground = 0,
-    Background = 1,
+    PartialForeground = 1,
     NoUi = 2,
-    BackgroundIndirect = 3,
+    PartialForegroundWithIndirectDisplay = 3,
     AllForegroundInitiallyHidden = 4,
 };
 
