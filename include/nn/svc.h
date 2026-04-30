@@ -4,8 +4,6 @@
 #include <nn/util.h>
 
 namespace nn::svc {
-#define __aarch64__  // TODO: Remove
-
 #ifdef __aarch64__
 #define aarch aarch64
 #define lp lp64
@@ -234,11 +232,9 @@ struct CreateProcessParameter {
 }  // namespace lp
 
 namespace aarch {
-
 #if NN_SDK_VER >= NN_MAKE_VER(1, 0, 0)  // TODO: find when lp namespace was introduced
 namespace lp {
 #endif
-
 Result SetHeapSize(uintptr* outHeapAddress, size heapSize);
 Result SetMemoryPermission(uintptr address, size regionSize, MemoryPermission memoryPermission);
 Result SetMemoryAttribute(uintptr address, size size, u32 mask, u32 attr);
@@ -377,11 +373,9 @@ Result GetProcessInfo(s64* outProcessInfo, Handle handle, ProcessInfoType proces
 Result CreateResourceLimit(Handle* outHandle);
 Result SetResourceLimitLimitValue(Handle handle, LimitableResource resource, s64 value);
 void CallSecureMonitor();
-
 #if NN_SDK_VER >= NN_MAKE_VER(1, 0, 0)
 }  // namespace lp
 #endif
-
 }  // namespace aarch
 
 }  // namespace nn::svc
