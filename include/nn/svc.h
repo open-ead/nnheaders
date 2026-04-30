@@ -190,6 +190,8 @@ enum class DebugThreadParam {
     AffinityMask
 };
 
+enum class ProcessInfoType { ProcessState };
+
 namespace lp {
 struct MemoryInfo {
     uintptr baseAddress;
@@ -216,6 +218,17 @@ struct PhysicalMemoryInfo {
 
 struct DebugEventInfo {
     s8 padding[0x40];
+};  // TODO
+
+struct CreateProcessParameter {
+    char _0[0xc];
+    s32 _c;
+    s64 _10;
+    uintptr _18;
+    s32 _20;
+    s32 _24;
+    Handle _28;
+    s32 _2c;
 };  // TODO
 
 }  // namespace lp
@@ -331,43 +344,35 @@ Result WriteDebugProcessMemory(Handle handle, uintptr bufferAddress, uintptr dst
 Result SetHardwareBreakPoint(HardwareBreakPointRegisterName registerName, u64 flags, u64 value);
 Result GetDebugThreadParam(u64*, u32*, Handle handle, u64 threadId, DebugThreadParam param);
 Result CreateSession(Handle* outServerHandle, Handle* outClientHandle, bool isLight, u64);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
-Result ArbitrateUnlock(uintptr address);
+Result AcceptSession(Handle* outPortHandle, Handle sessionHandle);
+Result ReplyAndReceiveLight(Handle handle);
+Result ReplyAndReceive(s32* outHandleIndex, const Handle* handles, s32 handleCount, Handle handle,
+                       s64 timeout);
+Result ReplyAndReceiveWithUserBuffer(s32* outHandleIndex, uintptr bufferAddress, size bufferSize,
+                                     const Handle* handles, s32 handleCount, Handle handle,
+                                     s64 timeout);
+Result CreateEvent(Handle* outWritableEventHandle, Handle* outReadableEventHandle);
+void SleepSystem();
+Result CreatePort(Handle* outServerHandle, Handle* outClientHandle, s32 maxSessionCount,
+                  bool isLight, u64);
+Result ManageNamedPort(Handle* outServerHandle, const char* name, s32 maxSessionCount);
+Result ConnectToPort(Handle* outSessionHandle, Handle handle);
+Result SetProcessMemoryPermission(Handle handle, uintptr address, size size,
+                                  MemoryPermission memoryPermission);
+Result MapProcessMemory(uintptr dstAddress, Handle handle, uintptr srcAddress, size size);
+Result UnmapProcessMemory(uintptr dstAddress, Handle handle, uintptr srcAddress, size size);
+Result QueryProcessMemory(svc::lp::MemoryInfo* outMemoryInfo, PageInfo* outPageInfo, Handle handle,
+                          uintptr address);
+Result MapProcessCodeMemory(Handle handle, uintptr dstAddress, uintptr srcAddress, size size);
+Result UnmapProcessCodeMemory(Handle handle, uintptr dstAddress, uintptr srcAddress, size size);
+Result CreateProcess(Handle* outHandle, const svc::lp::CreateProcessParameter& parameter,
+                     const u32* capabilities, s32 capabilityCount);
+Result StartProcess(Handle handle, s32 priority, s32 defaultCpuId, u64 stackSize);
+Result TerminateProcess(Handle handle);
+Result GetProcessInfo(s64* outProcessInfo, Handle handle, ProcessInfoType processInfoType);
+Result CreateResourceLimit(Handle* outHandle);
+Result SetResourceLimitLimitValue(Handle handle, LimitableResource resource, s64 value);
+void CallSecureMonitor();
 
 #if NN_SDK_VER >= NN_MAKE_VER(1, 0, 0)
 }  // namespace lp
