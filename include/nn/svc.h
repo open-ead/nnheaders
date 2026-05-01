@@ -18,10 +18,6 @@ namespace nn::svc {
 #endif
 #endif
 
-inline __attribute__((always_inline)) void svc(u8 i) {
-    asm(svc_instruction " %[i]" ::[i] "i"(i));
-}
-
 struct Handle {
     u32 handle;
 
@@ -32,7 +28,7 @@ struct Handle {
     operator u32() const { return handle; }
 };
 
-enum class MemoryPermission { Read, Write, Execute, DontCare = 28 };
+enum class MemoryPermission { Read = 1 << 0, Write = 1 << 1, Execute = 1 << 2, DontCare = 1 << 28 };
 
 enum class MemoryType {
     Free,
@@ -62,13 +58,13 @@ enum class MemoryType {
 };
 
 enum class MemoryAttribute {
-    Locked,
-    IpcLocked,
-    DeviceShared,
-    Uncached,
-    PermissionLocked,
-    GpuSharable,
-    GpuShared
+    Locked = 1 << 0,
+    IpcLocked = 1 << 1,
+    DeviceShared = 1 << 2,
+    Uncached = 1 << 3,
+    PermissionLocked = 1 << 4,
+    GpuSharable = 1 << 5,
+    GpuShared = 1 << 6
 };
 
 struct PageInfo {};  // TODO
@@ -95,8 +91,7 @@ enum class InfoType {
     SystemResourceSizeTotal,
     SystemResourceSizeUsed,
     ProgramId,
-    InitialProcessIdRange_LowerBound,
-    InitialProcessIdRange_UpperBound,
+    InitialProcessIdRange,
     UserExceptionContextAddress,
     TotalNonSystemMemorySize,
     UsedNonSystemMemorySize,
@@ -222,7 +217,7 @@ struct CreateProcessParameter {
     char _0[0xc];
     s32 _c;
     s64 _10;
-    uintptr _18;
+    u64 _18;
     s32 _20;
     s32 _24;
     Handle _28;
@@ -232,7 +227,7 @@ struct CreateProcessParameter {
 }  // namespace lp
 
 namespace aarch {
-#if NN_SDK_VER >= NN_MAKE_VER(1, 0, 0)  // TODO: find when lp namespace was introduced
+#ifdef __aarch64__
 namespace lp {
 #endif
 Result SetHeapSize(uintptr* outHeapAddress, size heapSize);
@@ -373,7 +368,7 @@ Result GetProcessInfo(s64* outProcessInfo, Handle handle, ProcessInfoType proces
 Result CreateResourceLimit(Handle* outHandle);
 Result SetResourceLimitLimitValue(Handle handle, LimitableResource resource, s64 value);
 void CallSecureMonitor();
-#if NN_SDK_VER >= NN_MAKE_VER(1, 0, 0)
+#ifdef __aarch64__
 }  // namespace lp
 #endif
 }  // namespace aarch
