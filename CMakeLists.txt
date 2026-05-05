@@ -188,7 +188,9 @@ add_library(NintendoSDK OBJECT
   include/nn/ui2d/Parts.h
   include/nn/ui2d/Types.h
   include/nn/ui2d/Util.h
+  include/nn/g3d/AnimObj.h
   include/nn/g3d/BindFuncTable.h
+  include/nn/g3d/BoneVisibilityAnimObj.h
   include/nn/g3d/ModelObj.h
   include/nn/g3d/ResMaterialAnim.h
   include/nn/g3d/ResShapeAnim.h
