@@ -3,10 +3,6 @@
 #include <nn/account.h>
 #include <nn/fs/fs_types.h>
 
-namespace nn {
-typedef u64 ApplicationId;
-};
-
 namespace nn::fs {
 
 Result EnsureSaveData(const nn::account::Uid&);

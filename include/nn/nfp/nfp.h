@@ -8,7 +8,9 @@ struct SystemEventType;
 
 namespace nn::nfp {
 
-using DeviceHandle = u64;
+struct DeviceHandle {
+    u64 m_Id;
+};
 
 enum State : u32;
 enum DeviceState : u32;
