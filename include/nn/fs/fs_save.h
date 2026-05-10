@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nn/nn.h>
 #include <nn/account.h>
 #include <nn/fs/fs_types.h>
 
