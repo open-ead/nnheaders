@@ -8,19 +8,16 @@ struct SystemEventType;
 
 namespace nn::nfp {
 
-struct DeviceHandle {
-    u64 m_Id;
-};
-
 enum State : u32;
 enum DeviceState : u32;
 enum ModelType : u32;
 enum MountTarget : u32;
 
-struct TagInfo;
 struct CommonInfo;
+struct DeviceHandle;
 struct ModelInfo;
 struct RegisterInfo;
+struct TagInfo;
 
 Result Initialize();
 Result Finalize();
