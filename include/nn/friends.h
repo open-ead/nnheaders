@@ -10,7 +10,12 @@
 
 namespace nn {
 namespace friends {
-typedef char Url[0xA0];
+struct Url {
+    char m_Buffer[0xA0];
+};
+struct ImageSize {
+    s32 m_Size;
+};
 
 class AsyncContext;
 class Profile;
@@ -27,7 +32,7 @@ public:
     nn::account::NetworkServiceAccountId GetAccountId() const;
     nn::account::Nickname& GetNickname() const;
     bool IsValid() const;
-    Result GetProfileImageUrl(nn::friends::Url*, s32);
+    Result GetProfileImageUrl(nn::friends::Url*, ImageSize) const;
 };
 
 class AsyncContext {

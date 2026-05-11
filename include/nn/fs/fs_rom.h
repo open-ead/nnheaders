@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nn/fs/fs_types.h>
+#include <nn/nn.h>
 
 namespace nn::fs {
 

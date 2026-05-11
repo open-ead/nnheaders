@@ -35,7 +35,7 @@ public:
     nn::image::JpegStatus Analyze();
     nn::image::Dimension GetAnalyzedDimension() const;
     s64 GetAnalyzedWorkBufferSize() const;
-    JpegStatus Decode(void* out, s64, s32 alignment, void*, s64);
+    JpegStatus Decode(void* out, u64, s32 alignment, void*, u64);
 
     nn::image::ProcessStage mProcessStage;  // _8
     void* mData;                            // _C
