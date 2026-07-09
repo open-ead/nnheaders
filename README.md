@@ -8,3 +8,4 @@ Do not ask for or PR any copyrighted material to this repo. You will be ignored.
 # Credits
  - [Shadow](https://github.com/shadowninja108/) - For [Skyline](https://github.com/shadowninja108/Skyline), which was the primary inspiration and use case for this repo.
  - [Shibbo](https://github.com/shibbo) - For [OdysseyReversed](https://github.com/shibbo/OdysseyReversed/), which most of these headers came from.
+ - [SciresM](https://github.com/SciresM) - For [libvapours](https://github.com/Atmosphere-NX/Atmosphere/tree/master/libraries/libvapours) and exemption for this project to use libvapours results headers under the ISC license

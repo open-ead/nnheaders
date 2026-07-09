@@ -12,6 +12,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * open-ead/nnheaders use libvapours results headers under the ISC license,
+ * see /include/vapours/LICENSE
  */
 #pragma once
 #include <vapours/results/results_common.hpp>
