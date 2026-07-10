@@ -18,8 +18,8 @@ CharacterEncodingResult ConvertCharacterUtf8ToUtf32(u32* dest, char const* src);
 CharacterEncodingResult ConvertStringUtf16NativeToUtf8(char*, s32, u16 const*, s32);
 CharacterEncodingResult ConvertStringUtf8ToUtf16Native(u16*, s32, char const*, s32);
 
-s32 SNPrintf(char* s, ulong n, const char* format, ...);
-s32 VSNPrintf(char* s, ulong n, const char* format, va_list arg);
+s32 SNPrintf(char* s, size n, const char* format, ...);
+s32 VSNPrintf(char* s, size n, const char* format, va_list arg);
 
 void ReferSymbol(const void*);
 }  // namespace util
