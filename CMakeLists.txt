@@ -188,6 +188,7 @@ add_library(NintendoSDK OBJECT
   include/nn/ui2d/Parts.h
   include/nn/ui2d/Types.h
   include/nn/ui2d/Util.h
+  include/nn/swkbd/swkbd.h
   include/nn/g3d/BindFuncTable.h
   include/nn/g3d/ModelObj.h
   include/nn/g3d/ResMaterialAnim.h
@@ -311,7 +312,7 @@ function(nn_ver ID)
   list(POP_FRONT VER MAJOR MINOR PATCH)
   
   foreach(VAR IN ITEMS MAJOR MINOR PATCH)
-    target_compile_definitions(NintendoSDK PRIVATE ${ID}_${VAR}=${${VAR}})
+    target_compile_definitions(NintendoSDK PUBLIC ${ID}_${VAR}=${${VAR}})
   endforeach()
 endfunction()
 
