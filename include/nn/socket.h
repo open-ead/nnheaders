@@ -6,6 +6,7 @@
 #include <poll.h>
 #include <sys/select.h>
 #include <sys/socket.h>
+#include <poll.h>
 
 namespace nn {
 class TimeSpan;
@@ -60,6 +61,9 @@ s32 GetSockName(int, sockaddr*, u32*);
 s32 GetSockOpt(int, int, int, void*, u32*);
 s32 Listen(int, int);
 s32 SetSockOpt(s32 socket, s32 socketLevel, s32 option, const void*, u32 len);
+s32 Poll(pollfd *fds, unsigned long nfds, s32 timeout);
+s32 Fcntl(s32 fd, s32 cmd, ...);
+u64 Send(s32 socket, const void* buffer, u64 bufferLength, s32 flags);
 s32 SockAtMark(int);
 s32 Shutdown(int, int);
 s32 ShutdownAllSockets(bool);
