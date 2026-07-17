@@ -52,6 +52,10 @@ struct FirmwareVersion {
     }
 };
 
+struct RegionCode {
+    s32 code;
+};
+
 Result GetFirmwareVersion(FirmwareVersion*);
 }  // namespace system
 
