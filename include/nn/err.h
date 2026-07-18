@@ -19,7 +19,7 @@ bool CreateErrorViewerStartupParamForRecordedError(void*, u64*, u64, const char*
                                                    time::PosixTime);
 void GetErrorCodeString(char* outErrorCodeStr, size_t errorCodeStrBufferSize, ErrorCode errorCode);
 void* GetErrorMessageDatabaseVersion(ErrorMessageDatabaseVersion* outErrorMessageDatabaseVersion);
-ErrorCode MakeErrorCode(u32, u32);
+ErrorCode MakeErrorCode(u32 category, u32 number);
 void ShowApplicationError(const ApplicationErrorArg& arg);
 void ShowError(Result result);
 void ShowError(ErrorCode errorCode);
