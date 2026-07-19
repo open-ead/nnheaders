@@ -1,6 +1,7 @@
 #include <nn/err/detail.h>
 
 #include <nn/diag.h>
+#include <nn/err/ErrorMessageDatabaseVersion.h>
 #include <nn/fs.h>
 #include <nn/util.h>
 
@@ -151,7 +152,7 @@ bool DefaultErrorMessageDataExists(u32 category) {
     return false;
 }
 
-void* ReadMessageFile(char16* outMessage, s32* outMessageLength, size_t messageBufferSize,
+void* ReadMessageFile(char16* outBuffer, s32* outMessageLength, size_t messageBufferSize,
                       ErrorCode errorCode, settings::LanguageCode languageCode,
                       MessageKind messageKind) {
     char errorInfoMessageFilePath[32];
@@ -159,12 +160,42 @@ void* ReadMessageFile(char16* outMessage, s32* outMessageLength, size_t messageB
                                  errorCode, languageCode, messageKind);
 
     fs::FileHandle fileHandle;
-    Result result =
-        fs::OpenFile(&fileHandle, errorInfoMessageFilePath, fs::OpenDirectoryMode_Directory);
+    Result result = fs::OpenFile(&fileHandle, errorInfoMessageFilePath, fs::OpenMode_Read);
 
     if (result.IsSuccess()) {
         u64 fileSize;
         result = fs::GetFileSize(&fileSize, fileHandle);
+
+        if (result.IsFailure()) {
+            diag::detail::AbortImpl(
+                "", "", "", 0, result,
+                "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
+                "fs::GetFileSize(&fileSize, fileHandle)", result.GetModule(),
+                result.GetDescription(), result.GetInnerValueForDebug());
+        }
+
+        if (fileSize != 0) {
+            *outMessageLength = fileSize;
+
+            if (messageBufferSize <= fileSize) {
+                diag::detail::AbortImpl("", "", "", 0);
+            }
+
+            result = fs::ReadFile(fileHandle, 0, outBuffer, static_cast<size_t>(fileSize));
+
+            if (result.IsFailure()) {
+                diag::detail::AbortImpl(
+                    "", "", "", 0, result,
+                    "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
+                    "fs::ReadFile(fileHandle, 0, outBuffer, static_cast<size_t>(fileSize))",
+                    result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug());
+            }
+
+            outBuffer[*outMessageLength] = u'\0';
+            fs::CloseFile(fileHandle);
+
+            return nullptr;
+        }
     }
 
     if (result != fs::ResultPathNotFound()) {
@@ -175,13 +206,85 @@ void* ReadMessageFile(char16* outMessage, s32* outMessageLength, size_t messageB
     }
 
     *outMessageLength = 0;
-    *outMessage = u'\0';
+    *outBuffer = u'\0';
 
     return nullptr;
 }
 
-void ReadVersion(ErrorMessageDatabaseVersion* outMessageDatabaseVersion) {}
+void ReadVersion(ErrorMessageDatabaseVersion* outVersion) {
+    Result result = fs::MountSystemData("err", ncm::SystemDataId::Err);
 
-void* ReadMessageFile(char16* outMessage, size_t messageBufferSize, const char* errorCodeString,
-                      const settings::LanguageCode& languageCode) {}
+    if (result.IsFailure()) {
+        return;
+    }
+
+    char infoFilePath[32];
+    util::TSNPrintf(infoFilePath, sizeof(infoFilePath), "%s:/DatabaseInfo", "err");
+
+    fs::FileHandle fileHandle;
+    result = fs::OpenFile(&fileHandle, infoFilePath, fs::OpenMode_Read);
+
+    if (result.IsFailure()) {
+        diag::detail::AbortImpl(
+            "", "", "", 0, result,
+            "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
+            "nn::fs::OpenFile(&fileHandle, infoFilePath, nn::fs::OpenMode_Read)",
+            result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug());
+    }
+
+    result = fs::ReadFile(fileHandle, 0, outVersion, sizeof(ErrorMessageDatabaseVersion));
+
+    if (result.IsFailure()) {
+        diag::detail::AbortImpl(
+            "", "", "", 0, result,
+            "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
+            "fs::ReadFile(fileHandle, 0, outVersion, sizeof(ErrorMessageDatabaseVersion))",
+            result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug());
+    }
+
+    fs::CloseFile(fileHandle);
+    fs::Unmount("err");
+}
+
+void ReadMessageFile(char16* outMessage, size_t messageBufferSize, const char* errorCodeString,
+                     const settings::LanguageCode& languageCode) {
+    Result result = fs::MountSystemData("err", ncm::SystemDataId::Err);
+
+    if (result.IsFailure()) {
+        *outMessage = u'\0';
+
+        return;
+    }
+
+    char messageFilePath[32];
+    util::TSNPrintf(messageFilePath, sizeof(messageFilePath), "%s:/Messages/%s_%s", "err",
+                    languageCode.code, errorCodeString);
+
+    fs::FileHandle fileHandle;
+    result = fs::OpenFile(&fileHandle, messageFilePath, fs::OpenMode_Read);
+
+    if (result.IsFailure()) {
+        diag::detail::AbortImpl(
+            "", "", "", 0, result,
+            "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x");
+    }
+
+    result = fs::ReadFile(fileHandle, 0, outMessage, messageBufferSize);
+
+    if (result.IsFailure()) {
+        diag::detail::AbortImpl(
+            "", "", "", 0, result,
+            "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x");
+    }
+
+    u32 uh;  //????
+    u32 fileRead = messageBufferSize - 1;
+    if (fileRead >= uh)
+        fileRead = uh;
+
+    outMessage[fileRead] = u'\0';
+
+    fs::CloseFile(fileHandle);
+    fs::Unmount("err");
+}
 }  // namespace nn::err::detail

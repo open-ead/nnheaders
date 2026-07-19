@@ -10,8 +10,8 @@
 #include <nn/types.h>
 
 namespace nn::err {
-// TODO
 class ErrorMessageDatabaseVersion;
+// TODO
 class EulaData;
 
 ErrorCode ConvertResultToErrorCode(const Result& result);
