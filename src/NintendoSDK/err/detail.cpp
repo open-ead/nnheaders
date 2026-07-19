@@ -238,7 +238,7 @@ void ReadVersion(ErrorMessageDatabaseVersion* outVersion) {
         diag::detail::AbortImpl(
             "", "", "", 0, result,
             "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
-            "fs::ReadFile(fileHandle, 0, outVersion, sizeof(ErrorMessageDatabaseVersion))",
+            "nn::fs::ReadFile(fileHandle, 0, outVersion, sizeof(ErrorMessageDatabaseVersion))",
             result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug());
     }
 
