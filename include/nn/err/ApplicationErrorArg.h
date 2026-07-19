@@ -13,7 +13,7 @@ public:
     u32 GetApplicationErrorCodeNumber() const;
     const char* GetDialogMessage() const;
     const char* GetFullScreenMessage() const;
-    const settings::LanguageCode& GetLanguageCode() const;
+    settings::LanguageCode GetLanguageCode() const;
 
     void SetApplicationErrorCodeNumber(u32 errorCode);
     void SetDialogMessage(const char* message);
