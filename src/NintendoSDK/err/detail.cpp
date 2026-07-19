@@ -269,7 +269,8 @@ void ReadMessageFile(char16* outMessage, size_t messageBufferSize, const char* e
             "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x");
     }
 
-    result = fs::ReadFile(fileHandle, 0, outMessage, messageBufferSize);
+    u64 bytesRead;
+    result = fs::ReadFile(&bytesRead, fileHandle, 0, outMessage, messageBufferSize);
 
     if (result.IsFailure()) {
         diag::detail::AbortImpl(
@@ -277,10 +278,9 @@ void ReadMessageFile(char16* outMessage, size_t messageBufferSize, const char* e
             "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x");
     }
 
-    u32 uh;  //????
-    u32 fileRead = messageBufferSize - 1;
-    if (fileRead >= uh)
-        fileRead = uh;
+    u64 fileRead = messageBufferSize - 1;
+    if (fileRead >= bytesRead)
+        fileRead = bytesRead;
 
     outMessage[fileRead] = u'\0';
 
