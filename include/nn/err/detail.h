@@ -7,7 +7,7 @@
 #include <nn/types.h>
 
 namespace nn::ns {
-// TODO
+// TODO: move
 class ApplicationErrorCodeCategory {
 public:
     const char* GetCategory() const { return mCategory; }

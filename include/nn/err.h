@@ -13,12 +13,15 @@ namespace nn::err {
 class ErrorMessageDatabaseVersion;
 // TODO
 class EulaData;
+class ErrorViewerJumpDestination;
 
 ErrorCode ConvertResultToErrorCode(const Result& result);
 bool CreateErrorViewerStartupParamForRecordedError(void*, u64*, u64, const char*, const char*,
                                                    time::PosixTime);
-void GetErrorCodeString(char* outErrorCodeStr, size_t errorCodeStrBufferSize, ErrorCode errorCode);
-void* GetErrorMessageDatabaseVersion(ErrorMessageDatabaseVersion* outErrorMessageDatabaseVersion);
+void ExecuteJump(ErrorViewerJumpDestination destination);
+void GetErrorCodeString(char* outErrorCodeString, size_t errorCodeStrBufferSize,
+                        ErrorCode errorCode);
+void* GetErrorMessageDatabaseVersion(ErrorMessageDatabaseVersion* outVersion);
 ErrorCode MakeErrorCode(u32 category, u32 number);
 void ShowApplicationError(const ApplicationErrorArg& arg);
 void ShowError(Result result);
