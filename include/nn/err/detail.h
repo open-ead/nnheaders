@@ -45,12 +45,12 @@ void ParseApplicationErrorCodeString(
     ns::ApplicationErrorCodeCategory* outApplicationErrorCodeCategory,
     u32* outErrorCodeCategoryNumber, const char* errorCodeString);
 void ParseErrorCodeString(ErrorCode* outErrorCode, const char* errorCodeString);
-void* ReadMessageFile(char16* outMessage, s32* outMessageLength, size_t messageBufferSize,
+void* ReadMessageFile(char16* outBuffer, s32* outMessageLength, size_t messageBufferSize,
                       ErrorCode errorCode, settings::LanguageCode languageCode,
                       MessageKind messageKind);
-void* ReadMessageFile(char16* outMessage, size_t messageBufferSize, const char* errorCodeString,
-                      const settings::LanguageCode& languageCode);
-void ReadVersion(ErrorMessageDatabaseVersion* outMessageDatabaseVersion);
+void ReadMessageFile(char16* outMessage, size_t messageBufferSize, const char* errorCodeString,
+                     const settings::LanguageCode& languageCode);
+void ReadVersion(ErrorMessageDatabaseVersion* outVersion);
 bool TryParseApplicationErrorCodeString(
     ns::ApplicationErrorCodeCategory* outApplicationErrorCodeCategory,
     u32* outErrorCodeCategoryNumber, const char* errorCodeString);
