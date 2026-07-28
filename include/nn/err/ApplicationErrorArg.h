@@ -7,7 +7,7 @@ namespace nn::err {
 class ApplicationErrorArg {
 public:
     ApplicationErrorArg();
-    ApplicationErrorArg(u32 errorCode, const char* dialogMessage, const char* fullscreenMessage,
+    ApplicationErrorArg(u32 errorCode, const char* dialogMessage, const char* fullScreenMessage,
                         const settings::LanguageCode& languageCode);
 
     u32 GetApplicationErrorCodeNumber() const;
@@ -27,6 +27,6 @@ private:
     u32 mErrorCode = 0;
     settings::LanguageCode mLanguageCode;
     char mDialogMessage[2048];
-    char mFullscreenMessage[2048];
+    char mFullScreenMessage[2048];
 };
 }  // namespace nn::err
