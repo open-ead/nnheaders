@@ -8,12 +8,12 @@ namespace nn::err {
 class SystemErrorArg {
 public:
     SystemErrorArg();
-    SystemErrorArg(ErrorCode errorCode, const char* dialogueMessage, const char* fullScreenMessage,
+    SystemErrorArg(ErrorCode errorCode, const char* dialogMessage, const char* fullScreenMessage,
                    const settings::LanguageCode& languageCode);
 
     void SetErrorCode(ErrorCode errorCode);
-    void SetDialogMessage(const char* dialogueMessage);
-    void SetFullScreenMessage(const char* fullScreenMessage);
+    void SetDialogMessage(const char* message);
+    void SetFullScreenMessage(const char* message);
     void SetLanguageCode(const settings::LanguageCode& languageCode);
     ErrorCode GetErrorCode() const;
     const char* GetDialogMessage() const;

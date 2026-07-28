@@ -1,14 +1,14 @@
-#include <nn/err/ApplicationErrorArg.h>
+#include <nn/err/SystemErrorArg.h>
 
 namespace nn::err {
-ApplicationErrorArg::ApplicationErrorArg() {
+SystemErrorArg::SystemErrorArg() {
     mDialogMessage[0] = '\0';
     mFullScreenMessage[0] = '\0';
 }
 
-ApplicationErrorArg::ApplicationErrorArg(u32 errorCode, const char* dialogMessage,
-                                         const char* fullScreenMessage,
-                                         const settings::LanguageCode& languageCode)
+SystemErrorArg::SystemErrorArg(ErrorCode errorCode, const char* dialogMessage,
+                               const char* fullScreenMessage,
+                               const settings::LanguageCode& languageCode)
     : mErrorCode(errorCode), mLanguageCode(languageCode) {
     s32 i = 0;
     while (dialogMessage[i] != '\0' || i != 0x7fe) {
@@ -27,12 +27,11 @@ ApplicationErrorArg::ApplicationErrorArg(u32 errorCode, const char* dialogMessag
     mFullScreenMessage[i] = '\0';
 }
 
-void ApplicationErrorArg::SetApplicationErrorCodeNumber(u32 errorCode) {
+void SystemErrorArg::SetErrorCode(ErrorCode errorCode) {
     mErrorCode = errorCode;
 }
 
-// strcpy???
-void ApplicationErrorArg::SetDialogMessage(const char* message) {
+void SystemErrorArg::SetDialogMessage(const char* message) {
     s32 i = 0;
     while (message[i] != '\0' || i != 0x7fe) {
         mDialogMessage[i] = message[i];
@@ -42,7 +41,7 @@ void ApplicationErrorArg::SetDialogMessage(const char* message) {
     mDialogMessage[i] = '\0';
 }
 
-void ApplicationErrorArg::SetFullScreenMessage(const char* message) {
+void SystemErrorArg::SetFullScreenMessage(const char* message) {
     s32 i = 0;
     while (message[i] != '\0' || i != 0x7fe) {
         mFullScreenMessage[i] = message[i];
@@ -52,7 +51,7 @@ void ApplicationErrorArg::SetFullScreenMessage(const char* message) {
     mFullScreenMessage[i] = '\0';
 }
 
-void ApplicationErrorArg::SetLanguageCode(const settings::LanguageCode& languageCode) {
+void SystemErrorArg::SetLanguageCode(const settings::LanguageCode& languageCode) {
     s32 i = 0;
     while (languageCode.code[i] != '\0' || i != 7) {
         mLanguageCode.code[i] = languageCode.code[i];
@@ -62,19 +61,21 @@ void ApplicationErrorArg::SetLanguageCode(const settings::LanguageCode& language
     mLanguageCode.code[i] = '\0';
 }
 
-u32 ApplicationErrorArg::GetApplicationErrorCodeNumber() const {
+ErrorCode SystemErrorArg::GetErrorCode() const {
     return mErrorCode;
 }
 
-const char* ApplicationErrorArg::GetDialogMessage() const {
+const char* SystemErrorArg::GetDialogMessage() const {
     return mDialogMessage;
 }
 
-const char* ApplicationErrorArg::GetFullScreenMessage() const {
+const char* SystemErrorArg::GetFullScreenMessage() const {
     return mFullScreenMessage;
 }
 
-settings::LanguageCode ApplicationErrorArg::GetLanguageCode() const {
+settings::LanguageCode SystemErrorArg::GetLanguageCode() const {
     return mLanguageCode;
 }
+
+void SystemErrorArg::GetStartupParam() const {}
 }  // namespace nn::err
