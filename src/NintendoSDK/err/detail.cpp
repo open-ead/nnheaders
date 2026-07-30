@@ -68,14 +68,14 @@ void MakeErrorInfoCommonFilePath(char* outErrorInfoCommonFilePath,
 void MakeErrorInfoMessageFilePath(char* outErrorInfoMessageFilePath,
                                   size_t errorInfoMessageFilePathBufferSize, ErrorCode errorCode,
                                   settings::LanguageCode languageCode, MessageKind messageKind) {
-    u8 kind = static_cast<u8>(messageKind);
-    if (kind >= 4) {
+    if (messageKind > MessageKind::FlvButton) {
         nn::detail::UnexpectedDefaultImpl("", "", 0);
     }
 
+    const char* messageKindStr = sMessageKindStrs[static_cast<s8>(messageKind)];
     util::TSNPrintf(outErrorInfoMessageFilePath, errorInfoMessageFilePathBufferSize,
                     "%s:/%04d/%04d/%s_%s", "err", errorCode.GetCategory(), errorCode.GetNumber(),
-                    languageCode.code, sMessageKindStrs[kind]);
+                    languageCode.code, messageKindStr);
 }
 
 bool ErrorMessageDataExists(ErrorCode errorCode) {
@@ -93,7 +93,7 @@ bool ErrorMessageDataExists(ErrorCode errorCode) {
     }
 
     if (result != fs::ResultPathNotFound()) {
-        diag::detail::AbortImpl("", "", "", 0, result,
+        diag::detail::AbortImpl("", "", "", 0, &result,
                                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                                 "result", result.GetModule(), result.GetDescription(),
                                 result.GetInnerValueForDebug());
@@ -118,7 +118,7 @@ bool CategoryExists(u32 category) {
     }
 
     if (result != fs::ResultPathNotFound()) {
-        diag::detail::AbortImpl("", "", "", 0, result,
+        diag::detail::AbortImpl("", "", "", 0, &result,
                                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                                 "result", result.GetModule(), result.GetDescription(),
                                 result.GetInnerValueForDebug());
@@ -143,7 +143,7 @@ bool DefaultErrorMessageDataExists(u32 category) {
     }
 
     if (result != fs::ResultPathNotFound()) {
-        diag::detail::AbortImpl("", "", "", 0, result,
+        diag::detail::AbortImpl("", "", "", 0, &result,
                                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                                 "result", result.GetModule(), result.GetDescription(),
                                 result.GetInnerValueForDebug());
@@ -163,12 +163,12 @@ void* ReadMessageFile(char16* outBuffer, s32* outMessageLength, size_t messageBu
     Result result = fs::OpenFile(&fileHandle, errorInfoMessageFilePath, fs::OpenMode_Read);
 
     if (result.IsSuccess()) {
-        u64 fileSize;
+        s64 fileSize;
         result = fs::GetFileSize(&fileSize, fileHandle);
 
         if (result.IsFailure()) {
             diag::detail::AbortImpl(
-                "", "", "", 0, result,
+                "", "", "", 0, &result,
                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                 "fs::GetFileSize(&fileSize, fileHandle)", result.GetModule(),
                 result.GetDescription(), result.GetInnerValueForDebug());
@@ -185,7 +185,7 @@ void* ReadMessageFile(char16* outBuffer, s32* outMessageLength, size_t messageBu
 
             if (result.IsFailure()) {
                 diag::detail::AbortImpl(
-                    "", "", "", 0, result,
+                    "", "", "", 0, &result,
                     "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                     "fs::ReadFile(fileHandle, 0, outBuffer, static_cast<size_t>(fileSize))",
                     result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug());
@@ -199,7 +199,7 @@ void* ReadMessageFile(char16* outBuffer, s32* outMessageLength, size_t messageBu
     }
 
     if (result != fs::ResultPathNotFound()) {
-        diag::detail::AbortImpl("", "", "", 0, result,
+        diag::detail::AbortImpl("", "", "", 0, &result,
                                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                                 "result", result.GetModule(), result.GetDescription(),
                                 result.GetInnerValueForDebug());
@@ -226,7 +226,7 @@ void ReadVersion(ErrorMessageDatabaseVersion* outVersion) {
 
     if (result.IsFailure()) {
         diag::detail::AbortImpl(
-            "", "", "", 0, result,
+            "", "", "", 0, &result,
             "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
             "nn::fs::OpenFile(&fileHandle, infoFilePath, nn::fs::OpenMode_Read)",
             result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug());
@@ -236,7 +236,7 @@ void ReadVersion(ErrorMessageDatabaseVersion* outVersion) {
 
     if (result.IsFailure()) {
         diag::detail::AbortImpl(
-            "", "", "", 0, result,
+            "", "", "", 0, &result,
             "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
             "nn::fs::ReadFile(fileHandle, 0, outVersion, sizeof(ErrorMessageDatabaseVersion))",
             result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug());
@@ -265,7 +265,7 @@ void ReadMessageFile(char16* outMessage, size_t messageBufferSize, const char* e
 
     if (result.IsFailure()) {
         diag::detail::AbortImpl(
-            "", "", "", 0, result,
+            "", "", "", 0, &result,
             "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x");
     }
 
@@ -274,7 +274,7 @@ void ReadMessageFile(char16* outMessage, size_t messageBufferSize, const char* e
 
     if (result.IsFailure()) {
         diag::detail::AbortImpl(
-            "", "", "", 0, result,
+            "", "", "", 0, &result,
             "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x");
     }
 

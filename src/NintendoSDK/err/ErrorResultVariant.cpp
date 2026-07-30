@@ -1,7 +1,7 @@
 #include <nn/err/ErrorResultVariant.h>
 
 namespace nn::err {
-ErrorResultVariant::ErrorResultVariant() {}
+ErrorResultVariant::ErrorResultVariant() : mValue({}) {}
 
 ErrorResultVariant::ErrorResultVariant(const Result& result)
     : mState(State::Result), mValue({.mResult = result}) {}

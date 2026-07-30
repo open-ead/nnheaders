@@ -23,10 +23,9 @@ namespace detail {
 // LOG
 void LogImpl(nn::diag::LogMetaData const&, char const*, ...);
 void AbortImpl(char const*, char const*, char const*, s32);
-void AbortImpl(char const*, char const*, char const*, s32, Result);
 
 [[gnu::format(printf, 6, 7)]] [[noreturn]]
-void AbortImpl(char const*, char const*, char const*, s32, Result, const char*, ...);
+void AbortImpl(char const*, char const*, char const*, s32, const Result*, const char*, ...);
 
 void OnAssertionFailure(nn::diag::AssertionType, char const*, char const*, char const*, s32);
 }  // namespace detail
