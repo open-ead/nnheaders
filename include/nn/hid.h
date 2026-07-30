@@ -518,11 +518,11 @@ void GetNpadState(NpadJoyDualState*, const u32& port);
 void GetNpadState(NpadJoyLeftState*, const u32& port);
 void GetNpadState(NpadJoyRightState*, const u32& port);
 
-void GetNpadStates(NpadFullKeyState*, s32, const u32& port);
-void GetNpadStates(NpadHandheldState*, s32, const u32& port);
-void GetNpadStates(NpadJoyDualState*, s32, const u32& port);
-void GetNpadStates(NpadJoyLeftState*, s32, const u32& port);
-void GetNpadStates(NpadJoyRightState*, s32, const u32& port);
+s32 GetNpadStates(NpadFullKeyState*, s32, const u32& port);
+s32 GetNpadStates(NpadHandheldState*, s32, const u32& port);
+s32 GetNpadStates(NpadJoyDualState*, s32, const u32& port);
+s32 GetNpadStates(NpadJoyLeftState*, s32, const u32& port);
+s32 GetNpadStates(NpadJoyRightState*, s32, const u32& port);
 
 void InitializeMouse();
 void InitializeKeyboard();
