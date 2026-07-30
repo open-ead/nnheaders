@@ -13,7 +13,7 @@ namespace nn::err {
 class ErrorMessageDatabaseVersion;
 // TODO
 class EulaData;
-class ErrorViewerJumpDestination;
+class ErrorViewerJumpDestination {};
 
 ErrorCode ConvertResultToErrorCode(const Result& result);
 bool CreateErrorViewerStartupParamForRecordedError(void*, u64*, u64, const char*, const char*,

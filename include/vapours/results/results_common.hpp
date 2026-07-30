@@ -58,6 +58,10 @@ public:
     static BaseType GetDescriptionFromValue(BaseType value) noexcept {
         return GetBitsValue(value, ModuleBits, DescriptionBits);
     }
+
+    static BaseType GetModuleAndDescriptionFromValue(BaseType value) noexcept {
+        return GetBitsValue(value, 0, ModuleBits + DescriptionBits);
+    }
 };
 
 /* Use CRTP for Results. */
@@ -67,13 +71,18 @@ public:
     using BaseType = typename ResultTraits::BaseType;
     static const BaseType SuccessValue = ResultTraits::SuccessValue;
 
-    int GetModule() const noexcept {
+    __attribute__((always_inline)) int GetModule() const noexcept {
         return static_cast<int>(ResultTraits::GetModuleFromValue(
             static_cast<const Self&>(*this).GetInnerValueForDebug()));
     }
 
-    int GetDescription() const noexcept {
+    __attribute__((always_inline)) int GetDescription() const noexcept {
         return static_cast<int>(ResultTraits::GetDescriptionFromValue(
+            static_cast<const Self&>(*this).GetInnerValueForDebug()));
+    }
+
+    __attribute__((always_inline)) int GetValue() const noexcept {
+        return static_cast<int>(ResultTraits::GetModuleAndDescriptionFromValue(
             static_cast<const Self&>(*this).GetInnerValueForDebug()));
     }
 };
@@ -104,13 +113,16 @@ public:
     bool IsSuccess() const noexcept { return m_value == SuccessValue; }
     bool IsFailure() const noexcept { return !IsSuccess(); }
 
-    bool operator==(Result other) const noexcept { return m_value == other.m_value; }
+    bool operator==(Result other) const noexcept { return GetValue() == other.GetValue(); }
     bool operator!=(Result other) const noexcept { return !operator==(other); }
     operator ResultSuccess() const noexcept;
     static bool CanAccept(Result result) noexcept;
 
-    int GetModule() const noexcept { return Base::GetModule(); }
-    int GetDescription() const noexcept { return Base::GetDescription(); }
+    __attribute__((always_inline)) int GetModule() const noexcept { return Base::GetModule(); }
+    __attribute__((always_inline)) int GetDescription() const noexcept {
+        return Base::GetDescription();
+    }
+    __attribute__((always_inline)) int GetValue() const noexcept { return Base::GetValue(); }
 };
 static_assert(sizeof(Result) == sizeof(result::detail::ResultTraits::BaseType),
               "sizeof(Result) == sizeof(detail::ResultTraits::BaseType)");
@@ -148,8 +160,11 @@ public:
 
     static bool CanAccept(Result result) noexcept { return result.IsSuccess(); }
 
-    int GetModule() const noexcept { return Base::GetModule(); }
-    int GetDescription() const noexcept { return Base::GetDescription(); }
+    __attribute__((always_inline)) int GetModule() const noexcept { return Base::GetModule(); }
+    __attribute__((always_inline)) int GetDescription() const noexcept {
+        return Base::GetDescription();
+    }
+    __attribute__((always_inline)) int GetValue() const noexcept { return Base::GetValue(); }
 };
 
 namespace result::detail {
