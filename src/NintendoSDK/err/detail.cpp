@@ -177,7 +177,7 @@ void* ReadMessageFile(char16* outBuffer, s32* outMessageLength, size_t messageBu
         if (fileSize != 0) {
             *outMessageLength = fileSize;
 
-            if (messageBufferSize <= fileSize) {
+            if (messageBufferSize <= static_cast<size_t>(fileSize)) {
                 diag::detail::AbortImpl("", "", "", 0);
             }
 
@@ -246,43 +246,47 @@ void ReadVersion(ErrorMessageDatabaseVersion* outVersion) {
     fs::Unmount("err");
 }
 
-void ReadMessageFile(char16* outMessage, size_t messageBufferSize, const char* errorCodeString,
+void ReadMessageFile(char16* outBuffer, size_t bufferSize, const char* errorCodeString,
                      const settings::LanguageCode& languageCode) {
     Result result = fs::MountSystemData("err", ncm::SystemDataId::Err);
 
     if (result.IsFailure()) {
-        *outMessage = u'\0';
+        *outBuffer = u'\0';
 
         return;
     }
 
-    char messageFilePath[32];
-    util::TSNPrintf(messageFilePath, sizeof(messageFilePath), "%s:/Messages/%s_%s", "err",
-                    languageCode.code, errorCodeString);
+    char filePath[32];
+    util::TSNPrintf(filePath, sizeof(filePath), "%s:/Messages/%s_%s", "err", languageCode.code,
+                    errorCodeString);
 
     fs::FileHandle fileHandle;
-    result = fs::OpenFile(&fileHandle, messageFilePath, fs::OpenMode_Read);
+    result = fs::OpenFile(&fileHandle, filePath, fs::OpenMode_Read);
 
     if (result.IsFailure()) {
-        diag::detail::AbortImpl(
-            "", "", "", 0, &result,
-            "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x");
+        diag::detail::AbortImpl("", "", "", 0, &result,
+                                "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
+                                "nn::fs::OpenFile(&fileHandle, filePath, nn::fs::OpenMode_Read)",
+                                result.GetModule(), result.GetDescription(),
+                                result.GetInnerValueForDebug());
     }
 
     u64 bytesRead;
-    result = fs::ReadFile(&bytesRead, fileHandle, 0, outMessage, messageBufferSize);
+    result = fs::ReadFile(&bytesRead, fileHandle, 0, outBuffer, bufferSize);
 
     if (result.IsFailure()) {
-        diag::detail::AbortImpl(
-            "", "", "", 0, &result,
-            "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x");
+        diag::detail::AbortImpl("", "", "", 0, &result,
+                                "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
+                                "nn::fs::ReadFile(&readSize, fileHandle, 0, outBuffer, bufferSize)",
+                                result.GetModule(), result.GetDescription(),
+                                result.GetInnerValueForDebug());
     }
 
-    u64 fileRead = messageBufferSize - 1;
+    u64 fileRead = bufferSize - 1;
     if (fileRead >= bytesRead)
         fileRead = bytesRead;
 
-    outMessage[fileRead] = u'\0';
+    outBuffer[fileRead] = u'\0';
 
     fs::CloseFile(fileHandle);
     fs::Unmount("err");

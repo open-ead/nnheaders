@@ -48,7 +48,7 @@ void ParseErrorCodeString(ErrorCode* outErrorCode, const char* errorCodeString);
 void* ReadMessageFile(char16* outBuffer, s32* outMessageLength, size_t messageBufferSize,
                       ErrorCode errorCode, settings::LanguageCode languageCode,
                       MessageKind messageKind);
-void ReadMessageFile(char16* outMessage, size_t messageBufferSize, const char* errorCodeString,
+void ReadMessageFile(char16* outBuffer, size_t bufferSize, const char* errorCodeString,
                      const settings::LanguageCode& languageCode);
 void ReadVersion(ErrorMessageDatabaseVersion* outVersion);
 bool TryParseApplicationErrorCodeString(
