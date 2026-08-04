@@ -18,11 +18,9 @@ CharacterEncodingResult ConvertCharacterUtf8ToUtf32(u32* dest, char const* src);
 CharacterEncodingResult ConvertStringUtf16NativeToUtf8(char*, s32, u16 const*, s32);
 CharacterEncodingResult ConvertStringUtf8ToUtf16Native(u16*, s32, char const*, s32);
 
-[[gnu::format(printf, 3, 4)]]
-s32 SNPrintf(char* s, size_t n, const char* format, ...);
+[[gnu::format(printf, 3, 4)]] s32 SNPrintf(char* s, size_t n, const char* format, ...);
 s32 VSNPrintf(char* s, size_t n, const char* format, va_list arg);
-[[gnu::format(printf, 3, 4)]]
-s32 TSNPrintf(char* s, size_t n, const char* format, ...);
+[[gnu::format(printf, 3, 4)]] s32 TSNPrintf(char* s, size_t n, const char* format, ...);
 s32 TVSNPrintf(char* s, size_t n, const char* format, va_list arg);
 
 void ReferSymbol(const void*);
