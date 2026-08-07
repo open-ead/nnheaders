@@ -191,7 +191,7 @@ public:
 
     bool IsAvailable() const;
 
-    void Initialize(detail::SoundArchiveFileReader* reader);
+    void Initialize(detail::SoundArchiveFileReader* fileReader);
     void Finalize();
 
     s32 GetSoundCount() const;
