@@ -29,27 +29,31 @@ void SoundArchive::Finalize() {
     m_ExtFileRoot[1] = '\0';
 }
 
-s32 SoundArchive::GetSoundCount() const {
+u32 SoundArchive::GetSoundCount() const {
     return m_pFileReader->GetSoundCount();
 }
 
-s32 SoundArchive::GetGroupCount() const {
+u32 SoundArchive::GetGroupCount() const {
     return m_pFileReader->GetGroupCount();
 }
 
-s32 SoundArchive::GetPlayerCount() const {
+u32 SoundArchive::GetPlayerCount() const {
     return m_pFileReader->GetPlayerCount();
 }
 
-s32 SoundArchive::GetSoundGroupCount() const {
+u32 SoundArchive::GetSoundGroupCount() const {
     return m_pFileReader->GetSoundGroupCount();
 }
 
-s32 SoundArchive::GetBankCount() const {
+u32 SoundArchive::GetBankCount() const {
     return m_pFileReader->GetBankCount();
 }
 
-s32 SoundArchive::GetWaveArchiveCount() const {
+u32 SoundArchive::GetWaveArchiveCount() const {
     return m_pFileReader->GetWaveArchiveCount();
+}
+
+u32 SoundArchive::detail_GetFileCount() const {
+    return m_pFileReader->GetFileCount();
 }
 } // namespace nn::atk
