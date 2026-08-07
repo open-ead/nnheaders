@@ -64,6 +64,8 @@ public:
     void* GetAttachedGroupTable(u32) const; // unknown return type
 
 private:
+    friend SoundArchive;
+
     SoundArchiveFile::FileHeader m_Header;
     SoundArchiveFile::StringBlockBody* m_pStringBlockBody;
     SoundArchiveFile::InfoBlockBody* m_pInfoBlockBody;
