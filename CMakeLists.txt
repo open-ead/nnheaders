@@ -242,6 +242,56 @@ add_library(NintendoSDK OBJECT
   include/nn/audio/audio_VoiceTypes.h
   include/nn/audio/audio_WaveBuffer.h
 
+  include/nvn/nvn_Cpp.h
+  include/nvn/nvn_CppFuncPtrBase.h
+  include/nvn/nvn_CppMethods.h
+  include/nvn/nvn_FuncPtrBase.h
+  include/nvn/nvn_FuncPtrInline.h
+  include/nvn/nvn.h
+  
+  include/vapours/results.hpp
+  include/vapours/results/sf_results.hpp
+  include/vapours/results/capsrv_results.hpp
+  include/vapours/results/pgl_results.hpp
+  include/vapours/results/lr_results.hpp
+  include/vapours/results/spl_results.hpp
+  include/vapours/results/pm_results.hpp
+  include/vapours/results/settings_results.hpp
+  include/vapours/results/debug_results.hpp
+  include/vapours/results/cal_results.hpp
+  include/vapours/results/i2c_results.hpp
+  include/vapours/results/results_common.hpp
+  include/vapours/results/time_results.hpp
+  include/vapours/results/vi_results.hpp
+  include/vapours/results/ns_results.hpp
+  include/vapours/results/fs_results.hpp
+  include/vapours/results/hipc_results.hpp
+  include/vapours/results/os_results.hpp
+  include/vapours/results/ro_results.hpp
+  include/vapours/results/loader_results.hpp
+  include/vapours/results/err_results.hpp
+  include/vapours/results/ncm_results.hpp
+  include/vapours/results/svc_results.hpp
+  include/vapours/results/nim_results.hpp
+  include/vapours/results/exosphere_results.hpp
+  include/vapours/results/creport_results.hpp
+  include/vapours/results/erpt_results.hpp
+  include/vapours/results/kvdb_results.hpp
+  include/vapours/results/dmnt_results.hpp
+  include/vapours/results/updater_results.hpp
+  include/vapours/results/fatal_results.hpp
+  include/vapours/results/sm_results.hpp
+  include/vapours/results/psc_results.hpp
+  include/vapours/results/nfp_results.hpp
+  include/nv.h
+
+  src/NintendoSDK/nvn/nvn_CppFuncPtrImpl.h
+  src/NintendoSDK/nvn/nvn_FuncPtrImpl.h
+  src/NintendoSDK/nvn/nvn_Impl.cpp
+)
+
+target_sources(NintendoSDK
+PUBLIC
   include/nn/atk/atk_Adpcm.h
   include/nn/atk/atk_BiquadFilterCallback.h
   include/nn/atk/atk_FsSoundArchive.h
@@ -385,53 +435,8 @@ add_library(NintendoSDK OBJECT
   include/nn/atk/fnd/io/atkfnd_StreamCache.h
   include/nn/atk/fnd/os/atkfnd_CriticalSection.h
   include/nn/atk/fnd/os/atkfnd_Thread.h
-
-  include/nvn/nvn_Cpp.h
-  include/nvn/nvn_CppFuncPtrBase.h
-  include/nvn/nvn_CppMethods.h
-  include/nvn/nvn_FuncPtrBase.h
-  include/nvn/nvn_FuncPtrInline.h
-  include/nvn/nvn.h
-  
-  include/vapours/results.hpp
-  include/vapours/results/sf_results.hpp
-  include/vapours/results/capsrv_results.hpp
-  include/vapours/results/pgl_results.hpp
-  include/vapours/results/lr_results.hpp
-  include/vapours/results/spl_results.hpp
-  include/vapours/results/pm_results.hpp
-  include/vapours/results/settings_results.hpp
-  include/vapours/results/debug_results.hpp
-  include/vapours/results/cal_results.hpp
-  include/vapours/results/i2c_results.hpp
-  include/vapours/results/results_common.hpp
-  include/vapours/results/time_results.hpp
-  include/vapours/results/vi_results.hpp
-  include/vapours/results/ns_results.hpp
-  include/vapours/results/fs_results.hpp
-  include/vapours/results/hipc_results.hpp
-  include/vapours/results/os_results.hpp
-  include/vapours/results/ro_results.hpp
-  include/vapours/results/loader_results.hpp
-  include/vapours/results/err_results.hpp
-  include/vapours/results/ncm_results.hpp
-  include/vapours/results/svc_results.hpp
-  include/vapours/results/nim_results.hpp
-  include/vapours/results/exosphere_results.hpp
-  include/vapours/results/creport_results.hpp
-  include/vapours/results/erpt_results.hpp
-  include/vapours/results/kvdb_results.hpp
-  include/vapours/results/dmnt_results.hpp
-  include/vapours/results/updater_results.hpp
-  include/vapours/results/fatal_results.hpp
-  include/vapours/results/sm_results.hpp
-  include/vapours/results/psc_results.hpp
-  include/vapours/results/nfp_results.hpp
-  include/nv.h
-
-  src/NintendoSDK/nvn/nvn_CppFuncPtrImpl.h
-  src/NintendoSDK/nvn/nvn_FuncPtrImpl.h
-  src/NintendoSDK/nvn/nvn_Impl.cpp
+PRIVATE
+  src/NintendoWare/atk/atk_SoundArchive.cpp
 )
 
 target_include_directories(NintendoSDK PUBLIC include/)
