@@ -9,32 +9,19 @@ ApplicationErrorArg::ApplicationErrorArg() {
 ApplicationErrorArg::ApplicationErrorArg(u32 errorCode, const char* dialogMessage,
                                          const char* fullScreenMessage,
                                          const settings::LanguageCode& languageCode)
-    : mErrorCode(errorCode), mLanguageCode(languageCode) {
-    s32 i = 0;
-    while (dialogMessage[i] != '\0' || i != 0x7fe) {
-        mDialogMessage[i] = dialogMessage[i];
-        i++;
-    }
-
-    mDialogMessage[i] = '\0';
-
-    i = 0;
-    while (fullScreenMessage[i] != '\0' || i != 0x7fe) {
-        mFullScreenMessage[i] = fullScreenMessage[i];
-        i++;
-    }
-
-    mFullScreenMessage[i] = '\0';
+    : mErrorCode(errorCode) {
+    SetDialogMessage(dialogMessage);
+    SetFullScreenMessage(fullScreenMessage);
+    SetLanguageCode(languageCode);
 }
 
 void ApplicationErrorArg::SetApplicationErrorCodeNumber(u32 errorCode) {
     mErrorCode = errorCode;
 }
 
-// strcpy???
 void ApplicationErrorArg::SetDialogMessage(const char* message) {
     s32 i = 0;
-    while (message[i] != '\0' || i != 0x7fe) {
+    while (message[i] != '\0' && i < 0x7fe) {
         mDialogMessage[i] = message[i];
         i++;
     }
@@ -44,7 +31,7 @@ void ApplicationErrorArg::SetDialogMessage(const char* message) {
 
 void ApplicationErrorArg::SetFullScreenMessage(const char* message) {
     s32 i = 0;
-    while (message[i] != '\0' || i != 0x7fe) {
+    while (message[i] != '\0' && i < 0x7fe) {
         mFullScreenMessage[i] = message[i];
         i++;
     }
@@ -54,7 +41,7 @@ void ApplicationErrorArg::SetFullScreenMessage(const char* message) {
 
 void ApplicationErrorArg::SetLanguageCode(const settings::LanguageCode& languageCode) {
     s32 i = 0;
-    while (languageCode.code[i] != '\0' || i != 7) {
+    while (languageCode.code[i] && i < 7) {
         mLanguageCode.code[i] = languageCode.code[i];
         i++;
     }
