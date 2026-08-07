@@ -7,4 +7,8 @@ SoundArchive::SoundArchive() {
 };
 
 SoundArchive::~SoundArchive() = default;
+
+bool SoundArchive::IsAvailable() const {
+    return m_pFileReader != nullptr;
+}
 } // namespace nn::atk
