@@ -193,14 +193,13 @@ public:
 
     bool IsAvailable() const;
 
-    s32 GetSoundCount() const;
-    s32 GetGroupCount() const; 
-    s32 GetPlayerCount() const; 
-    s32 GetSoundGroupCount() const; 
-    s32 GetBankCount() const; 
-    s32 GetWaveArchiveCount() const; 
-
-    s32 detail_GetFileCount() const; 
+    u32 GetSoundCount() const;
+    u32 GetGroupCount() const; 
+    u32 GetPlayerCount() const; 
+    u32 GetSoundGroupCount() const; 
+    u32 GetBankCount() const; 
+    u32 GetWaveArchiveCount() const; 
+    u32 detail_GetFileCount() const; 
 
     char* GetItemLabel(ItemId id) const;
     FileId GetItemFileId(ItemId id) const;

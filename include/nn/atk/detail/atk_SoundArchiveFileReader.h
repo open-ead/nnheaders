@@ -33,13 +33,13 @@ public:
     SoundArchive::FileId GetItemFileId(SoundArchive::ItemId id) const;
     SoundArchive::FileId GetItemPrefetchFileId(SoundArchive::ItemId id) const;
 
-    s32 GetSoundCount() const;
-    s32 GetBankCount() const;
-    s32 GetPlayerCount() const;
-    s32 GetSoundGroupCount() const;
-    s32 GetGroupCount() const;
-    s32 GetWaveArchiveCount() const;
-    s32 GetFileCount() const;
+    u32 GetSoundCount() const;
+    u32 GetBankCount() const;
+    u32 GetPlayerCount() const;
+    u32 GetSoundGroupCount() const;
+    u32 GetGroupCount() const;
+    u32 GetWaveArchiveCount() const;
+    u32 GetFileCount() const;
 
     bool ReadSoundInfo(SoundArchive::ItemId soundId, SoundArchive::SoundInfo* info) const;
     bool ReadBankInfo(SoundArchive::ItemId bankId, SoundArchive::BankInfo* info) const;
