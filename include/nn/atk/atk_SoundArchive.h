@@ -194,9 +194,9 @@ public:
     bool IsAvailable() const;
 
     s32 GetSoundCount() const;
+    s32 GetGroupCount() const; 
     s32 GetPlayerCount() const; 
     s32 GetSoundGroupCount() const; 
-    s32 GetGroupCount() const; 
     s32 GetBankCount() const; 
     s32 GetWaveArchiveCount() const; 
 
@@ -252,6 +252,7 @@ public:
 
     virtual bool IsAddon();
 
+protected:
     void Initialize(detail::SoundArchiveFileReader* fileReader);
     void Finalize();
 
@@ -261,7 +262,7 @@ public:
     virtual detail::fnd::FileStream* OpenExtStream(void* buffer, size_t size, const char* extFilePath,
                                                    void* cacheBuffer, size_t cacheSize) const = 0;
 
-    void OpenExtStreamImpl(void*, size_t, const char*, void*, size_t) const;
+    detail::fnd::FileStream* OpenExtStreamImpl(void*, size_t, const char*, void*, size_t) const;
 
 private:
     detail::SoundArchiveFileReader* m_pFileReader{};
