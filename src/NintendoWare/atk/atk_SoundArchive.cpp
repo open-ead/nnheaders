@@ -18,4 +18,14 @@ void SoundArchive::Initialize(detail::SoundArchiveFileReader* fileReader) {
     m_pFileReader = fileReader;
     m_FileBlockOffset = fileReader->m_Header.GetFileBlockOffset();
 }
+
+void SoundArchive::Finalize() {
+    if (m_pFileReader != nullptr) {
+        m_pFileReader->Finalize();
+        m_pFileReader = nullptr;
+    }
+
+    m_ExtFileRoot[0] = '/';
+    m_ExtFileRoot[1] = '\0';
+}
 } // namespace nn::atk
