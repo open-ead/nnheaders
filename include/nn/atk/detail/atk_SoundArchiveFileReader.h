@@ -63,6 +63,8 @@ public:
     bool ReadSoundUserParam(u32*, u32, s32) const;
     void* GetAttachedGroupTable(u32) const; // unknown return type
 
+    int GetFileBlockOffset() const { return m_Header.GetFileBlockOffset(); }
+
 private:
     friend SoundArchive;
 
