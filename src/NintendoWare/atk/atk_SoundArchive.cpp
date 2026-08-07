@@ -16,7 +16,7 @@ bool SoundArchive::IsAvailable() const {
 
 void SoundArchive::Initialize(detail::SoundArchiveFileReader* fileReader) {
     m_pFileReader = fileReader;
-    m_FileBlockOffset = fileReader->m_Header.GetFileBlockOffset();
+    m_FileBlockOffset = fileReader->GetFileBlockOffset();
 }
 
 void SoundArchive::Finalize() {
@@ -28,4 +28,9 @@ void SoundArchive::Finalize() {
     m_ExtFileRoot[0] = '/';
     m_ExtFileRoot[1] = '\0';
 }
+
+s32 SoundArchive::GetPlayerCount() const {
+    return m_pFileReader->GetPlayerCount();
+}
+
 } // namespace nn::atk

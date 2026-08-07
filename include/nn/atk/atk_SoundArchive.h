@@ -185,14 +185,13 @@ public:
     };
     static_assert(sizeof(Sound3DInfo) == 0xc);
 
+protected:
     SoundArchive();
 
+public:
     virtual ~SoundArchive();
 
     bool IsAvailable() const;
-
-    void Initialize(detail::SoundArchiveFileReader* fileReader);
-    void Finalize();
 
     s32 GetSoundCount() const;
     s32 GetPlayerCount() const; 
@@ -237,8 +236,6 @@ public:
 
     bool detail_OpenFileStream(FileId id, void*, size_t, void*, size_t) const;
 
-    void OpenExtStreamImpl(void*, size_t, const char*, void*, size_t) const;
-
     char* detail_GetExternalFileFullPath(const char*, char*, size_t) const;
 
     void SetExternalFileRoot(const char*);
@@ -255,11 +252,16 @@ public:
 
     virtual bool IsAddon();
 
+    void Initialize(detail::SoundArchiveFileReader* fileReader);
+    void Finalize();
+
     virtual detail::fnd::FileStream* OpenStream(void* buffer, size_t size, 
                                                 position_t begin, size_t length) const = 0;
 
     virtual detail::fnd::FileStream* OpenExtStream(void* buffer, size_t size, const char* extFilePath,
                                                    void* cacheBuffer, size_t cacheSize) const = 0;
+
+    void OpenExtStreamImpl(void*, size_t, const char*, void*, size_t) const;
 
 private:
     detail::SoundArchiveFileReader* m_pFileReader{};
