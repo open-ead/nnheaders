@@ -4,7 +4,7 @@
 #include <nn/util/util_IntrusiveList.h>
 
 #include <nn/atk/atk_SoundMemoryAllocatable.h>
-#include <nn/atk/detail/util/atk_FrameHeap.h>
+#include <nn/atk/atk_FrameHeap.h>
 #include <nn/atk/fnd/os/atkfnd_CriticalSection.h>
 
 namespace nn::atk::detail {

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <nn/atk/detail/atk_AdvancedWaveSoundFileReader.h>
-#include <nn/atk/detail/atk_BasicSoundPlayer.h>
-#include <nn/atk/detail/thread/atk_SoundThread.h>
-#include <nn/atk/detail/voice/atk_Channel.h>
-#include <nn/atk/submix/atk_OutputReceiver.h>
+#include <nn/atk/atk_BasicSoundPlayer.h>
+#include <nn/atk/atk_SoundThread.h>
+#include <nn/atk/atk_Channel.h>
+#include <nn/atk/atk_OutputReceiver.h>
 
 namespace nn::atk::detail::driver {
 class AdvancedWaveSoundPlayer : BasicSoundPlayer, SoundThread::PlayerCallback {

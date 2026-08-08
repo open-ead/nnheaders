@@ -2,7 +2,7 @@
 
 #include <nn/audio/audio_Adpcm.h>
 
-#include <nn/atk/detail/atk_Config.h>
+#include <nn/atk/atk_Config.h>
 
 namespace nn::atk {
 using AdpcmParam = audio::AdpcmParameter;
@@ -18,6 +18,7 @@ struct AdpcmContextNotAligned {
 static_assert(sizeof(AdpcmContextNotAligned) == 0x6);
 
 namespace detail {
+// TODO: Move to atk/detail/dsp/atk_DecodeAdpcm.cpp
 void DecodeDspAdpcm(position_t playPosition, AdpcmContext& context, 
                     const AdpcmParam& param, const void* adpcmData, 
                     size_t decodeSamples, s16* dest);

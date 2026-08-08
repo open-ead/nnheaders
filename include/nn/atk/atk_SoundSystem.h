@@ -6,12 +6,12 @@
 #include <vapours/results/results_common.hpp>
 
 #include <nn/atk/atk_Global.h>
-#include <nn/atk/detail/dsp/atk_HardwareManager.h>
-#include <nn/atk/detail/thread/atk_ThreadInfoReader.h>
-#include <nn/atk/effect/atk_EffectAux.h>
-#include <nn/atk/effect/atk_EffectBase.h>
-#include <nn/atk/util/atk_AudioRendererPerformanceReader.h>
-#include <nn/atk/util/atk_ProfileReader.h>
+#include <nn/atk/atk_HardwareManager.h>
+#include <nn/atk/atk_ThreadInfoReader.h>
+#include <nn/atk/atk_EffectAux.h>
+#include <nn/atk/atk_EffectBase.h>
+#include <nn/atk/atk_AudioRendererPerformanceReader.h>
+#include <nn/atk/atk_ProfileReader.h>
 
 namespace nn::atk {
 struct SoundSystem {

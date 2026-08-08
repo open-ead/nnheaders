@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nn/atk/detail/strm/atk_StreamSoundFile.h>
+#include <nn/atk/atk_StreamSoundFile.h>
 
 namespace nn::atk::detail {
 class IRegionInfoReadable {

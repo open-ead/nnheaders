@@ -1,7 +1,7 @@
 #pragma once
 
-#include <nn/atk/detail/atk_BasicSound.h>
-#include <nn/atk/detail/atk_SoundInstanceManager.h>
+#include <nn/atk/atk_BasicSound.h>
+#include <nn/atk/atk_SoundInstanceManager.h>
 #include <nn/atk/detail/atk_AdvancedWaveSoundPlayer.h>
 
 namespace nn::atk::detail {

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <nn/atk/detail/atk_Config.h>
-#include <nn/atk/detail/util/atk_Util.h>
+#include <nn/atk/atk_Config.h>
+#include <nn/atk/atk_Util.h>
 #include <nn/atk/fnd/io/atkfnd_FileStream.h>
 
 namespace nn::atk {
 namespace detail{
 class SoundArchiveFileReader;
-struct SoundArchiveParametersHook;
+class SoundArchiveParametersHook;
 struct SoundArchiveFilesHook;
 } // namespace nn::atk::detail
 

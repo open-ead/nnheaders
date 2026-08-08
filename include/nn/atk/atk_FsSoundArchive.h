@@ -1,7 +1,7 @@
 #pragma once
 
 #include <nn/atk/atk_SoundArchive.h>
-#include <nn/atk/detail/atk_SoundArchiveFileReader.h>
+#include <nn/atk/atk_SoundArchiveFileReader.h>
 #include <nn/atk/fnd/io/atkfnd_FileStreamImpl.h>
 #include <nn/atk/fnd/os/atkfnd_CriticalSection.h>
 

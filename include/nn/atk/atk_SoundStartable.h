@@ -3,8 +3,8 @@
 #include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/atk_SoundHandle.h>
 #include <nn/atk/detail/atk_RegionManager.h>
-#include <nn/atk/detail/strm/atk_StreamBufferPool.h>
-#include <nn/atk/submix/atk_OutputReceiver.h>
+#include <nn/atk/atk_StreamBufferPool.h>
+#include <nn/atk/atk_OutputReceiver.h>
 
 namespace nn::atk {
 class SoundStartable {

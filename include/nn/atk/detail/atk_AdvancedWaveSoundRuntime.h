@@ -5,8 +5,8 @@
 #include <nn/atk/atk_SoundDataManager.h>
 #include <nn/atk/atk_SoundStartable.h>
 #include <nn/atk/detail/atk_AdvancedWaveSound.h>
-#include <nn/atk/detail/atk_StartInfoReader.h>
-#include <nn/atk/submix/atk_OutputReceiver.h>
+#include <nn/atk/atk_StartInfoReader.h>
+#include <nn/atk/atk_OutputReceiver.h>
 
 namespace nn::atk::detail {
 class AdvancedWaveSoundRuntime {

@@ -2,7 +2,7 @@
 
 #include <nn/os.h>
 
-#include <nn/atk/detail/atk_Config.h>
+#include <nn/atk/atk_Config.h>
 
 namespace nn::atk::detail {
 namespace driver {

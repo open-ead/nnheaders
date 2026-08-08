@@ -2,7 +2,7 @@
 
 #include <nn/util/util_BinaryFormat.h>
 
-#include <nn/atk/detail/util/atk_BinaryTypes.h>
+#include <nn/atk/detail/atk_BinaryTypes.h>
 
 namespace nn::atk::detail {
 struct AdvancedWaveSoundFile {    

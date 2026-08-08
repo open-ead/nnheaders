@@ -2,9 +2,9 @@
 
 #include <nn/util/util_IntrusiveList.h>
 
-#include <nn/atk/detail/atk_BasicSound.h>
-#include <nn/atk/detail/atk_PlayerHeap.h>
-#include <nn/atk/detail/atk_OutputAdditionalParam.h>
+#include <nn/atk/atk_BasicSound.h>
+#include <nn/atk/atk_PlayerHeap.h>
+#include <nn/atk/atk_OutputAdditionalParam.h>
 
 namespace nn::atk  {
 class SoundPlayer {
