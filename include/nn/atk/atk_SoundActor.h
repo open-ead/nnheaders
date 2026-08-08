@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nn/atk/detail/atk_ExternalSoundPlayer.h>
+#include <nn/atk/atk_ExternalSoundPlayer.h>
 
 namespace nn::atk {
 class SoundActor {

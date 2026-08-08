@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nn/atk/detail/atk_BasicSound.h>
+#include <nn/atk/atk_BasicSound.h>
 
 namespace nn::atk {
 class SoundHandle {

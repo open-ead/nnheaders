@@ -1,8 +1,8 @@
 #pragma once
 
-#include <nn/atk/detail/atk_DisposeCallback.h>
-#include <nn/atk/detail/atk_SoundArchiveLoader.h>
-#include <nn/atk/detail/util/atk_Util.h>
+#include <nn/atk/atk_DisposeCallback.h>
+#include <nn/atk/atk_SoundArchiveLoader.h>
+#include <nn/atk/atk_Util.h>
 
 namespace nn::atk {
 

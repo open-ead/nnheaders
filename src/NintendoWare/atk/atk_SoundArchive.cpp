@@ -1,6 +1,6 @@
 #include <nn/atk/atk_SoundArchive.h>
 
-#include <nn/atk/detail/atk_SoundArchiveFileReader.h>
+#include <nn/atk/atk_SoundArchiveFileReader.h>
 
 namespace nn::atk {
 SoundArchive::SoundArchive() {
