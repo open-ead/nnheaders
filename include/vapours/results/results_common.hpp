@@ -71,19 +71,19 @@ public:
     using BaseType = typename ResultTraits::BaseType;
     static const BaseType SuccessValue = ResultTraits::SuccessValue;
 
-    __attribute__((always_inline)) int GetModule() const noexcept {
-        return static_cast<int>(ResultTraits::GetModuleFromValue(
-            static_cast<const Self&>(*this).GetInnerValueForDebug()));
+    __attribute__((always_inline)) BaseType GetModule() const noexcept {
+        return ResultTraits::GetModuleFromValue(
+            static_cast<const Self&>(*this).GetInnerValueForDebug());
     }
 
-    __attribute__((always_inline)) int GetDescription() const noexcept {
-        return static_cast<int>(ResultTraits::GetDescriptionFromValue(
-            static_cast<const Self&>(*this).GetInnerValueForDebug()));
+    __attribute__((always_inline)) BaseType GetDescription() const noexcept {
+        return ResultTraits::GetDescriptionFromValue(
+            static_cast<const Self&>(*this).GetInnerValueForDebug());
     }
 
-    __attribute__((always_inline)) int GetValue() const noexcept {
-        return static_cast<int>(ResultTraits::GetModuleAndDescriptionFromValue(
-            static_cast<const Self&>(*this).GetInnerValueForDebug()));
+    __attribute__((always_inline)) BaseType GetValue() const noexcept {
+        return ResultTraits::GetModuleAndDescriptionFromValue(
+            static_cast<const Self&>(*this).GetInnerValueForDebug());
     }
 };
 
@@ -118,11 +118,11 @@ public:
     operator ResultSuccess() const noexcept;
     static bool CanAccept(Result result) noexcept;
 
-    __attribute__((always_inline)) int GetModule() const noexcept { return Base::GetModule(); }
-    __attribute__((always_inline)) int GetDescription() const noexcept {
+    __attribute__((always_inline)) BaseType GetModule() const noexcept { return Base::GetModule(); }
+    __attribute__((always_inline)) BaseType GetDescription() const noexcept {
         return Base::GetDescription();
     }
-    __attribute__((always_inline)) int GetValue() const noexcept { return Base::GetValue(); }
+    __attribute__((always_inline)) BaseType GetValue() const noexcept { return Base::GetValue(); }
 };
 static_assert(sizeof(Result) == sizeof(result::detail::ResultTraits::BaseType),
               "sizeof(Result) == sizeof(detail::ResultTraits::BaseType)");
