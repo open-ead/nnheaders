@@ -5,9 +5,15 @@
 namespace nn::atk::detail {
 class SoundArchiveParametersHook {
 public:
-    bool SetIsEnable(bool value);
+    bool GetIsEnable() const { return m_IsEnable; }
+    void SetIsEnable(bool value) { m_IsEnable = value; }
 
-    const char* GetItemLabel(SoundArchive::ItemId id) const;
+    const char* GetItemLabel(SoundArchive::ItemId id) const {
+        if (m_IsEnable)
+            return GetItemLabelImpl(id);
+        return nullptr;
+    }
+
     SoundArchive::ItemId GetItemId(const char* itemLabel) const;
 
     SoundArchive::SoundType GetSoundType(const char* itemLabel);
@@ -28,6 +34,15 @@ public:
 
     bool ReadSoundUserParam(u32* pOutValue, SoundArchive::ItemId soundId, int index) const;
     u32 GetSoundUserParam(SoundArchive::ItemId soundId, u32 userParam) const;
+
+protected:
+    virtual void Impl1();
+    virtual void Impl2();
+    virtual void Impl3();
+    virtual const char* GetItemLabelImpl(SoundArchive::ItemId id) const;
+
+private:
+    bool m_IsEnable;
 };
 } // namespace nn::atk::detail
 
