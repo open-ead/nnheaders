@@ -5,5 +5,8 @@
 namespace nn::audio {
 struct SubMixType {
     MixInfo* _pMixInfo;
+
+    static float GetVolumeMin();
+    static float GetVolumeMax();
 };
 } // namespace nn::audio

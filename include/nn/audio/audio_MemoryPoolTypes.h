@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nn/types.h>
+
 namespace nn::audio {
 enum MemoryPoolState {
     MemoryPoolState_Invalid,
@@ -20,6 +22,9 @@ struct MemoryPoolType {
         State_RequestDetach,
         State_Detached,
     };
+
+    static const size_t AddressAlignment {4096};
+    static const size_t SizeGranularity {4096};
 
     MemoryPoolInfo* _pMemoryPoolInfo;
 };
