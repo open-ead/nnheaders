@@ -67,4 +67,14 @@ const char* SoundArchive::GetItemLabel(ItemId id) const {
 
     return m_pFileReader->GetItemLabel(id);
 }
+
+SoundArchive::ItemId SoundArchive::GetItemId(const char* pStr) const {
+    if (m_pParametersHook != nullptr) {
+        ItemId result {m_pParametersHook->GetItemId(pStr)};
+        if (result != InvalidId)
+            return result;
+    }
+
+    return m_pFileReader->GetItemId(pStr);
+}
 } // namespace nn::atk

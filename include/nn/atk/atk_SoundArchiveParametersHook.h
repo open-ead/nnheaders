@@ -11,10 +11,16 @@ public:
     const char* GetItemLabel(SoundArchive::ItemId id) const {
         if (m_IsEnable)
             return GetItemLabelImpl(id);
+
         return nullptr;
     }
 
-    SoundArchive::ItemId GetItemId(const char* itemLabel) const;
+    SoundArchive::ItemId GetItemId(const char* itemLabel) const {
+        if (m_IsEnable)
+            return GetItemIdImpl(itemLabel);
+
+        return SoundArchive::InvalidId;
+    }
 
     SoundArchive::SoundType GetSoundType(const char* itemLabel);
 
@@ -40,6 +46,8 @@ protected:
     virtual void Impl2();
     virtual void Impl3();
     virtual const char* GetItemLabelImpl(SoundArchive::ItemId id) const;
+    virtual SoundArchive::ItemId GetItemIdImpl(const char* itemLabel) const;
+    virtual SoundArchive::SoundType GetSoundTypeImpl(const char* itemLabel) const;
 
 private:
     bool m_IsEnable;
