@@ -1,6 +1,7 @@
 #include <nn/atk/atk_SoundArchive.h>
 
 #include <nn/atk/atk_SoundArchiveFileReader.h>
+#include <nn/atk/atk_SoundArchiveParametersHook.h>
 
 namespace nn::atk {
 SoundArchive::SoundArchive() {
@@ -55,5 +56,15 @@ u32 SoundArchive::GetWaveArchiveCount() const {
 
 u32 SoundArchive::detail_GetFileCount() const {
     return m_pFileReader->GetFileCount();
+}
+
+const char* SoundArchive::GetItemLabel(ItemId id) const {
+    if (m_pParametersHook != nullptr) {
+        const char* result {m_pParametersHook->GetItemLabel(id)};
+        if (result != nullptr)
+            return result;
+    }
+
+    return m_pFileReader->GetItemLabel(id);
 }
 } // namespace nn::atk
