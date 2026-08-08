@@ -29,7 +29,7 @@ ErrorCode MakeErrorCode(u32 category, u32 number) {
 // void ShowErrorRecord(const void*, u64) {}
 
 ErrorCode ConvertResultToErrorCode(const Result& result) {
-    return {result.GetModule() + 2000u, (u32)result.GetDescription()};
+    return {result.GetModule() + 2000, result.GetDescription()};
 }
 
 void GetErrorCodeString(char* outErrorCodeString, size_t errorCodeStrBufferSize,
