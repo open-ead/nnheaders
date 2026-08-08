@@ -14,6 +14,7 @@ public:
                     const WaveArchiveFileReader& warcReader, 
                     const NoteOnInfo& noteOnInfo) const;
     
-    static f32 CalcChannelVelocityVolume(u8 velocity);
+    static float CalcChannelVelocityVolume(u8 velocity);
 };
+static_assert(sizeof(Bank) == 0x1);
 } // namespace nn::atk::detail::driver
