@@ -7,17 +7,23 @@
 namespace nn::audio {
 class PerformanceInfo {
 public:
+    PerformanceInfo& operator=(const PerformanceInfo&);
+    PerformanceInfo& operator=(PerformanceInfo&&);
+
     PerformanceInfo();
     ~PerformanceInfo();
 
-    void SetBuffer(const void* buffer, size_t bufferSize);
-    void MoveToNextFrame();
+    bool SetBuffer(const void* buffer, size_t bufferSize);
 
-    PerformanceEntry* GetEntries(s32*);
-    void GetTotalProcessingTime();
+    bool MoveToNextFrame();
+
+    s32 GetTotalProcessingTime();
+    u32 GetFrameIndex();
+    const PerformanceEntry* GetEntries(int*);
+    const PerformanceDetail* GetDetails(int*);
 
 private:
-    void* m_Buffer;
+    const void* m_Buffer;
     size_t m_BufferSize;
     PerformanceFrameHeader* m_Header;
     PerformanceEntry* m_Entries;

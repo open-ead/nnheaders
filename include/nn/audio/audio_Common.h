@@ -4,6 +4,7 @@
 
 namespace nn::audio {
 using NodeId = uint32_t;
+const int BufferAlignSize = 64;
 
 struct AudioDeviceName {
     char raw_name[0x100];
@@ -14,7 +15,6 @@ struct DelayType {
     u64* _0;
 };
 
-struct EffectInfo {};
 struct MixInfo {};
 
 class VoiceInfoManager {};
