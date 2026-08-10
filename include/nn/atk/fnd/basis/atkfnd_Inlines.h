@@ -23,9 +23,13 @@ template <typename ValueT = void>
 inline ValueT* RoundDown(ValueT* x, int base);
 
 template <typename TDiff>
-inline TDiff GetOffsetFromPtr(const void* start, const void* end);
+inline TDiff GetOffsetFromPtr(const void* start, const void* end) {
+    return reinterpret_cast<TDiff>(end) - reinterpret_cast<TDiff>(start);
+}
 
-inline ptrdiff_t GetOffsetFromPtr(const void* start, const void* end);
+inline ptrdiff_t GetOffsetFromPtr(const void* start, const void* end) {
+    return reinterpret_cast<ptrdiff_t>(end) - reinterpret_cast<ptrdiff_t>(start);
+}
 
 template <typename TOffset>
 inline void* AddOffsetToPtr(void* ptr, TOffset offset);
