@@ -27,10 +27,15 @@ u32 StreamSoundFile::FileHeader::GetRegionBlockSize() const {
     return GetReferenceBy(ElementType_StreamSoundFile_RegionBlock)->size;
 }
 
+u32 StreamSoundFile::FileHeader::GetInfoBlockOffset() const {
+    return GetReferenceBy(ElementType_StreamSoundFile_InfoBlock)->offset;
+}
+
 const Util::ReferenceWithSize* StreamSoundFile::FileHeader::GetReferenceBy(u16 typeId) const {
     for (int i {0}; i < dataBlocks; ++i) {
-        if (toBlocks[i].typeId == typeId)
-            return &toBlocks[i];
+        const Util::ReferenceWithSize* p {&toBlocks[i]};
+        if (p->typeId == typeId)
+            return p;
     }
 
     return nullptr;
