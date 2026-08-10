@@ -36,7 +36,6 @@ public:
 
     constexpr static int MIN_ALIGNMENT = DefaultAlignment;
 
-
     static HeapBase* FindContainHeap(const void* memBlock);
     static HeapBase* FindParentHeap(const HeapBase* pChild);
     
@@ -71,7 +70,7 @@ private:
     static HeapList* FindListContainHeap(HeapBase* pHeapBase);
 
     u16 GetOptionFlag();
-    void SetOptionFlag(u16 optFlag);
+    void SetOptionFlag(u16 optFlag) { m_Attribute = optFlag & 0xff; };
 
     void* mHeapStart;
     void* mHeapEnd;
@@ -80,7 +79,4 @@ private:
     u32 m_Attribute;
 };
 static_assert(sizeof(HeapBase) == 0x40);
-
-static u8 sFillVals[12];
-static HeapBase::HeapList sRootList {};
 } // namespace nn::atk::detail::fnd
