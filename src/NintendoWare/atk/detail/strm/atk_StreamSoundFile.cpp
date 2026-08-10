@@ -67,4 +67,11 @@ const StreamSoundFile::TrackInfoTable* StreamSoundFile::InfoBlockBody::GetTrackI
 
     return nullptr;
 }
+
+const StreamSoundFile::ChannelInfoTable* StreamSoundFile::InfoBlockBody::GetChannelInfoTable() const {
+    if (toChannelInfoTable.typeId == ElementType_Table_ReferenceTable)
+        return util::ConstBytePtr(this).Advance(toChannelInfoTable.offset).Get<ChannelInfoTable>();
+
+    return nullptr;
+}
 } // namespace nn::atk::detail
