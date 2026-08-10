@@ -35,6 +35,10 @@ u32 StreamSoundFile::FileHeader::GetSeekBlockOffset() const {
     return GetReferenceBy(ElementType_StreamSoundFile_SeekBlock)->offset;
 }
 
+u32 StreamSoundFile::FileHeader::GetDataBlockOffset() const {
+    return GetReferenceBy(ElementType_StreamSoundFile_DataBlock)->offset;
+}
+
 const Util::ReferenceWithSize* StreamSoundFile::FileHeader::GetReferenceBy(u16 typeId) const {
     for (int i {0}; i < dataBlocks; ++i) {
         const Util::ReferenceWithSize* p {&toBlocks[i]};
