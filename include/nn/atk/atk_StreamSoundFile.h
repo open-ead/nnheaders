@@ -3,17 +3,19 @@
 #include <nn/atk/atk_Util.h>
 
 namespace nn::atk::detail {
-class StreamSoundFile {
-public:
+struct StreamSoundFile {
+    struct InfoBlock;
+
     struct FileHeader : BinaryFileHeader {
-
-        constexpr static u8 BlockCount = 4;
-
-        Util::Reference* GetReferenceBy(u16) const;
+    private:
+        static const int BlockCount = 4;
+    
+    public:
+        Util::ReferenceWithSize toBlocks[BlockCount];
 
         bool HasSeekBlock() const;
         bool HasRegionBlock() const;
-        
+
         u32 GetInfoBlockSize() const;
         u32 GetSeekBlockSize() const;
         u32 GetDataBlockSize() const;
@@ -24,9 +26,32 @@ public:
         u32 GetDataBlockOffset() const;
         u32 GetRegionBlockOffset() const;
 
-        Util::ReferenceWithSize toBlocks[BlockCount];
+        const InfoBlock* GetInfoBlock() const;
+
+    private:
+        const Util::ReferenceWithSize* GetReferenceBy(u16 typeId) const;
     };
     static_assert(sizeof(FileHeader) == 0x44);
+
+    struct StreamSoundInfo;
+    struct TrackInfoTable;
+    struct ChannelInfoTable;
+    struct InfoBlockBody {
+        Util::Reference toStreamSoundInfo;
+        Util::Reference toTrackInfoTable;
+        Util::Reference toChannelInfoTable;
+
+        const StreamSoundInfo* GetStreamSoundInfo() const;
+        const TrackInfoTable* GetTrackInfoTable() const;
+        const ChannelInfoTable* GetChannelInfoTable() const;
+    };
+    static_assert(sizeof(InfoBlockBody) == 0x18);
+
+    struct InfoBlock {
+        BinaryBlockHeader header;
+        InfoBlockBody body;
+    };
+    static_assert(sizeof(InfoBlock) == 0x20);
 
     struct StreamSoundInfo {
         u8 encodeMethod;
@@ -54,6 +79,15 @@ public:
     };
     static_assert(sizeof(StreamSoundInfo) == 0x50);
 
+    struct TrackInfo;
+    struct TrackInfoTable {
+        Util::ReferenceTable table;
+
+        const TrackInfo* GetTrackInfo(u32 index) const;
+        u32 GetTrackCount() const;
+    };
+
+    struct GlobalChannelIndexTable;
     struct TrackInfo {
         u8 volume;
         u8 pan;
@@ -61,53 +95,43 @@ public:
         u8 flags;
 
         Util::Reference toGlobalChannelIndexTable;
+
+        u32 GetTrackChannelCount() const;
+        u8 GetGlobalChannelIndex(u32 index) const;
+
+    private:
+        const GlobalChannelIndexTable& GetGlobalChannelIndexTable() const;
+    };
+    static_assert(sizeof(TrackInfo) == 0xc);
+
+    struct GlobalChannelIndexTable {
+        Util::Table<u8> table;
+
+        u32 GetCount() const;
+        u8 GetGlobalIndex(u32 index) const;
     };
 
-    struct TrackInfoTable {
-
-        TrackInfo* GetTrackInfo(u32 index) const;
-
+    struct ChannelInfo;
+    struct ChannelInfoTable {
         Util::ReferenceTable table;
+        
+        u32 GetChannelCount() const;
+        const ChannelInfo* GetChannelInfo(u32 index) const;
     };
+
+    struct DspAdpcmChannelInfo;
+    struct ChannelInfo {
+        Util::Reference toDetailChannelInfo;
+        
+        const DspAdpcmChannelInfo* GetDspAdpcmChannelInfo() const;
+    };
+    static_assert(sizeof(ChannelInfo) == 0x8);
 
     struct DspAdpcmChannelInfo {
         DspAdpcmParam param;
         DspAdpcmLoopParam loopParam;
     };
     static_assert(sizeof(DspAdpcmChannelInfo) == 0x2c);
-
-    struct ChannelInfo {
-        
-        DspAdpcmChannelInfo* GetDspAdpcmChannelInfo() const;
-
-        Util::Reference toDetailChannelInfo;
-    };
-    static_assert(sizeof(ChannelInfo) == 0x8);
-
-    struct ChannelInfoTable {
-    
-        ChannelInfo* GetChannelInfo(u32 index) const;
-    
-        Util::ReferenceTable table;
-    };
-
-    struct InfoBlockBody {
-
-        StreamSoundInfo* GetStreamSoundInfo() const;
-        TrackInfoTable* GetTrackInfoTable() const;
-        ChannelInfoTable* GetChannelInfoTable() const;
-
-        Util::Reference toStreamSoundInfo;
-        Util::Reference toTrackInfoTable;
-        Util::Reference toChannelInfoTable;
-    };
-    static_assert(sizeof(InfoBlockBody) == 0x18);
-
-    struct InfoBlock {
-        BinaryBlockHeader header;
-        InfoBlockBody body;
-    };
-    static_assert(sizeof(InfoBlock) == 0x20);
 
     struct RegionInfo {
         u32 start;
@@ -124,9 +148,5 @@ public:
         RegionInfo info;
     };
     static_assert(sizeof(RegionBlock) == 0x108);
-
-    struct GlobalChannelIndexTable {
-        Util::Table<u8> table;
-    };
 };
 } // namespace nn::atk::detail
