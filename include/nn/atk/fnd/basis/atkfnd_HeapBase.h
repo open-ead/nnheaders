@@ -4,7 +4,7 @@
 #include <nn/util/util_IntrusiveList.h>
 
 namespace nn::atk::detail::fnd {
-class HeapBase : util::IntrusiveListBaseNode<HeapBase> {
+class HeapBase : public util::IntrusiveListBaseNode<HeapBase> {
 public:
     using HeapList = util::IntrusiveList<HeapBase, util::IntrusiveListBaseNodeTraits<HeapBase>>;
 
@@ -70,7 +70,11 @@ private:
     static HeapList* FindListContainHeap(HeapBase* pHeapBase);
 
     u16 GetOptionFlag();
-    void SetOptionFlag(u16 optFlag) { m_Attribute = optFlag & 0xff; };
+    void SetOptionFlag(u16 optFlag) { 
+        u32 maskBits {0xff};
+        u16 newVal = optFlag & maskBits;
+        m_Attribute = newVal; 
+    };
 
     void* mHeapStart;
     void* mHeapEnd;
