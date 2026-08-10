@@ -546,6 +546,17 @@ PRIVATE
   src/NintendoWare/atk/util/atk_DeviceOutRecorder.cpp
   src/NintendoWare/atk/util/atk_ProfileReader.cpp
   src/NintendoWare/atk/util/atk_TaskProfileReader.cpp
+
+  src/NintendoWare/atk/fnd/basis/atkfnd_FrameHeapImpl.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_HeapBase.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_Time.win32.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_WorkBufferAllocator.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.win32.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamProxy.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_StreamCache.cpp
+  src/NintendoWare/atk/fnd/os/atkfnd_Thread.cpp
+  src/NintendoWare/atk/fnd/os/atkfnd_Thread.win32.cpp
 )
 
 target_include_directories(NintendoSDK PUBLIC include/)
