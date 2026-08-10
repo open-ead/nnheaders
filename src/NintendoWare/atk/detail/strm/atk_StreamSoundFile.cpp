@@ -1,6 +1,7 @@
 #include <nn/atk/atk_StreamSoundFile.h>
 
 #include <nn/atk/atk_ElementType.h>
+#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 bool StreamSoundFile::FileHeader::HasSeekBlock() const {
@@ -49,6 +50,13 @@ const Util::ReferenceWithSize* StreamSoundFile::FileHeader::GetReferenceBy(u16 t
         if (p->typeId == typeId)
             return p;
     }
+
+    return nullptr;
+}
+
+const StreamSoundFile::StreamSoundInfo* StreamSoundFile::InfoBlockBody::GetStreamSoundInfo() const {
+    if (toStreamSoundInfo.typeId == ElementType_StreamSoundFile_StreamSoundInfo)
+        return util::ConstBytePtr(this).Advance(toStreamSoundInfo.offset).Get<StreamSoundInfo>();
 
     return nullptr;
 }
