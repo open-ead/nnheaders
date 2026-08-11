@@ -420,10 +420,10 @@ struct WaveInfo {
 };
 static_assert(sizeof(WaveInfo) == 0xa0);
 
-static const OutputMix DefaultTvMix{1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 
-                                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
-                                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
-                                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+static const OutputMix DefaultTvMix{{1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 
+                                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
 } // namespace nn::atk::detail
 
 using SoundFrameUserCallback = void(*)(std::uintptr_t); 
