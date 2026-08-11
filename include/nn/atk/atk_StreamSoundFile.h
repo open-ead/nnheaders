@@ -83,8 +83,8 @@ struct StreamSoundFile {
     struct TrackInfoTable {
         Util::ReferenceTable table;
 
-        const TrackInfo* GetTrackInfo(u32 index) const;
         u32 GetTrackCount() const;
+        const TrackInfo* GetTrackInfo(u32 index) const;
     };
 
     struct GlobalChannelIndexTable;
