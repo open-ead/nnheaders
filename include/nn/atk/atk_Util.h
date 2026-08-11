@@ -48,7 +48,10 @@ struct Util {
     };
 
     struct Reference {
-        constexpr static s32 InvalidOffset = -1;
+        static const int InvalidOffset = -1;
+
+        bool IsValidTypeId(u16 validId) const { return typeId == validId; }
+        bool IsValidOffset() const { return offset != InvalidOffset; }
 
         // Id from ElementTypes enum
         u16 typeId;
@@ -57,7 +60,7 @@ struct Util {
     };
     static_assert(sizeof(Reference) == 0x8);
 
-    struct ReferenceWithSize : Reference {
+    struct ReferenceWithSize : public Reference {
         u32 size;
     };
     static_assert(sizeof(ReferenceWithSize) == 0xc);
@@ -81,14 +84,14 @@ struct Util {
 
         const void* GetReferedItem(u32 index) const {
             if (count > index)
-                return util::ConstBytePtr(this).Advance(item[index].offset).Get<void>();
+                return util::ConstBytePtr(this).Advance(item[index].offset).Get();
 
             return nullptr;
         }
 
         const void* GetReferedItem(u32 index, u16 typeId) const {
             if (count > index && item[index].typeId == typeId)
-                return util::ConstBytePtr(this).Advance(item[index].offset).Get<void>();
+                return util::ConstBytePtr(this).Advance(item[index].offset).Get();
 
             return nullptr;
         }
@@ -101,14 +104,14 @@ struct Util {
 
         const void* GetReferedItem(u32 index) const {
             if (count > index)
-                return util::ConstBytePtr(this).Advance(item[index].offset).Get<void>();
+                return util::ConstBytePtr(this).Advance(item[index].offset).Get();
 
             return nullptr;
         }
 
         const void* GetReferedItemBy(u16 typeId) const;
         u32 GetReferedItemSize(u32 index) const;
-        
+
     };
 
     struct BitFlag {

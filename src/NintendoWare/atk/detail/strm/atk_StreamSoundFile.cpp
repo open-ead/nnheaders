@@ -54,21 +54,21 @@ const Util::ReferenceWithSize* StreamSoundFile::FileHeader::GetReferenceBy(u16 t
 }
 
 const StreamSoundFile::StreamSoundInfo* StreamSoundFile::InfoBlockBody::GetStreamSoundInfo() const {
-    if (toStreamSoundInfo.typeId == ElementType_StreamSoundFile_StreamSoundInfo)
+    if (toStreamSoundInfo.IsValidTypeId(ElementType_StreamSoundFile_StreamSoundInfo))
         return util::ConstBytePtr(this).Advance(toStreamSoundInfo.offset).Get<StreamSoundInfo>();
 
     return nullptr;
 }
 
 const StreamSoundFile::TrackInfoTable* StreamSoundFile::InfoBlockBody::GetTrackInfoTable() const {
-    if (toTrackInfoTable.typeId == ElementType_Table_ReferenceTable)
+    if (toTrackInfoTable.IsValidTypeId(ElementType_Table_ReferenceTable))
         return util::ConstBytePtr(this).Advance(toTrackInfoTable.offset).Get<TrackInfoTable>();
 
     return nullptr;
 }
 
 const StreamSoundFile::ChannelInfoTable* StreamSoundFile::InfoBlockBody::GetChannelInfoTable() const {
-    if (toChannelInfoTable.typeId == ElementType_Table_ReferenceTable)
+    if (toChannelInfoTable.IsValidTypeId(ElementType_Table_ReferenceTable))
         return util::ConstBytePtr(this).Advance(toChannelInfoTable.offset).Get<ChannelInfoTable>();
 
     return nullptr;
@@ -79,7 +79,7 @@ u32 StreamSoundFile::TrackInfoTable::GetTrackCount() const {
 }
 
 const StreamSoundFile::TrackInfo* StreamSoundFile::TrackInfoTable::GetTrackInfo(u32 index) const {
-    return static_cast<const StreamSoundFile::TrackInfo*>(table.GetReferedItem(index, ElementType_StreamSoundFile_TrackInfo));
+    return static_cast<const TrackInfo*>(table.GetReferedItem(index, ElementType_StreamSoundFile_TrackInfo));
 }
 
 u32 StreamSoundFile::ChannelInfoTable::GetChannelCount() const {
@@ -87,6 +87,13 @@ u32 StreamSoundFile::ChannelInfoTable::GetChannelCount() const {
 }
 
 const StreamSoundFile::ChannelInfo* StreamSoundFile::ChannelInfoTable::GetChannelInfo(u32 index) const {
-    return static_cast<const StreamSoundFile::ChannelInfo*>(table.GetReferedItem(index, ElementType_StreamSoundFile_ChannelInfo));
+    return static_cast<const ChannelInfo*>(table.GetReferedItem(index, ElementType_StreamSoundFile_ChannelInfo));
+}
+
+const StreamSoundFile::DspAdpcmChannelInfo* StreamSoundFile::ChannelInfo::GetDspAdpcmChannelInfo() const {
+    if (toDetailChannelInfo.IsValidTypeId(ElementType_Codec_DspAdpcmInfo))
+        return util::ConstBytePtr(this).Advance(toDetailChannelInfo.offset).Get<DspAdpcmChannelInfo>();
+    
+    return nullptr;
 }
 } // namespace nn::atk::detail
