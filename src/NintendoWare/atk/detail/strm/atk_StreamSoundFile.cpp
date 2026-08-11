@@ -1,7 +1,6 @@
 #include <nn/atk/atk_StreamSoundFile.h>
 
 #include <nn/atk/atk_ElementType.h>
-#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 bool StreamSoundFile::FileHeader::HasSeekBlock() const {
@@ -75,7 +74,19 @@ const StreamSoundFile::ChannelInfoTable* StreamSoundFile::InfoBlockBody::GetChan
     return nullptr;
 }
 
+u32 StreamSoundFile::TrackInfoTable::GetTrackCount() const {
+    return table.count;
+}
+
 const StreamSoundFile::TrackInfo* StreamSoundFile::TrackInfoTable::GetTrackInfo(u32 index) const {
     return static_cast<const StreamSoundFile::TrackInfo*>(table.GetReferedItem(index, ElementType_StreamSoundFile_TrackInfo));
+}
+
+u32 StreamSoundFile::ChannelInfoTable::GetChannelCount() const {
+    return table.count;
+}
+
+const StreamSoundFile::ChannelInfo* StreamSoundFile::ChannelInfoTable::GetChannelInfo(u32 index) const {
+    return static_cast<const StreamSoundFile::ChannelInfo*>(table.GetReferedItem(index, ElementType_StreamSoundFile_ChannelInfo));
 }
 } // namespace nn::atk::detail

@@ -96,8 +96,20 @@ struct Util {
         const void* FindReferedItemBy(u16 typeId) const;
 
     };
-    
-    struct ReferenceWithSizeTable : Table<ReferenceWithSize> {};
+
+    struct ReferenceWithSizeTable : Table<ReferenceWithSize> {
+
+        const void* GetReferedItem(u32 index) const {
+            if (count > index)
+                return util::ConstBytePtr(this).Advance(item[index].offset).Get<void>();
+
+            return nullptr;
+        }
+
+        const void* GetReferedItemBy(u16 typeId) const;
+        u32 GetReferedItemSize(u32 index) const;
+        
+    };
 
     struct BitFlag {
         constexpr static u32 BitNumberMax = 31;
