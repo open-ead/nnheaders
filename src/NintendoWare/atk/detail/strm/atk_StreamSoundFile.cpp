@@ -74,4 +74,8 @@ const StreamSoundFile::ChannelInfoTable* StreamSoundFile::InfoBlockBody::GetChan
 
     return nullptr;
 }
+
+const StreamSoundFile::TrackInfo* StreamSoundFile::TrackInfoTable::GetTrackInfo(u32 index) const {
+    return static_cast<const StreamSoundFile::TrackInfo*>(table.GetReferedItem(index, ElementType_StreamSoundFile_TrackInfo));
+}
 } // namespace nn::atk::detail
