@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nn/util.h>
+#include <nn/util/util_BytePtr.h>
 
 #include <nn/atk/atk_Global.h>
 #include <nn/atk/atk_BinaryFileFormat.h>
@@ -70,13 +71,32 @@ struct Util {
         BlockReferenceTable blockReferenceTable;
     };
 
-    template <typename T, typename CountType = u32>
+    template <typename ItemType, typename CountType = u32>
     struct Table {
         CountType count;
-        T item[1];
+        ItemType item[1];
     };
 
-    struct ReferenceTable : Table<Reference> {};
+    struct ReferenceTable : Table<Reference> {
+
+        const void* GetReferedItem(u32 index) const {
+            if (count > index)
+                return util::ConstBytePtr(this).Advance(item[index].offset).Get<void>();
+
+            return nullptr;
+        }
+
+        const void* GetReferedItem(u32 index, u16 typeId) const {
+            if (count > index && item[index].typeId == typeId)
+                return util::ConstBytePtr(this).Advance(item[index].offset).Get<void>();
+
+            return nullptr;
+        }
+
+        const void* FindReferedItemBy(u16 typeId) const;
+
+    };
+    
     struct ReferenceWithSizeTable : Table<ReferenceWithSize> {};
 
     struct BitFlag {
