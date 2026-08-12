@@ -27,4 +27,28 @@ bool StreamSoundFileLoader::LoadFileHeader(StreamSoundFileReader* reader, void* 
 
     return false;
 }
+
+bool StreamSoundFileLoader::ReadSeekBlockData(u16* yn1, u16* yn2, int blockIndex, int channelCount) {
+    const size_t SeekInfoMaxSize = channelCount * 4L;
+    size_t readDataSize = SeekInfoMaxSize;
+    size_t readOffset = m_SeekBlockOffset + blockIndex * readDataSize + 8;
+
+    m_pStream->Seek(readOffset, fnd::FileStream::SeekOrigin_Begin);
+    if (readDataSize <= 64) {
+        const int Align = 64;
+        u16 bufferBase[128];
+        u16* buffer = util::BytePtr(bufferBase).AlignUp(Align).Get<u16>();
+        size_t readSize {m_pStream->Read(buffer, readDataSize, nullptr)};
+
+        if (readSize == readDataSize) {
+            for (int i {0}; i < channelCount; ++i) {
+                yn1[i] = buffer[i * sizeof(u16)];
+                yn2[i] = buffer[i * sizeof(u16) + 1];
+            }
+            return true;
+        }
+    }
+
+    return false;
+}
 } // namespace nn::atk::detail
