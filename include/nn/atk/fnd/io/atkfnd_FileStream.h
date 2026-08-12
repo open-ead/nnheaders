@@ -4,7 +4,7 @@
 #include <nn/atk/fnd/io/atkfnd_StreamCache.h>
 
 namespace nn::atk::detail::fnd {
-class FileStream : Stream {
+class FileStream : public Stream {
 public:
     enum AccessMode {
         AccessMode_None,
