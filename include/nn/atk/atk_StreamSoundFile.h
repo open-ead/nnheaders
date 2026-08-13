@@ -85,7 +85,8 @@ struct StreamSoundFile {
     struct TrackInfoTable {
         Util::ReferenceTable table;
 
-        u32 GetTrackCount() const;
+        u32 GetTrackCount() const { return table.count; }
+
         const TrackInfo* GetTrackInfo(u32 index) const;
     };
 
@@ -98,19 +99,28 @@ struct StreamSoundFile {
 
         Util::Reference toGlobalChannelIndexTable;
 
-        u32 GetTrackChannelCount() const;
-        u8 GetGlobalChannelIndex(u32 index) const;
+        u32 GetTrackChannelCount() const {
+            return GetGlobalChannelIndexTable().GetCount();
+        }
+        
+        u8 GetGlobalChannelIndex(u32 index) const {
+            return GetGlobalChannelIndexTable().GetGlobalIndex(index);
+        }
 
     private:
-        const GlobalChannelIndexTable& GetGlobalChannelIndexTable() const;
+        const GlobalChannelIndexTable& GetGlobalChannelIndexTable() const {
+            return *util::ConstBytePtr(this)
+                    .Advance(toGlobalChannelIndexTable.offset)
+                    .Get<GlobalChannelIndexTable>();
+        }
     };
     static_assert(sizeof(TrackInfo) == 0xc);
 
     struct GlobalChannelIndexTable {
         Util::Table<u8> table;
 
-        u32 GetCount() const;
-        u8 GetGlobalIndex(u32 index) const;
+        u32 GetCount() const { return table.count; }
+        u8 GetGlobalIndex(u32 index) const { return table.item[index]; }
     };
 
     struct ChannelInfo;

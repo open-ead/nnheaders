@@ -106,6 +106,29 @@ bool StreamSoundFileReader::ReadStreamSoundInfo(StreamSoundFile::StreamSoundInfo
     return true;
 }
 
+bool StreamSoundFileReader::ReadStreamTrackInfo(TrackInfo* pTrackInfo, int trackIndex) const {
+    auto* table {m_pInfoBlockBody->GetTrackInfoTable()};
+    if (table != nullptr && trackIndex < static_cast<int>(table->GetTrackCount())) {
+        auto* src {table->GetTrackInfo(trackIndex)};
+        pTrackInfo->volume = src->volume;
+        pTrackInfo->pan = src->pan;
+        pTrackInfo->span = src->span;
+        pTrackInfo->flags = src->flags;
+        pTrackInfo->channelCount = src->GetTrackChannelCount();
+        
+        u32 count {pTrackInfo->channelCount};
+        if (count > 1)
+            count = 2;
+        
+        for (u32 i {0}; i < count; ++i)
+            pTrackInfo->globalChannelIndex[i] = src->GetGlobalChannelIndex(i);
+
+        return true;
+    }
+
+    return false;
+}
+
 bool StreamSoundFileReader::ReadDspAdpcmChannelInfo(DspAdpcmParam* pParam, DspAdpcmLoopParam* pLoopParam,
                                                     int channelIndex) const {
     auto* src {m_pInfoBlockBody->GetChannelInfoTable()->GetChannelInfo(channelIndex)->GetDspAdpcmChannelInfo()};
