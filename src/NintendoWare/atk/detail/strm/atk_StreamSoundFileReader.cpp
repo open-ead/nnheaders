@@ -23,6 +23,17 @@ void StreamSoundFileReader::Initialize(const void* streamSoundFile) {
     }
 }
 
+void StreamSoundFileReader::Finalize()  {
+    m_pHeader = nullptr;
+    m_pInfoBlockBody = nullptr;
+}
+
+bool StreamSoundFileReader::IsTrackInfoAvailable() const {
+    auto& header {*util::ConstBytePtr(m_pHeader).Get<BinaryFileHeader>()};
+
+    return header.version <= IncludeTrackinfoVersionStm;
+}
+
 bool StreamSoundFileReader::IsValidFileHeader(const void* streamSoundFile) {
     const BinaryFileHeader& header {*util::ConstBytePtr(streamSoundFile).Get<BinaryFileHeader>()};
     
