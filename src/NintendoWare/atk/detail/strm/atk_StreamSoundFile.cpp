@@ -74,10 +74,6 @@ const StreamSoundFile::ChannelInfoTable* StreamSoundFile::InfoBlockBody::GetChan
     return nullptr;
 }
 
-u32 StreamSoundFile::TrackInfoTable::GetTrackCount() const {
-    return table.count;
-}
-
 const StreamSoundFile::TrackInfo* StreamSoundFile::TrackInfoTable::GetTrackInfo(u32 index) const {
     return static_cast<const TrackInfo*>(table.GetReferedItem(index, ElementType_StreamSoundFile_TrackInfo));
 }

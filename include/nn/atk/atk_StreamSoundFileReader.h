@@ -5,6 +5,17 @@
 namespace nn::atk::detail {
 class StreamSoundFileReader {
 public:
+    struct TrackInfo {
+        u8 volume;
+        u8 pan;
+        u8 span;
+        u8 flags;
+        u8 channelCount;
+        u8 globalChannelIndex[2];
+
+        TrackInfo();
+    };
+
     StreamSoundFileReader();
 
     void Initialize(const void* streamSoundFile);
@@ -22,7 +33,7 @@ public:
     static bool IsValidFileHeader(const void* streamSoundFile);
 
     bool ReadStreamSoundInfo(StreamSoundFile::StreamSoundInfo* strmInfo) const;
-    bool ReadStreamTrackInfo(StreamSoundFile::TrackInfo* pTrackInfo, int trackIndex) const;
+    bool ReadStreamTrackInfo(TrackInfo* pTrackInfo, int trackIndex) const;
     bool ReadDspAdpcmChannelInfo(DspAdpcmParam* pParam, DspAdpcmLoopParam* pLoopParam,
                                  int channelIndex) const;
 
