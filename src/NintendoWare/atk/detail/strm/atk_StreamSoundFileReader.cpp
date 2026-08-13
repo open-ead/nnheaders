@@ -34,6 +34,12 @@ bool StreamSoundFileReader::IsTrackInfoAvailable() const {
     return header.version <= IncludeTrackinfoVersionStm;
 }
 
+bool StreamSoundFileReader::IsCrc32CheckAvailable() const {
+    auto& header {*util::ConstBytePtr(m_pHeader).Get<BinaryFileHeader>()};
+
+    return header.version >= IncludeCrc32CheckVersionStm;
+}
+
 bool StreamSoundFileReader::IsValidFileHeader(const void* streamSoundFile) {
     const BinaryFileHeader& header {*util::ConstBytePtr(streamSoundFile).Get<BinaryFileHeader>()};
     
