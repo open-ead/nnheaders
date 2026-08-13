@@ -11,6 +11,8 @@ struct BinaryFileHeader {
     u32 fileSize;
     u16 dataBlocks;
     u16 reserved;
+
+    static const u16 ValidByteOrderMark {0xFEFF};
 };
 static_assert(sizeof(BinaryFileHeader) == 0x14);
 
