@@ -8,23 +8,23 @@ public:
     StreamSoundFileReader();
 
     void Initialize(const void* streamSoundFile);
-
-    static bool IsValidFileHeader(const void* streamSoundFile);
-
     void Finalize();
 
+    bool IsAvailable() const;
     bool IsTrackInfoAvailable() const;
     bool IsOriginalLoopAvailable() const;
-
-    static bool IsOriginalLoopAvailableImpl(const StreamSoundFile::FileHeader* header);
-
     bool IsCrc32CheckAvailable() const;
     bool IsRegionIndexCheckAvailable() const;
 
+    static bool IsValidFileHeader(const void* streamSoundFile);
+
     bool ReadStreamSoundInfo(StreamSoundFile::StreamSoundInfo* strmInfo) const;
-    bool ReadStreamTrackInfo(StreamSoundFile::TrackInfo* pTrackInfo, s32 trackIndex) const;
+    bool ReadStreamTrackInfo(StreamSoundFile::TrackInfo* pTrackInfo, int trackIndex) const;
     bool ReadDspAdpcmChannelInfo(DspAdpcmParam* pParam, DspAdpcmLoopParam* pLoopParam,
-                                 s32 channelIndex) const;
+                                 int channelIndex) const;
+
+    u32 GetChannelCount() const;
+    u32 GetTrackCount() const;
 
     u32 GetSeekBlockOffset() const {
         if (m_pHeader != nullptr && m_pHeader->HasSeekBlock())
@@ -32,6 +32,8 @@ public:
         
         return 0;
     }
+
+    u32 GetSampleDataOffset() const;
 
     u32 GetRegionDataOffset() const {
         u32 result {0};
@@ -48,9 +50,11 @@ public:
         return m_pInfoBlockBody->GetStreamSoundInfo()->regionInfoBytes;
     }
 
+    static bool IsOriginalLoopAvailableImpl(const StreamSoundFile::FileHeader* pHeader);
+
 private:
-    StreamSoundFile::FileHeader* m_pHeader;
-    StreamSoundFile::InfoBlockBody* m_pInfoBlockBody;
+    StreamSoundFile::FileHeader* m_pHeader {};
+    StreamSoundFile::InfoBlockBody* m_pInfoBlockBody {};
 };
 static_assert(sizeof(StreamSoundFileReader) == 0x10);
 } // namespace nn::atk::detail
