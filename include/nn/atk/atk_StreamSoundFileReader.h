@@ -10,7 +10,10 @@ public:
     void Initialize(const void* streamSoundFile);
     void Finalize();
 
-    bool IsAvailable() const;
+    bool IsAvailable() const {
+        return m_pHeader != nullptr;
+    }
+    
     bool IsTrackInfoAvailable() const;
     bool IsOriginalLoopAvailable() const;
     bool IsCrc32CheckAvailable() const;
