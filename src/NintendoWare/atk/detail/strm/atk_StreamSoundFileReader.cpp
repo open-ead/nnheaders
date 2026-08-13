@@ -34,11 +34,13 @@ bool StreamSoundFileReader::IsTrackInfoAvailable() const {
     return header.version <= IncludeTrackinfoVersionStm;
 }
 
-// bool StreamSoundFileReader::IsOriginalLoopAvailable() const {
-//     auto& header {*util::ConstBytePtr(m_pHeader).Get<BinaryFileHeader>()};
+bool StreamSoundFileReader::IsOriginalLoopAvailable() const {
+    return IsOriginalLoopAvailableImpl(m_pHeader);
+}
 
-//     return header.version >= IncludeOriginalloopVersionStm;
-// }
+bool StreamSoundFileReader::IsOriginalLoopAvailableImpl(const StreamSoundFile::FileHeader* pHeader) {
+    return pHeader->version >= IncludeOriginalloopVersionStm;
+}
 
 bool StreamSoundFileReader::IsCrc32CheckAvailable() const {
     auto& header {*util::ConstBytePtr(m_pHeader).Get<BinaryFileHeader>()};
@@ -61,5 +63,46 @@ bool StreamSoundFileReader::IsValidFileHeader(const void* streamSoundFile) {
                              && header.version <= CurrentFileVersionStm};
 
     return isSupportedVersion;
+}
+
+bool StreamSoundFileReader::ReadStreamSoundInfo(StreamSoundFile::StreamSoundInfo* strmInfo) const {
+    auto* info {m_pInfoBlockBody->GetStreamSoundInfo()};
+
+    strmInfo->encodeMethod = info->encodeMethod;
+    strmInfo->isLoop = info->isLoop;
+    strmInfo->channelCount = info->channelCount;
+    strmInfo->regionCount = info->regionCount;
+    strmInfo->sampleRate = info->sampleRate;
+    strmInfo->loopStart = info->loopStart;
+    strmInfo->frameCount = info->frameCount;
+    strmInfo->blockCount = info->blockCount;
+    strmInfo->oneBlockBytes = info->oneBlockBytes;
+    strmInfo->oneBlockSamples = info->oneBlockSamples;
+    strmInfo->lastBlockBytes = info->lastBlockBytes;
+    strmInfo->lastBlockSamples = info->lastBlockSamples;
+    strmInfo->lastBlockPaddedBytes = info->lastBlockPaddedBytes;
+    strmInfo->sizeofSeekInfoAtom = info->sizeofSeekInfoAtom;
+    strmInfo->seekInfoIntervalSamples = info->seekInfoIntervalSamples;
+    strmInfo->sampleDataOffset = info->sampleDataOffset;
+    strmInfo->regionInfoBytes = info->regionInfoBytes;
+    strmInfo->regionDataOffset = info->regionDataOffset;
+    
+    if (IsOriginalLoopAvailable()) {
+        strmInfo->originalLoopStart = info->originalLoopStart;
+        strmInfo->originalLoopEnd = info->originalLoopEnd;
+    }
+    else {
+        strmInfo->originalLoopStart = info->loopStart;
+        strmInfo->originalLoopEnd = info->frameCount;
+    }
+    
+    if (IsCrc32CheckAvailable()) {
+        strmInfo->crc32Value = info->crc32Value;
+    }
+    else {
+        strmInfo->crc32Value = 0;
+    }
+
+    return true;
 }
 } // namespace nn::atk::detail
