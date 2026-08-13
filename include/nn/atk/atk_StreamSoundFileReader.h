@@ -13,7 +13,7 @@ public:
     bool IsAvailable() const {
         return m_pHeader != nullptr;
     }
-    
+
     bool IsTrackInfoAvailable() const;
     bool IsOriginalLoopAvailable() const;
     bool IsCrc32CheckAvailable() const;
@@ -36,7 +36,15 @@ public:
         return 0;
     }
 
-    u32 GetSampleDataOffset() const;
+    u32 GetSampleDataOffset() const {
+        u32 result {0};
+        if (m_pHeader != nullptr)
+            result = m_pHeader->GetDataBlockOffset()
+                     + m_pInfoBlockBody->GetStreamSoundInfo()->sampleDataOffset.offset
+                     + sizeof(BinaryBlockHeader);
+
+        return result;
+    }
 
     u32 GetRegionDataOffset() const {
         u32 result {0};

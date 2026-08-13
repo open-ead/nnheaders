@@ -34,10 +34,22 @@ bool StreamSoundFileReader::IsTrackInfoAvailable() const {
     return header.version <= IncludeTrackinfoVersionStm;
 }
 
+// bool StreamSoundFileReader::IsOriginalLoopAvailable() const {
+//     auto& header {*util::ConstBytePtr(m_pHeader).Get<BinaryFileHeader>()};
+
+//     return header.version >= IncludeOriginalloopVersionStm;
+// }
+
 bool StreamSoundFileReader::IsCrc32CheckAvailable() const {
     auto& header {*util::ConstBytePtr(m_pHeader).Get<BinaryFileHeader>()};
 
     return header.version >= IncludeCrc32CheckVersionStm;
+}
+
+bool StreamSoundFileReader::IsRegionIndexCheckAvailable() const {
+    auto& header {*util::ConstBytePtr(m_pHeader).Get<BinaryFileHeader>()};
+
+    return header.version >= IncludeRegionIndexCheckVersionStm;
 }
 
 bool StreamSoundFileReader::IsValidFileHeader(const void* streamSoundFile) {
