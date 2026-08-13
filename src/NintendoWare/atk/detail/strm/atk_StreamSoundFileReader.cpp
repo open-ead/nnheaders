@@ -15,7 +15,12 @@ const u32 IncludeRegionIndexCheckVersionStm {0x60100};
 StreamSoundFileReader::StreamSoundFileReader() = default;
 
 void StreamSoundFileReader::Initialize(const void* streamSoundFile) {
-    
+    if (IsValidFileHeader(streamSoundFile)) {
+        m_pHeader = util::ConstBytePtr(streamSoundFile).Get<StreamSoundFile::FileHeader>();
+        const StreamSoundFile::InfoBlock* infoBlock {m_pHeader->GetInfoBlock()};
+        if (infoBlock->header.kind == SignatureInfoBlockStm)
+            m_pInfoBlockBody = &infoBlock->body;
+    }
 }
 
 bool StreamSoundFileReader::IsValidFileHeader(const void* streamSoundFile) {
