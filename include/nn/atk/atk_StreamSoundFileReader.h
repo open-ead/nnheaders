@@ -53,8 +53,8 @@ public:
     static bool IsOriginalLoopAvailableImpl(const StreamSoundFile::FileHeader* pHeader);
 
 private:
-    StreamSoundFile::FileHeader* m_pHeader {};
-    StreamSoundFile::InfoBlockBody* m_pInfoBlockBody {};
+    const StreamSoundFile::FileHeader* m_pHeader {};
+    const StreamSoundFile::InfoBlockBody* m_pInfoBlockBody {};
 };
 static_assert(sizeof(StreamSoundFileReader) == 0x10);
 } // namespace nn::atk::detail
