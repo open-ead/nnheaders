@@ -8,39 +8,39 @@ class StreamSoundPrefetchFile {
 public:
     struct PrefetchDataBlock;
     struct FileHeader : Util::SoundFileHeader {
-        
-        StreamSoundFile::InfoBlock* GetInfoBlock() const;
-        StreamSoundFile::RegionBlock* GetRegionBlock() const;
-        PrefetchDataBlock* GetPrefetchDataBlock() const;
+
+        const StreamSoundFile::InfoBlock* GetInfoBlock() const;
+        const StreamSoundFile::RegionBlock* GetRegionBlock() const;
+        const PrefetchDataBlock* GetPrefetchDataBlock() const;
 
         u32 GetPrefetchDataBlockSize() const;
         
         bool HasRegionBlock() const;
         u32 GetRegionBlockSize() const;
         u32 GetRegionBlockOffset() const;
-
     };
 
     struct PrefetchSample {
-
-        void* GetSampleAddress();
-
         u8 data[1];
+
+        const void* GetSampleAddress() const;
     };
 
     struct PrefetchData {
-        
-        PrefetchSample* GetPrefetchSample();
-
         u32 startFrame;
         u32 prefetchSize;
         u32 reserved[1];
         Util::Reference toPrefetchSample;
+
+        const PrefetchSample* GetPrefetchSample() const;
     };
     static_assert(sizeof(PrefetchData) == 0x14);
 
     struct PrefetchDataBlockBody {
         Util::Table<PrefetchData> prefetchDataTable;
+
+        u32 GetPrefetchDataCount() const { return prefetchDataTable.count; }
+        const PrefetchData* GetPrefetchData(u32 index) const { return &prefetchDataTable.item[index]; }
     };
 
     struct PrefetchDataBlock {
