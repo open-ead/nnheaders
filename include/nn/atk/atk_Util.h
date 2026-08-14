@@ -53,7 +53,7 @@ struct Util {
         bool IsValidTypeId(u16 validId) const { return typeId == validId; }
         bool IsValidOffset() const { return offset != InvalidOffset; }
 
-        // Id from ElementTypes enum
+        // Id from ElementType enum
         u16 typeId;
         u8 padding[2];
         s32 offset;
@@ -67,11 +67,43 @@ struct Util {
 
     struct BlockReferenceTable {
         ReferenceWithSize item[1];
+
+        const void* GetReferedItemByIndex(const void* origin, int index, u16 count) const;
+        
+        const ReferenceWithSize* GetReference(u16 typeId, u16 count) const {
+            for (int i {0}; i < count; ++i) {
+                if (item[i].IsValidTypeId(typeId))
+                    return &item[i];
+            }
+
+            return nullptr;
+        }
+
+        const void* GetReferedItem(const void* origin, u16 typeId, u16 count) const {
+            auto* ref {GetReference(typeId, count)};
+            if (ref != nullptr && ref->offset != 0)
+                return util::ConstBytePtr(origin).Advance(ref->offset).Get();
+
+            return nullptr;
+        }
+
+        u32 GetReferedItemSize(u16 typeId, u16 count) const;
+        u32 GetReferedItemOffset(u16 typeId, u16 count) const;
     };
 
     struct SoundFileHeader {
         BinaryFileHeader header;
         BlockReferenceTable blockReferenceTable;
+
+        int GetBlockCount() const { return header.dataBlocks; }
+
+    protected:
+        const void* GetBlock(u16 typeId) const {
+            return blockReferenceTable.GetReferedItem(this, typeId, header.dataBlocks);
+        }
+
+        u32 GetBlockSize(u16 typeId) const;
+        u32 GetBlockOffset(u16 typeId) const;
     };
 
     template <typename ItemType, typename CountType = u32>
@@ -81,7 +113,6 @@ struct Util {
     };
 
     struct ReferenceTable : Table<Reference> {
-
         const void* GetReferedItem(u32 index) const {
             if (count > index)
                 return util::ConstBytePtr(this).Advance(item[index].offset).Get();
@@ -97,11 +128,9 @@ struct Util {
         }
 
         const void* FindReferedItemBy(u16 typeId) const;
-
     };
 
     struct ReferenceWithSizeTable : Table<ReferenceWithSize> {
-
         const void* GetReferedItem(u32 index) const {
             if (count > index)
                 return util::ConstBytePtr(this).Advance(item[index].offset).Get();
@@ -111,7 +140,6 @@ struct Util {
 
         const void* GetReferedItemBy(u16 typeId) const;
         u32 GetReferedItemSize(u32 index) const;
-
     };
 
     struct BitFlag {
