@@ -22,7 +22,7 @@ struct WaveFile {
         u32 originalLoopStartFrame;
         Util::ReferenceTable channelInfoReferenceTable;
 
-        int GetChannelCount() const;
+        int GetChannelCount() const { return channelInfoReferenceTable.count; };
         const ChannelInfo& GetChannelInfo(int channelIndex) const;
     };
 
