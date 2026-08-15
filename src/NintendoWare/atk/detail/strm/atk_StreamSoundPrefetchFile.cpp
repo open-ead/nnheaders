@@ -1,6 +1,7 @@
 #include <nn/atk/atk_StreamSoundPrefetchFile.h>
 
 #include <nn/atk/atk_ElementType.h>
+#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 const StreamSoundFile::InfoBlock* StreamSoundPrefetchFile::FileHeader::GetInfoBlock() const {
@@ -35,5 +36,9 @@ u32 StreamSoundPrefetchFile::FileHeader::GetRegionBlockOffset() const {
 
 const StreamSoundPrefetchFile::PrefetchSample* StreamSoundPrefetchFile::PrefetchData::GetPrefetchSample() const {
     return util::ConstBytePtr(this).Advance(toPrefetchSample.offset).Get<PrefetchSample>();
+}
+
+const void* StreamSoundPrefetchFile::PrefetchSample::GetSampleAddress() const {
+    return util::ConstBytePtr(data).Get();
 }
 } // namespace nn::atk::detail
