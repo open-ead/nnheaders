@@ -20,12 +20,7 @@ public:
         u32 GetRegionBlockOffset() const;
     };
 
-    struct PrefetchSample {
-        u8 data[1];
-
-        const void* GetSampleAddress() const;
-    };
-
+    struct PrefetchSample;
     struct PrefetchData {
         u32 startFrame;
         u32 prefetchSize;
@@ -46,6 +41,12 @@ public:
     struct PrefetchDataBlock {
         BinaryBlockHeader header;
         PrefetchDataBlockBody body;
+    };
+
+    struct PrefetchSample {
+        u8 data[1];
+
+        const void* GetSampleAddress() const;
     };
 };
 } // namespace nn::atk::detail
