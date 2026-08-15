@@ -63,4 +63,17 @@ bool StreamSoundPrefetchFileReader::ReadStreamSoundInfo(StreamSoundFile::StreamS
     return true;
 }
 
+bool StreamSoundPrefetchFileReader::ReadDspAdpcmChannelInfo(DspAdpcmParam* pParam, 
+                                                            DspAdpcmLoopParam* pLoopParam,
+                                                            int channelIndex) const {
+    auto* src {m_pInfoBlockBody->GetChannelInfoTable()->GetChannelInfo(channelIndex)->GetDspAdpcmChannelInfo()};
+    if (src != nullptr) {
+        *pParam = src->param;
+        *pLoopParam = src->loopParam;
+        return true;
+    }
+
+    return false;
+}
+
 } // namespace nn::atk::detail
