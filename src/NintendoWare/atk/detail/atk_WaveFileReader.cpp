@@ -58,4 +58,10 @@ WaveFileReader::WaveFileReader(const void* waveFile, s8 waveType) {
         break;
     }
 }
+
+bool WaveFileReader::IsOriginalLoopAvailable() const {
+    const BinaryFileHeader& header {*util::ConstBytePtr(m_pHeader).Get<BinaryFileHeader>()};
+    
+    return header.version >= IncludeOriginalLoopVersionWav;
+}
 } // namespace nn::atk::detail
