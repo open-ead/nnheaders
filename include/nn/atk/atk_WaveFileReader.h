@@ -21,9 +21,9 @@ public:
     const void* GetWaveDataAddress(const WaveFile::ChannelInfo* info, const void* waveDataOffsetOrigin) const;
 
 private:
-    const WaveFile::FileHeader* m_pHeader;
-    const WaveFile::InfoBlockBody* m_pInfoBlockBody;
-    const void* m_pDataBlockBody;
+    const WaveFile::FileHeader* m_pHeader {};
+    const WaveFile::InfoBlockBody* m_pInfoBlockBody {};
+    const void* m_pDataBlockBody {};
     DspadpcmReader m_DspadpcmReader;
     s8 m_WaveType;
 };
