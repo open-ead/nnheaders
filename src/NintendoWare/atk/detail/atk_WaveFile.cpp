@@ -22,4 +22,9 @@ const WaveFile::ChannelInfo& WaveFile::InfoBlockBody::GetChannelInfo(int channel
 const void* WaveFile::ChannelInfo::GetSamplesAddress(const void* dataBlockBodyAddress) const {
     return util::ConstBytePtr(dataBlockBodyAddress).Advance(referToSamples.offset).Get();
 }
+
+const WaveFile::DspAdpcmInfo& WaveFile::ChannelInfo::GetDspAdpcmInfo() const {
+    return *util::ConstBytePtr(this).Advance(referToAdpcmInfo.offset)
+            .Get<WaveFile::DspAdpcmInfo>();
+}
 } // namespace nn::atk::detail
