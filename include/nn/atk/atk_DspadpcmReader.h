@@ -7,9 +7,13 @@ class DspadpcmReader {
 public:
     DspadpcmReader();
 
+    void Initialize(const void* dspadpcmData) {
+        m_pDspadpcmData = dspadpcmData;
+    }
+
     bool ReadWaveInfo(WaveInfo* info) const;
 
 private:
-    void* m_pDspadpcmData;
+    const void* m_pDspadpcmData;
 };
 } // namespace nn::atk::detail
