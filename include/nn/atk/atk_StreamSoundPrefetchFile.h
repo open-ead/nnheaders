@@ -8,7 +8,6 @@ class StreamSoundPrefetchFile {
 public:
     struct PrefetchDataBlock;
     struct FileHeader : Util::SoundFileHeader {
-
         const StreamSoundFile::InfoBlock* GetInfoBlock() const;
         const StreamSoundFile::RegionBlock* GetRegionBlock() const;
         const PrefetchDataBlock* GetPrefetchDataBlock() const;
