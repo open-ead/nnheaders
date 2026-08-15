@@ -46,4 +46,8 @@ void StreamSoundPrefetchFileReader::Initialize(const void* streamSoundPrefetchFi
     }
 }
 
+bool StreamSoundPrefetchFileReader::IsIncludeRegionInfo() const {
+    return m_pHeader->header.version >= IncludeRegionInfoVersionStp;
+}
+
 } // namespace nn::atk::detail
