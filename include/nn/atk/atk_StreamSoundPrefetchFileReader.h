@@ -39,7 +39,7 @@ public:
                                  int channelIndex) const;
     bool ReadPrefetchDataInfo(PrefetchDataInfo* pDataInfo, int prefetchIndex) const;
     
-    bool ReadRegionInfo(StreamSoundFile::RegionInfo* pInfo,u32 regionIndex) const override;
+    bool ReadRegionInfo(StreamSoundFile::RegionInfo* pInfo, u32 regionIndex) const override;
 
     u32 GetChannelCount() const;
     u32 GetPrefetchDataCount() const;
