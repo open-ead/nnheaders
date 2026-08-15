@@ -95,7 +95,13 @@ struct Util {
             return 0;
         }
         
-        u32 GetReferedItemOffset(u16 typeId, u16 count) const;
+        u32 GetReferedItemOffset(u16 typeId, u16 count) const {
+            auto* ref {GetReference(typeId, count)};
+            if (ref != nullptr)
+                return ref->offset;
+
+            return 0;
+        }
     };
 
     struct SoundFileHeader {
@@ -113,7 +119,9 @@ struct Util {
             return blockReferenceTable.GetReferedItemSize(typeId, header.dataBlocks);
         }
 
-        u32 GetBlockOffset(u16 typeId) const;
+        u32 GetBlockOffset(u16 typeId) const {
+            return blockReferenceTable.GetReferedItemOffset(typeId, header.dataBlocks);
+        }
     };
 
     template <typename ItemType, typename CountType = u32>
