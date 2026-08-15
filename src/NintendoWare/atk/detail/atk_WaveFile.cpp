@@ -18,4 +18,8 @@ const WaveFile::ChannelInfo& WaveFile::InfoBlockBody::GetChannelInfo(int channel
     return *util::ConstBytePtr(channelInfoReferenceTable.GetReferedItem(channelIndex))
             .Get<WaveFile::ChannelInfo>();
 }
+
+const void* WaveFile::ChannelInfo::GetSamplesAddress(const void* dataBlockBodyAddress) const {
+    return util::ConstBytePtr(dataBlockBodyAddress).Advance(referToSamples.offset).Get();
+}
 } // namespace nn::atk::detail
