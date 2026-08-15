@@ -16,7 +16,13 @@ public:
     ~StreamSoundPrefetchFileReader() override;
 
     void Initialize(const void* streamSoundPrefetchFile);
-    void Finalize();
+    void Finalize() {
+        m_pHeader = nullptr;
+        m_pInfoBlockBody = nullptr;
+        m_pPrefetchDataBlockBody = nullptr;
+        m_RegionDataOffset = 0;
+        m_RegionInfoBytes = 0;
+    }
 
     bool IsAvailable() const;
 
