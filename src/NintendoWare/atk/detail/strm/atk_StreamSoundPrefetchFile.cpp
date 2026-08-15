@@ -12,4 +12,8 @@ const StreamSoundFile::RegionBlock* StreamSoundPrefetchFile::FileHeader::GetRegi
     return util::ConstBytePtr(GetBlock(ElementType_StreamSoundFile_RegionBlock))
             .Get<StreamSoundFile::RegionBlock>();
 }
+
+const StreamSoundPrefetchFile::PrefetchDataBlock* StreamSoundPrefetchFile::FileHeader::GetPrefetchDataBlock() const {
+    return util::ConstBytePtr(GetBlock(ElementType_StreamSoundFile_PrefetchDataBlock)).Get<PrefetchDataBlock>();
+}
 } // namespace nn::atk::detail
