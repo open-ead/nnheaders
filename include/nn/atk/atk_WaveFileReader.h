@@ -6,22 +6,24 @@
 namespace nn::atk::detail {
 class WaveFileReader {
 public:
-    constexpr static s32 SignatureFile = 0x56415746; // FWAV
+    static const int SignatureFile = 0x56415746; // FWAV
 
     static SampleFormat GetSampleFormat(u8 format);
 
     WaveFileReader(const void* waveFile, s8 waveType);
 
+    bool IsAvailable() const { return m_pHeader != nullptr; }
+
     bool IsOriginalLoopAvailable() const;
 
     bool ReadWaveInfo(WaveInfo* info, const void* waveDataOffsetOrigin) const;
 
-    void* GetWaveDataAddress(const WaveFile::ChannelInfo* channelInfo, const void*) const;
+    const void* GetWaveDataAddress(const WaveFile::ChannelInfo* info, const void* waveDataOffsetOrigin) const;
 
 private:
-    WaveFile::FileHeader* m_pHeader;
-    WaveFile::InfoBlockBody* m_pInfoBlockBody;
-    void* m_pDataBlockBody;
+    const WaveFile::FileHeader* m_pHeader;
+    const WaveFile::InfoBlockBody* m_pInfoBlockBody;
+    const void* m_pDataBlockBody;
     DspadpcmReader m_DspadpcmReader;
     s8 m_WaveType;
 };
