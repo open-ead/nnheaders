@@ -58,4 +58,9 @@ bool StreamSoundPrefetchFileReader::IsRegionIndexCheckAvailable() const {
     return m_pHeader->header.version >= IncludeRegionIndexCheckVersionStp;
 }
 
+bool StreamSoundPrefetchFileReader::ReadStreamSoundInfo(StreamSoundFile::StreamSoundInfo* strmInfo) const {
+    *strmInfo = *m_pInfoBlockBody->GetStreamSoundInfo();
+    return true;
+}
+
 } // namespace nn::atk::detail
