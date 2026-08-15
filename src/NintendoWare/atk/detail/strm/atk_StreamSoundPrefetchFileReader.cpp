@@ -63,8 +63,7 @@ bool StreamSoundPrefetchFileReader::ReadStreamSoundInfo(StreamSoundFile::StreamS
     return true;
 }
 
-bool StreamSoundPrefetchFileReader::ReadDspAdpcmChannelInfo(DspAdpcmParam* pParam, 
-                                                            DspAdpcmLoopParam* pLoopParam,
+bool StreamSoundPrefetchFileReader::ReadDspAdpcmChannelInfo(DspAdpcmParam* pParam, DspAdpcmLoopParam* pLoopParam,
                                                             int channelIndex) const {
     auto* src {m_pInfoBlockBody->GetChannelInfoTable()->GetChannelInfo(channelIndex)->GetDspAdpcmChannelInfo()};
     if (src != nullptr) {
@@ -74,6 +73,17 @@ bool StreamSoundPrefetchFileReader::ReadDspAdpcmChannelInfo(DspAdpcmParam* pPara
     }
 
     return false;
+}
+
+bool StreamSoundPrefetchFileReader::ReadPrefetchDataInfo(PrefetchDataInfo* pDataInfo, int prefetchIndex) const {
+    auto* data {m_pPrefetchDataBlockBody->GetPrefetchData(prefetchIndex)};
+    pDataInfo->startFrame = data->startFrame;
+    pDataInfo->prefetchSize = data->prefetchSize;
+
+    auto* sample {data->GetPrefetchSample()};
+    pDataInfo->dataAddress = sample->GetSampleAddress();
+    
+    return true;
 }
 
 } // namespace nn::atk::detail
