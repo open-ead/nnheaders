@@ -28,4 +28,8 @@ bool StreamSoundPrefetchFile::FileHeader::HasRegionBlock() const {
 u32 StreamSoundPrefetchFile::FileHeader::GetRegionBlockSize() const {
     return GetBlockSize(ElementType_StreamSoundFile_RegionBlock);
 }
+
+u32 StreamSoundPrefetchFile::FileHeader::GetRegionBlockOffset() const {
+    return GetBlockOffset(ElementType_StreamSoundFile_RegionBlock);
+}
 } // namespace nn::atk::detail
