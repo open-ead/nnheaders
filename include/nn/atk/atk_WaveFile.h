@@ -7,25 +7,23 @@ struct WaveFile {
     struct InfoBlock;
     struct DataBlock;
     struct FileHeader : Util::SoundFileHeader {
-
-        InfoBlock* GetInfoBlock() const;
-        DataBlock* GetDataBlock() const;
-
+        const InfoBlock* GetInfoBlock() const;
+        const DataBlock* GetDataBlock() const;
     };
 
     struct ChannelInfo;
     struct InfoBlockBody {
-
-        ChannelInfo* GetChannelInfo(s32 channelIndex) const;
-
         u8 encoding;
         u8 isLoop;
-        u8 padding;
+        u8 padding[2];
         u32 sampleRate;
         u32 loopStartFrame;
         u32 loopEndFrame;
         u32 originalLoopStartFrame;
         Util::ReferenceTable channelInfoReferenceTable;
+
+        int GetChannelCount() const;
+        const ChannelInfo& GetChannelInfo(int channelIndex) const;
     };
 
     struct InfoBlock {
@@ -33,21 +31,22 @@ struct WaveFile {
         InfoBlockBody body;
     };
 
-    struct DspAdpcmInfo {
-        DspAdpcmParam adpcmParam;
-        DspAdpcmLoopParam adpcmLoopParam;
-    };
-    static_assert(sizeof(DspAdpcmInfo) == 0x2C);
-
+    struct DspAdpcmInfo;
     struct ChannelInfo {
         Util::Reference referToSamples;
         Util::Reference referToAdpcmInfo;
         u32 reserved;
 
-        void* GetSamplesAddress(const void* dataBlockBodyAddress) const;
-        DspAdpcmInfo* GetDspAdpcmInfo() const;
+        const void* GetSamplesAddress(const void* dataBlockBodyAddress) const;
+        const DspAdpcmInfo& GetDspAdpcmInfo() const;
     };
     static_assert(sizeof(ChannelInfo) == 0x14);
+
+    struct DspAdpcmInfo {
+        DspAdpcmParam adpcmParam;
+        DspAdpcmLoopParam adpcmLoopParam;
+    };
+    static_assert(sizeof(DspAdpcmInfo) == 0x2c);
 
     struct DataBlock {
         BinaryBlockHeader header;
