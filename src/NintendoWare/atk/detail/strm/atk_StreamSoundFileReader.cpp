@@ -14,6 +14,17 @@ const u32 IncludeRegionIndexCheckVersionStm {0x60100};
 
 StreamSoundFileReader::StreamSoundFileReader() = default;
 
+bool StreamSoundFileReader::IsValidFileHeader(const void* streamSoundFile) {
+    const BinaryFileHeader& header {*util::ConstBytePtr(streamSoundFile).Get<BinaryFileHeader>()};
+    
+    bool isSupportedVersion {header.signature == SignatureFileStm 
+                             && header.byteOrder == BinaryFileHeader::ValidByteOrderMark 
+                             && header.version >= SupportedFileVersionStm 
+                             && header.version <= CurrentFileVersionStm};
+
+    return isSupportedVersion;
+}
+
 void StreamSoundFileReader::Initialize(const void* streamSoundFile) {
     if (IsValidFileHeader(streamSoundFile)) {
         m_pHeader = util::ConstBytePtr(streamSoundFile).Get<StreamSoundFile::FileHeader>();
@@ -52,17 +63,6 @@ bool StreamSoundFileReader::IsRegionIndexCheckAvailable() const {
     auto& header {*util::ConstBytePtr(m_pHeader).Get<BinaryFileHeader>()};
 
     return header.version >= IncludeRegionIndexCheckVersionStm;
-}
-
-bool StreamSoundFileReader::IsValidFileHeader(const void* streamSoundFile) {
-    const BinaryFileHeader& header {*util::ConstBytePtr(streamSoundFile).Get<BinaryFileHeader>()};
-    
-    bool isSupportedVersion {header.signature == SignatureFileStm 
-                             && header.byteOrder == BinaryFileHeader::ValidByteOrderMark 
-                             && header.version >= SupportedFileVersionStm 
-                             && header.version <= CurrentFileVersionStm};
-
-    return isSupportedVersion;
 }
 
 bool StreamSoundFileReader::ReadStreamSoundInfo(StreamSoundFile::StreamSoundInfo* strmInfo) const {

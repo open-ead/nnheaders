@@ -24,7 +24,9 @@ public:
         m_RegionInfoBytes = 0;
     }
 
-    bool IsAvailable() const;
+    bool IsAvailable() const {
+        return m_pHeader != nullptr;
+    }
 
     bool IsIncludeRegionInfo() const;
     bool IsCrc32CheckAvailable() const;
@@ -41,8 +43,21 @@ public:
 
     u32 GetChannelCount() const;
     u32 GetPrefetchDataCount() const;
-    u32 GetRegionDataOffset() const;
-    u16 GetRegionInfoBytes() const;
+
+    u32 GetRegionDataOffset() const {
+        u32 result {0};
+
+        if (IsAvailable() && m_pHeader->HasRegionBlock()) {
+            result = m_pHeader->GetRegionBlockOffset() + sizeof(BinaryBlockHeader)
+                     + m_pInfoBlockBody->GetStreamSoundInfo()->regionDataOffset.offset;
+        }
+
+        return result;
+    }
+
+    u16 GetRegionInfoBytes() const {
+        return m_pInfoBlockBody->GetStreamSoundInfo()->regionInfoBytes;
+    }
 
 private:
     const StreamSoundPrefetchFile::FileHeader* m_pHeader {};
