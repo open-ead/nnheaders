@@ -1,6 +1,7 @@
 #include <nn/atk/atk_WaveFile.h>
 
 #include <nn/atk/atk_ElementType.h>
+#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 const WaveFile::InfoBlock* WaveFile::FileHeader::GetInfoBlock() const {
@@ -11,5 +12,10 @@ const WaveFile::InfoBlock* WaveFile::FileHeader::GetInfoBlock() const {
 const WaveFile::DataBlock* WaveFile::FileHeader::GetDataBlock() const {
     return util::ConstBytePtr(GetBlock(ElementType_WaveFile_DataBlock))
         .Get<WaveFile::DataBlock>();
+}
+
+const WaveFile::ChannelInfo& WaveFile::InfoBlockBody::GetChannelInfo(int channelIndex) const {
+    return *util::ConstBytePtr(channelInfoReferenceTable.GetReferedItem(channelIndex))
+            .Get<WaveFile::ChannelInfo>();
 }
 } // namespace nn::atk::detail
