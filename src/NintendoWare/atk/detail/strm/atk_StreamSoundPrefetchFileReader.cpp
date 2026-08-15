@@ -50,4 +50,8 @@ bool StreamSoundPrefetchFileReader::IsIncludeRegionInfo() const {
     return m_pHeader->header.version >= IncludeRegionInfoVersionStp;
 }
 
+bool StreamSoundPrefetchFileReader::IsCrc32CheckAvailable() const {
+    return m_pHeader->header.version >= IncludeCrc32CheckVersionStp;
+}
+
 } // namespace nn::atk::detail
