@@ -87,7 +87,14 @@ struct Util {
             return nullptr;
         }
 
-        u32 GetReferedItemSize(u16 typeId, u16 count) const;
+        u32 GetReferedItemSize(u16 typeId, u16 count) const {
+            auto* ref {GetReference(typeId, count)};
+            if (ref != nullptr)
+                return ref->size;
+
+            return 0;
+        }
+        
         u32 GetReferedItemOffset(u16 typeId, u16 count) const;
     };
 
@@ -102,7 +109,10 @@ struct Util {
             return blockReferenceTable.GetReferedItem(this, typeId, header.dataBlocks);
         }
 
-        u32 GetBlockSize(u16 typeId) const;
+        u32 GetBlockSize(u16 typeId) const {
+            return blockReferenceTable.GetReferedItemSize(typeId, header.dataBlocks);
+        }
+
         u32 GetBlockOffset(u16 typeId) const;
     };
 
