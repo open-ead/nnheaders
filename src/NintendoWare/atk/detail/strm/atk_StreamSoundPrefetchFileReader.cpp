@@ -82,8 +82,19 @@ bool StreamSoundPrefetchFileReader::ReadPrefetchDataInfo(PrefetchDataInfo* pData
 
     auto* sample {data->GetPrefetchSample()};
     pDataInfo->dataAddress = sample->GetSampleAddress();
-    
+
     return true;
+}
+
+bool StreamSoundPrefetchFileReader::ReadRegionInfo(StreamSoundFile::RegionInfo* pInfo, u32 regionIndex) const { // 179
+    if (m_RegionDataOffset != 0 && m_RegionInfoBytes != 0) {
+        position_t offset = m_RegionDataOffset + static_cast<long>(m_RegionInfoBytes) * regionIndex;
+        auto bytePtr {util::ConstBytePtr(m_pHeader)};
+        *pInfo = *bytePtr.Advance(offset).Get<StreamSoundFile::RegionInfo>();
+        return true;
+    }
+
+    return false;
 }
 
 } // namespace nn::atk::detail
