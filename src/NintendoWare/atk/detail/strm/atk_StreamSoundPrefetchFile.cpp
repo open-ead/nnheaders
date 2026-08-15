@@ -1,7 +1,6 @@
 #include <nn/atk/atk_StreamSoundPrefetchFile.h>
 
 #include <nn/atk/atk_ElementType.h>
-#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 const StreamSoundFile::InfoBlock* StreamSoundPrefetchFile::FileHeader::GetInfoBlock() const {
