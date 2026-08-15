@@ -32,4 +32,8 @@ u32 StreamSoundPrefetchFile::FileHeader::GetRegionBlockSize() const {
 u32 StreamSoundPrefetchFile::FileHeader::GetRegionBlockOffset() const {
     return GetBlockOffset(ElementType_StreamSoundFile_RegionBlock);
 }
+
+const StreamSoundPrefetchFile::PrefetchSample* StreamSoundPrefetchFile::PrefetchData::GetPrefetchSample() const {
+    return util::ConstBytePtr(this).Advance(toPrefetchSample.offset).Get<PrefetchSample>();
+}
 } // namespace nn::atk::detail
