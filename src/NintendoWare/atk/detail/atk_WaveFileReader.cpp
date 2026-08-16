@@ -64,4 +64,8 @@ bool WaveFileReader::IsOriginalLoopAvailable() const {
     
     return header.version >= IncludeOriginalLoopVersionWav;
 }
+
+const void* WaveFileReader::GetWaveDataAddress(const WaveFile::ChannelInfo* info, const void* waveDataOffsetOrigin) const {
+    return info->GetSamplesAddress(m_pDataBlockBody);
+}
 } // namespace nn::atk::detail

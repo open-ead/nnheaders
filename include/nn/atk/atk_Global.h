@@ -401,8 +401,8 @@ static_assert(sizeof(VoiceParam) == 0x78);
 
 struct WaveInfo {
     struct ChannelParam {
-        void* dataAddress;
-        s32 dataSize;
+        const void* dataAddress;
+        int dataSize;
         DspAdpcmParam adpcmParam;
         DspAdpcmLoopParam adpcmLoopParam;
     };
@@ -410,8 +410,8 @@ struct WaveInfo {
 
     SampleFormat sampleFormat;
     bool loopFlag;
-    s32 channelCount;
-    s32 sampleRate;
+    int channelCount;
+    int sampleRate;
     position_t loopStartFrame;
     position_t loopEndFrame;
     position_t originalLoopStartFrame;
