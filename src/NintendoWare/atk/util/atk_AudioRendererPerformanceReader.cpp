@@ -1,4 +1,5 @@
 #include <nn/atk/atk_AudioRendererPerformanceReader.h>
+
 #include <nn/atk/atk_SoundSystem.h>
 
 namespace nn::atk {
@@ -43,5 +44,20 @@ const AudioRendererPerformanceReader::PerformanceInfo* AudioRendererPerformanceR
     }
 
     return nullptr;
+}
+
+void AudioRendererPerformanceReader::Record(const void* performanceFrameBuffer, 
+                                            size_t performanceFrameBufferSize, os::Tick tick) {
+    if (m_WriteIndex != m_ReadIndex) {
+        const int writeIndex {m_WriteIndex};
+        m_pPerformanceInfo[writeIndex].tick = tick;
+        memcpy(m_pPerformanceInfo[writeIndex].performanceBuffer, performanceFrameBuffer, performanceFrameBufferSize);
+        
+        int nextWriteIndex {0};
+        if (writeIndex + 1 < m_PerformanceInfoCount)
+            nextWriteIndex = writeIndex + 1;
+
+        m_WriteIndex = nextWriteIndex;
+    }
 }
 } // namespace nn::atk
