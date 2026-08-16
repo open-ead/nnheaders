@@ -28,11 +28,10 @@ public:
 
 private:
     PerformanceInfo* m_pPerformanceInfo{};
-    s32 m_PerformanceInfoCount{0};
-    std::atomic_int m_WriteIndex{0};
-    std::atomic_int m_ReadIndex{0};
-    bool m_IsInitialized{false};
+    int m_PerformanceInfoCount {0};
+    std::atomic_int m_WriteIndex {0};
+    std::atomic_int m_ReadIndex {0};
+    bool m_IsInitialized {false};
 };
 static_assert(sizeof(AudioRendererPerformanceReader) == 0x18);
-
 } // namespace nn::atk
