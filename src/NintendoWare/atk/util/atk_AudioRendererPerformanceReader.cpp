@@ -29,4 +29,19 @@ void AudioRendererPerformanceReader::Initialize(int performanceInfoCount, void* 
     m_ReadIndex = m_PerformanceInfoCount - 1;
     m_IsInitialized = true;
 }
+
+const AudioRendererPerformanceReader::PerformanceInfo* AudioRendererPerformanceReader::ReadPerformanceInfo() {
+    int nextReadIndex {0};
+    const int readIndex {m_ReadIndex};
+
+    if (readIndex + 1 < m_PerformanceInfoCount)
+        nextReadIndex = readIndex + 1;
+
+    if (nextReadIndex != m_WriteIndex) {
+        m_ReadIndex = nextReadIndex;
+        return &m_pPerformanceInfo[nextReadIndex];
+    }
+
+    return nullptr;
+}
 } // namespace nn::atk
