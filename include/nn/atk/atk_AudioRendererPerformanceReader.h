@@ -27,7 +27,7 @@ public:
     void Record(const void* performanceFrameBuffer, size_t performanceFrameBufferSize, os::Tick tick);
 
 private:
-    PerformanceInfo* m_pPerformanceInfo{};
+    PerformanceInfo* m_pPerformanceInfo {};
     int m_PerformanceInfoCount {0};
     std::atomic_int m_WriteIndex {0};
     std::atomic_int m_ReadIndex {0};
