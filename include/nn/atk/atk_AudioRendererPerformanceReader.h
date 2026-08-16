@@ -22,7 +22,7 @@ public:
     void Initialize(int performanceInfoCount, void* buffer, size_t bufferSize);
     const PerformanceInfo* ReadPerformanceInfo();
 
-    bool IsInitialized() const;
+    bool IsInitialized() const { return m_IsInitialized; };
 
     void Record(const void* performanceFrameBuffer, size_t performanceFrameBufferSize, os::Tick tick);
 
