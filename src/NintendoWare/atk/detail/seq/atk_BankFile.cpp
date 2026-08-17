@@ -17,4 +17,14 @@ const Util::ReferenceTable& BankFile::InfoBlockBody::GetInstrumentReferenceTable
     return *util::ConstBytePtr(this).Advance(toInstrumentReferenceTable.offset)
             .Get<Util::ReferenceTable>();
 }
+
+const BankFile::Instrument* BankFile::InfoBlockBody::GetInstrument(int programNo) const {
+    auto& table {GetInstrumentReferenceTable()};
+    auto& ref {table.item[programNo]};
+
+    if (ref.IsValidTypeId(ElementType_BankFile_InstrumentInfo))
+        return util::ConstBytePtr(table.GetReferedItem(programNo)).Get<BankFile::Instrument>();
+
+    return nullptr;
+}
 } // namespace nn::atk::detail

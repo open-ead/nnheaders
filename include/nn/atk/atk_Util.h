@@ -197,6 +197,10 @@ struct Util {
     
     struct WaveIdTable {
         Table<WaveId> table;
+
+        const WaveId* GetWaveId(u32 index) const {
+            return &table.item[index];
+        }
     };
 
     class WarningLogger {

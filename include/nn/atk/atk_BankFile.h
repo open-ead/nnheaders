@@ -17,10 +17,18 @@ struct BankFile {
         const Util::WaveIdTable& GetWaveIdTable() const;
         const Util::ReferenceTable& GetInstrumentReferenceTable() const;
 
-        u32 GetWaveIdCount() const;
-        s32 GetInstrumentCount() const;
+        u32 GetWaveIdCount() const { 
+            return GetWaveIdTable().table.count;
+        }
 
-        const Util::WaveId* GetWaveId(u32 index) const;
+        s32 GetInstrumentCount() const {
+            return GetInstrumentReferenceTable().count;
+        }
+
+        const Util::WaveId* GetWaveId(u32 index) const {
+            return GetWaveIdTable().GetWaveId(index);
+        }
+        
         const Instrument* GetInstrument(int programNo) const;
     };
     static_assert(sizeof(InfoBlockBody) == 0x10);
