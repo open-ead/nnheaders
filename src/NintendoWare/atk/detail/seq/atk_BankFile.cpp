@@ -7,4 +7,9 @@ const BankFile::InfoBlock* BankFile::FileHeader::GetInfoBlock() const {
     return util::ConstBytePtr(GetBlock(ElementType_BankFile_InfoBlock))
             .Get<InfoBlock>();
 }
+
+const Util::WaveIdTable& BankFile::InfoBlockBody::GetWaveIdTable() const {
+    return *util::ConstBytePtr(this).Advance(toWaveIdTable.offset)
+            .Get<Util::WaveIdTable>();
+}
 } // namespace nn::atk::detail
