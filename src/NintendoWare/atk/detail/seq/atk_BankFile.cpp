@@ -12,4 +12,9 @@ const Util::WaveIdTable& BankFile::InfoBlockBody::GetWaveIdTable() const {
     return *util::ConstBytePtr(this).Advance(toWaveIdTable.offset)
             .Get<Util::WaveIdTable>();
 }
+
+const Util::ReferenceTable& BankFile::InfoBlockBody::GetInstrumentReferenceTable() const {
+    return *util::ConstBytePtr(this).Advance(toInstrumentReferenceTable.offset)
+            .Get<Util::ReferenceTable>();
+}
 } // namespace nn::atk::detail
