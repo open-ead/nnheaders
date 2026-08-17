@@ -6,20 +6,22 @@ namespace nn::atk::detail {
 struct BankFile {
     struct InfoBlock;
     struct FileHeader : Util::SoundFileHeader {
-
-        InfoBlock* GetInfoBlock() const;
-        
+        const InfoBlock* GetInfoBlock() const;
     };
 
     struct Instrument;
     struct InfoBlockBody {
-
-        Util::WaveIdTable* GetWaveIdTable() const;
-        Util::ReferenceTable GetInstrumentReferenceTable() const;
-        Instrument* GetInstrument(s32 programNo) const;
-
         Util::Reference toWaveIdTable;
         Util::Reference toInstrumentReferenceTable;
+
+        const Util::WaveIdTable& GetWaveIdTable() const;
+        const Util::ReferenceTable& GetInstrumentReferenceTable() const;
+
+        u32 GetWaveIdCount() const;
+        s32 GetInstrumentCount() const;
+
+        const Util::WaveId* GetWaveId(u32 index) const;
+        const Instrument* GetInstrument(int programNo) const;
     };
     static_assert(sizeof(InfoBlockBody) == 0x10);
 
@@ -31,37 +33,36 @@ struct BankFile {
 
     struct KeyRegion;
     struct Instrument {
-
-        KeyRegion* GetKeyRegion(u32 key) const;
-
         Util::Reference toKeyRegionChunk;
+
+        const KeyRegion* GetKeyRegion(u32 key) const;
+
     };
     static_assert(sizeof(Instrument) == 0x8);
 
     struct VelocityRegion;
     struct KeyRegion {
-
-        VelocityRegion* GetVelocityRegion(u32 velocity) const;
-
         Util::Reference toVelocityRegionChunk;
+
+        const VelocityRegion* GetVelocityRegion(u32 velocity) const;
+
     };
     static_assert(sizeof(KeyRegion) == 0x8);
 
     struct RegionParameter;
     struct VelocityRegion {
+        u32 waveIdTableIndex;
+        Util::BitFlag optionParameter;
 
         u8 GetOriginalKey() const;
         u8 GetVolume() const;
         u8 GetPan() const;
-        f32 GetPitch() const ;
+        float GetPitch() const ;
         bool IsIgnoreNoteOff() const;
         u8 GetKeyGroup() const;
         u8 GetInterpolationType() const;
-        AdshrCurve* GetAdshrCurve() const;
-        RegionParameter* GetRegionParameter() const;
-
-        u32 waveIdTableIndex;
-        Util::BitFlag optionParameter;
+        const AdshrCurve& GetAdshrCurve() const;
+        const RegionParameter* GetRegionParameter() const;
     };
     static_assert(sizeof(VelocityRegion) == 0x8);
 
