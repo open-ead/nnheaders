@@ -11,8 +11,13 @@
 #include <nn/atk/fnd/os/atkfnd_Thread.h>
 
 namespace nn::atk {
-class DeviceOutRecorder : detail::fnd::Thread::Handler {
+class DeviceOutRecorder : public detail::fnd::Thread::Handler {
+    NN_NO_COPY(DeviceOutRecorder);
 public:
+    static const u32 RecordingBufferSize = 0x5a000;
+    static const u32 DefaultWriteBlockPerSamples = 0x10000;
+    static const u32 RequiredThreadStackSize = 0x10000;
+
     enum State {
         State_NotInitialized,
         State_Initialized,
@@ -27,23 +32,45 @@ public:
         Message_Exit,
     };
 
-    constexpr static u32 RecordingBufferSize = 0x5a000;
-    constexpr static u32 DefaultWriteBlockPerSamples = 0x10000;
-    constexpr static u32 RequiredThreadStackSize = 0x10000;
+    class InitializationOptions {
+    public:
+        InitializationOptions() = default;
 
-    struct RecordingOptions {
+        u32 GetPrioritiy() const { return m_Priority; }
+        void SetPriority(u32 value) { m_Priority = value; }
+
+        int GetIdealCoreNumber() const { return m_IdealCoreNumber; }
+        void SetIdealCoreNumber(int value) { m_IdealCoreNumber = value; }
+
+    private:
+        u32 m_Priority;
+        int m_IdealCoreNumber;
+    };
+    static_assert(sizeof(InitializationOptions) == 0x8);
+
+    class RecordingOptions {
+    public:
+        RecordingOptions() = default;
+
+        u32 GetChannels() const { return m_Channels; }
+        void SetChannels(u32 value) { m_Channels = value; }
+
+        bool IsLeadSilenceTrimmingEnabled() const { return m_IsLeadSilenceTrimmingEnabled; }
+        void SetLeadSilenceTrimmingEnabled(bool value) { m_IsLeadSilenceTrimmingEnabled = value; }
+
+        u32 GetMaxFrames() const { return m_MaxFrames; }
+        void SetMaxFrames(u32 value) { m_MaxFrames = value; }
+
+        u32 GetWriteBlockPerSamples() const { return m_WriteBlockPerSamples; }
+        void SetWriteBlockPerSamples(u32 value) { m_WriteBlockPerSamples = value; }
+
+    private:
         u32 m_Channels;
         bool m_IsLeadSilenceTrimmingEnabled;
         u32 m_MaxFrames;
         u32 m_WriteBlockPerSamples;
     };
     static_assert(sizeof(RecordingOptions) == 0x10);
-
-    struct InitializationOptions {
-        u32 m_Priority;
-        s32 m_IdealCoreNumber;
-    };
-    static_assert(sizeof(InitializationOptions) == 0x8);
 
     class RecorderBuffer {
         struct WriteState {
@@ -55,20 +82,27 @@ public:
         explicit RecorderBuffer(const char* deviceName);
 
         void Initialize(s16* sampleBuffer, u32 maxSamples);
+        void Finalize();
+        
+        u32 Push(const s16* sampleBuffer, u32 samples);
+        u32 Pop(u32 samples);
+        s16* Peek();
 
-        void UpdateMaxSamples();
-
+        void SetReadBlockSamples(u32 value);
         void Clear();
 
-        void Finalize();
-
-        u32 Push(const s16* sampleBuffer, u32 samples);
-        u32 Pop(u32);
-        s64 Peek();
-
-        void SetReadBlockSamples(u32 readBlockSamples);
+        u32 GetReadableCount() const;
+        u32 GetWritableCount() const;
+        u32 GetContiguousReadableCount() const;
+        const char* GetDeviceName() const;
+        
+        void UpdateMaxSamples();
 
     private:
+        void Skip(u32 samples);
+        void Write(const s16* sampleBuffer, u32 samples);
+        u32 IncrementPosition(u32 position, u32 length) const;
+
         s16* m_SampleBuffer;
         u32 m_MaxBufferSamples;
         u32 m_MaxSamples;
@@ -77,56 +111,74 @@ public:
         u32 m_WritePosition;
         u32 m_ReadBlockSamples;
         WriteState m_WriteState;
-        char* m_DeviceName;
+        const char* m_DeviceName;
     };
     static_assert(sizeof(RecorderBuffer) == 0x30);
 
+protected:
     explicit DeviceOutRecorder(const char* deviceName);
+
+public:
     ~DeviceOutRecorder() override;
+
+    bool Initialize(void* recordingBuffer, size_t recordingBufferSize, 
+                    void* pThreadStack, size_t threadStackSize);
+    bool Initialize(void* recordingBuffer, size_t recordingBufferSize, 
+                    void* pThreadStack, size_t threadStackSize, const InitializationOptions& options);
 
     void Finalize();
 
-    bool Initialize(void*, size_t, void*, size_t);
-    bool Initialize(void*, size_t, void*, size_t, const InitializationOptions& options);
+    size_t GetRequiredMemorySizeForRecording();
 
-    bool StartThread(u32, s32);
+    bool Start(detail::fnd::FileStream& fileStream);
+    bool Start(detail::fnd::FileStream& fileStream, const RecordingOptions& options);
 
-    static size_t GetRequiredMemorySizeForRecording();
+    void Stop(bool isBlocking);
 
-    void Stop(bool);
-    void StopThread();
+    bool IsInitialized() const;
 
-    bool Start(detail::fnd::FileStream&, const RecordingOptions& options);
+    State GetState() const;
 
-    s32 GetReadBlockSamples(u32) const;
+    bool IsLeadSilenceTrimming() const;
 
-    s32 Prepare();
-
-    bool SendMessage(Message message);
+    u32 GetRecordingChannels() const;
 
     void RecordSamples(const s16* sampleBuffer, u32 samples);
 
-    bool PostMessage(Message message);
+protected:
+    OutputMode GetOutputMode() const;
+
+    virtual u32 GetMaxFrameLength() const = 0;
+    virtual u32 GetSamplesPerSec() const = 0;
+    virtual u32 GetValidChannels() const = 0;
+
+    virtual void OnStart();
+    virtual void OnStop();
+    virtual u32 OnProcessSamples(s16* sampleBuffer, u32 samples);
+
+    s16 ResolveSampleEndian(s16 sample);
 
     u32 Run(void* param) override;
 
-    s32 OnPrepare();
-    bool OnWriteSamples(bool);
-    void OnRequestStop();
-    void OnExit();
-
-    u64 GetLeadSilenceSamples(const s16* sampleBuffer, u32 sampleCount, u32) const;
-    u32 GetWritableSamples(u32) const;
-
+private:
+    s32 GetReadBlockSamples(u32 channels) const;
+    u32 GetLeadSilenceSamples(const s16* sampleBuffer, u32 samples, u32 channels) const;
+    u32 GetWritableSamples(u32 samples) const;
     bool IsNoMoreSamples() const;
 
-    void OnStart();
-    void OnStop();
+    bool StartThread(u32, s32);
+    void StopThread();
 
-    u32 OnProcessSamples(s16* sampleBuffer, u32 samples);
+    s32 Prepare();
+    bool SendMessage(Message message);
+    bool PostMessage(Message message);
 
-private:
-    State m_State;
+    s32 OnPrepare();
+    void OnRequestStop();
+    void OnExit();
+    bool OnWriteSamples(bool isForceWriteMode);
+
+    volatile State m_State;
     u32 m_Channels;
     OutputMode m_OutputMode;
     bool m_IsLeadSilenceTrimming;
