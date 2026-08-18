@@ -190,4 +190,13 @@ const BankFile::VelocityRegion* BankFile::KeyRegion::GetVelocityRegion(u32 veloc
                           velocity)
             ).Get<VelocityRegion>();
 }
+
+u8 BankFile::VelocityRegion::GetOriginalKey() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_Key)};
+    if (result)
+        return value;
+
+    return DefaultOriginalKey;
+}
 } // namespace nn::atk::detail

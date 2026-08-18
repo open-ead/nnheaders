@@ -161,9 +161,45 @@ struct Util {
     };
 
     struct BitFlag {
-        constexpr static u32 BitNumberMax = 31;
-
         u32 bitFlag;
+
+        bool GetValue(u32* value, u32 bitNumber) const {
+            u32 count {GetTrueCount(bitNumber)};
+            if (count == 0)
+                return false;
+
+            *value = (&bitFlag)[count];
+            return true;
+        }
+
+        bool GetValueF32(float* value, u32 bitNumber) const {
+            u32 count {GetTrueCount(bitNumber)};
+            if (count == 0)
+                return false;
+
+            *value = reinterpret_cast<const float*>(&bitFlag)[count];
+            return true;
+        }
+
+    private:
+        static const int BitNumberMax = 31;
+        u32 GetTrueCount(u32 bitNumber) const {
+            int count {0};
+
+            bool ret {false};
+            for (u32 i {0}; i <= bitNumber; ++i) {
+                if ((bitFlag & (1 << i)) != 0) {
+                    ++count;
+                    if (i == bitNumber)
+                        ret = true;
+                }
+            }
+
+            if (ret)
+                return count;
+
+            return 0;
+        }
     };
     static_assert(sizeof(BitFlag) == 0x4);
 
