@@ -7,4 +7,9 @@ const SequenceSoundFile::DataBlock* SequenceSoundFile::FileHeader::GetDataBlock(
     return util::ConstBytePtr(GetBlock(ElementType_SequenceSoundFile_DataBlock))
             .Get<DataBlock>();
 }
+
+const SequenceSoundFile::LabelBlock* SequenceSoundFile::FileHeader::GetLabelBlock() const {
+    return util::ConstBytePtr(GetBlock(ElementType_SequenceSoundFile_LabelBlock))
+            .Get<LabelBlock>();
+}
 } // namespace nn::atk::detail
