@@ -28,7 +28,7 @@ struct BankFile {
         const Util::WaveId* GetWaveId(u32 index) const {
             return GetWaveIdTable().GetWaveId(index);
         }
-        
+
         const Instrument* GetInstrument(int programNo) const;
     };
     static_assert(sizeof(InfoBlockBody) == 0x10);
@@ -44,7 +44,6 @@ struct BankFile {
         Util::Reference toKeyRegionChunk;
 
         const KeyRegion* GetKeyRegion(u32 key) const;
-
     };
     static_assert(sizeof(Instrument) == 0x8);
 
@@ -53,7 +52,6 @@ struct BankFile {
         Util::Reference toVelocityRegionChunk;
 
         const VelocityRegion* GetVelocityRegion(u32 velocity) const;
-
     };
     static_assert(sizeof(KeyRegion) == 0x8);
 
