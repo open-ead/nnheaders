@@ -1,6 +1,8 @@
 #include <nn/atk/atk_BankFile.h>
 
 #include <nn/atk/atk_ElementType.h>
+#include "nn/atk/atk_Global.h"
+#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 namespace {
@@ -234,5 +236,30 @@ bool BankFile::VelocityRegion::IsIgnoreNoteOff() const {
         return static_cast<u8>(value) != 0;
 
     return DefaultIgnoreNoteOff;
+}
+
+u8 BankFile::VelocityRegion::GetKeyGroup() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_InstrumentNoteParam)};
+    if (result)
+        return value >> 8;
+
+    return DefaultKeyGroup;
+}
+
+u8 BankFile::VelocityRegion::GetInterpolationType() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_InstrumentNoteParam)};
+    if (result)
+        return value >> 16;
+
+    return DefaultInterpolationType;
+}
+
+const BankFile::RegionParameter* BankFile::VelocityRegion::GetRegionParameter() const {
+    if (optionParameter.bitFlag != VelocityRegionBitFlag_BasicParamFlag)
+        return nullptr;
+
+    return util::ConstBytePtr(this, sizeof(VelocityRegion)).Get<BankFile::RegionParameter>();
 }
 } // namespace nn::atk::detail
