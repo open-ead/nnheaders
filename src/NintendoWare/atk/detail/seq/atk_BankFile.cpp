@@ -226,4 +226,13 @@ float BankFile::VelocityRegion::GetPitch() const {
 
     return DefaultPitch;
 }
+
+bool BankFile::VelocityRegion::IsIgnoreNoteOff() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_InstrumentNoteParam)};
+    if (result)
+        return static_cast<u8>(value) != 0;
+
+    return DefaultIgnoreNoteOff;
+}
 } // namespace nn::atk::detail
