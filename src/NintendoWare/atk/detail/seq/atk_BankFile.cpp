@@ -208,4 +208,13 @@ u8 BankFile::VelocityRegion::GetVolume() const {
 
     return DefaultVolume;
 }
+
+u8 BankFile::VelocityRegion::GetPan() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_Pan)};
+    if (result)
+        return value;
+
+    return DefaultPan;
+}
 } // namespace nn::atk::detail
