@@ -217,4 +217,13 @@ u8 BankFile::VelocityRegion::GetPan() const {
 
     return DefaultPan;
 }
+
+float BankFile::VelocityRegion::GetPitch() const {
+    float value;
+    bool result {optionParameter.GetValueF32(&value, VelocityRegionBitFlag_Pitch)};
+    if (result)
+        return value;
+
+    return DefaultPitch;
+}
 } // namespace nn::atk::detail
