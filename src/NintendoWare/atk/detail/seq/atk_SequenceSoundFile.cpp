@@ -21,4 +21,14 @@ const char* SequenceSoundFile::LabelBlockBody::GetLabel(int index) const {
     const LabelInfo* labelInfo {GetLabelInfo(index)};
     return labelInfo->label;
 }
+
+const char* SequenceSoundFile::LabelBlockBody::GetLabelByOffset(u32 offset) const {
+    for (int i {0}; i < GetLabelCount(); ++i) {
+        const LabelInfo* labelInfo {GetLabelInfo(i)};
+        if (labelInfo->referToSequenceData.offset == offset)
+            return labelInfo->label;
+    }
+
+    return nullptr;
+}
 } // namespace nn::atk::detail
