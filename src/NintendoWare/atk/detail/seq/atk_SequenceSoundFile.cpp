@@ -31,4 +31,10 @@ const char* SequenceSoundFile::LabelBlockBody::GetLabelByOffset(u32 offset) cons
 
     return nullptr;
 }
+
+bool SequenceSoundFile::LabelBlockBody::GetOffset(int index, u32* offsetPtr) const {
+    const LabelInfo* labelInfo {GetLabelInfo(index)};
+    *offsetPtr = labelInfo->referToSequenceData.offset;
+    return true;
+}
 } // namespace nn::atk::detail
