@@ -1,5 +1,7 @@
 #include <nn/atk/atk_SequenceSoundFile.h>
 
+#include <cstring>
+
 #include <nn/atk/atk_ElementType.h>
 
 namespace nn::atk::detail {
@@ -36,5 +38,18 @@ bool SequenceSoundFile::LabelBlockBody::GetOffset(int index, u32* offsetPtr) con
     const LabelInfo* labelInfo {GetLabelInfo(index)};
     *offsetPtr = labelInfo->referToSequenceData.offset;
     return true;
+}
+
+bool SequenceSoundFile::LabelBlockBody::GetOffsetByLabel(const char* label, u32* offsetPtr) const {
+    const size_t labelLength {strlen(label)};
+    for (int i {0}; i < GetLabelCount(); ++i) {
+        const LabelInfo* labelInfo {GetLabelInfo(i)};
+        if (strncmp(label, labelInfo->label, labelLength) == 0) {
+            *offsetPtr = labelInfo->referToSequenceData.offset;
+            return true;
+        }
+    }
+
+    return false;
 }
 } // namespace nn::atk::detail
