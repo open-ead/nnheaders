@@ -181,4 +181,13 @@ const BankFile::KeyRegion* BankFile::Instrument::GetKeyRegion(u32 key) const {
                           key)
             ).Get<KeyRegion>();
 }
+
+const BankFile::VelocityRegion* BankFile::KeyRegion::GetVelocityRegion(u32 velocity) const {
+    return util::ConstBytePtr(
+                GetRegion(this, 
+                          toVelocityRegionChunk.typeId, 
+                          toVelocityRegionChunk.offset, 
+                          velocity)
+            ).Get<VelocityRegion>();
+}
 } // namespace nn::atk::detail
