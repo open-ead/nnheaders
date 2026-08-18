@@ -1,5 +1,7 @@
 #include <nn/atk/atk_AudioRendererPerformanceReader.h>
 
+#include <cstring>
+
 #include <nn/atk/atk_SoundSystem.h>
 
 namespace nn::atk {
