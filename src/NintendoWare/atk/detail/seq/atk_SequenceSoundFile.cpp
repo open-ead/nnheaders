@@ -16,4 +16,9 @@ const SequenceSoundFile::LabelBlock* SequenceSoundFile::FileHeader::GetLabelBloc
 const SequenceSoundFile::LabelInfo* SequenceSoundFile::LabelBlockBody::GetLabelInfo(int index) const {
     return util::ConstBytePtr(labelInfoReferenceTable.GetReferedItem(index)).Get<LabelInfo>();
 }
+
+const char* SequenceSoundFile::LabelBlockBody::GetLabel(int index) const {
+    const LabelInfo* labelInfo {GetLabelInfo(index)};
+    return labelInfo->label;
+}
 } // namespace nn::atk::detail

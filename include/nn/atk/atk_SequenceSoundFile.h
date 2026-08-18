@@ -26,7 +26,8 @@ struct SequenceSoundFile {
     struct LabelBlockBody {
         Util::ReferenceTable labelInfoReferenceTable;
         
-        int GetLabelCount() const { return labelInfoReferenceTable.count; };
+        int GetLabelCount() const { return labelInfoReferenceTable.count; }
+        
         const LabelInfo* GetLabelInfo(int index) const;
         const char* GetLabel(int index) const;
         const char* GetLabelByOffset(u32 offset) const;
