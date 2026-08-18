@@ -256,6 +256,17 @@ u8 BankFile::VelocityRegion::GetInterpolationType() const {
     return DefaultInterpolationType;
 }
 
+const AdshrCurve& BankFile::VelocityRegion::GetAdshrCurve() const {
+    u32 offsetToReference;
+    bool result {optionParameter.GetValue(&offsetToReference, VelocityRegionBitFlag_Envelope)};
+    if (result) {
+        const auto& ref {*util::ConstBytePtr(this, offsetToReference).Get<Util::Reference>()};
+        return *util::ConstBytePtr(&ref, ref.offset).Get<AdshrCurve>();
+    }
+
+    return DefaultAdshrCurve;
+}
+
 const BankFile::RegionParameter* BankFile::VelocityRegion::GetRegionParameter() const {
     if (optionParameter.bitFlag != VelocityRegionBitFlag_BasicParamFlag)
         return nullptr;
