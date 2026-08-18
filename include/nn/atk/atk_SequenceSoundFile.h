@@ -7,27 +7,32 @@ struct SequenceSoundFile {
     struct DataBlock;
     struct LabelBlock;
     struct FileHeader : Util::SoundFileHeader {
-
-        DataBlock* GetDataBlock() const;
-        LabelBlock* GetLabelBlock() const;
+        const DataBlock* GetDataBlock() const;
+        const LabelBlock* GetLabelBlock() const;
     };
 
-    struct LabelInfo {
-        Util::Reference referToSequenceData;
-        u32 labelStringLength;
-        char label[1];
+    struct DataBlockBody {
+        u8 sequenceData[1];
+
+        const void* GetSequenceData() const;
     };
 
+    struct DataBlock {
+        BinaryBlockHeader header;
+        DataBlockBody body;
+    };
+
+    struct LabelInfo;
     struct LabelBlockBody {
-        
-        LabelInfo* GetLabelInfo(s32 index) const;
-        char* GetLabel(s32 index) const;
-        char* GetLabelByOffest(s32 labelOffset) const;
-        
-        u32 GetOffset(s32 index, u32* offsetPtr) const;
-        bool GetOffsetByLabel(char* label, u32* offsetPtr) const;
-        
         Util::ReferenceTable labelInfoReferenceTable;
+        
+        int GetLabelCount() const { return labelInfoReferenceTable.count; };
+        const LabelInfo* GetLabelInfo(int index) const;
+        const char* GetLabel(int index) const;
+        const char* GetLabelByOffset(u32 offset) const;
+        
+        bool GetOffset(int index, u32* offsetPtr) const;
+        bool GetOffsetByLabel(const char* label, u32* offsetPtr) const;
     };
 
     struct LabelBlock {
@@ -35,13 +40,11 @@ struct SequenceSoundFile {
         LabelBlockBody body;
     };
 
-    struct DataBlockBody {
-        u8 sequenceData[1];
+    struct LabelInfo {
+        Util::Reference referToSequenceData;
+        u32 labelStringLength;
+        char label[1];
     };
-
-    struct DataBlock {
-        BinaryBlockHeader header;
-        DataBlockBody body;
-    };
+    static_assert(sizeof(LabelInfo) == 0x10);
 };
 } // namespace nn::atk::detail

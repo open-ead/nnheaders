@@ -82,7 +82,7 @@ struct Util {
         const void* GetReferedItem(const void* origin, u16 typeId, u16 count) const {
             auto* ref {GetReference(typeId, count)};
             if (ref != nullptr && ref->offset != 0)
-                return util::ConstBytePtr(origin).Advance(ref->offset).Get();
+                return util::ConstBytePtr(origin, ref->offset).Get();
 
             return nullptr;
         }
@@ -133,14 +133,14 @@ struct Util {
     struct ReferenceTable : Table<Reference> {
         const void* GetReferedItem(u32 index) const {
             if (count > index)
-                return util::ConstBytePtr(this).Advance(item[index].offset).Get();
+                return util::ConstBytePtr(this, item[index].offset).Get();
 
             return nullptr;
         }
 
         const void* GetReferedItem(u32 index, u16 typeId) const {
             if (count > index && item[index].typeId == typeId)
-                return util::ConstBytePtr(this).Advance(item[index].offset).Get();
+                return util::ConstBytePtr(this,item[index].offset).Get();
 
             return nullptr;
         }
@@ -151,7 +151,7 @@ struct Util {
     struct ReferenceWithSizeTable : Table<ReferenceWithSize> {
         const void* GetReferedItem(u32 index) const {
             if (count > index)
-                return util::ConstBytePtr(this).Advance(item[index].offset).Get();
+                return util::ConstBytePtr(this, item[index].offset).Get();
 
             return nullptr;
         }

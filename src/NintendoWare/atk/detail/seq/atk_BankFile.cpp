@@ -1,8 +1,6 @@
 #include <nn/atk/atk_BankFile.h>
 
 #include <nn/atk/atk_ElementType.h>
-#include "nn/atk/atk_Global.h"
-#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 namespace {
