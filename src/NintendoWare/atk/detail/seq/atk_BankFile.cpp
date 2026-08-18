@@ -199,4 +199,13 @@ u8 BankFile::VelocityRegion::GetOriginalKey() const {
 
     return DefaultOriginalKey;
 }
+
+u8 BankFile::VelocityRegion::GetVolume() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_Volume)};
+    if (result)
+        return value;
+
+    return DefaultVolume;
+}
 } // namespace nn::atk::detail
