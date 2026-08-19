@@ -81,4 +81,8 @@ SoundArchive::ItemId SoundArchive::GetItemId(const char* pStr) const {
 SoundArchive::FileId SoundArchive::GetItemFileId(ItemId id) const {
     return m_pFileReader->GetItemFileId(id);
 }
+
+SoundArchive::FileId SoundArchive::GetItemPrefetchFileId(ItemId id) const {
+    return m_pFileReader->GetItemPrefetchFileId(id);
+}
 } // namespace nn::atk
