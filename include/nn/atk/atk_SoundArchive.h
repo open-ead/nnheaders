@@ -271,8 +271,13 @@ public:
                                                    void* cacheBuffer, size_t cacheSize) const;
     const detail::Util::Table<u32>* detail_GetAttachedGroupTable(FileId fileId) const;
     
-    detail::SoundArchiveParametersHook* detail_GetParametersHook() const;
-    void detail_SetParametersHook(detail::SoundArchiveParametersHook* parametersHook);
+    detail::SoundArchiveParametersHook* detail_GetParametersHook() const { 
+        return m_pParametersHook;
+    }
+
+    void detail_SetParametersHook(detail::SoundArchiveParametersHook* parametersHook) {
+        m_pParametersHook = parametersHook;
+    }
 
     void SetExternalFileRoot(const char* extFileRoot);
     bool ReadStreamSoundFilePath(char* outFilePathBuffer, size_t filePathBufferSize, ItemId soundId) const;

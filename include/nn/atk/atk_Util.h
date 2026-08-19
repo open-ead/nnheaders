@@ -5,6 +5,7 @@
 
 #include <nn/atk/atk_Global.h>
 #include <nn/atk/atk_BinaryFileFormat.h>
+#include <nn/atk/atk_ItemType.h>
 
 namespace nn::atk {
 class SoundArchive;
@@ -15,36 +16,54 @@ namespace detail {
 class PlayerHeapDataManager;
 class SoundArchiveLoader;
 struct LoadItemInfo;
-struct Util {
-    NN_NO_COPY(Util);
-    NN_NO_MOVE(Util);
+class Util {
+public:
+    static const int VolumeDbMin {-904};
+    static const int VolumeDbMax {60};
 
-    constexpr static s32 VolumeDbMin = -904;
-    constexpr static s32 VolumeDbMax = 60;
-
-    constexpr static s32 PitchDivisionBit = 0b1000;
-    constexpr static s32 PitchDivisionRange = 256;
+    static const int PitchDivisionBit {8};
+    static const int PitchDivisionRange {256};
     
-    constexpr static s32 CalcLpfFreqTableSize = 24;
-    constexpr static u32 CalcLpfFreqIntercept = 0x3E0ADE7F;
-    constexpr static u32 CalcLpfFreqThreshold = 0x3F666666;
-
-    constexpr static u16 CalcLpfFreqTable[CalcLpfFreqTableSize] {
-        80, 100, 128, 160, 
-        200, 256, 320, 400, 
-        500, 640, 800, 1000,
-        1280, 1600, 2000, 2560, 
-        3200, 4000, 5120, 6400, 
-        8000, 10240, 12800, 16000
+    enum PanCurve {
+        PanCurve_Sqrt,
+        PanCurve_Sincos,
+        PanCurve_Linear,
     };
 
-    constexpr static BiquadFilterCoefficients LowPassFilterCoefficientsTable32000[CalcLpfFreqTableSize] {};
-    constexpr static BiquadFilterCoefficients LowPassFilterCoefficientsTable48000[CalcLpfFreqTableSize] {};
+    struct PanInfo {
+        PanCurve curve;
+        bool centerZeroFlag;
+        bool zeroClampFlag;
+        bool isEnableFrontBypass;
+    };
+    static_assert(sizeof(PanInfo) == 0x8);
 
-    template <typename Class>
-    class Singleton {
-    public:
-        static Class* GetInstance(); 
+    static u16 CalcLpfFreq(float scale);
+    static BiquadFilterCoefficients CalcLowPassFilterCoefficients(int frequency, int sampleRate, bool isTableUsed);
+    static int FindLpfFreqTableIndex(int frequency);
+    static float CalcPanRatio(float pan, const PanInfo& info, OutputMode mode);
+    static float CalcSurroundPanRatio(float surroundPan, const PanInfo& info);
+
+    static float CalcPitchRatio(int pitch_);
+    static float CalcVolumeRatio(float dB);
+    static u16 CalcRandom();
+
+    static size_t GetSampleByByte(size_t byte, SampleFormat format); // 85
+    static size_t GetByteBySample(size_t samples, SampleFormat format);
+
+    static bool IsValidMemoryForDsp(const void* ptr, size_t size);
+
+    static const int CalcLpfFreqTableSize {24}; // 92
+    static const float CalcLpfFreqIntercept; // = 0x3E0ADE7F
+    static const float CalcLpfFreqThreshold;// = 0x3F666666;
+    static const u16 CalcLpfFreqTable[CalcLpfFreqTableSize];
+    static const BiquadFilterCoefficients LowPassFilterCoefficientsTable32000[CalcLpfFreqTableSize];
+    static const BiquadFilterCoefficients LowPassFilterCoefficientsTable48000[CalcLpfFreqTableSize];
+
+    template <typename ItemType, typename CountType = u32>
+    struct Table {
+        CountType count;
+        ItemType item[1];
     };
 
     struct Reference {
@@ -64,6 +83,36 @@ struct Util {
         u32 size;
     };
     static_assert(sizeof(ReferenceWithSize) == 0xc);
+
+    struct ReferenceTable : Table<Reference> {
+        const void* GetReferedItem(u32 index) const {
+            if (count > index)
+                return util::ConstBytePtr(this, item[index].offset).Get();
+
+            return nullptr;
+        }
+
+        const void* GetReferedItem(u32 index, u16 typeId) const {
+            if (count > index && item[index].typeId == typeId)
+                return util::ConstBytePtr(this,item[index].offset).Get();
+
+            return nullptr;
+        }
+
+        const void* FindReferedItemBy(u16 typeId) const;
+    };
+
+    struct ReferenceWithSizeTable : Table<ReferenceWithSize> { // 164
+        const void* GetReferedItem(u32 index) const {
+            if (count > index)
+                return util::ConstBytePtr(this, item[index].offset).Get();
+
+            return nullptr;
+        }
+
+        const void* GetReferedItemBy(u16 typeId) const;
+        u32 GetReferedItemSize(u32 index) const;
+    };
 
     struct BlockReferenceTable {
         ReferenceWithSize item[1];
@@ -104,7 +153,7 @@ struct Util {
         }
     };
 
-    struct SoundFileHeader {
+    struct SoundFileHeader { // 239
         BinaryFileHeader header;
         BlockReferenceTable blockReferenceTable;
 
@@ -122,42 +171,6 @@ struct Util {
         u32 GetBlockOffset(u16 typeId) const {
             return blockReferenceTable.GetReferedItemOffset(typeId, header.dataBlocks);
         }
-    };
-
-    template <typename ItemType, typename CountType = u32>
-    struct Table {
-        CountType count;
-        ItemType item[1];
-    };
-
-    struct ReferenceTable : Table<Reference> {
-        const void* GetReferedItem(u32 index) const {
-            if (count > index)
-                return util::ConstBytePtr(this, item[index].offset).Get();
-
-            return nullptr;
-        }
-
-        const void* GetReferedItem(u32 index, u16 typeId) const {
-            if (count > index && item[index].typeId == typeId)
-                return util::ConstBytePtr(this,item[index].offset).Get();
-
-            return nullptr;
-        }
-
-        const void* FindReferedItemBy(u16 typeId) const;
-    };
-
-    struct ReferenceWithSizeTable : Table<ReferenceWithSize> {
-        const void* GetReferedItem(u32 index) const {
-            if (count > index)
-                return util::ConstBytePtr(this, item[index].offset).Get();
-
-            return nullptr;
-        }
-
-        const void* GetReferedItemBy(u16 typeId) const;
-        u32 GetReferedItemSize(u32 index) const;
     };
 
     struct BitFlag {
@@ -203,19 +216,16 @@ struct Util {
     };
     static_assert(sizeof(BitFlag) == 0x4);
 
-    enum PanCurve {
-        PanCurve_Sqrt,
-        PanCurve_Sincos,
-        PanCurve_Linear,
-    };
+    static u8 DivideBy8bit(u32 value, int index) { // 334
 
-    struct PanInfo {
-        PanCurve curve;
-        bool centerZeroFlag;
-        bool zeroClampFlag;
-        bool isEnableFrontBypass;
-    };
-    static_assert(sizeof(PanInfo) == 0x8);
+    }
+
+    static u8 DivideBy16bit(u32 value, int index) {
+           
+    }
+
+    const void* GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchive& arc, const SoundArchivePlayer& player);
+    const void* GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchive& arc, const PlayerHeapDataManager* mgr);
 
     enum WaveArchiveLoadStatus {
         WaveArchiveLoadStatus_Error = -2,
@@ -225,89 +235,82 @@ struct Util {
         WaveArchiveLoadStatus_Partly
     };
 
-    struct WaveId {
+    static WaveArchiveLoadStatus GetWaveArchiveOfBank(LoadItemInfo& warcLoadInfo, bool& isLoadIndividual, const void* bankFile, const SoundArchive& arc, const SoundArchiveLoader& mgr);
+
+    static const void* GetWaveFileOfWaveSound(const void* wsdFile, u32 index, const SoundArchive& arc, const SoundArchiveLoader& mgr);
+
+    static ItemType GetItemType(u32 id);
+    static u32 GetItemIndex(u32 id);
+    static u32 GetMaskedItemId(u32 id, ItemType type); // 393
+    
+    struct WaveId { // 398
         u32 waveArchiveId;
         u32 waveIndex;
     };
     static_assert(sizeof(WaveId) == 0x8);
     
-    struct WaveIdTable {
+    struct WaveIdTable { // 404
         Table<WaveId> table;
 
         const WaveId* GetWaveId(u32 index) const {
             return &table.item[index];
         }
+
+        u32 GetCount() const {
+            return table.count;
+        }
     };
 
-    class WarningLogger {
+    template <typename CHILD>
+    class Singleton { // 426
     public:
-        enum LogId {
-            LogId_ChannelAllocationFailed,
-            LogId_SoundthreadFailedWakeup,
-            LogId_LogbufferFull,
-            LogId_Max,
-        };
+        static CHILD& GetInstance(); 
+    };
 
+    static int GetSubMixBusFromMainBus(); // 470
+    static int GetSubMixBus(AuxBus bus);
+    static int GetSubMixBus(int bus);
+    static int GetOutputReceiverMixBufferIndex(const OutputReceiver* pOutputReceiver, int bus, int channel);
+    static int GetAdditionalSendIndex(int bus);
+
+    class WarningLogger : public Singleton<WarningLogger> { // 578
+    public:
+        WarningLogger();
+
+        void Log(int logId, int arg0, int arg1);
+        void Print();
+        void SwapBuffer();
+
+    private:
         struct LogBuffer {
-            constexpr static u32 LogCount = 64;
+            static const int LogCount = 64;
 
             struct Element {
-                
-                void Print();
+                int logId;
+                int arg0;
+                int arg1;
 
-                s32 logId;
-                s32 arg0;
-                s32 arg1;
+                void Print();
             };
             static_assert(sizeof(Element) == 0xc);
 
-            void Log(s32 logId, s32 arg0, s32 arg1);
-            void Print();
 
             Element element[LogCount];
-            s32 counter;
+            int counter;
+
+            LogBuffer();
+
+            void Log(int logId, int arg0, int arg1);
+            void Print();
+            void Reset();
         };
         static_assert(sizeof(LogBuffer) == 0x304);
 
-        void Log(s32 logId, s32 arg0, s32 arg1);
-        void SwapBuffer();
-        void Print();
-
-    private:
         LogBuffer m_Buffer0;
         LogBuffer m_Buffer1;
         LogBuffer* m_pCurrentBuffer;
     };
     static_assert(sizeof(WarningLogger) == 0x610);
-
-    static u16 CalcLpfFreq(f32 scale);
-    static BiquadFilterCoefficients CalcLowPassFilterCoefficients(s32 frequency, s32 sampleRate, 
-                                                           bool isTableUsed);
-
-    static s32 FindLpfFreqTableIndex(s32);
-
-    static f32 CalcPanRatio(f32 pan, PanInfo* info, OutputMode mode);
-    static f32 CalcSurroundPanRatio(f32 surroundPan, PanInfo* info);
-    static f32 CalcPitchRatio(f32 pitch_);
-    static f32 CalcVolumeRatio(f32 dB);
-    static f32 CalcRandom();
-    
-    static void* GetWaveFile(u32, u32, const SoundArchive&, const SoundArchivePlayer&);
-    static void* GetWaveFile(u32, u32, const SoundArchive&, const PlayerHeapDataManager&);
-
-    static WaveArchiveLoadStatus GetWaveArchiveOfBank(const LoadItemInfo& warcLoadInfo, 
-                                                      bool& isLoadIndividual, const void* bankFile, 
-                                                      const SoundArchive& arc, const SoundArchiveLoader& mgr);
-
-    static void* GetWaveFileOfWaveSound(const void* wsdFile, u32 index, 
-                                        const SoundArchive& arc, const SoundArchiveLoader& mgr);
-
-    static s32 GetOutputReceiverMixBufferIndex(OutputReceiver*, s32, s32);
-
-    static size_t GetSampleByByte(size_t samples, SampleFormat format);
-    static size_t GetByteBySample(size_t samples, SampleFormat format);
-    
-    static bool IsValidMemoryForDsp(const void* ptr, size_t size);
 };
 
 static const f32 NoteTable[12] {};
