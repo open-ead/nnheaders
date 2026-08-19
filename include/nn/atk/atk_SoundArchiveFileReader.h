@@ -61,7 +61,7 @@ public:
     u32 GetSoundUserParam(u32) const;
 
     bool ReadSoundUserParam(u32*, u32, s32) const;
-    void* GetAttachedGroupTable(u32) const; // unknown return type
+    const detail::Util::Table<u32>* GetAttachedGroupTable(u32) const;
 
     int GetFileBlockOffset() const { return m_Header.GetFileBlockOffset(); }
 
