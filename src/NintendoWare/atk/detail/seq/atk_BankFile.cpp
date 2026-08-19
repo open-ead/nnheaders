@@ -204,7 +204,7 @@ u8 BankFile::VelocityRegion::GetVolume() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_Volume)};
     if (result)
-        return value;
+        return Util::DivideBy8bit(value, 0);
 
     return DefaultVolume;
 }
@@ -213,7 +213,7 @@ u8 BankFile::VelocityRegion::GetPan() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_Pan)};
     if (result)
-        return value;
+        return Util::DivideBy8bit(value, 0);
 
     return DefaultPan;
 }
@@ -231,7 +231,7 @@ bool BankFile::VelocityRegion::IsIgnoreNoteOff() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_InstrumentNoteParam)};
     if (result)
-        return static_cast<u8>(value) != 0;
+        return Util::DivideBy8bit(value, 0) != 0;
 
     return DefaultIgnoreNoteOff;
 }
@@ -240,7 +240,7 @@ u8 BankFile::VelocityRegion::GetKeyGroup() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_InstrumentNoteParam)};
     if (result)
-        return value >> 8;
+        return Util::DivideBy8bit(value, 1);
 
     return DefaultKeyGroup;
 }
@@ -249,7 +249,7 @@ u8 BankFile::VelocityRegion::GetInterpolationType() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, VelocityRegionBitFlag_InstrumentNoteParam)};
     if (result)
-        return value >> 16;
+        return Util::DivideBy8bit(value, 2);
 
     return DefaultInterpolationType;
 }

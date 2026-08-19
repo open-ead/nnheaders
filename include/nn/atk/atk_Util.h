@@ -39,7 +39,9 @@ public:
     static_assert(sizeof(PanInfo) == 0x8);
 
     static u16 CalcLpfFreq(float scale);
-    static BiquadFilterCoefficients CalcLowPassFilterCoefficients(int frequency, int sampleRate, bool isTableUsed);
+    static BiquadFilterCoefficients CalcLowPassFilterCoefficients(int frequency, 
+                                                                  int sampleRate, 
+                                                                  bool isTableUsed);
     static int FindLpfFreqTableIndex(int frequency);
     static float CalcPanRatio(float pan, const PanInfo& info, OutputMode mode);
     static float CalcSurroundPanRatio(float surroundPan, const PanInfo& info);
@@ -48,12 +50,12 @@ public:
     static float CalcVolumeRatio(float dB);
     static u16 CalcRandom();
 
-    static size_t GetSampleByByte(size_t byte, SampleFormat format); // 85
+    static size_t GetSampleByByte(size_t byte, SampleFormat format);
     static size_t GetByteBySample(size_t samples, SampleFormat format);
 
     static bool IsValidMemoryForDsp(const void* ptr, size_t size);
 
-    static const int CalcLpfFreqTableSize {24}; // 92
+    static const int CalcLpfFreqTableSize {24};
     static const float CalcLpfFreqIntercept; // = 0x3E0ADE7F
     static const float CalcLpfFreqThreshold;// = 0x3F666666;
     static const u16 CalcLpfFreqTable[CalcLpfFreqTableSize];
@@ -102,7 +104,7 @@ public:
         const void* FindReferedItemBy(u16 typeId) const;
     };
 
-    struct ReferenceWithSizeTable : Table<ReferenceWithSize> { // 164
+    struct ReferenceWithSizeTable : Table<ReferenceWithSize> {
         const void* GetReferedItem(u32 index) const {
             if (count > index)
                 return util::ConstBytePtr(this, item[index].offset).Get();
@@ -153,7 +155,7 @@ public:
         }
     };
 
-    struct SoundFileHeader { // 239
+    struct SoundFileHeader {
         BinaryFileHeader header;
         BlockReferenceTable blockReferenceTable;
 
@@ -216,16 +218,18 @@ public:
     };
     static_assert(sizeof(BitFlag) == 0x4);
 
-    static u8 DivideBy8bit(u32 value, int index) { // 334
-
+    static u8 DivideBy8bit(u32 value, int index) {
+        return static_cast<u8>(value >> (8 * index));
     }
 
     static u8 DivideBy16bit(u32 value, int index) {
-           
+        return static_cast<u16>(value >> (16 * index));
     }
 
-    const void* GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchive& arc, const SoundArchivePlayer& player);
-    const void* GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchive& arc, const PlayerHeapDataManager* mgr);
+    const void* GetWaveFile(u32 waveArchiveId, u32 waveIndex, 
+                            const SoundArchive& arc, const SoundArchivePlayer& player);
+    const void* GetWaveFile(u32 waveArchiveId, u32 waveIndex, 
+                            const SoundArchive& arc, const PlayerHeapDataManager* mgr);
 
     enum WaveArchiveLoadStatus {
         WaveArchiveLoadStatus_Error = -2,
@@ -235,21 +239,36 @@ public:
         WaveArchiveLoadStatus_Partly
     };
 
-    static WaveArchiveLoadStatus GetWaveArchiveOfBank(LoadItemInfo& warcLoadInfo, bool& isLoadIndividual, const void* bankFile, const SoundArchive& arc, const SoundArchiveLoader& mgr);
+    static WaveArchiveLoadStatus GetWaveArchiveOfBank(LoadItemInfo& warcLoadInfo, 
+                                                      bool& isLoadIndividual, 
+                                                      const void* bankFile, 
+                                                      const SoundArchive& arc, 
+                                                      const SoundArchiveLoader& mgr);
 
-    static const void* GetWaveFileOfWaveSound(const void* wsdFile, u32 index, const SoundArchive& arc, const SoundArchiveLoader& mgr);
+    static const void* GetWaveFileOfWaveSound(const void* wsdFile, 
+                                              u32 index, 
+                                              const SoundArchive& arc, 
+                                              const SoundArchiveLoader& mgr);
 
-    static ItemType GetItemType(u32 id);
-    static u32 GetItemIndex(u32 id);
-    static u32 GetMaskedItemId(u32 id, ItemType type); // 393
+    static ItemType GetItemType(u32 id) {
+        return static_cast<ItemType>(id >> 24);
+    }
+
+    static u32 GetItemIndex(u32 id) {
+        return id & 0x00FFFFFF;
+    }
+
+    static u32 GetMaskedItemId(u32 id, ItemType type) {
+        return id | (type << 24);
+    }
     
-    struct WaveId { // 398
+    struct WaveId {
         u32 waveArchiveId;
         u32 waveIndex;
     };
     static_assert(sizeof(WaveId) == 0x8);
     
-    struct WaveIdTable { // 404
+    struct WaveIdTable {
         Table<WaveId> table;
 
         const WaveId* GetWaveId(u32 index) const {
@@ -262,18 +281,18 @@ public:
     };
 
     template <typename CHILD>
-    class Singleton { // 426
+    class Singleton {
     public:
         static CHILD& GetInstance(); 
     };
 
-    static int GetSubMixBusFromMainBus(); // 470
+    static int GetSubMixBusFromMainBus();
     static int GetSubMixBus(AuxBus bus);
     static int GetSubMixBus(int bus);
     static int GetOutputReceiverMixBufferIndex(const OutputReceiver* pOutputReceiver, int bus, int channel);
     static int GetAdditionalSendIndex(int bus);
 
-    class WarningLogger : public Singleton<WarningLogger> { // 578
+    class WarningLogger : public Singleton<WarningLogger> {
     public:
         WarningLogger();
 

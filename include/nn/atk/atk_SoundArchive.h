@@ -231,12 +231,29 @@ public:
     FileId GetItemFileId(ItemId id) const;
     FileId GetItemPrefetchFileId(ItemId id) const;
 
-    static ItemId GetSoundIdFromIndex(u32 index);
-    static ItemId GetSoundGroupIdFromIndex(u32 index);
-    static ItemId GetBankIdFromIndex(u32 index);
-    static ItemId GetPlayerIdFromIndex(u32 index);
-    static ItemId GetWaveArchiveIdFromIndex(u32 index);
-    static ItemId GetGroupIdFromIndex(u32 index);
+    static ItemId GetSoundIdFromIndex(u32 index) {
+        return detail::Util::GetMaskedItemId(index, detail::ItemType_Sound);
+    }
+
+    static ItemId GetSoundGroupIdFromIndex(u32 index) {
+        return detail::Util::GetMaskedItemId(index, detail::ItemType_SoundGroup);
+    }
+
+    static ItemId GetBankIdFromIndex(u32 index) {
+        return detail::Util::GetMaskedItemId(index, detail::ItemType_Bank);
+    }
+
+    static ItemId GetPlayerIdFromIndex(u32 index) {
+        return detail::Util::GetMaskedItemId(index, detail::ItemType_Player);
+    }
+
+    static ItemId GetWaveArchiveIdFromIndex(u32 index) {
+        return detail::Util::GetMaskedItemId(index, detail::ItemType_WaveArchive);
+    }
+
+    static ItemId GetGroupIdFromIndex(u32 index) {
+        return detail::Util::GetMaskedItemId(index, detail::ItemType_Group);
+    }
 
     u32 GetSoundUserParam(ItemId soundId) const;
     bool ReadSoundUserParam(u32* pOutValue, ItemId soundId, int index) const;
