@@ -221,4 +221,13 @@ bool SoundArchive::detail_ReadSoundGroupInfo(ItemId soundGroupId, SoundGroupInfo
 
     return result;
 }
+
+bool SoundArchive::ReadGroupInfo(GroupInfo* pOutValue, ItemId groupId) const {
+    bool result {m_pFileReader->ReadGroupInfo(groupId, pOutValue)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadGroupInfo(groupId, pOutValue);
+
+    return result;
+}
 } // namespace nn::atk
