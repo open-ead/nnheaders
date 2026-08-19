@@ -171,4 +171,13 @@ bool SoundArchive::ReadStreamSoundInfo(StreamSoundInfo* pOutValue, ItemId soundI
 
     return result;
 }
+
+bool SoundArchive::detail_ReadStreamSoundInfo2(ItemId soundId, StreamSoundInfo2* info) const {
+    bool result {m_pFileReader->ReadStreamSoundInfo2(soundId, info)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadStreamSoundInfo2(soundId, info);
+
+    return result;
+}
 } // namespace nn::atk
