@@ -245,4 +245,21 @@ bool SoundArchive::detail_ReadFileInfo(FileId fileId, FileInfo* info) const {
 const detail::Util::Table<u32>* SoundArchive::detail_GetWaveArchiveIdTable(ItemId id) const {
     return m_pFileReader->GetWaveArchiveIdTable(id);
 }
+
+detail::fnd::FileStream* SoundArchive::detail_OpenFileStream(FileId fileId, void* buffer, size_t size, 
+                                                             void* cacheBuffer, size_t cacheSize) const {
+    FileInfo fileInfo {};
+    detail::fnd::FileStream* stream {};
+    if (detail_ReadFileInfo(fileId, &fileInfo)) {
+        if (fileInfo.externalFilePath == nullptr) {
+            if (fileInfo.fileSize != FileInfo::InvalidSize && fileInfo.offsetFromFileBlockHead != FileInfo::InvalidOffset)
+                stream = OpenStream(buffer, size, m_FileBlockOffset + fileInfo.offsetFromFileBlockHead, fileInfo.fileSize);
+        }
+        else {
+            stream = OpenExtStreamImpl(buffer, size, fileInfo.externalFilePath, cacheBuffer, cacheSize);
+        }
+    }
+
+    return stream;
+}
 } // namespace nn::atk
