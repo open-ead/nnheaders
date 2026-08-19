@@ -50,7 +50,13 @@ public:
         return false;
     }
 
-    bool ReadSoundGroupInfo(SoundArchive::ItemId soundGroupId, SoundArchive::SoundGroupInfo* info) const;
+    bool ReadSoundGroupInfo(SoundArchive::ItemId soundGroupId, SoundArchive::SoundGroupInfo* info) const {
+        if (m_IsEnable)
+            return ReadSoundGroupInfoImpl(soundGroupId, info);
+
+        return false;
+    }
+
     bool ReadGroupInfo(SoundArchive::ItemId groupId, SoundArchive::GroupInfo* info) const;
     bool ReadFileInfo(SoundArchive::FileId id, SoundArchive::FileInfo* info, int index) const;
     
@@ -124,7 +130,7 @@ protected:
     virtual bool ReadSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::SoundInfo* info) const;
     virtual bool ReadBankInfoImpl(SoundArchive::ItemId bankId, SoundArchive::BankInfo* info) const;
     virtual bool ReadPlayerInfoImpl(SoundArchive::ItemId playerId, SoundArchive::PlayerInfo* info) const;
-    virtual void Impl9();
+    virtual bool ReadSoundGroupInfoImpl(SoundArchive::ItemId soundGroupId, SoundArchive::SoundGroupInfo* info) const;
     virtual void Impl10();
     virtual bool ReadWaveArchiveInfoImpl(SoundArchive::ItemId warcId, SoundArchive::WaveArchiveInfo* info) const;
     virtual void Impl12();
