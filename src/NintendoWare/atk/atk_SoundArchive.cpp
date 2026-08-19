@@ -262,4 +262,8 @@ detail::fnd::FileStream* SoundArchive::detail_OpenFileStream(FileId fileId, void
 
     return stream;
 }
+
+const detail::Util::Table<u32>* SoundArchive::detail_GetAttachedGroupTable(FileId fileId) const {
+    return m_pFileReader->GetAttachedGroupTable(fileId);
+}
 } // namespace nn::atk
