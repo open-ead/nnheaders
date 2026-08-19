@@ -85,4 +85,13 @@ SoundArchive::FileId SoundArchive::GetItemFileId(ItemId id) const {
 SoundArchive::FileId SoundArchive::GetItemPrefetchFileId(ItemId id) const {
     return m_pFileReader->GetItemPrefetchFileId(id);
 }
+
+u32 SoundArchive::GetSoundUserParam(ItemId soundId) const {
+    u32 userParam {m_pFileReader->GetSoundUserParam(soundId)};
+
+    if (m_pParametersHook != nullptr && m_pParametersHook->GetIsEnable())
+        userParam = m_pParametersHook->GetSoundUserParam(soundId, userParam);
+
+    return userParam;
+}
 } // namespace nn::atk

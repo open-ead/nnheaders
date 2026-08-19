@@ -37,9 +37,14 @@ public:
     bool ReadStreamSoundInfo(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo* info) const;
     bool ReadStreamSoundInfo2(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo2* info) const;
     bool ReadWaveSoundInfo(SoundArchive::ItemId soundId, SoundArchive::WaveSoundInfo* info) const;
-
     bool ReadSoundUserParam(u32* pOutValue, SoundArchive::ItemId soundId, int index) const;
-    u32 GetSoundUserParam(SoundArchive::ItemId soundId, u32 userParam) const;
+
+    u32 GetSoundUserParam(SoundArchive::ItemId soundId, u32 userParam) const {
+        if (m_IsEnable)
+            return GetSoundUserParamImpl(soundId, userParam);
+
+        return SoundArchive::InvalidUserParam;
+    }
 
 protected:
     virtual void Impl1();
@@ -48,6 +53,20 @@ protected:
     virtual const char* GetItemLabelImpl(SoundArchive::ItemId id) const;
     virtual SoundArchive::ItemId GetItemIdImpl(const char* itemLabel) const;
     virtual SoundArchive::SoundType GetSoundTypeImpl(const char* itemLabel) const;
+    virtual void Impl7();
+    virtual void Impl8();
+    virtual void Impl9();
+    virtual void Impl10();
+    virtual void Impl11();
+    virtual void Impl12();
+    virtual void Impl13();
+    virtual void Impl14();
+    virtual void Impl15();
+    virtual void Impl16();
+    virtual void Impl17();
+    virtual void Impl18();
+    virtual void Impl19();
+    virtual u32 GetSoundUserParamImpl(SoundArchive::ItemId soundId, u32 userParam) const;
 
 private:
     bool m_IsEnable;
