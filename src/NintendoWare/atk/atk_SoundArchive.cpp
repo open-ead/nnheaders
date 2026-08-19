@@ -103,4 +103,17 @@ bool SoundArchive::ReadSoundUserParam(u32* pOutValue, ItemId soundId, int index)
 
     return result;
 }
+
+SoundArchive::SoundType SoundArchive::GetSoundType(ItemId soundId) const {
+    if (m_pParametersHook != nullptr) {
+        const char* label {m_pParametersHook->GetItemLabel(soundId)};
+        if (label != nullptr) {
+            SoundType type {m_pParametersHook->GetSoundType(label)};
+            if (type != SoundType_Invalid)
+                return type;
+        }
+    }
+    
+    return m_pFileReader->GetSoundType(soundId);
+}
 } // namespace nn::atk

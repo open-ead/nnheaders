@@ -22,7 +22,12 @@ public:
         return SoundArchive::InvalidId;
     }
 
-    SoundArchive::SoundType GetSoundType(const char* itemLabel);
+    SoundArchive::SoundType GetSoundType(const char* itemLabel) {
+        if (m_IsEnable)
+            return GetSoundTypeImpl(itemLabel);
+
+        return SoundArchive::SoundType_Invalid;
+    }
 
     bool ReadSoundInfo(SoundArchive::ItemId soundId, SoundArchive::SoundInfo* info) const;
     bool ReadBankInfo(SoundArchive::ItemId bankId, SoundArchive::BankInfo* info) const;
