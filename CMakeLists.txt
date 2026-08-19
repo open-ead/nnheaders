@@ -290,7 +290,6 @@ add_library(NintendoSDK OBJECT
   src/NintendoSDK/nvn/nvn_Impl.cpp
 )
 
-
 # Atk Sources
 target_sources(NintendoSDK
 PUBLIC
@@ -428,19 +427,21 @@ PUBLIC
   include/nn/atk/fnd/basis/atkfnd_Config.h
   include/nn/atk/fnd/basis/atkfnd_FrameHeapImpl.h
   include/nn/atk/fnd/basis/atkfnd_HeapBase.h
-  include/nn/atk/fnd/basis/atkfnd_PrimitiveTypes.h
+  include/nn/atk/fnd/basis/atkfnd_Inlines.h
   include/nn/atk/fnd/basis/atkfnd_Result.h
   include/nn/atk/fnd/basis/atkfnd_RuntimeTypeInfo.h
   include/nn/atk/fnd/basis/atkfnd_Time.h
   include/nn/atk/fnd/basis/atkfnd_WorkBufferAllocator.h
+  include/nn/atk/fnd/binary/atkfnd_PrimitiveTypes.h
   include/nn/atk/fnd/io/atkfnd_FileStream.h
   include/nn/atk/fnd/io/atkfnd_FileStreamImpl.h
   include/nn/atk/fnd/io/atkfnd_FileStreamProxy.h
-  include/nn/atk/fnd/io/atkfnd_ScopedLock.h
   include/nn/atk/fnd/io/atkfnd_Stream.h
   include/nn/atk/fnd/io/atkfnd_StreamCache.h
   include/nn/atk/fnd/os/atkfnd_CriticalSection.h
+  include/nn/atk/fnd/os/atkfnd_ScopedLock.h
   include/nn/atk/fnd/os/atkfnd_Thread.h
+  include/nn/atk/fnd/string/atkfnd_String.h
   
 PRIVATE
   src/NintendoWare/atk/atk_SoundArchive.cpp
