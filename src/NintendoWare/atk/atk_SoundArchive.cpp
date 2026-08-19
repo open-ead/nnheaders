@@ -105,6 +105,7 @@ bool SoundArchive::ReadSoundUserParam(u32* pOutValue, ItemId soundId, int index)
 }
 
 SoundArchive::SoundType SoundArchive::GetSoundType(ItemId soundId) const {
+#if NN_SDK_VER > NN_MAKE_VER(1, 6, 0)
     if (m_pParametersHook != nullptr) {
         const char* label {m_pParametersHook->GetItemLabel(soundId)};
         if (label != nullptr) {
@@ -113,7 +114,7 @@ SoundArchive::SoundType SoundArchive::GetSoundType(ItemId soundId) const {
                 return type;
         }
     }
-
+#endif
     return m_pFileReader->GetSoundType(soundId);
 }
 
@@ -122,6 +123,15 @@ bool SoundArchive::ReadSoundInfo(SoundInfo* pOutValue, ItemId soundId) const {
 
     if (m_pParametersHook != nullptr)
         result |= m_pParametersHook->ReadSoundInfo(soundId, pOutValue);
+
+    return result;
+}
+
+bool SoundArchive::ReadSequenceSoundInfo(SequenceSoundInfo* pOutValue, ItemId soundId) const {
+    bool result {m_pFileReader->ReadSequenceSoundInfo(soundId, pOutValue)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadSequenceSoundInfo(soundId, pOutValue);
 
     return result;
 }
