@@ -180,4 +180,13 @@ bool SoundArchive::detail_ReadStreamSoundInfo2(ItemId soundId, StreamSoundInfo2*
 
     return result;
 }
+
+bool SoundArchive::detail_ReadWaveSoundInfo(ItemId soundId, WaveSoundInfo* info) const {
+    bool result {m_pFileReader->ReadWaveSoundInfo(soundId, info)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadWaveSoundInfo(soundId, info);
+
+    return result;
+}
 } // namespace nn::atk
