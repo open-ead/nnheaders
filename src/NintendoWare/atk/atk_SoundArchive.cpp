@@ -113,7 +113,16 @@ SoundArchive::SoundType SoundArchive::GetSoundType(ItemId soundId) const {
                 return type;
         }
     }
-    
+
     return m_pFileReader->GetSoundType(soundId);
+}
+
+bool SoundArchive::ReadSoundInfo(SoundInfo* pOutValue, ItemId soundId) const {
+    bool result {m_pFileReader->ReadSoundInfo(soundId, pOutValue)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadSoundInfo(soundId, pOutValue);
+
+    return result;
 }
 } // namespace nn::atk
