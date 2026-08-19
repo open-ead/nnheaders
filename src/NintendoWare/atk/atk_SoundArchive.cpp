@@ -212,4 +212,13 @@ bool SoundArchive::ReadWaveArchiveInfo(ItemId warcId, WaveArchiveInfo* info) con
 
     return result;
 }
+
+bool SoundArchive::detail_ReadSoundGroupInfo(ItemId soundGroupId, SoundGroupInfo* info) const {
+    bool result {m_pFileReader->ReadSoundGroupInfo(soundGroupId, info)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadSoundGroupInfo(soundGroupId, info);
+
+    return result;
+}
 } // namespace nn::atk
