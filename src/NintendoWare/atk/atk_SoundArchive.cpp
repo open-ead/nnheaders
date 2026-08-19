@@ -144,4 +144,13 @@ bool SoundArchive::ReadBankInfo(BankInfo* pOutValue, ItemId bankId) const {
 
     return result;
 }
+
+bool SoundArchive::ReadPlayerInfo(PlayerInfo* pOutValue, ItemId playerId) const {
+    bool result {m_pFileReader->ReadPlayerInfo(playerId, pOutValue)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadPlayerInfo(playerId, pOutValue);
+
+    return result;
+}
 } // namespace nn::atk
