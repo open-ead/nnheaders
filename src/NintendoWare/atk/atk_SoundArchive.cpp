@@ -241,4 +241,8 @@ bool SoundArchive::detail_ReadFileInfo(FileId fileId, FileInfo* info) const {
 
     return result;
 }
+
+const detail::Util::Table<u32>* SoundArchive::detail_GetWaveArchiveIdTable(ItemId id) const {
+    return m_pFileReader->GetWaveArchiveIdTable(id);
+}
 } // namespace nn::atk
