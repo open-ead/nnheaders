@@ -189,4 +189,9 @@ bool SoundArchive::detail_ReadWaveSoundInfo(ItemId soundId, WaveSoundInfo* info)
 
     return result;
 }
+
+bool SoundArchive::detail_ReadAdvancedWaveSoundInfo(ItemId soundId, AdvancedWaveSoundInfo* info) const {
+    bool result {m_pFileReader->ReadAdvancedWaveSoundInfo(soundId, info)};
+    return result;
+}
 } // namespace nn::atk
