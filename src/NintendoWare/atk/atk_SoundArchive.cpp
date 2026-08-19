@@ -203,4 +203,13 @@ bool SoundArchive::ReadSound3DInfo(Sound3DInfo* pOutValue, ItemId soundId) const
 
     return result;
 }
+
+bool SoundArchive::ReadWaveArchiveInfo(ItemId warcId, WaveArchiveInfo* info) const {
+    bool result {m_pFileReader->ReadWaveArchiveInfo(warcId, info)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadWaveArchiveInfo(warcId, info);
+
+    return result;
+}
 } // namespace nn::atk
