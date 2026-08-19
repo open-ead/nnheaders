@@ -94,4 +94,13 @@ u32 SoundArchive::GetSoundUserParam(ItemId soundId) const {
 
     return userParam;
 }
+
+bool SoundArchive::ReadSoundUserParam(u32* pOutValue, ItemId soundId, int index) const {
+    bool result {m_pFileReader->ReadSoundUserParam(pOutValue, soundId, index)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadSoundUserParam(pOutValue, soundId, index);
+
+    return result;
+}
 } // namespace nn::atk

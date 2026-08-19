@@ -19,16 +19,12 @@ class StreamSoundLoader;
 class SoundArchive {
 public:
     using ItemId = u32;
-    using FileId = ItemId;
-    using StringId = ItemId;
 
-    static const ItemId InvalidId = -1;
+    static const ItemId InvalidId = 0xffffffff;
 
     static const int UserParamIndexMax = 3;
     static const u32 ResultInvalidSoundId = 0;
-    static const u32 InvalidUserParam = -1;
-    static const u32 SequenceBankMax = 4;
-    static const u32 StreamTrackCount = 8;
+    static const u32 InvalidUserParam = 0xffffffff;
 
     enum SoundType {
         SoundType_Invalid,
@@ -38,11 +34,20 @@ public:
         SoundType_AdvancedWave,
     };
 
+    enum StreamFileType {
+        StreamFileType_Invalid = 0,
+        StreamFileType_NwStreamBinary = 1,
+        StreamFileType_Opus = 3,
+    };
+
     enum DecodeMode {
         DecodeMode_Default,
         DecodeMode_Cpu,
         DecodeMode_Accelerator,
     };
+
+    using FileId = ItemId;
+    using StringId = ItemId;
 
     struct SoundInfo {
         FileId fileId;
@@ -59,78 +64,27 @@ public:
     };
     static_assert(sizeof(SoundInfo) == 0x1c);
 
-    struct BankInfo {
-        FileId fileId;
+    struct Sound3DInfo {
+        u32 flags;
+        float decayRatio;
+        u8 decayCurve;
+        u8 dopplerFactor;
     };
-    static_assert(sizeof(BankInfo) == 0x4);
+    static_assert(sizeof(Sound3DInfo) == 0xc);
 
-    struct PlayerInfo {
-        s32 playableSoundMax;
-        u32 playerHeapSize;
-    };
-    static_assert(sizeof(PlayerInfo) == 0x8);
-
-    struct SoundGroupInfo {
-        ItemId startId;
-        ItemId endId;
-        detail::Util::Table<FileId> fileIdTable;
-    };
-    static_assert(sizeof(SoundGroupInfo) == 0x10);
-
-    struct GroupInfo {
-        FileId fileId;
-        u32 groupFileSize;
-    };
-    static_assert(sizeof(GroupInfo) == 0x8);
-
-    struct FileInfo {
-        static const u32 InvalidOffset = 0xffffffff;
-        static const u32 InvalidSize = 0xffffffff;
-
-        u32 fileSize;
-        u32 offsetFromFileBlockHead;
-        const char* externalFilePath;
-
-        FileInfo();
-    };
-    static_assert(sizeof(FileInfo) == 0x10);
-
-    struct WaveArchiveInfo {
-        u32 fileId;
-        u32 waveCount;
-        bool isLoadIndividual;
-        u8 padding[3];
-    };
-    static_assert(sizeof(WaveArchiveInfo) == 0xc);
-
-    struct SoundArchivePlayerInfo {
-        s32 sequenceSoundCount;
-        s32 sequenceTrackCount;
-        s32 streamSoundCount;
-        s32 streamTrackCount;
-        s32 streamChannelCount;
-        s32 waveSoundCount;
-        s32 waveTrackCount;
-        s32 streamBufferTimes;
-        bool isAdvancedWaveSoundEnabled;
-    };
-    static_assert(sizeof(SoundArchivePlayerInfo) == 0x24);
-
+    static const u32 SequenceBankMax = 4;
     struct SequenceSoundInfo {
         u32 startOffset;
-        u32 bankIds[4];
+        u32 bankIds[SequenceBankMax];
         u32 allocateTrackFlags;
         u8 channelPriority;
         bool isReleasePriorityFix;
+
+        SequenceSoundInfo();
     };
     static_assert(sizeof(SequenceSoundInfo) == 0x1c);
 
-    enum StreamFileType {
-        StreamFileType_Invalid = 0,
-        StreamFileType_NwStreamBinary = 1,
-        StreamFileType_Opus = 3,
-    };
-
+    static const u32 StreamTrackCount = 8;
     struct StreamTrackInfo {
         u8 volume;
         u8 pan;
@@ -154,7 +108,7 @@ public:
         float pitch;
         u8 mainSend;
         u8 fxSend[3];
-        StreamTrackInfo trackInfo[8];
+        StreamTrackInfo trackInfo[StreamTrackCount];
         StreamFileType streamFileType;
         DecodeMode decodeMode;
         FileId prefetchFileId;
@@ -179,6 +133,8 @@ public:
         u32 allocateTrackCount;
         u8 channelPriority;
         bool isReleasePriorityFix;
+
+        WaveSoundInfo();
     };
     static_assert(sizeof(WaveSoundInfo) == 0xc);
 
@@ -186,14 +142,73 @@ public:
         u32 waveArchiveId;
     };
     static_assert(sizeof(AdvancedWaveSoundInfo) == 0x4);
-    
-    struct Sound3DInfo {
-        u32 flags;
-        float decayRatio;
-        u8 decayCurve;
-        u8 dopplerFactor;
+
+    struct BankInfo {
+        FileId fileId;
+
+        BankInfo();
     };
-    static_assert(sizeof(Sound3DInfo) == 0xc);
+    static_assert(sizeof(BankInfo) == 0x4);
+
+    struct WaveArchiveInfo {
+        u32 fileId;
+        u32 waveCount;
+        bool isLoadIndividual;
+        u8 padding[3];
+
+        WaveArchiveInfo();
+    };
+    static_assert(sizeof(WaveArchiveInfo) == 0xc);
+
+    struct PlayerInfo {
+        int playableSoundMax;
+        u32 playerHeapSize;
+
+        PlayerInfo();
+    };
+    static_assert(sizeof(PlayerInfo) == 0x8);
+
+    struct SoundGroupInfo {
+        ItemId startId;
+        ItemId endId;
+        detail::Util::Table<FileId> fileIdTable;
+
+        SoundGroupInfo();
+    };
+    static_assert(sizeof(SoundGroupInfo) == 0x10);
+
+    struct GroupInfo {
+        FileId fileId;
+        u32 groupFileSize;
+
+        GroupInfo();
+    };
+    static_assert(sizeof(GroupInfo) == 0x8);
+
+    struct SoundArchivePlayerInfo {
+        s32 sequenceSoundCount;
+        s32 sequenceTrackCount;
+        s32 streamSoundCount;
+        s32 streamTrackCount;
+        s32 streamChannelCount;
+        s32 waveSoundCount;
+        s32 waveTrackCount;
+        s32 streamBufferTimes;
+        bool isAdvancedWaveSoundEnabled;
+    };
+    static_assert(sizeof(SoundArchivePlayerInfo) == 0x24);
+
+    struct FileInfo {
+        static const u32 InvalidOffset = 0xffffffff; 
+        static const u32 InvalidSize = 0xffffffff;
+
+        u32 fileSize;
+        u32 offsetFromFileBlockHead;
+        const char* externalFilePath;
+
+        FileInfo();
+    };
+    static_assert(sizeof(FileInfo) == 0x10);
 
 protected:
     SoundArchive();
@@ -216,12 +231,12 @@ public:
     FileId GetItemFileId(ItemId id) const;
     FileId GetItemPrefetchFileId(ItemId id) const;
 
-    static ItemId GetSoundIdFromIndex(u32);
-    static ItemId GetSoundGroupIdFromIndex(u32);
-    static ItemId GetBankIdFromIndex(u32);
-    static ItemId GetPlayerIdFromIndex(u32);
-    static ItemId GetWaveArchiveIdFromIndex(u32);
-    static ItemId GetGroupIdFromIndex(u32);
+    static ItemId GetSoundIdFromIndex(u32 index);
+    static ItemId GetSoundGroupIdFromIndex(u32 index);
+    static ItemId GetBankIdFromIndex(u32 index);
+    static ItemId GetPlayerIdFromIndex(u32 index);
+    static ItemId GetWaveArchiveIdFromIndex(u32 index);
+    static ItemId GetGroupIdFromIndex(u32 index);
 
     u32 GetSoundUserParam(ItemId soundId) const;
     bool ReadSoundUserParam(u32* pOutValue, ItemId soundId, int index) const;
@@ -287,8 +302,8 @@ protected:
 private:
     friend detail::driver::StreamSoundLoader;
 
-    detail::SoundArchiveFileReader* m_pFileReader{};
-    detail::SoundArchiveParametersHook* m_pParametersHook{};
+    detail::SoundArchiveFileReader* m_pFileReader {};
+    detail::SoundArchiveParametersHook* m_pParametersHook {};
     char m_ExtFileRoot[FilePathMax];
     u32 m_FileBlockOffset;
 };
