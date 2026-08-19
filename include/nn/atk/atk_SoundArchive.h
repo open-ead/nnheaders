@@ -202,11 +202,11 @@ public:
         static const u32 InvalidOffset = 0xffffffff; 
         static const u32 InvalidSize = 0xffffffff;
 
-        u32 fileSize;
-        u32 offsetFromFileBlockHead;
-        const char* externalFilePath;
+        u32 fileSize {InvalidSize};
+        u32 offsetFromFileBlockHead {InvalidOffset};
+        const char* externalFilePath {};
 
-        FileInfo();
+        FileInfo() = default;
     };
     static_assert(sizeof(FileInfo) == 0x10);
 
