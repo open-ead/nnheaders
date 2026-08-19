@@ -9,6 +9,11 @@ namespace detail{
 class SoundArchiveFileReader;
 class SoundArchiveParametersHook;
 struct SoundArchiveFilesHook;
+
+namespace driver {
+class StreamSoundLoader;
+}
+
 } // namespace nn::atk::detail
 
 class SoundArchive {
@@ -280,10 +285,14 @@ protected:
     static const s32 FilePathMax = 639;
 
 private:
+    friend detail::driver::StreamSoundLoader;
+
     detail::SoundArchiveFileReader* m_pFileReader{};
     detail::SoundArchiveParametersHook* m_pParametersHook{};
     char m_ExtFileRoot[FilePathMax];
     u32 m_FileBlockOffset;
 };
 static_assert(sizeof(SoundArchive) == 0x2a0);
+
+class AddonSoundArchive : public SoundArchive {};
 } // namespace nn::atk::detail

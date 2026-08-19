@@ -6,10 +6,7 @@
 #include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/atk_SoundDataManager.h>
 
-namespace nn::atk {
-class AddonSoundArchive;
-
-namespace detail {
+namespace nn::atk::detail {
 class AddonSoundArchiveContainer {
 public:
     AddonSoundArchiveContainer();
@@ -56,4 +53,3 @@ private:
 };
 static_assert(sizeof(AddonSoundArchiveContainer) == 0x70);
 } // namespace nn::atk::detail
-} // namespace nn::atk
