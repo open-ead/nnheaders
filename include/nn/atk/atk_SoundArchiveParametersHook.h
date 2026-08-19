@@ -36,7 +36,13 @@ public:
         return false;
     }
 
-    bool ReadBankInfo(SoundArchive::ItemId bankId, SoundArchive::BankInfo* info) const;
+    bool ReadBankInfo(SoundArchive::ItemId bankId, SoundArchive::BankInfo* info) const {
+        if (m_IsEnable)
+            return ReadBankInfoImpl(bankId, info);
+
+        return false;
+    }
+
     bool ReadPlayerInfo(SoundArchive::ItemId playerId, SoundArchive::PlayerInfo* info) const;
     bool ReadSoundGroupInfo(SoundArchive::ItemId soundGroupId, SoundArchive::SoundGroupInfo* info) const;
     bool ReadGroupInfo(SoundArchive::ItemId groupId, SoundArchive::GroupInfo* info) const;
@@ -75,7 +81,7 @@ protected:
     virtual SoundArchive::ItemId GetItemIdImpl(const char* itemLabel) const;
     virtual SoundArchive::SoundType GetSoundTypeImpl(const char* itemLabel) const;
     virtual bool ReadSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::SoundInfo* info) const;
-    virtual void Impl7();
+    virtual bool ReadBankInfoImpl(SoundArchive::ItemId bankId, SoundArchive::BankInfo* info) const;
     virtual void Impl8();
     virtual void Impl9();
     virtual void Impl10();
