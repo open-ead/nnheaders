@@ -230,4 +230,15 @@ bool SoundArchive::ReadGroupInfo(GroupInfo* pOutValue, ItemId groupId) const {
 
     return result;
 }
+
+bool SoundArchive::detail_ReadFileInfo(FileId fileId, FileInfo* info) const {
+    bool result {m_pFileReader->ReadFileInfo(fileId, info, 0)};
+
+    if (result && m_pParametersHook != nullptr) {
+        m_pParametersHook->ReadFileInfo(fileId, info, 0);
+        result = true;
+    }
+
+    return result;
+}
 } // namespace nn::atk
