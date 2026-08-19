@@ -153,4 +153,13 @@ bool SoundArchive::ReadPlayerInfo(PlayerInfo* pOutValue, ItemId playerId) const 
 
     return result;
 }
+
+bool SoundArchive::ReadSoundArchivePlayerInfo(SoundArchivePlayerInfo* pOutValue) const {
+    bool result {m_pFileReader->ReadSoundArchivePlayerInfo(pOutValue)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadSoundArchivePlayerInfo(pOutValue);
+
+    return result;
+}
 } // namespace nn::atk
