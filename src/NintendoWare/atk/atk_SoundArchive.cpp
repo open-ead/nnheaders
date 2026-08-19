@@ -194,4 +194,13 @@ bool SoundArchive::detail_ReadAdvancedWaveSoundInfo(ItemId soundId, AdvancedWave
     bool result {m_pFileReader->ReadAdvancedWaveSoundInfo(soundId, info)};
     return result;
 }
+
+bool SoundArchive::ReadSound3DInfo(Sound3DInfo* pOutValue, ItemId soundId) const {
+    bool result {m_pFileReader->ReadSound3DInfo(soundId, pOutValue)};
+
+    if (m_pParametersHook != nullptr)
+        result |= m_pParametersHook->ReadSound3DInfo(soundId, pOutValue);
+
+    return result;
+}
 } // namespace nn::atk

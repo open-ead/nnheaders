@@ -61,7 +61,13 @@ public:
         return false;
     }
 
-    bool ReadSound3DInfo(SoundArchive::ItemId soundId, SoundArchive::Sound3DInfo* info) const;
+    bool ReadSound3DInfo(SoundArchive::ItemId soundId, SoundArchive::Sound3DInfo* info) const {
+        if (m_IsEnable)
+            return ReadSound3DInfoImpl(soundId, info);
+
+        return false;
+    }
+
     bool ReadWaveArchiveInfo(SoundArchive::ItemId warcId, SoundArchive::WaveArchiveInfo* info) const;
     
     bool ReadSequenceSoundInfo(SoundArchive::ItemId soundId, SoundArchive::SequenceSoundInfo* info) const {
@@ -118,7 +124,7 @@ protected:
     virtual void Impl11();
     virtual void Impl12();
     virtual bool ReadSoundArchivePlayerInfoImpl(SoundArchive::SoundArchivePlayerInfo* info) const;
-    virtual void Impl14();
+    virtual bool ReadSound3DInfoImpl(SoundArchive::ItemId soundId, SoundArchive::Sound3DInfo* info) const;
     virtual bool ReadSequenceSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::SequenceSoundInfo* info) const;
     virtual bool ReadStreamSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo* info) const;
     virtual bool ReadStreamSoundInfo2Impl(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo2* info) const;
