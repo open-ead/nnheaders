@@ -84,8 +84,13 @@ public:
 
         return false;
     }
-    
-    bool ReadWaveSoundInfo(SoundArchive::ItemId soundId, SoundArchive::WaveSoundInfo* info) const;
+
+    bool ReadWaveSoundInfo(SoundArchive::ItemId soundId, SoundArchive::WaveSoundInfo* info) const {
+        if (m_IsEnable)
+            return ReadWaveSoundInfoImpl(soundId, info);
+
+        return false;
+    }
     
     bool ReadSoundUserParam(u32* pOutValue, SoundArchive::ItemId soundId, int index) const {
         if (m_IsEnable)
@@ -117,7 +122,7 @@ protected:
     virtual bool ReadSequenceSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::SequenceSoundInfo* info) const;
     virtual bool ReadStreamSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo* info) const;
     virtual bool ReadStreamSoundInfo2Impl(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo2* info) const;
-    virtual void Impl18();
+    virtual bool ReadWaveSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::WaveSoundInfo* info) const;
     virtual bool ReadSoundUserParamImpl(u32* pOutValue, SoundArchive::ItemId soundId, int index) const;
     virtual u32 GetSoundUserParamImpl(SoundArchive::ItemId soundId, u32 userParam) const;
 
