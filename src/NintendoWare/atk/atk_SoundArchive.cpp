@@ -1,5 +1,10 @@
 #include <nn/atk/atk_SoundArchive.h>
 
+#include <algorithm>
+#include <cstring>
+
+#include <nn/util/util_StringUtil.h>
+
 #include <nn/atk/atk_SoundArchiveFileReader.h>
 #include <nn/atk/atk_SoundArchiveParametersHook.h>
 
@@ -265,6 +270,19 @@ detail::fnd::FileStream* SoundArchive::detail_OpenFileStream(FileId fileId, void
 
 const detail::Util::Table<u32>* SoundArchive::detail_GetAttachedGroupTable(FileId fileId) const {
     return m_pFileReader->GetAttachedGroupTable(fileId);
+}
+
+void SoundArchive::SetExternalFileRoot(const char* extFileRoot) {
+    size_t len {std::strlen(extFileRoot)};
+    size_t nullPos {len + 1};
+
+    util::Strlcpy(m_ExtFileRoot, extFileRoot, std::min<int>(sizeof(m_ExtFileRoot), nullPos));
+    
+    if (extFileRoot[len - 1] != '/') {
+        m_ExtFileRoot[len] = '/';
+        ++len;
+    }
+    m_ExtFileRoot[len] = '\0';
 }
 
 void SoundArchive::FileAccessBegin() const {}
