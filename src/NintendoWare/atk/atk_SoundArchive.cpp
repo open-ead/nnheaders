@@ -285,6 +285,26 @@ void SoundArchive::SetExternalFileRoot(const char* extFileRoot) {
     m_ExtFileRoot[len] = '\0';
 }
 
+bool SoundArchive::ReadStreamSoundFilePath(char* outFilePathBuffer, size_t filePathBufferSize, ItemId soundId) const {
+    if (GetSoundType(soundId) == SoundType_Stream) {
+        SoundInfo soundInfo;
+        if (!ReadSoundInfo(&soundInfo, soundId))
+            return false;
+
+        FileInfo fileInfo;
+        if (!detail_ReadFileInfo(soundInfo.fileId, &fileInfo))
+            return false;
+
+        const char* result {};
+        if (fileInfo.externalFilePath != nullptr)
+            result = detail_GetExternalFileFullPath(fileInfo.externalFilePath, outFilePathBuffer, filePathBufferSize);
+        
+        return result != nullptr;
+    }
+
+    return false;
+}
+
 void SoundArchive::FileAccessBegin() const {}
 
 void SoundArchive::FileAccessEnd() const {} 
