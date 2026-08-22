@@ -1,5 +1,25 @@
 #include <nn/err/ApplicationErrorArg.h>
 
+namespace nn::util {
+template <typename T>
+inline int Strlcpy(T* pOutDst, const T* pSrc, int count) {
+    int length = 0;
+
+    if (count > 0) {
+        while (--count && *pSrc) {
+            *pOutDst++ = *pSrc++;
+            ++length;
+        }
+        *pOutDst++ = '\0';
+    }
+
+    while (*pSrc++)
+        ++length;
+
+    return length;
+}
+}  // namespace nn::util
+
 namespace nn::err {
 ApplicationErrorArg::ApplicationErrorArg() {
     mDialogMessage[0] = '\0';
@@ -20,33 +40,15 @@ void ApplicationErrorArg::SetApplicationErrorCodeNumber(u32 errorCode) {
 }
 
 void ApplicationErrorArg::SetDialogMessage(const char* message) {
-    s32 i = 0;
-    while (message[i] != '\0' && i < 0x7fe) {
-        mDialogMessage[i] = message[i];
-        i++;
-    }
-
-    mDialogMessage[i] = '\0';
+    util::Strlcpy(mDialogMessage, message, sizeof(mDialogMessage));
 }
 
 void ApplicationErrorArg::SetFullScreenMessage(const char* message) {
-    s32 i = 0;
-    while (message[i] != '\0' && i < 0x7fe) {
-        mFullScreenMessage[i] = message[i];
-        i++;
-    }
-
-    mFullScreenMessage[i] = '\0';
+    util::Strlcpy(mFullScreenMessage, message, sizeof(mFullScreenMessage));
 }
 
 void ApplicationErrorArg::SetLanguageCode(const settings::LanguageCode& languageCode) {
-    s32 i = 0;
-    while (languageCode.code[i] && i < 7) {
-        mLanguageCode.code[i] = languageCode.code[i];
-        i++;
-    }
-
-    mLanguageCode.code[i] = '\0';
+    util::Strlcpy(mLanguageCode.code, languageCode.code, sizeof(mLanguageCode.code));
 }
 
 u32 ApplicationErrorArg::GetApplicationErrorCodeNumber() const {

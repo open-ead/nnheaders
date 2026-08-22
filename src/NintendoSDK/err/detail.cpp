@@ -5,6 +5,23 @@
 #include <nn/fs.h>
 #include <nn/util.h>
 
+namespace nn::util {
+template <typename T>
+inline int Strncmp(const T* pStr1, const T* pStr2, int count) {
+    if (count == 0)
+        return 0;
+
+    T c1, c2;
+
+    do {
+        c1 = *pStr1++;
+        c2 = *pStr2++;
+    } while (c1 && c1 == c2 && --count);
+
+    return c1 - c2;
+}
+}  // namespace nn::util
+
 namespace nn::err::detail {
 static const char* sMessageKindStrs[] = {"DlgMsg", "DlgBtn", "FlvMsg", "FlvBtn"};
 
@@ -28,16 +45,7 @@ void MakeApplicationErrorCodeString(
 //     u32* outErrorCodeCategoryNumber, const char* errorCodeString) {}
 
 bool IsApplicationErrorCodeString(const char* errorCodeString) {
-    char c1 = errorCodeString[0];
-    char c2;
-    if (c1 == '2') {
-        c1 = errorCodeString[1];
-        c2 = '-';
-    } else {
-        c2 = '2';
-    }
-
-    return c1 == c2;
+    return util::Strncmp(errorCodeString, "2-", 2) == 0;
 }
 
 // bool TryParseErrorCodeString(ErrorCode* outErrorCode, const char* errorCodeString) {}

@@ -1,30 +1,39 @@
 #include <nn/err/SystemErrorArg.h>
 
+namespace nn::util {
+template <typename T>
+inline int Strlcpy(T* pOutDst, const T* pSrc, int count) {
+    int length = 0;
+
+    if (count > 0) {
+        while (--count && *pSrc) {
+            *pOutDst++ = *pSrc++;
+            ++length;
+        }
+        *pOutDst++ = '\0';
+    }
+
+    while (*pSrc++)
+        ++length;
+
+    return length;
+}
+}  // namespace nn::util
+
 namespace nn::err {
 SystemErrorArg::SystemErrorArg() {
     mDialogMessage[0] = '\0';
     mFullScreenMessage[0] = '\0';
+    mLanguageCode.code[0] = '\0';
 }
 
 SystemErrorArg::SystemErrorArg(ErrorCode errorCode, const char* dialogMessage,
                                const char* fullScreenMessage,
                                const settings::LanguageCode& languageCode)
-    : mErrorCode(errorCode), mLanguageCode(languageCode) {
-    s32 i = 0;
-    while (dialogMessage[i] != '\0' || i != 0x7fe) {
-        mDialogMessage[i] = dialogMessage[i];
-        i++;
-    }
-
-    mDialogMessage[i] = '\0';
-
-    i = 0;
-    while (fullScreenMessage[i] != '\0' || i != 0x7fe) {
-        mFullScreenMessage[i] = fullScreenMessage[i];
-        i++;
-    }
-
-    mFullScreenMessage[i] = '\0';
+    : mErrorCode(errorCode) {
+    SetDialogMessage(dialogMessage);
+    SetFullScreenMessage(fullScreenMessage);
+    SetLanguageCode(languageCode);
 }
 
 void SystemErrorArg::SetErrorCode(ErrorCode errorCode) {
@@ -32,33 +41,15 @@ void SystemErrorArg::SetErrorCode(ErrorCode errorCode) {
 }
 
 void SystemErrorArg::SetDialogMessage(const char* message) {
-    s32 i = 0;
-    while (message[i] != '\0' || i != 0x7fe) {
-        mDialogMessage[i] = message[i];
-        i++;
-    }
-
-    mDialogMessage[i] = '\0';
+    util::Strlcpy(mDialogMessage, message, sizeof(mDialogMessage));
 }
 
 void SystemErrorArg::SetFullScreenMessage(const char* message) {
-    s32 i = 0;
-    while (message[i] != '\0' || i != 0x7fe) {
-        mFullScreenMessage[i] = message[i];
-        i++;
-    }
-
-    mFullScreenMessage[i] = '\0';
+    util::Strlcpy(mFullScreenMessage, message, sizeof(mFullScreenMessage));
 }
 
 void SystemErrorArg::SetLanguageCode(const settings::LanguageCode& languageCode) {
-    s32 i = 0;
-    while (languageCode.code[i] != '\0' || i != 7) {
-        mLanguageCode.code[i] = languageCode.code[i];
-        i++;
-    }
-
-    mLanguageCode.code[i] = '\0';
+    util::Strlcpy(mLanguageCode.code, languageCode.code, sizeof(mLanguageCode.code));
 }
 
 ErrorCode SystemErrorArg::GetErrorCode() const {
