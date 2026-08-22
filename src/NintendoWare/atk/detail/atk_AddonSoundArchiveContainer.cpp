@@ -28,4 +28,14 @@ void AddonSoundArchiveContainer::Finalize() {
     m_pSoundArchive = nullptr;
     m_pSoundDataManager = nullptr;
 }
+
+bool AddonSoundArchiveContainer::IsSameName(const char* name) const {
+    int nameLength {util::Strnlen(name, SoundArchiveNameLengthMax)};
+
+    if (nameLength == SoundArchiveNameLengthMax)
+        return false;
+
+    int result {util::Strncmp(name, m_SoundArchiveName, SoundArchiveNameLengthMax)};
+    return result == 0;
+}
 } // namespace nn::atk::detail
