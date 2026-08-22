@@ -297,6 +297,7 @@ public:
     }
 
     void SetExternalFileRoot(const char* extFileRoot);
+    
     bool ReadStreamSoundFilePath(char* outFilePathBuffer, size_t filePathBufferSize, ItemId soundId) const;
 
     virtual void FileAccessBegin() const;
