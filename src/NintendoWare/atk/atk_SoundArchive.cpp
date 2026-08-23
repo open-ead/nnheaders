@@ -7,6 +7,7 @@
 
 #include <nn/atk/atk_SoundArchiveFileReader.h>
 #include <nn/atk/atk_SoundArchiveParametersHook.h>
+#include "nn/atk/fnd/string/atkfnd_String.h"
 
 namespace nn::atk {
 SoundArchive::SoundArchive() {
@@ -308,6 +309,31 @@ bool SoundArchive::ReadStreamSoundFilePath(char* outFilePathBuffer, size_t fileP
 void SoundArchive::FileAccessBegin() const {}
 
 void SoundArchive::FileAccessEnd() const {} 
+
+// NON_MATCHING: still unsure on fnd::strncat's implementation,
+// or the whole function really. Leaving as TODO
+const char* SoundArchive::detail_GetExternalFileFullPath(const char* externalFilePath, 
+                                                         char* pathBuffer, 
+                                                         size_t bufSize) const {
+    if (*externalFilePath != '/') {
+        size_t dirLen {strlen(externalFilePath)};
+        size_t fileLen {strlen(m_ExtFileRoot)};
+        if (fileLen + dirLen < bufSize) {
+            if (bufSize > fileLen + 1)
+                bufSize += 1;
+            
+            util::Strlcpy(pathBuffer, externalFilePath, bufSize);
+            detail::fnd::strncat(pathBuffer, bufSize, m_ExtFileRoot, fileLen);
+            pathBuffer[bufSize - 1] = '\0';
+            externalFilePath = pathBuffer;
+        }
+        else {
+            externalFilePath = nullptr;
+        }
+    }
+    
+    return externalFilePath;
+}
 
 bool SoundArchive::IsAddon() const {
     return false;
