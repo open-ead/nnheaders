@@ -12,7 +12,7 @@ public:
         HeapType_Exp,
         HeapType_Frame,
         HeapType_Unit,
-        HeapTyep_Unknown,
+        HeapType_Unknown,
     };
 
     enum FillType {
@@ -34,7 +34,7 @@ public:
 
     static const int ErrorPrint = 1;
 
-    constexpr static int MIN_ALIGNMENT = DefaultAlignment;
+    static const int MIN_ALIGNMENT = DefaultAlignment;
 
     static HeapBase* FindContainHeap(const void* memBlock);
     static HeapBase* FindParentHeap(const HeapBase* pChild);
@@ -45,7 +45,7 @@ public:
     size_t GetTotalSize();
     size_t GetTotalUsableSize();
 
-    u32 SetFillValue(FillType type, u32 value);
+    u32 SetFillValue(FillType type, u32 val);
     u32 GetFillValue(FillType type);
 
     HeapType GetHeapType();
@@ -54,9 +54,17 @@ protected:
     void Initialize(u32 signature, void* heapStart, void* heapEnd, u16 optFlag);
     void Finalize();
     
-    u32 GetSignature() const;
-    void* GetHeapStart() const;
-    void* GetHeapEnd() const;
+    u32 GetSignature() const {
+        return m_Signature;
+    }
+
+    void* GetHeapStart() const {
+        return mHeapStart;
+    }
+
+    void* GetHeapEnd() const {
+        return mHeapEnd;
+    }
     
     void LockHeap();
     void UnlockHeap();
@@ -70,11 +78,7 @@ private:
     static HeapList* FindListContainHeap(HeapBase* pHeapBase);
 
     u16 GetOptionFlag();
-    void SetOptionFlag(u16 optFlag) { 
-        u32 maskBits {0xff};
-        u16 newVal = optFlag & maskBits;
-        m_Attribute = newVal; 
-    };
+    void SetOptionFlag(u16 optFlag);
 
     void* mHeapStart;
     void* mHeapEnd;
