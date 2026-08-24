@@ -14,6 +14,6 @@ public:
     bool ReadWaveInfo(WaveInfo* info) const;
 
 private:
-    const void* m_pDspadpcmData;
+    const void* m_pDspadpcmData {};
 };
 } // namespace nn::atk::detail
