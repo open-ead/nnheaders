@@ -423,7 +423,7 @@ PUBLIC
   include/nn/atk/detail/atk_RegionManager.h
   include/nn/atk/detail/atk_MemoryFileStream.h
   include/nn/atk/detail/atk_SoundArchiveManager.h
-
+  
   include/nn/atk/fnd/basis/atkfnd_Config.h
   include/nn/atk/fnd/basis/atkfnd_FrameHeapImpl.h
   include/nn/atk/fnd/basis/atkfnd_HeapBase.h
@@ -442,8 +442,19 @@ PUBLIC
   include/nn/atk/fnd/os/atkfnd_ScopedLock.h
   include/nn/atk/fnd/os/atkfnd_Thread.h
   include/nn/atk/fnd/string/atkfnd_String.h
-  
+
 PRIVATE
+  src/NintendoWare/atk/fnd/basis/atkfnd_FrameHeapImpl.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_HeapBase.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_Time.win32.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_WorkBufferAllocator.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.win32.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamProxy.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_StreamCache.cpp
+  src/NintendoWare/atk/fnd/os/atkfnd_Thread.cpp
+  src/NintendoWare/atk/fnd/os/atkfnd_Thread.win32.cpp
+
   src/NintendoWare/atk/atk_SoundArchive.cpp
   src/NintendoWare/atk/atk_FsSoundArchive.cpp
   src/NintendoWare/atk/atk_SequenceSoundHandle.cpp
@@ -547,17 +558,6 @@ PRIVATE
   src/NintendoWare/atk/util/atk_DeviceOutRecorder.cpp
   src/NintendoWare/atk/util/atk_ProfileReader.cpp
   src/NintendoWare/atk/util/atk_TaskProfileReader.cpp
-
-  src/NintendoWare/atk/fnd/basis/atkfnd_FrameHeapImpl.cpp
-  src/NintendoWare/atk/fnd/basis/atkfnd_HeapBase.cpp
-  src/NintendoWare/atk/fnd/basis/atkfnd_Time.win32.cpp
-  src/NintendoWare/atk/fnd/basis/atkfnd_WorkBufferAllocator.cpp
-  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.cpp
-  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.win32.cpp
-  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamProxy.cpp
-  src/NintendoWare/atk/fnd/io/atkfnd_StreamCache.cpp
-  src/NintendoWare/atk/fnd/os/atkfnd_Thread.cpp
-  src/NintendoWare/atk/fnd/os/atkfnd_Thread.win32.cpp
 )
 
 target_include_directories(NintendoSDK PUBLIC include/)
