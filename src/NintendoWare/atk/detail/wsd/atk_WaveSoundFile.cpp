@@ -165,4 +165,13 @@ u8 WaveSoundFile::WaveSoundInfo::GetLpfFreq() const {
 
     return WsdDefaultLpfFreq;
 }
+
+u8 WaveSoundFile::WaveSoundInfo::GetBiquadType() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Filter)};
+    if (result)
+        return Util::DivideBy8bit(value, 1);
+
+    return WsdDefaultBiquadType;
+}
 } // namespace nn::atk::detail
