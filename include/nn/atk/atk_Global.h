@@ -156,8 +156,6 @@ struct AdshrCurve {
 };
 static_assert(sizeof(AdshrCurve) == 0x5);
 
-static const AdshrCurve WsdDefaultAdshrCurve = {127, 127, 127, 127, 127};
-
 struct BiquadFilterCoefficients {
     s16 b0;
     s16 b1;

@@ -5,8 +5,8 @@
 
 namespace nn::atk::detail::fnd {
 namespace {
-    HeapBase::HeapList sRootList;
-    u32 sFillVals[HeapBase::FillType_Max] { 0xC3C3C3C3, 0xF3F3F3F3, 0xD3D3D3D3 };
+HeapBase::HeapList sRootList;
+u32 sFillVals[HeapBase::FillType_Max] = { 0xC3C3C3C3, 0xF3F3F3F3, 0xD3D3D3D3 };
 } // anonymous namespace
 
 HeapBase::HeapList* HeapBase::FindListContainHeap(HeapBase* pHeapBase) {
