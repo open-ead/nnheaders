@@ -48,7 +48,6 @@ struct WaveSoundFile {
         Util::Reference toNoteInfoReferenceTable;
 
         const WaveSoundInfo& GetWaveSoundInfo() const;
-
         const Util::ReferenceTable& GetTrackInfoReferenceTable() const;
         const Util::ReferenceTable& GetNoteInfoReferenceTable() const;
 
