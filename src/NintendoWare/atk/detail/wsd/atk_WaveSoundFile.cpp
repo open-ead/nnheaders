@@ -9,6 +9,11 @@ const WaveSoundFile::InfoBlock* WaveSoundFile::FileHeader::GetInfoBlock() const 
             .Get<WaveSoundFile::InfoBlock>();
 }
 
+const Util::ReferenceTable& WaveSoundFile::InfoBlockBody::GetWaveSoundDataReferenceTable() const {
+    return *util::ConstBytePtr(this, toWaveSoundDataReferenceTable.offset)
+            .Get<Util::ReferenceTable>();
+}
+
 const Util::WaveIdTable& WaveSoundFile::InfoBlockBody::GetWaveIdTable() const {
     return *util::ConstBytePtr(this, toWaveIdTable.offset).Get<Util::WaveIdTable>();
 }
