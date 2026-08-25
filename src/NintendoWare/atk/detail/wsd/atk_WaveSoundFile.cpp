@@ -193,4 +193,13 @@ const WaveSoundFile::NoteEvent& WaveSoundFile::TrackInfo::GetNoteEvent(u32 index
 
     return *util::ConstBytePtr(pNoteEvent).Get<NoteEvent>();
 }
+
+u8 WaveSoundFile::NoteInfo::GetOriginalKey() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, NoteInfoBitFlag_Key)};
+    if (result)
+        return Util::DivideBy8bit(value, 0);
+
+    return WsdDefaultKey;
+}
 } // namespace nn::atk::detail
