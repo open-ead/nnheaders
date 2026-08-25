@@ -398,9 +398,11 @@ PUBLIC
   include/nn/atk/atk_VoiceCommand.h
   include/nn/atk/atk_VolumeThroughModePacket.h
   include/nn/atk/atk_WavBinary.h
+  include/nn/atk/atk_WavOutFileStream.h
   include/nn/atk/atk_WaveArchiveFile.h
   include/nn/atk/atk_WaveArchiveFileReader.h
   include/nn/atk/atk_WaveFile.h
+  include/nn/atk/atk_WaveFileReader.h
   include/nn/atk/atk_WaveSound.h
   include/nn/atk/atk_WaveSoundFile.h
   include/nn/atk/atk_WaveSoundFileReader.h
@@ -408,8 +410,6 @@ PUBLIC
   include/nn/atk/atk_WaveSoundLoader.h
   include/nn/atk/atk_WaveSoundPlayer.h
   include/nn/atk/atk_WaveSoundRuntime.h
-  include/nn/atk/atk_WavOutFileStream.h
-
   include/nn/atk/detail/atk_AddonSoundArchiveContainer.h
   include/nn/atk/detail/atk_AdvancedWaveSound.h
   include/nn/atk/detail/atk_AdvancedWaveSoundFile.h
@@ -417,13 +417,12 @@ PUBLIC
   include/nn/atk/detail/atk_AdvancedWaveSoundPlayer.h
   include/nn/atk/detail/atk_AdvancedWaveSoundRuntime.h
   include/nn/atk/detail/atk_BinaryTypes.h
-  include/nn/atk/detail/atk_IntrusiveList.h
   include/nn/atk/detail/atk_IRegionInfoReadable.h
   include/nn/atk/detail/atk_IStreamDataDecoder.h
-  include/nn/atk/detail/atk_RegionManager.h
+  include/nn/atk/detail/atk_IntrusiveList.h
   include/nn/atk/detail/atk_MemoryFileStream.h
+  include/nn/atk/detail/atk_RegionManager.h
   include/nn/atk/detail/atk_SoundArchiveManager.h
-  
   include/nn/atk/fnd/basis/atkfnd_Config.h
   include/nn/atk/fnd/basis/atkfnd_FrameHeapImpl.h
   include/nn/atk/fnd/basis/atkfnd_HeapBase.h
@@ -444,18 +443,6 @@ PUBLIC
   include/nn/atk/fnd/string/atkfnd_String.h
 
 PRIVATE
-  src/NintendoWare/atk/fnd/basis/atkfnd_FrameHeapImpl.cpp
-  src/NintendoWare/atk/fnd/basis/atkfnd_HeapBase.cpp
-  src/NintendoWare/atk/fnd/basis/atkfnd_Time.win32.cpp
-  src/NintendoWare/atk/fnd/basis/atkfnd_WorkBufferAllocator.cpp
-  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.cpp
-  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.win32.cpp
-  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamProxy.cpp
-  src/NintendoWare/atk/fnd/io/atkfnd_StreamCache.cpp
-  src/NintendoWare/atk/fnd/os/atkfnd_Thread.cpp
-  src/NintendoWare/atk/fnd/os/atkfnd_Thread.win32.cpp
-
-  src/NintendoWare/atk/atk_SoundArchive.cpp
   src/NintendoWare/atk/atk_FsSoundArchive.cpp
   src/NintendoWare/atk/atk_SequenceSoundHandle.cpp
   src/NintendoWare/atk/atk_SoundArchive.cpp
@@ -550,6 +537,16 @@ PRIVATE
   src/NintendoWare/atk/detail/wsd/atk_WaveSoundRuntime.cpp
   src/NintendoWare/atk/effect/atk_EffectAux.cpp
   src/NintendoWare/atk/effect/atk_EffectBase.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_FrameHeapImpl.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_HeapBase.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_Time.win32.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_WorkBufferAllocator.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.win32.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamProxy.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_StreamCache.cpp
+  src/NintendoWare/atk/fnd/os/atkfnd_Thread.cpp
+  src/NintendoWare/atk/fnd/os/atkfnd_Thread.win32.cpp
   src/NintendoWare/atk/submix/atk_ChannelMixVolume.cpp
   src/NintendoWare/atk/submix/atk_FinalMix.cpp
   src/NintendoWare/atk/submix/atk_OutputMixer.cpp
