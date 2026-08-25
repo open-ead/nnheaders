@@ -202,4 +202,13 @@ u8 WaveSoundFile::NoteInfo::GetOriginalKey() const {
 
     return WsdDefaultKey;
 }
+
+u8 WaveSoundFile::NoteInfo::GetVolume() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, NoteInfoBitFlag_Volume)};
+    if (result)
+        return Util::DivideBy8bit(value, 0);
+
+    return WsdDefaultVolume;
+}
 } // namespace nn::atk::detail
