@@ -114,4 +114,13 @@ s8 WaveSoundFile::WaveSoundInfo::GetSurroundPan() const {
 
     return WsdDefaultSurroundPan;
 }
+
+float WaveSoundFile::WaveSoundInfo::GetPitch() const {
+    float value;
+    bool result {optionParameter.GetValueF32(&value, WaveSoundInfoBitFlagWsd_Pitch)};
+    if (result)
+        return value;
+
+    return WsdDefaultPitch;
+}
 } // namespace nn::atk::detail
