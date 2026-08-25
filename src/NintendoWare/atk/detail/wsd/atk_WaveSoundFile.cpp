@@ -33,4 +33,9 @@ const Util::ReferenceTable& WaveSoundFile::WaveSoundData::GetTrackInfoReferenceT
     return *util::ConstBytePtr(this, toTrackInfoReferenceTable.offset)
             .Get<Util::ReferenceTable>();
 }
+
+const Util::ReferenceTable& WaveSoundFile::WaveSoundData::GetNoteInfoReferenceTable() const {
+    return *util::ConstBytePtr(this, toNoteInfoReferenceTable.offset)
+            .Get<Util::ReferenceTable>();
+}
 } // namespace nn::atk::detail
