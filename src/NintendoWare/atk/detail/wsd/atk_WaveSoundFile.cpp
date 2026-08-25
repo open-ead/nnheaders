@@ -156,4 +156,13 @@ const AdshrCurve& WaveSoundFile::WaveSoundInfo::GetAdshrCurve() const {
 
     return WsdDefaultAdshrCurve;
 }
+
+u8 WaveSoundFile::WaveSoundInfo::GetLpfFreq() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Filter)};
+    if (result)
+        return Util::DivideBy8bit(value, 0);
+
+    return WsdDefaultLpfFreq;
+}
 } // namespace nn::atk::detail
