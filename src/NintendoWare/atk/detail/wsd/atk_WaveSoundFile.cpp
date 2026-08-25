@@ -24,4 +24,8 @@ const Util::ReferenceTable& WaveSoundFile::InfoBlockBody::GetWaveSoundDataRefere
 const Util::WaveIdTable& WaveSoundFile::InfoBlockBody::GetWaveIdTable() const {
     return *util::ConstBytePtr(this, toWaveIdTable.offset).Get<Util::WaveIdTable>();
 }
+
+const WaveSoundFile::WaveSoundInfo& WaveSoundFile::WaveSoundData::GetWaveSoundInfo() const {
+    return *util::ConstBytePtr(this, toWaveSoundInfo.offset).Get<WaveSoundInfo>();
+}
 } // namespace nn::atk::detail
