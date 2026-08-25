@@ -145,4 +145,15 @@ void WaveSoundFile::WaveSoundInfo::GetSendValue(u8* mainSend, u8* fxSend, u8 fxS
             fxSend[i] = WsdDefaultFxSend;
     }
 }
+
+const AdshrCurve& WaveSoundFile::WaveSoundInfo::GetAdshrCurve() const {
+    u32 offsetToReference;
+    bool result {optionParameter.GetValue(&offsetToReference, WaveSoundInfoBitFlagWsd_Envelope)};
+    if (result) {
+        const auto& ref {*util::ConstBytePtr(this, offsetToReference).Get<Util::Reference>()};
+        return *util::ConstBytePtr(&ref, ref.offset).Get<AdshrCurve>();
+    }
+
+    return WsdDefaultAdshrCurve;
+}
 } // namespace nn::atk::detail
