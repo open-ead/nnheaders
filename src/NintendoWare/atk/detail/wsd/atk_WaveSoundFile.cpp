@@ -105,4 +105,13 @@ u8 WaveSoundFile::WaveSoundInfo::GetPan() const {
 
     return WsdDefaultPan;
 }
+
+s8 WaveSoundFile::WaveSoundInfo::GetSurroundPan() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Pan)};
+    if (result)
+        return static_cast<s8>(Util::DivideBy8bit(value, 1));
+
+    return WsdDefaultSurroundPan;
+}
 } // namespace nn::atk::detail
