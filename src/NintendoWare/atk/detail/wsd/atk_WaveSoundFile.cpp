@@ -238,4 +238,15 @@ float WaveSoundFile::NoteInfo::GetPitch() const {
 
     return WsdDefaultPitch;
 }
+
+const AdshrCurve& WaveSoundFile::NoteInfo::GetAdshrCurve() const {
+    u32 offsetToReference;
+    bool result {optionParameter.GetValue(&offsetToReference, NoteInfoBitFlag_Envelope)};
+    if (result) {
+        const auto& ref {*util::ConstBytePtr(this, offsetToReference).Get<Util::Reference>()};
+        return *util::ConstBytePtr(&ref, ref.offset).Get<AdshrCurve>();
+    }
+
+    return WsdDefaultAdshrCurve;
+}
 } // namespace nn::atk::detail
