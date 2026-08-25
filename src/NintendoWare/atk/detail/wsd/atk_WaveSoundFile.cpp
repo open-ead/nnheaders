@@ -239,6 +239,27 @@ float WaveSoundFile::NoteInfo::GetPitch() const {
     return WsdDefaultPitch;
 }
 
+// NON_MATCHING
+void WaveSoundFile::NoteInfo::GetSendValue(u8* mainSend, u8** fxSend, u8 fxSendCount) const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, NoteInfoBitFlag_Send)};
+
+    if (!result) {
+        *mainSend = WsdDefaultMainSend;
+        for (int i {0}; i < fxSendCount; ++i)
+            fxSend[i][0] = WsdDefaultFxSend;
+    }
+    else {
+        const SendValueWsd& sendValue = *util::ConstBytePtr(this, value).Get<SendValueWsd>();
+
+        *mainSend = sendValue.mainSend;
+        int countSize {sendValue.fxSend.count > AuxBus_Count ? AuxBus_Count : sendValue.fxSend.count};
+        
+        for (int i {0}; i < countSize; ++i)
+            fxSend[i][0] = sendValue.fxSend.item[i];
+    }
+}
+
 const AdshrCurve& WaveSoundFile::NoteInfo::GetAdshrCurve() const {
     u32 offsetToReference;
     bool result {optionParameter.GetValue(&offsetToReference, NoteInfoBitFlag_Envelope)};
