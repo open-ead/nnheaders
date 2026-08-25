@@ -1,6 +1,8 @@
 #include <nn/atk/atk_WaveSoundFile.h>
 
 #include <nn/atk/atk_ElementType.h>
+#include "nn/atk/atk_Global.h"
+#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 namespace {
@@ -122,5 +124,25 @@ float WaveSoundFile::WaveSoundInfo::GetPitch() const {
         return value;
 
     return WsdDefaultPitch;
+}
+
+void WaveSoundFile::WaveSoundInfo::GetSendValue(u8* mainSend, u8* fxSend, u8 fxSendCount) const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Send)};
+
+    if (result) {
+        const SendValueWsd& sendValue = *util::ConstBytePtr(this, value).Get<SendValueWsd>();
+
+        *mainSend = sendValue.mainSend;
+        int countSize {sendValue.fxSend.count > AuxBus_Count ? AuxBus_Count : sendValue.fxSend.count};
+
+        for (int i {0}; i < countSize; ++i)
+            fxSend[i] = sendValue.fxSend.item[i];
+    }
+    else {
+        *mainSend = WsdDefaultMainSend;
+        for (int i {0}; i < fxSendCount; ++i)
+            fxSend[i] = WsdDefaultFxSend;
+    }
 }
 } // namespace nn::atk::detail
