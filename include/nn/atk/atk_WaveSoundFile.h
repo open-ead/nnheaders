@@ -93,9 +93,12 @@ struct WaveSoundFile {
     static_assert(sizeof(TrackInfo) == 0x8);
 
     struct NoteEvent {
-        u8 _0[8];
+        float position;
+        float length;
+        u32 noteIndex;
+        u32 reserved;
     };
-    static_assert(sizeof(NoteEvent) == 0x8);
+    static_assert(sizeof(NoteEvent) == 0x10);
 
     struct NoteInfo {
         u32 waveIdTableIndex;
