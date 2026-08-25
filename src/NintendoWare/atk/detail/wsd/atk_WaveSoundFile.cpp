@@ -1,8 +1,6 @@
 #include <nn/atk/atk_WaveSoundFile.h>
 
 #include <nn/atk/atk_ElementType.h>
-#include "nn/atk/atk_Global.h"
-#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 namespace {
@@ -182,5 +180,10 @@ u8 WaveSoundFile::WaveSoundInfo::GetBiquadValue() const {
         return Util::DivideBy8bit(value, 2);
 
     return WsdDefaultBiquadValue;
+}
+
+const Util::ReferenceTable& WaveSoundFile::TrackInfo::GetNoteEventReferenceTable() const {
+    return *util::ConstBytePtr(this, toNoteEventReferenceTable.offset)
+            .Get<Util::ReferenceTable>();
 }
 } // namespace nn::atk::detail
