@@ -186,4 +186,11 @@ const Util::ReferenceTable& WaveSoundFile::TrackInfo::GetNoteEventReferenceTable
     return *util::ConstBytePtr(this, toNoteEventReferenceTable.offset)
             .Get<Util::ReferenceTable>();
 }
+
+const WaveSoundFile::NoteEvent& WaveSoundFile::TrackInfo::GetNoteEvent(u32 index) const {
+    const void* pNoteEvent;
+    pNoteEvent = GetNoteEventReferenceTable().GetReferedItem(index, ElementType_WaveSoundFile_NoteEvent);
+
+    return *util::ConstBytePtr(pNoteEvent).Get<NoteEvent>();
+}
 } // namespace nn::atk::detail
