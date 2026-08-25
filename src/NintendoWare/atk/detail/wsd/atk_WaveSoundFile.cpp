@@ -229,4 +229,13 @@ u8 WaveSoundFile::NoteInfo::GetSurroundPan() const {
 
     return WsdDefaultSurroundPan;
 }
+
+float WaveSoundFile::NoteInfo::GetPitch() const {
+    float value;
+    bool result {optionParameter.GetValueF32(&value, NoteInfoBitFlag_Pitch)};
+    if (result)
+        return value;
+
+    return WsdDefaultPitch;
+}
 } // namespace nn::atk::detail
