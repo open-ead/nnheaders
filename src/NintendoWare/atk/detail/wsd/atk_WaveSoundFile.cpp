@@ -220,4 +220,13 @@ u8 WaveSoundFile::NoteInfo::GetPan() const {
 
     return WsdDefaultPan;
 }
+
+u8 WaveSoundFile::NoteInfo::GetSurroundPan() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, NoteInfoBitFlag_Pan)};
+    if (result)
+        return Util::DivideBy8bit(value, 1);
+
+    return WsdDefaultSurroundPan;
+}
 } // namespace nn::atk::detail
