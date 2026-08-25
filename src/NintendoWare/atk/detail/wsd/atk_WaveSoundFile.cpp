@@ -211,4 +211,13 @@ u8 WaveSoundFile::NoteInfo::GetVolume() const {
 
     return WsdDefaultVolume;
 }
+
+u8 WaveSoundFile::NoteInfo::GetPan() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, NoteInfoBitFlag_Pan)};
+    if (result)
+        return Util::DivideBy8bit(value, 0);
+
+    return WsdDefaultPan;
+}
 } // namespace nn::atk::detail
