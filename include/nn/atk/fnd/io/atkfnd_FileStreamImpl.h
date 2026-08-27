@@ -100,7 +100,7 @@ private:
     size_t WriteDirect(const void* buf, size_t length, FndResult* result);
     FndResult SeekDirect(position_t offset, SeekOrigin origin);
 
-    void ValidateAlignment(void* buf) const;
+    void ValidateAlignment([[maybe_unused]] const void* buf) const;
 
     fs::FileHandle m_FileHandle;
     bool m_IsOpened;
