@@ -45,4 +45,8 @@ size_t FileStreamImpl::GetSize() const {
 
     // diag::detail::AbortImpl("", "", "", 0);
 }
+
+int FileStreamImpl::GetIoBufferAlignment() const {
+    return 1;
+}
 } // namespace nn::atk::detail::fnd
