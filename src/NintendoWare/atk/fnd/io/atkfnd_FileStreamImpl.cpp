@@ -14,4 +14,11 @@ size_t FileStreamImpl::Write(const void* buf, size_t length, FndResult* result) 
 
     return WriteDirect(buf, length, result);
 }
+
+FndResult FileStreamImpl::Seek(position_t offset, SeekOrigin origin) {
+    if (IsCacheEnabled())
+        return m_StreamCache.Seek(offset, origin);
+
+    return SeekDirect(offset, origin);
+}
 } // namespace nn::atk::detail::fnd
