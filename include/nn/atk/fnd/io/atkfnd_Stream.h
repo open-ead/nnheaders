@@ -22,7 +22,7 @@ public:
     virtual ~Stream();
 
 protected:
-    Stream();
+    Stream() = default;
 
 public:
     virtual void Close() = 0;
