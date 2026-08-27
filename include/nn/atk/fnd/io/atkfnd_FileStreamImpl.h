@@ -55,6 +55,8 @@ public:
         ~DirectStream() override;
 
     private:
+        friend FileStreamImpl;
+
         FileStreamImpl* m_Owner;
     };
     static_assert(sizeof(DirectStream) == 0x10);
@@ -102,14 +104,14 @@ private:
 
     void ValidateAlignment([[maybe_unused]] const void* buf) const;
 
-    fs::FileHandle m_FileHandle;
-    bool m_IsOpened;
+    fs::FileHandle m_FileHandle {0};
+    bool m_IsOpened {false};
     u8 m_Padding[3];
     size_t m_FileSize;
-    position_t m_CurrentPosition;
+    position_t m_CurrentPosition {0};
     StreamCache m_StreamCache;
     DirectStream m_DirectStream;
-    FsAccessLog* m_pAccessLog;
+    FsAccessLog* m_pAccessLog {nullptr};
 };
 static_assert(sizeof(FileStreamImpl) == 0x80);
 } // namespace nn::atk::detail::fnd
