@@ -29,4 +29,8 @@ bool FileStreamImpl::CanRead() const {
 bool FileStreamImpl::CanWrite() const {
     return IsOpened();
 }
+
+bool FileStreamImpl::CanSeek() const {
+    return IsOpened();
+}
 } // namespace nn::atk::detail::fnd
