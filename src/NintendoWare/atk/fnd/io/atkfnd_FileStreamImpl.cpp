@@ -50,4 +50,8 @@ void FileStreamImpl::EnableCache(void* buffer, size_t length) {
         length + GetOffsetFromPtr(alignedBuffer, buffer)
     );
 }
+
+void FileStreamImpl::DisableCache() {
+    m_StreamCache.Finalize();
+}
 } // namespace nn::atk::detail::fnd
