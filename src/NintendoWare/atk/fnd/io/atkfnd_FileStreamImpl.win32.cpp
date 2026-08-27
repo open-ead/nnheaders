@@ -71,4 +71,27 @@ size_t FileStreamImpl::ReadDirect(void* buf, size_t length, FndResult* result) {
 
     return readFileLength;
 }
+
+size_t FileStreamImpl::WriteDirect(const void* buf, size_t length, FndResult* result) {
+    ValidateAlignment(buf);
+
+    FndResult writeResult;
+
+    fs::WriteOption option;
+    Result nnResult {fs::WriteFile(m_FileHandle, m_CurrentPosition, buf, length, option)};
+
+
+    if (nnResult.IsSuccess()) {
+        writeResult = FndResult{FndResultType_True};
+        m_CurrentPosition += length;
+    }
+    else {
+        writeResult = FndResult{FndResultType_IoError};
+    }
+
+    if (result != nullptr)
+        *result = writeResult;
+
+    return length;
+}
 } // namespace nn::atk::detail::fnd
