@@ -30,4 +30,8 @@ void FileStreamImpl::Flush() {
     if (IsOpened())
         fs::FlushFile(m_FileHandle);
 }
+
+bool FileStreamImpl::IsOpened() const {
+    return m_IsOpened;
+}
 } // namespace nn::atk::detail::fnd
