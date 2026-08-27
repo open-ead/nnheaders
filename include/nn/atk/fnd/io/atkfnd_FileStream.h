@@ -8,9 +8,9 @@ class FileStream : public Stream {
 public:
     enum AccessMode {
         AccessMode_None                 = 0,
-        AccessMode_Read                 = 1,
-        AccessMode_Write                = 2,
-        AccessMode_AllowAppend          = 4,
+        AccessMode_Read                 = 1 << 0,
+        AccessMode_Write                = 1 << 1,
+        AccessMode_AllowAppend          = 1 << 2,
         AccessMode_ReadAndWrite         = AccessMode_Read | AccessMode_Write,
         AccessMode_AllowAppendAndWrite  = AccessMode_AllowAppend | AccessMode_Write,
     };
