@@ -7,4 +7,11 @@ size_t FileStreamImpl::Read(void* buf, size_t length, FndResult* result) {
 
     return ReadDirect(buf, length, result);
 }
+
+size_t FileStreamImpl::Write(const void* buf, size_t length, FndResult* result) {
+    if (IsCacheEnabled())
+        return m_StreamCache.Write(buf, length, result);
+
+    return WriteDirect(buf, length, result);
+}
 } // namespace nn::atk::detail::fnd
