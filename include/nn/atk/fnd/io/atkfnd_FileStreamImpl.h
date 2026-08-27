@@ -5,46 +5,63 @@
 #include <nn/atk/fnd/io/atkfnd_FileStream.h>
 
 namespace nn::atk::detail::fnd {
-class FileStreamImpl : FileStream {
+class FileStreamImpl : public FileStream {
+    NN_NO_COPY(FileStreamImpl);
 public:
-    class DirectStream : fnd::Stream {
+    class DirectStream : public Stream {
     public:
+        DirectStream() = default;
+
+        void Initialize(FileStreamImpl& fileStream);
+        
+        void Close() override {}
+
+        bool IsOpened() const override {
+            return m_Owner->IsOpened();
+        }
+        
+        bool CanRead() const override {
+            return m_Owner->CanRead();
+        }
+
+        bool CanWrite() const override {
+            return m_Owner->CanWrite();
+        }
+
+        bool CanSeek() const override {
+            return m_Owner->CanSeek();
+        }
+
+        size_t GetSize() const override {
+            return m_Owner->GetSize();
+        }
+
+        size_t Read(void* buf, size_t length, FndResult* result) override {
+            return m_Owner->ReadDirect(buf, length, result);
+        }
+
+        size_t Write(const void* buf, size_t length, FndResult* result) override {
+            return m_Owner->WriteDirect(buf, length, result);
+        }
+
+        FndResult Seek(position_t offset, SeekOrigin origin) override {
+            return m_Owner->SeekDirect(offset, origin);
+        }
+        
+        position_t GetCurrentPosition() const override {
+            return m_Owner->GetCurrentPosition();
+        }
+
         ~DirectStream() override;
 
-        void Close() override;
-        bool IsOpened() const override;
-        
-        size_t Read(void* buf, size_t length, FndResult* result) override;
-        size_t Write(const void* buf, size_t length, FndResult* result) override;
-        FndResult Seek(position_t offset, SeekOrigin origin) override;
-        
-        position_t GetCurrentPosition() const override;
-        size_t GetSize() const override;
-        
-        bool CanRead() const override;
-        bool CanWrite() const override;
-        bool CanSeek() const override;
-    
     private:
         FileStreamImpl* m_Owner;
     };
     static_assert(sizeof(DirectStream) == 0x10);
 
     FileStreamImpl();
+    explicit FileStreamImpl(void*);
     ~FileStreamImpl() override;
-
-    size_t Read(void* buf, size_t length, FndResult* result) override;
-    size_t Write(const void* buf, size_t length, FndResult* result) override;
-    FndResult Seek(position_t offset, fnd::Stream::SeekOrigin origin) override;
-    
-    bool CanRead() const override;
-    bool CanWrite() const override;
-    bool CanSeek() const override;
-
-    void EnableCache(void* buffer, size_t length) override;
-    void DisableCache() override;
-
-    void ValidateAlignment(void* buf);
 
     FndResult Open(const char* filePath, AccessMode accessMode) override;
     void Close() override;
@@ -52,16 +69,25 @@ public:
 
     bool IsOpened() const override;
 
-    size_t GetSize() const override;
-    s32 GetIoBufferAlignment() const override;
+    bool CanRead() const override;
+    bool CanWrite() const override;
+    bool CanSeek() const override;
 
-    size_t ReadDirect(void* buf, size_t length, FndResult* result);
-    size_t WriteDirect(const void* buf, size_t length, FndResult* result);
-    FndResult SeekDirect(position_t offset, fnd::Stream::SeekOrigin origin);
+    size_t GetSize() const override;
+
+    size_t Read(void* buf, size_t length, FndResult* result) override;
+    size_t Write(const void* buf, size_t length, FndResult* result) override;
+    FndResult Seek(position_t offset, SeekOrigin origin) override;
     
-    position_t GetCurrentPosition() const override;
-    
+    position_t GetCurrentPosition() const override {
+        return m_CurrentPosition;
+    }
+
+    void EnableCache(void* buffer, size_t length) override;
+    void DisableCache() override;
     bool IsCacheEnabled() const override;
+
+    int GetIoBufferAlignment() const override;
 
     bool CanSetFsAccessLog() const override;
     void* SetFsAccessLog(FsAccessLog* pFsAccessLog) override;
@@ -70,6 +96,12 @@ public:
     size_t GetCachedLength() override;
 
 private:
+    size_t ReadDirect(void* buf, size_t length, FndResult* result);
+    size_t WriteDirect(const void* buf, size_t length, FndResult* result);
+    FndResult SeekDirect(position_t offset, SeekOrigin origin);
+
+    void ValidateAlignment(void* buf) const;
+
     fs::FileHandle m_FileHandle;
     bool m_IsOpened;
     u8 m_Padding[3];

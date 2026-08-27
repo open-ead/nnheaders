@@ -7,30 +7,45 @@ namespace nn::atk::detail::fnd {
 class FileStream : public Stream {
 public:
     enum AccessMode {
-        AccessMode_None,
-        AccessMode_Read,
-        AccessMode_Write,
-        AccessMode_ReadAndWrite,
-        AccessMode_AllowAppend,
-        AccessMode_AllowAppendAndWrite = 6,
+        AccessMode_None                 = 0,
+        AccessMode_Read                 = 1,
+        AccessMode_Write                = 2,
+        AccessMode_AllowAppend          = 4,
+        AccessMode_ReadAndWrite         = AccessMode_Read | AccessMode_Write,
+        AccessMode_AllowAppendAndWrite  = AccessMode_AllowAppend | AccessMode_Write,
     };
 
-    virtual FndResult Open(const char* filePath, AccessMode openMode);
-    virtual void Flush();
+    ~FileStream() override = default;
+
+    virtual FndResult Open(const char* filePath, AccessMode openMode) = 0;
+    void Close() override = 0;
+    virtual void Flush() = 0;
     
-    virtual void EnableCache(void* buffer, size_t length);
-    virtual void DisableCache();
-    virtual bool IsCacheEnabled() const;
+    bool IsOpened() const override = 0;
 
-    virtual s32 GetIoBufferAlignment() const;
+    bool CanRead() const override = 0;
+    bool CanWrite() const override = 0;
+    bool CanSeek() const override = 0;
 
-    virtual bool CanSetFsAccessLog() const;
-    virtual void* SetFsAccessLog(FsAccessLog* pFsAccessLog);
+    size_t GetSize() const override = 0;
 
-    virtual position_t GetCachePosition();
-    virtual size_t GetCachedLength();
+    size_t Read(void* buf, size_t length, FndResult* result) override = 0;
+    size_t Write(const void* buf, size_t length, FndResult* result) override = 0;
+    FndResult Seek(position_t offset, SeekOrigin origin) override = 0;
 
-    ~FileStream() override;
+    position_t GetCurrentPosition() const override = 0;
+
+    virtual void EnableCache(void* buffer, size_t length) = 0;
+    virtual void DisableCache() = 0;
+    virtual bool IsCacheEnabled() const = 0;
+
+    virtual int GetIoBufferAlignment() const = 0;
+
+    virtual bool CanSetFsAccessLog() const = 0;
+    virtual void* SetFsAccessLog(FsAccessLog* pFsAccessLog) = 0;
+
+    virtual position_t GetCachePosition() = 0;
+    virtual size_t GetCachedLength() = 0;
 };
 static_assert(sizeof(FileStream) == 0x8);
 } // namespace nn::atk::detail::fnd
