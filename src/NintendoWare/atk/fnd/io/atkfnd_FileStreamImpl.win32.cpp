@@ -25,4 +25,9 @@ void FileStreamImpl::Close() {
         fs::CloseFile(m_FileHandle);
     }
 }
+
+void FileStreamImpl::Flush() {
+    if (IsOpened())
+        fs::FlushFile(m_FileHandle);
+}
 } // namespace nn::atk::detail::fnd
