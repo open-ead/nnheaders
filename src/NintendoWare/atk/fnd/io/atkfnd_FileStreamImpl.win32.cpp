@@ -49,4 +49,26 @@ size_t FileStreamImpl::GetSize() const {
 int FileStreamImpl::GetIoBufferAlignment() const {
     return 1;
 }
+
+size_t FileStreamImpl::ReadDirect(void* buf, size_t length, FndResult* result) {
+    ValidateAlignment(buf);
+
+    size_t readFileLength {0};
+    Result nnResult {fs::ReadFile(&readFileLength, m_FileHandle, m_CurrentPosition, buf, length)};
+
+    FndResult readResult;
+
+    if (nnResult.IsSuccess()) {
+        readResult = FndResult{readFileLength != length};
+        m_CurrentPosition += readFileLength;
+    }
+    else {
+        readResult = FndResult{FndResultType_IoError};
+    }
+
+    if (result != nullptr)
+        *result = readResult;
+
+    return readFileLength;
+}
 } // namespace nn::atk::detail::fnd
