@@ -7,10 +7,14 @@ struct FsAccessLog;
 
 class StreamCache {
 public:
-    constexpr static position_t InvalidPosition = -1;
+    static const position_t InvalidPosition = -1;
 
     StreamCache();
     StreamCache(Stream* sourceStream, void* buffer, size_t length);
+
+    bool IsInitialized() const {
+        return m_Stream != nullptr && m_CacheBuffer != nullptr && m_CacheBufferLength != 0;
+    }
 
     void Initialize(Stream* sourceStream, void* buffer, size_t length);
     void Finalize();
