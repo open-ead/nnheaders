@@ -21,4 +21,8 @@ FndResult FileStreamImpl::Seek(position_t offset, SeekOrigin origin) {
 
     return SeekDirect(offset, origin);
 }
+
+bool FileStreamImpl::CanRead() const {
+    return IsOpened();
+}
 } // namespace nn::atk::detail::fnd
