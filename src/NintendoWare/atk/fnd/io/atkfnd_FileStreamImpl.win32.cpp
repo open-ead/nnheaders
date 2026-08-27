@@ -34,4 +34,15 @@ void FileStreamImpl::Flush() {
 bool FileStreamImpl::IsOpened() const {
     return m_IsOpened;
 }
+
+// NON_MATCHING: needs symbol for nn::diag::detail::AbortImpl
+size_t FileStreamImpl::GetSize() const {
+    s64 fileSize;
+    Result result {fs::GetFileSize(&fileSize, m_FileHandle)};
+
+    if (result.IsSuccess())
+        return fileSize & 0xffffffff;
+
+    // diag::detail::AbortImpl("", "", "", 0);
+}
 } // namespace nn::atk::detail::fnd
