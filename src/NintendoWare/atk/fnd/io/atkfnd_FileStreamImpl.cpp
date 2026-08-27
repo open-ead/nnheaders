@@ -54,4 +54,8 @@ void FileStreamImpl::EnableCache(void* buffer, size_t length) {
 void FileStreamImpl::DisableCache() {
     m_StreamCache.Finalize();
 }
+
+void FileStreamImpl::ValidateAlignment([[maybe_unused]] const void* buf) const {
+    GetIoBufferAlignment();
+}
 } // namespace nn::atk::detail::fnd
