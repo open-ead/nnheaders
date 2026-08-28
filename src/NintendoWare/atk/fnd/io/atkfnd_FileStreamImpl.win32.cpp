@@ -8,9 +8,37 @@ fs::OpenMode ConvertAccessMode(FileStream::AccessMode accessMode) {
 
 }
 
+// NON_MATCHING: still unsure of logic.
 position_t GetSeekPosition(FileStreamImpl& target, position_t offset, Stream::SeekOrigin origin) {
-    position_t targetSizeEnd;
-    position_t result;
+    position_t targetSizeEnd = target.GetSize();
+    position_t result {0};
+
+    switch (origin) {
+    case Stream::SeekOrigin_Begin:
+        result = offset >= 0 ? offset : 0;
+        break;
+    case Stream::SeekOrigin_End:
+        result = targetSizeEnd - (offset < 0 ? offset : 0);
+        break;
+    case Stream::SeekOrigin_Current:
+        if (offset > 0) {
+            position_t position {target.GetCurrentPosition()};
+            if (position + offset <= targetSizeEnd)
+                result = position + offset;
+            else
+                result = targetSizeEnd;
+        }
+        else if (offset < 0) {
+            if (0 < target.GetCurrentPosition() + offset)
+                result = target.GetCurrentPosition() + offset;
+        }
+        break;
+    default:
+        result = 0;
+        break;
+    }
+
+    return result;
 }
 } // anonymous namespace
 
@@ -93,5 +121,12 @@ size_t FileStreamImpl::WriteDirect(const void* buf, size_t length, FndResult* re
         *result = writeResult;
 
     return length;
+}
+
+// NON_MATCHING: needs GetSeekPosition
+FndResult FileStreamImpl::SeekDirect(position_t offset, SeekOrigin origin) {
+    position_t seekPosition {GetSeekPosition(*this, offset, origin)};
+    m_CurrentPosition = seekPosition;
+    return FndResult{FndResultType_True};
 }
 } // namespace nn::atk::detail::fnd
