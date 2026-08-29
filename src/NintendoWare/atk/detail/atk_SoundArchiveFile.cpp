@@ -29,4 +29,8 @@ int SoundArchiveFile::FileHeader::GetStringBlockOffset() const {
 int SoundArchiveFile::FileHeader::GetInfoBlockOffset() const {
     return GetReferenceBy(ElementType_SoundArchiveFile_InfoBlock)->offset;
 }
+
+int SoundArchiveFile::FileHeader::GetFileBlockOffset() const {
+    return GetReferenceBy(ElementType_SoundArchiveFile_FileBlock)->offset;
+}
 } // namespace nn::atk::detail
