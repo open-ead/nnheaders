@@ -33,7 +33,7 @@ public:
         enum Sections {
             Sections_StringTable = 0,
             Sections_PatriciaTree = 1,
-            Sections_Max = Sections_PatriciaTree,
+            Sections_Max = 1,
         };
 
         Util::Reference toSection[1];
