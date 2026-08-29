@@ -33,4 +33,11 @@ int SoundArchiveFile::FileHeader::GetInfoBlockOffset() const {
 int SoundArchiveFile::FileHeader::GetFileBlockOffset() const {
     return GetReferenceBy(ElementType_SoundArchiveFile_FileBlock)->offset;
 }
+
+const void* SoundArchiveFile::StringBlockBody::GetSection(Sections section) const {
+    if (section > Sections_Max)
+        return nullptr;
+
+    return util::ConstBytePtr(this, toSection[section].offset).Get();
+}
 } // namespace nn::atk::detail
