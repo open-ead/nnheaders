@@ -88,17 +88,17 @@ public:
 
     struct ReferenceTable : Table<Reference> {
         const void* GetReferedItem(u32 index) const {
-            if (count > index)
-                return util::ConstBytePtr(this, item[index].offset).Get();
-
-            return nullptr;
+            if (count <= index)
+                return nullptr;
+            
+            return util::ConstBytePtr(this, item[index].offset).Get();
         }
 
         const void* GetReferedItem(u32 index, u16 typeId) const {
-            if (count > index && item[index].typeId == typeId)
-                return util::ConstBytePtr(this,item[index].offset).Get();
-
-            return nullptr;
+            if (count <= index || item[index].typeId != typeId)
+                return nullptr;
+            
+            return util::ConstBytePtr(this,item[index].offset).Get();
         }
 
         const void* FindReferedItemBy(u16 typeId) const;
@@ -106,10 +106,10 @@ public:
 
     struct ReferenceWithSizeTable : Table<ReferenceWithSize> {
         const void* GetReferedItem(u32 index) const {
-            if (count > index)
-                return util::ConstBytePtr(this, item[index].offset).Get();
-
-            return nullptr;
+            if (count <= index)
+                return nullptr;
+            
+            return util::ConstBytePtr(this, item[index].offset).Get();
         }
 
         const void* GetReferedItemBy(u16 typeId) const;
