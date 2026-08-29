@@ -222,7 +222,7 @@ public:
         return static_cast<u8>(value >> (8 * index));
     }
 
-    static u8 DivideBy16bit(u32 value, int index) {
+    static u16 DivideBy16bit(u32 value, int index) {
         return static_cast<u16>(value >> (16 * index));
     }
 

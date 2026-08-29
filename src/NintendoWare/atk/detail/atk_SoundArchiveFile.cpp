@@ -478,6 +478,16 @@ SinglePlayType SoundArchiveFile::SoundInfo::GetSinglePlayType() const {
     return static_cast<SinglePlayType>(Util::DivideBy8bit(value, 0));
 }
 
+u16 SoundArchiveFile::SoundInfo::GetSinglePlayEffectiveDuration() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_SinglePlayParam)};
+
+    if (!result)
+        return DefaultSinglePlayEffectiveDuration;
+
+    return Util::DivideBy16bit(value, 1);
+}
+
 u32 SoundArchiveFile::BankInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, BankInfoBitFlag_StringId)};
