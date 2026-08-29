@@ -1,6 +1,7 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
 #include <cstring>
+#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 namespace {
@@ -352,5 +353,9 @@ SoundArchive::SoundType SoundArchiveFile::SoundInfo::GetSoundType() const {
     default:
         return SoundArchive::SoundType_Invalid;
     }
+}
+
+const SoundArchiveFile::StreamSoundInfo& SoundArchiveFile::SoundInfo::GetStreamSoundInfo() const {
+    return *util::ConstBytePtr(this, toDetailSoundInfo.offset).Get<StreamSoundInfo>();
 }
 } // namespace nn::atk::detail
