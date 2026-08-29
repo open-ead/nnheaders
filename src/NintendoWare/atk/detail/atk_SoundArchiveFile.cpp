@@ -13,4 +13,8 @@ const Util::ReferenceWithSize* SoundArchiveFile::FileHeader::GetReferenceBy(u16 
 u32 SoundArchiveFile::FileHeader::GetStringBlockSize() const {
     return GetReferenceBy(ElementType_SoundArchiveFile_StringBlock)->size;
 }
+
+u32 SoundArchiveFile::FileHeader::GetInfoBlockSize() const {
+    return GetReferenceBy(ElementType_SoundArchiveFile_InfoBlock)->size;
+}
 } // namespace nn::atk::detail
