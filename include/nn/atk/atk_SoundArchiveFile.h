@@ -145,13 +145,13 @@ public:
         Util::Reference toFileInfoReferenceTable;
         Util::Reference toSoundArchivePlayerInfo;
 
-        u32 GetSoundCount() const;
-        u32 GetBankCount() const;
-        u32 GetPlayerCount() const;
-        u32 GetSoundGroupCount() const;
-        u32 GetGroupCount() const;
-        u32 GetWaveArchiveCount() const;
-        u32 GetFileCount() const;
+        u32 GetSoundCount() const { return GetSoundInfoReferenceTable().count; }
+        u32 GetBankCount() const { return GetBankInfoReferenceTable().count; }
+        u32 GetPlayerCount() const { return GetPlayerInfoReferenceTable().count; }
+        u32 GetSoundGroupCount() const { return GetSoundGroupInfoReferenceTable().count; }
+        u32 GetGroupCount() const { return GetGroupInfoReferenceTable().count; }
+        u32 GetWaveArchiveCount() const { return GetWaveArchiveInfoReferenceTable().count; }
+        u32 GetFileCount() const { return GetFileInfoReferenceTable().count; }
 
         const SoundInfo* GetSoundInfo(SoundArchive::ItemId itemId) const;
         const BankInfo* GetBankInfo(SoundArchive::ItemId itemId) const;
