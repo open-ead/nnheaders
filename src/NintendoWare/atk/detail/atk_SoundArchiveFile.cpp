@@ -1,6 +1,7 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
 #include <cstring>
+#include "nn/atk/atk_Global.h"
 
 namespace nn::atk::detail {
 namespace {
@@ -465,6 +466,16 @@ PanCurve SoundArchiveFile::SoundInfo::GetPanCurve() const {
         return DefaultPanCurve;
 
     return static_cast<PanCurve>(Util::DivideBy8bit(value, 1));
+}
+
+SinglePlayType SoundArchiveFile::SoundInfo::GetSinglePlayType() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_SinglePlayParam)};
+
+    if (!result)
+        return DefaultSinglePlayType;
+
+    return static_cast<SinglePlayType>(Util::DivideBy8bit(value, 0));
 }
 
 u32 SoundArchiveFile::BankInfo::GetStringId() const {
