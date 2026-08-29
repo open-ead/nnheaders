@@ -100,4 +100,9 @@ const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetSoundInfoReferen
     return *util::ConstBytePtr(this, toSoundInfoReferenceTable.offset)
             .Get<Util::ReferenceTable>();
 }
+
+const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetBankInfoReferenceTable() const {
+    return *util::ConstBytePtr(this, toBankInfoReferenceTable.offset)
+            .Get<Util::ReferenceTable>();
+}
 } // namespace nn::atk::detail
