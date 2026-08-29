@@ -1,26 +1,25 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
 #include <cstring>
-#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 namespace {
-const u32 DefaultStringId {0xffffffff}; // 26
+const u32 DefaultStringId {0xffffffff};
 const PanMode DefaultPanMode {PanMode_Dual};
 const PanCurve DefaultPanCurve {PanCurve_Sqrt};
 const SinglePlayType DefaultSinglePlayType {SinglePlayType_None};
 const u16 DefaultSinglePlayEffectiveDuration {0xffff};
-const u8 DefaultPlayerPriority {64}; // 31
+const u8 DefaultPlayerPriority {64};
 const u8 DefaultChannelPriority {64};
-const u8 DefaultActorPlayerId {0}; // 33
+const u8 DefaultActorPlayerId {0};
 const u8 DefaultIsReleasePriorityFix {0};
 const bool DefaultIsFrontBypass {false};
-const u32 DefaultUserParam {0xffffffff}; // 36
+const u32 DefaultUserParam {0xffffffff};
 const u32 DefaultSeqStartOffset {0};
 const u32 DefaultWarcWaveCount {0};
-const u32 DefaultPlayerHeapSize {0}; // 39
+const u32 DefaultPlayerHeapSize {0};
 
-enum SoundInfoBitFlag { // 44
+enum SoundInfoBitFlag {
     SoundInfoBitFlag_StringId           = 0,
     SoundInfoBitFlag_PanParam           = 1,
     SoundInfoBitFlag_PlayerParam        = 2,
@@ -39,35 +38,35 @@ enum SoundInfoBitFlag { // 44
     SoundInfoBitFlag_UserParam          = 31,
 };
 
-const int UserParamIndex[4] {}; // 65
+const int UserParamIndex[4] {};
 
-enum WaveSoundInfoBitFlag { // 79
+enum WaveSoundInfoBitFlag {
     WaveSoundInfoBitFlag_Priority = 0,
 };
 
-enum SequenceSoundInfoBitFlag { // 84
+enum SequenceSoundInfoBitFlag {
     SequenceSoundInfoBitFlag_StartOffset    = 0,
     SequenceSoundInfoBitFlag_Priority       = 1,
 };
 
-enum BankInfoBitFlag { // 90
+enum BankInfoBitFlag {
     BankInfoBitFlag_StringId = 0,
 };
 
-enum PlayerInfoBitFlag { // 95
+enum PlayerInfoBitFlag {
     PlayerInfoBitFlag_StringId  = 0,
     PlayerInfoBitFlag_HeapSize  = 1,
 };
 
-enum SoundGroupInfoBitFlag { // 101
+enum SoundGroupInfoBitFlag {
     SoundGroupInfoBitFlag_StringId = 0,
 };
 
-enum GroupInfoBitFlag { // 106
+enum GroupInfoBitFlag {
     GroupInfoBitFlag_StringId = 0,
 };
 
-enum WaveArchiveInfoBitFlag { // 111
+enum WaveArchiveInfoBitFlag {
     WaveArchiveInfoBitFlag_StringId     = 0,
     WaveArchiveInfoBitFlag_WaveCount    = 1,
 };
@@ -448,9 +447,19 @@ u32 SoundArchiveFile::SoundInfo::GetStringId() const {
     return value;
 }
 
+PanMode SoundArchiveFile::SoundInfo::GetPanMode() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_PanParam)};
+
+    if (!result)
+        return DefaultPanMode;
+
+    return static_cast<PanMode>(Util::DivideBy8bit(value, 0));
+}
+
 u32 SoundArchiveFile::BankInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
+    bool result {optionParameter.GetValue(&value, BankInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -480,7 +489,7 @@ u32 SoundArchiveFile::SoundGroupInfo::GetStringId() const {
 
 u32 SoundArchiveFile::GroupInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
+    bool result {optionParameter.GetValue(&value, GroupInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -490,7 +499,7 @@ u32 SoundArchiveFile::GroupInfo::GetStringId() const {
 
 u32 SoundArchiveFile::PlayerInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
+    bool result {optionParameter.GetValue(&value, PlayerInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
