@@ -527,6 +527,16 @@ bool SoundArchiveFile::SoundInfo::ReadUserParam(u32* pOutValue, int index) const
     return optionParameter.GetValue(pOutValue, UserParamIndex[index]);
 }
 
+bool SoundArchiveFile::SoundInfo::IsFrontBypass() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_OffsetToCtrParam)};
+
+    if (!result)
+        return DefaultIsFrontBypass;
+
+    return value & 1;
+}
+
 u32 SoundArchiveFile::BankInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, BankInfoBitFlag_StringId)};
