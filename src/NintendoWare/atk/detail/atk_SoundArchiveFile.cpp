@@ -401,4 +401,14 @@ u32 SoundArchiveFile::PlayerInfo::GetStringId() const {
 
     return value;
 }
+
+u32 SoundArchiveFile::SoundGroupInfo::GetStringId() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, 0)};
+
+    if (!result)
+        return DefaultStringId;
+
+    return value;
+}
 } // namespace nn::atk::detail
