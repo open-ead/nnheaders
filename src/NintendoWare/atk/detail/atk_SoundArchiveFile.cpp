@@ -1,6 +1,7 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
 #include <cstring>
+#include "nn/atk/atk_ItemType.h"
 
 namespace nn::atk::detail {
 const Util::ReferenceWithSize* SoundArchiveFile::FileHeader::GetReferenceBy(u16 typeId) const {
@@ -133,6 +134,19 @@ const SoundArchiveFile::PlayerInfo* SoundArchiveFile::InfoBlockBody::GetPlayerIn
         return nullptr;
 
     return util::ConstBytePtr(table.GetReferedItem(index)).Get<PlayerInfo>();
+}
+
+const SoundArchiveFile::SoundGroupInfo* SoundArchiveFile::InfoBlockBody::GetSoundGroupInfo(SoundArchive::ItemId itemId) const {
+    if (Util::GetItemType(itemId) != ItemType_SoundGroup)
+        return nullptr;
+
+    u32 index {Util::GetItemIndex(itemId)};
+    const Util::ReferenceTable& table {GetSoundGroupInfoReferenceTable()};
+
+    if (index >= table.count)
+        return nullptr;
+
+    return util::ConstBytePtr(table.GetReferedItem(index)).Get<SoundGroupInfo>();
 }
 
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetSoundInfoReferenceTable() const {
