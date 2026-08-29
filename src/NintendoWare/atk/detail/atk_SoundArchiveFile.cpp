@@ -1,9 +1,77 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
 #include <cstring>
-#include "nn/atk/atk_ItemType.h"
 
 namespace nn::atk::detail {
+namespace {
+const u32 DefaultStringId {0xffffffff}; // 26
+const PanMode DefaultPanMode {PanMode_Dual};
+const PanCurve DefaultPanCurve {PanCurve_Sqrt};
+const SinglePlayType DefaultSinglePlayType {SinglePlayType_None};
+const u16 DefaultSinglePlayEffectiveDuration {0xffff};
+const u8 DefaultPlayerPriority {64}; // 31
+const u8 DefaultChannelPriority {64};
+const u8 DefaultActorPlayerId {0}; // 33
+const u8 DefaultIsReleasePriorityFix {0};
+const bool DefaultIsFrontBypass {false};
+const u32 DefaultUserParam {0xffffffff}; // 36
+const u32 DefaultSeqStartOffset {0};
+const u32 DefaultWarcWaveCount {0};
+const u32 DefaultPlayerHeapSize {0}; // 39
+
+enum SoundInfoBitFlag { // 44
+    SoundInfoBitFlag_StringId           = 0,
+    SoundInfoBitFlag_PanParam           = 1,
+    SoundInfoBitFlag_PlayerParam        = 2,
+    SoundInfoBitFlag_SinglePlayParam    = 3,
+
+    SoundInfoBitFlag_OffsetTo3dParam    = 8,
+    SoundInfoBitFlag_OffsetToSendParam  = 9,
+    SoundInfoBitFlag_OffsetToModParam   = 10,
+    SoundInfoBitFlag_OffsetToRvlParam   = 16,
+    SoundInfoBitFlag_OffsetToCtrParam   = 17,
+    SoundInfoBitFlag_OffsetToCafeParam  = 18,
+
+    SoundInfoBitFlag_UserParam3         = 28,
+    SoundInfoBitFlag_UserParam2         = 29,
+    SoundInfoBitFlag_UserParam1         = 30,
+    SoundInfoBitFlag_UserParam          = 31,
+};
+
+const int UserParamIndex[4] {}; // 65
+
+enum WaveSoundInfoBitFlag { // 79
+    WaveSoundInfoBitFlag_Priority = 0,
+};
+
+enum SequenceSoundInfoBitFlag { // 84
+    SequenceSoundInfoBitFlag_StartOffset    = 0,
+    SequenceSoundInfoBitFlag_Priority       = 1,
+};
+
+enum BankInfoBitFlag { // 90
+    BankInfoBitFlag_StringId = 0,
+};
+
+enum PlayerInfoBitFlag { // 95
+    PlayerInfoBitFlag_StringId  = 0,
+    PlayerInfoBitFlag_HeapSize  = 1,
+};
+
+enum SoundGroupInfoBitFlag { // 101
+    SoundGroupInfoBitFlag_StringId = 0,
+};
+
+enum GroupInfoBitFlag { // 106
+    GroupInfoBitFlag_StringId = 0,
+};
+
+enum WaveArchiveInfoBitFlag { // 111
+    WaveArchiveInfoBitFlag_StringId     = 0,
+    WaveArchiveInfoBitFlag_WaveCount    = 1,
+};
+} // anonymous namespace
+
 const Util::ReferenceWithSize* SoundArchiveFile::FileHeader::GetReferenceBy(u16 typeId) const {
     for (int i {0}; i < BlockCount; ++i) {
         if (toBlocks[i].typeId == typeId)
@@ -268,5 +336,21 @@ const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetGroupInfoReferen
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetFileInfoReferenceTable() const {
     return *util::ConstBytePtr(this, toFileInfoReferenceTable.offset)
             .Get<Util::ReferenceTable>();
+}
+
+SoundArchive::SoundType SoundArchiveFile::SoundInfo::GetSoundType() const {
+    switch (toDetailSoundInfo.typeId) {
+    case ElementType_SoundArchiveFile_SequenceSoundInfo:
+        return SoundArchive::SoundType_Sequence;
+    
+    case ElementType_SoundArchiveFile_StreamSoundInfo:
+        return SoundArchive::SoundType_Stream;
+
+    case ElementType_SoundArchiveFile_WaveSoundInfo:
+        return SoundArchive::SoundType_Wave;
+
+    default:
+        return SoundArchive::SoundType_Invalid;
+    }
 }
 } // namespace nn::atk::detail
