@@ -304,6 +304,19 @@ SoundArchive::FileId SoundArchiveFile::InfoBlockBody::GetItemFileId(SoundArchive
     return fileId;
 }
 
+SoundArchive::FileId SoundArchiveFile::InfoBlockBody::GetItemPrefetchFileId(SoundArchive::ItemId id) const {
+    SoundArchive::FileId fileId {SoundArchive::InvalidId};
+
+    const SoundInfo* info {GetSoundInfo(id)};
+
+    if (info != nullptr && info->GetSoundType() == SoundArchive::SoundType_Stream) {
+        const SoundArchiveFile::StreamSoundInfo& streamSoundInfo {info->GetStreamSoundInfo()};
+        fileId = streamSoundInfo.prefetchFileId;
+    }
+
+    return fileId;
+}
+
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetSoundInfoReferenceTable() const {
     return *util::ConstBytePtr(this, toSoundInfoReferenceTable.offset)
             .Get<Util::ReferenceTable>();
