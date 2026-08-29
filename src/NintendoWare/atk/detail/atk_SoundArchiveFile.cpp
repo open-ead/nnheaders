@@ -498,6 +498,16 @@ u8 SoundArchiveFile::SoundInfo::GetPlayerPriority() const {
     return Util::DivideBy8bit(value, 0);
 }
 
+u8 SoundArchiveFile::SoundInfo::GetActorPlayerId() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_PlayerParam)};
+
+    if (!result)
+        return DefaultActorPlayerId;
+
+    return Util::DivideBy8bit(value, 1);
+}
+
 u32 SoundArchiveFile::BankInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, BankInfoBitFlag_StringId)};
