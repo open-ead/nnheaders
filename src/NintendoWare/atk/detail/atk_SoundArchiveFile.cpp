@@ -190,6 +190,51 @@ const SoundArchiveFile::SoundArchivePlayerInfo* SoundArchiveFile::InfoBlockBody:
             .Get<SoundArchivePlayerInfo>();
 }
 
+SoundArchive::FileId SoundArchiveFile::InfoBlockBody::GetItemFileId(SoundArchive::ItemId id) const {
+    SoundArchive::FileId fileId {SoundArchive::InvalidId};
+
+    switch (Util::GetItemType(id)) {
+    case ItemType_Sound: {
+        const SoundInfo* info {GetSoundInfo(id)};
+        if (info != nullptr)
+            fileId = info->fileId;
+        break;
+    }
+    case ItemType_Bank: {
+        const BankInfo* info {GetBankInfo(id)};
+        if (info != nullptr)
+            fileId = info->fileId;
+        break;
+    }
+    case ItemType_WaveArchive: {
+        const WaveArchiveInfo* info {GetWaveArchiveInfo(id)};
+        if (info != nullptr)
+            fileId = info->fileId;
+        break;
+    }
+    case ItemType_Group: {
+        const GroupInfo* info {GetGroupInfo(id)};
+        if (info != nullptr)
+            fileId = info->fileId;
+        break;
+    }
+    case ItemType_SoundGroup: {
+        const SoundGroupInfo* info {GetSoundGroupInfo(id)};
+        if (info != nullptr) {
+            SoundArchive::ItemId soundId {info->startId};
+            const SoundInfo* soundInfo {GetSoundInfo(soundId)};
+            if (soundInfo != nullptr)
+                fileId = soundInfo->fileId;
+        }
+        break;
+    }
+    case ItemType_Player:
+        break;
+    }
+
+    return fileId;
+}
+
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetSoundInfoReferenceTable() const {
     return *util::ConstBytePtr(this, toSoundInfoReferenceTable.offset)
             .Get<Util::ReferenceTable>();
