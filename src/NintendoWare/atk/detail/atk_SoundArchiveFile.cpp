@@ -428,9 +428,19 @@ const SoundArchiveFile::SequenceSoundInfo& SoundArchiveFile::SoundInfo::GetSeque
     return *util::ConstBytePtr(this, toDetailSoundInfo.offset).Get<SequenceSoundInfo>();
 }
 
+const SoundArchiveFile::Sound3DInfo* SoundArchiveFile::SoundInfo::GetSound3DInfo() const {
+    u32 offset;
+    bool result {optionParameter.GetValue(&offset, SoundInfoBitFlag_OffsetTo3dParam)};
+    
+    if (!result)
+        return nullptr;
+    
+    return util::ConstBytePtr(this, offset).Get<Sound3DInfo>();
+}
+
 u32 SoundArchiveFile::SoundInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, 0)};
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -440,7 +450,7 @@ u32 SoundArchiveFile::SoundInfo::GetStringId() const {
 
 u32 SoundArchiveFile::BankInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, 0)};
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -450,7 +460,7 @@ u32 SoundArchiveFile::BankInfo::GetStringId() const {
 
 u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, 0)};
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -460,7 +470,7 @@ u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
 
 u32 SoundArchiveFile::SoundGroupInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, 0)};
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -470,7 +480,7 @@ u32 SoundArchiveFile::SoundGroupInfo::GetStringId() const {
 
 u32 SoundArchiveFile::GroupInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, 0)};
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -480,7 +490,7 @@ u32 SoundArchiveFile::GroupInfo::GetStringId() const {
 
 u32 SoundArchiveFile::PlayerInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, 0)};
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;

@@ -203,7 +203,7 @@ public:
         const WaveSoundInfo& GetWaveSoundInfo() const;
         const AdvancedWaveSoundInfo& GetAdvancedWaveSoundInfo() const;
         const SequenceSoundInfo& GetSequenceSoundInfo() const;
-        const Sound3DInfo& GetSound3DInfo() const;
+        const Sound3DInfo* GetSound3DInfo() const;
 
         u32 GetStringId() const;
         PanMode GetPanMode() const;
