@@ -40,4 +40,15 @@ const void* SoundArchiveFile::StringBlockBody::GetSection(Sections section) cons
 
     return util::ConstBytePtr(this, toSection[section].offset).Get();
 }
+
+const char* SoundArchiveFile::StringBlockBody::GetString(SoundArchive::StringId stringId) const {
+    if (stringId == SoundArchive::InvalidId)
+        return nullptr;
+
+    const StringTable* table {GetStringTable()};
+    if (table == nullptr)
+        return nullptr;
+    
+    return table->GetString(stringId);
+}
 } // namespace nn::atk::detail
