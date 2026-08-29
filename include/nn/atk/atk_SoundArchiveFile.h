@@ -88,7 +88,7 @@ public:
         u32 rootIdx;
         Util::Table<Node> nodeTable;
 
-        const NodeData* GetNodeDataBy(const char* str, size_t len) const;
+        const NodeData* GetNodeDataBy(const char* str, size_t len = 0) const;
 
         void* operator[](int idx) const {
             // TODO

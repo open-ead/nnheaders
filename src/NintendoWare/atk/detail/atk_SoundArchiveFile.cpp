@@ -54,13 +54,31 @@ const char* SoundArchiveFile::StringBlockBody::GetString(SoundArchive::StringId 
     return table->GetString(stringId);
 }
 
+void SoundArchiveFile::StringBlockBody::DumpTree() const {
+    // TODO: Empty only in release builds
+}
+
+u32 SoundArchiveFile::StringBlockBody::GetItemIdImpl(Sections section, const char* str) const {
+    const PatriciaTree* tree {GetPatriciaTree(section)};
+    const PatriciaTree::NodeData* nodeData {tree->GetNodeDataBy(str)};
+
+    if (nodeData == nullptr)
+        return SoundArchive::InvalidId;
+
+    const char* nodeDataStr {GetString(nodeData->stringId)};
+    if (std::strcmp(str, nodeDataStr) != 0)
+        return SoundArchive::InvalidId;
+
+    return nodeData->itemId;
+}
+
 const SoundArchiveFile::PatriciaTree::NodeData* SoundArchiveFile::PatriciaTree::GetNodeDataBy(const char* str, size_t len) const {
     if (rootIdx >= nodeTable.count)
         return nullptr;
 
     const Node* node = &nodeTable.item[rootIdx];
     if (len == 0)
-        len = strlen(str);
+        len = std::strlen(str);
 
     while ((node->flags & Node::FlagLeaf) == 0) {
         const int pos = node->bit >> 3;
