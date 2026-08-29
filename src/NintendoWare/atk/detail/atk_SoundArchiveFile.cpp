@@ -25,4 +25,8 @@ u32 SoundArchiveFile::FileHeader::GetFileBlockSize() const {
 int SoundArchiveFile::FileHeader::GetStringBlockOffset() const {
     return GetReferenceBy(ElementType_SoundArchiveFile_StringBlock)->offset;
 }
+
+int SoundArchiveFile::FileHeader::GetInfoBlockOffset() const {
+    return GetReferenceBy(ElementType_SoundArchiveFile_InfoBlock)->offset;
+}
 } // namespace nn::atk::detail
