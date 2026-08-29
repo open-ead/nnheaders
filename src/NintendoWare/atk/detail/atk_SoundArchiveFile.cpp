@@ -39,7 +39,12 @@ enum SoundInfoBitFlag {
     SoundInfoBitFlag_UserParam          = 31,
 };
 
-const int UserParamIndex[4] {};
+const int UserParamIndex[4] { 
+    SoundInfoBitFlag_UserParam, 
+    SoundInfoBitFlag_UserParam1, 
+    SoundInfoBitFlag_UserParam2, 
+    SoundInfoBitFlag_UserParam3
+};
 
 enum WaveSoundInfoBitFlag {
     WaveSoundInfoBitFlag_Priority = 0,
@@ -516,6 +521,10 @@ u32 SoundArchiveFile::SoundInfo::GetUserParam() const {
         return DefaultUserParam;
 
     return value;
+}
+
+bool SoundArchiveFile::SoundInfo::ReadUserParam(u32* pOutValue, int index) const {
+    return optionParameter.GetValue(pOutValue, UserParamIndex[index]);
 }
 
 u32 SoundArchiveFile::BankInfo::GetStringId() const {
