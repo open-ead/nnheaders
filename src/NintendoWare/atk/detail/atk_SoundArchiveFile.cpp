@@ -457,6 +457,16 @@ PanMode SoundArchiveFile::SoundInfo::GetPanMode() const {
     return static_cast<PanMode>(Util::DivideBy8bit(value, 0));
 }
 
+PanCurve SoundArchiveFile::SoundInfo::GetPanCurve() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_PanParam)};
+
+    if (!result)
+        return DefaultPanCurve;
+
+    return static_cast<PanCurve>(Util::DivideBy8bit(value, 1));
+}
+
 u32 SoundArchiveFile::BankInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, BankInfoBitFlag_StringId)};
