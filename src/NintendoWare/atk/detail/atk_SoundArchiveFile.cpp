@@ -426,4 +426,14 @@ u32 SoundArchiveFile::SoundInfo::GetStringId() const {
 
     return value;
 }
+
+u32 SoundArchiveFile::BankInfo::GetStringId() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, 0)};
+
+    if (!result)
+        return DefaultStringId;
+
+    return value;
+}
 } // namespace nn::atk::detail
