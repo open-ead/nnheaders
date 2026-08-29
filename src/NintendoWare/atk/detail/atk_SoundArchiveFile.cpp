@@ -1,5 +1,7 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
+#include <cstring>
+
 namespace nn::atk::detail {
 const Util::ReferenceWithSize* SoundArchiveFile::FileHeader::GetReferenceBy(u16 typeId) const {
     for (int i {0}; i < BlockCount; ++i) {
@@ -50,5 +52,29 @@ const char* SoundArchiveFile::StringBlockBody::GetString(SoundArchive::StringId 
         return nullptr;
     
     return table->GetString(stringId);
+}
+
+const SoundArchiveFile::PatriciaTree::NodeData* SoundArchiveFile::PatriciaTree::GetNodeDataBy(const char* str, size_t len) const {
+    if (rootIdx >= nodeTable.count)
+        return nullptr;
+
+    const Node* node = &nodeTable.item[rootIdx];
+    if (len == 0)
+        len = strlen(str);
+
+    while ((node->flags & Node::FlagLeaf) == 0) {
+        const int pos = node->bit >> 3;
+        const int bit = node->bit & 7;
+        u32 nodeIdx;
+
+        if (pos < static_cast<int>(len) && str[pos] & (1 << (7 - bit)))
+            nodeIdx = node->rightIdx;
+        else
+            nodeIdx = node->leftIdx;
+
+        node = &nodeTable.item[nodeIdx];
+    }
+
+    return &node->nodeData;
 }
 } // namespace nn::atk::detail
