@@ -160,6 +160,7 @@ public:
         const GroupInfo* GetGroupInfo(SoundArchive::ItemId itemId) const;
         const WaveArchiveInfo* GetWaveArchiveInfo(SoundArchive::ItemId itemId) const;
         const FileInfo* GetFileInfo(SoundArchive::FileId itemId) const;
+        
         const SoundArchivePlayerInfo* GetSoundArchivePlayerInfo() const;
 
         SoundArchive::FileId GetItemFileId(SoundArchive::ItemId id) const;
