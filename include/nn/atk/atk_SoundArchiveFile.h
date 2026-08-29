@@ -58,7 +58,10 @@ public:
         }
 
         const PatriciaTree* GetPatriciaTree(Sections section) const {
-            // TODO
+            if (section > Sections_Max)
+                return nullptr;
+
+            return util::ConstBytePtr(GetSection(section)).Get<PatriciaTree>();
         }
 
         u32 GetItemIdImpl(Sections section, const char* str) const;
@@ -85,7 +88,7 @@ public:
         u32 rootIdx;
         Util::Table<Node> nodeTable;
 
-        const NodeData* GetNodeDataBy(const char* str, size_t len);
+        const NodeData* GetNodeDataBy(const char* str, size_t len) const;
 
         void* operator[](int idx) const {
             // TODO
