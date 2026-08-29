@@ -304,6 +304,51 @@ SoundArchive::FileId SoundArchiveFile::InfoBlockBody::GetItemFileId(SoundArchive
     return fileId;
 }
 
+SoundArchive::StringId SoundArchiveFile::InfoBlockBody::GetItemStringId(SoundArchive::ItemId id) const {
+    SoundArchive::StringId stringId {SoundArchive::InvalidId};
+
+    switch (Util::GetItemType(id)) {
+    case ItemType_Sound: {
+        const SoundInfo* info {GetSoundInfo(id)};
+        if (info != nullptr)
+            stringId = info->GetStringId();
+        break;
+    }
+    case ItemType_Bank: {
+        const BankInfo* info {GetBankInfo(id)};
+        if (info != nullptr)
+            stringId = info->GetStringId();
+        break;
+    }
+    case ItemType_WaveArchive: {
+        const WaveArchiveInfo* info {GetWaveArchiveInfo(id)};
+        if (info != nullptr)
+            stringId = info->GetStringId();
+        break;
+    }
+    case ItemType_Group: {
+        const GroupInfo* info {GetGroupInfo(id)};
+        if (info != nullptr)
+            stringId = info->GetStringId();
+        break;
+    }
+    case ItemType_SoundGroup: {
+        const SoundGroupInfo* info {GetSoundGroupInfo(id)};
+        if (info != nullptr) {
+            SoundArchive::ItemId soundId {info->startId};
+            const SoundInfo* soundInfo {GetSoundInfo(soundId)};
+            if (soundInfo != nullptr)
+                stringId = soundInfo->GetStringId();
+        }
+        break;
+    }
+    case ItemType_Player:
+        break;
+    }
+
+    return stringId;
+}
+
 SoundArchive::FileId SoundArchiveFile::InfoBlockBody::GetItemPrefetchFileId(SoundArchive::ItemId id) const {
     SoundArchive::FileId fileId {SoundArchive::InvalidId};
 
@@ -370,5 +415,15 @@ SoundArchive::SoundType SoundArchiveFile::SoundInfo::GetSoundType() const {
 
 const SoundArchiveFile::StreamSoundInfo& SoundArchiveFile::SoundInfo::GetStreamSoundInfo() const {
     return *util::ConstBytePtr(this, toDetailSoundInfo.offset).Get<StreamSoundInfo>();
+}
+
+u32 SoundArchiveFile::SoundInfo::GetStringId() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, 0)};
+
+    if (!result)
+        return DefaultStringId;
+
+    return value;
 }
 } // namespace nn::atk::detail
