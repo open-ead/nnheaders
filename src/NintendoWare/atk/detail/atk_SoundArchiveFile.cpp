@@ -416,6 +416,10 @@ const SoundArchiveFile::StreamSoundInfo& SoundArchiveFile::SoundInfo::GetStreamS
     return *util::ConstBytePtr(this, toDetailSoundInfo.offset).Get<StreamSoundInfo>();
 }
 
+const SoundArchiveFile::WaveSoundInfo& SoundArchiveFile::SoundInfo::GetWaveSoundInfo() const {
+    return *util::ConstBytePtr(this, toDetailSoundInfo.offset).Get<WaveSoundInfo>();
+}
+
 u32 SoundArchiveFile::SoundInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, 0)};
