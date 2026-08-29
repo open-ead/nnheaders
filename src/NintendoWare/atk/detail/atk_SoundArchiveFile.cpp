@@ -109,6 +109,19 @@ const SoundArchiveFile::SoundInfo* SoundArchiveFile::InfoBlockBody::GetSoundInfo
     return util::ConstBytePtr(table.GetReferedItem(index)).Get<SoundInfo>();
 }
 
+const SoundArchiveFile::BankInfo* SoundArchiveFile::InfoBlockBody::GetBankInfo(SoundArchive::ItemId itemId) const {
+    if (Util::GetItemType(itemId) != ItemType_Bank)
+        return nullptr;
+
+    u32 index {Util::GetItemIndex(itemId)};
+    const Util::ReferenceTable& table {GetBankInfoReferenceTable()};
+
+    if (index >= table.count)
+        return nullptr;
+
+    return util::ConstBytePtr(table.GetReferedItem(index)).Get<BankInfo>();
+}
+
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetSoundInfoReferenceTable() const {
     return *util::ConstBytePtr(this, toSoundInfoReferenceTable.offset)
             .Get<Util::ReferenceTable>();
