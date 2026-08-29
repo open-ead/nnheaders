@@ -95,4 +95,9 @@ const SoundArchiveFile::PatriciaTree::NodeData* SoundArchiveFile::PatriciaTree::
 
     return &node->nodeData;
 }
+
+const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetSoundInfoReferenceTable() const {
+    return *util::ConstBytePtr(this, toSoundInfoReferenceTable.offset)
+            .Get<Util::ReferenceTable>();
+}
 } // namespace nn::atk::detail
