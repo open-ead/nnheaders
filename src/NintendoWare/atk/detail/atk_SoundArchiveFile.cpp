@@ -17,4 +17,8 @@ u32 SoundArchiveFile::FileHeader::GetStringBlockSize() const {
 u32 SoundArchiveFile::FileHeader::GetInfoBlockSize() const {
     return GetReferenceBy(ElementType_SoundArchiveFile_InfoBlock)->size;
 }
+
+u32 SoundArchiveFile::FileHeader::GetFileBlockSize() const {
+    return GetReferenceBy(ElementType_SoundArchiveFile_FileBlock)->size;
+}
 } // namespace nn::atk::detail
