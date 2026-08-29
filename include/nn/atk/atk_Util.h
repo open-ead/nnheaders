@@ -199,9 +199,9 @@ public:
     private:
         static const int BitNumberMax = 31;
         u32 GetTrueCount(u32 bitNumber) const {
+            bool ret {false};
             int count {0};
 
-            bool ret {false};
             for (u32 i {0}; i <= bitNumber; ++i) {
                 if ((bitFlag & (1 << i)) != 0) {
                     ++count;
