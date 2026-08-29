@@ -185,6 +185,11 @@ const SoundArchiveFile::FileInfo* SoundArchiveFile::InfoBlockBody::GetFileInfo(S
     return util::ConstBytePtr(table.GetReferedItem(index)).Get<FileInfo>();
 }
 
+const SoundArchiveFile::SoundArchivePlayerInfo* SoundArchiveFile::InfoBlockBody::GetSoundArchivePlayerInfo() const {
+    return util::ConstBytePtr(this, toSoundArchivePlayerInfo.offset)
+            .Get<SoundArchivePlayerInfo>();
+}
+
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetSoundInfoReferenceTable() const {
     return *util::ConstBytePtr(this, toSoundInfoReferenceTable.offset)
             .Get<Util::ReferenceTable>();
