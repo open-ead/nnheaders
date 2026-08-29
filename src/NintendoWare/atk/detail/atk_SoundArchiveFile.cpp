@@ -110,4 +110,9 @@ const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetPlayerInfoRefere
     return *util::ConstBytePtr(this, toPlayerInfoReferenceTable.offset)
             .Get<Util::ReferenceTable>();
 }
+
+const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetSoundGroupInfoReferenceTable() const {
+    return *util::ConstBytePtr(this, toSoundGroupInfoReferenceTable.offset)
+            .Get<Util::ReferenceTable>();
+}
 } // namespace nn::atk::detail
