@@ -1,6 +1,7 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
 #include <cstring>
+#include "nn/atk/atk_ElementType.h"
 
 namespace nn::atk::detail {
 namespace {
@@ -684,5 +685,21 @@ u32 SoundArchiveFile::WaveArchiveInfo::GetWaveCount() const {
         return DefaultWarcWaveCount;
 
     return value;
+}
+
+SoundArchiveFile::FileLocationType SoundArchiveFile::FileInfo::GetFileLocationType() const {
+    switch (toFileLocation.typeId) {
+    case ElementType_SoundArchiveFile_InternalFileInfo:
+        return FileLocationType_Internal;
+
+    case ElementType_SoundArchiveFile_ExternalFileInfo:
+        return FileLocationType_External;
+
+    case 0:
+        return FileLocationType_None;
+
+    default:
+        return FileLocationType_None;
+    }
 }
 } // namespace nn::atk::detail
