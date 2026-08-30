@@ -1,7 +1,9 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
 #include <cstring>
+#include "nn/atk/atk_ElementType.h"
 #include "nn/atk/atk_Global.h"
+#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 namespace {
@@ -545,6 +547,13 @@ u32 SoundArchiveFile::BankInfo::GetStringId() const {
         return DefaultStringId;
 
     return value;
+}
+
+const SoundArchiveFile::StreamTrackInfoTable* SoundArchiveFile::StreamSoundInfo::GetTrackInfoTable() const {
+    if (!toTrackInfoTable.IsValidTypeId(ElementType_Table_ReferenceTable))
+        return nullptr;
+    
+    return util::ConstBytePtr(this, toTrackInfoTable.offset).Get<StreamTrackInfoTable>();
 }
 
 u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
