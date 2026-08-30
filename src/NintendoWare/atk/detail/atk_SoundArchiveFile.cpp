@@ -1,9 +1,6 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
 #include <cstring>
-#include "nn/atk/atk_ElementType.h"
-#include "nn/atk/atk_Global.h"
-#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 namespace {
@@ -554,6 +551,14 @@ const SoundArchiveFile::StreamTrackInfoTable* SoundArchiveFile::StreamSoundInfo:
         return nullptr;
     
     return util::ConstBytePtr(this, toTrackInfoTable.offset).Get<StreamTrackInfoTable>();
+}
+
+const SoundArchiveFile::StreamSoundExtension* SoundArchiveFile::StreamSoundInfo::GetStreamSoundExtension() const {
+    if (!toStreamSoundExtension.IsValidOffset() || 
+        !toStreamSoundExtension.IsValidTypeId(ElementType_SoundArchiveFile_StreamSoundExtensionInfo))
+        return nullptr;
+    
+    return util::ConstBytePtr(this, toStreamSoundExtension.offset).Get<StreamSoundExtension>();
 }
 
 const SoundArchiveFile::SendValue& SoundArchiveFile::StreamSoundInfo::GetSendValue() const {
