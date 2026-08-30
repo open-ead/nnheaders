@@ -19,7 +19,8 @@ HeapBase::HeapList* HeapBase::FindListContainHeap(HeapBase* pHeapBase) {
     return pList;
 }
 
-// NON_MATCHING: commented because it needs to not be inlined for other functions to match
+// NON_MATCHING
+// Commented out because it needs to not be inlined for other functions to match
 // HeapBase* HeapBase::FindContainHeap(HeapList* pList, const void* memBlock) {
 //     uintptr_t memBlockAddress {reinterpret_cast<uintptr_t>(memBlock)};
 

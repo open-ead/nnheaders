@@ -77,5 +77,21 @@ DebugWarningFlag Debug_GetDebugWarningFlagFromSoundType(DebugSoundType type) {
         return DebugWarningFlag_NotEnoughSeqsound;
     }
 }
+
+const char* Debug_GetSoundTypeString(DebugSoundType type) {
+    switch (type) {
+    case DebugSoundType_Seqsound:
+        return "seq";
+
+    case DebugSoundType_Strmsound:
+        return "strm";
+
+    case DebugSoundType_Wavesound:
+        return "wave";
+
+    default:
+        return "";
+    }
+}
 } // namespace nn::atk::detail 
 } // namespace nn::atk

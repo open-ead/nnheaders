@@ -21,11 +21,9 @@ enum DebugSoundType {
     DebugSoundType_Wavesound,
 };
 
-static const char* gSoundTypeStrings[3] = {"seq", "strm", "wave"};
-
 bool Debug_GetWarningFlag(DebugWarningFlag warning);
 DebugWarningFlag Debug_GetDebugWarningFlagFromSoundType(DebugSoundType type);
-char* Debug_GetSoundTypeString(DebugSoundType type);
+const char* Debug_GetSoundTypeString(DebugSoundType type);
 
 using DebugLogFunc = void(*)(char*);
 } // namespace nn::atk::detail
