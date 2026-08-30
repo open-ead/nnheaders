@@ -258,6 +258,66 @@ const SoundArchiveFile::FileInfo* SoundArchiveFile::InfoBlockBody::GetFileInfo(S
     return util::ConstBytePtr(table.GetReferedItem(index)).Get<FileInfo>();
 }
 
+u32 SoundArchiveFile::SoundInfo::GetStringId() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
+
+    if (!result)
+        return DefaultStringId;
+
+    return value;
+}
+
+u32 SoundArchiveFile::BankInfo::GetStringId() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, BankInfoBitFlag_StringId)};
+
+    if (!result)
+        return DefaultStringId;
+
+    return value;
+}
+
+u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
+
+    if (!result)
+        return DefaultStringId;
+
+    return value;
+}
+
+u32 SoundArchiveFile::SoundGroupInfo::GetStringId() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
+
+    if (!result)
+        return DefaultStringId;
+
+    return value;
+}
+
+u32 SoundArchiveFile::GroupInfo::GetStringId() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, GroupInfoBitFlag_StringId)};
+
+    if (!result)
+        return DefaultStringId;
+
+    return value;
+}
+
+u32 SoundArchiveFile::PlayerInfo::GetStringId() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, PlayerInfoBitFlag_StringId)};
+
+    if (!result)
+        return DefaultStringId;
+
+    return value;
+}
+
 const SoundArchiveFile::SoundArchivePlayerInfo* SoundArchiveFile::InfoBlockBody::GetSoundArchivePlayerInfo() const {
     return util::ConstBytePtr(this, toSoundArchivePlayerInfo.offset)
             .Get<SoundArchivePlayerInfo>();
@@ -442,16 +502,6 @@ const SoundArchiveFile::Sound3DInfo* SoundArchiveFile::SoundInfo::GetSound3DInfo
     return util::ConstBytePtr(this, offset).Get<Sound3DInfo>();
 }
 
-u32 SoundArchiveFile::SoundInfo::GetStringId() const {
-    u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
-
-    if (!result)
-        return DefaultStringId;
-
-    return value;
-}
-
 PanMode SoundArchiveFile::SoundInfo::GetPanMode() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_PanParam)};
@@ -536,16 +586,6 @@ bool SoundArchiveFile::SoundInfo::IsFrontBypass() const {
     return value & 1;
 }
 
-u32 SoundArchiveFile::BankInfo::GetStringId() const {
-    u32 value;
-    bool result {optionParameter.GetValue(&value, BankInfoBitFlag_StringId)};
-
-    if (!result)
-        return DefaultStringId;
-
-    return value;
-}
-
 const SoundArchiveFile::StreamTrackInfoTable* SoundArchiveFile::StreamSoundInfo::GetTrackInfoTable() const {
     if (!toTrackInfoTable.IsValidTypeId(ElementType_Table_ReferenceTable))
         return nullptr;
@@ -626,42 +666,12 @@ bool SoundArchiveFile::SequenceSoundInfo::IsReleasePriorityFix() const {
     return Util::DivideBy8bit(value, 1) != 0;
 }
 
-u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
+u32 SoundArchiveFile::PlayerInfo::GetPlayerHeapSize() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
+    bool result {optionParameter.GetValue(&value, PlayerInfoBitFlag_HeapSize)};
 
     if (!result)
-        return DefaultStringId;
-
-    return value;
-}
-
-u32 SoundArchiveFile::SoundGroupInfo::GetStringId() const {
-    u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
-
-    if (!result)
-        return DefaultStringId;
-
-    return value;
-}
-
-u32 SoundArchiveFile::GroupInfo::GetStringId() const {
-    u32 value;
-    bool result {optionParameter.GetValue(&value, GroupInfoBitFlag_StringId)};
-
-    if (!result)
-        return DefaultStringId;
-
-    return value;
-}
-
-u32 SoundArchiveFile::PlayerInfo::GetStringId() const {
-    u32 value;
-    bool result {optionParameter.GetValue(&value, PlayerInfoBitFlag_StringId)};
-
-    if (!result)
-        return DefaultStringId;
+        return DefaultPlayerHeapSize;
 
     return value;
 }
