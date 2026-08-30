@@ -1,7 +1,6 @@
 #include <nn/atk/atk_WaveFile.h>
 
 #include <nn/atk/atk_ElementType.h>
-#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 const WaveFile::InfoBlock* WaveFile::FileHeader::GetInfoBlock() const {
