@@ -606,6 +606,16 @@ u32 SoundArchiveFile::SequenceSoundInfo::GetStartOffset() const {
     return value;
 }
 
+u8 SoundArchiveFile::SequenceSoundInfo::GetChannelPriority() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SequenceSoundInfoBitFlag_Priority)};
+
+    if (!result)
+        return DefaultChannelPriority;
+
+    return Util::DivideBy8bit(value, 0);
+}
+
 u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
