@@ -596,6 +596,16 @@ void SoundArchiveFile::SequenceSoundInfo::GetBankIds(u32* bankIds) const {
         bankIds[i] = i < table.count ? table.item[i] : SoundArchive::InvalidId;
 }
 
+u32 SoundArchiveFile::SequenceSoundInfo::GetStartOffset() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, SequenceSoundInfoBitFlag_StartOffset)};
+
+    if (!result)
+        return DefaultSeqStartOffset;
+
+    return value;
+}
+
 u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
