@@ -61,5 +61,21 @@ bool Debug_GetWarningFlag(DebugWarningFlag warning) {
 
     return (bitFlag & ~gWarningFlag) == 0;
 }
+
+DebugWarningFlag Debug_GetDebugWarningFlagFromSoundType(DebugSoundType type) {
+    switch (type) {
+    case DebugSoundType_Seqsound:
+        return DebugWarningFlag_NotEnoughSeqsound;
+
+    case DebugSoundType_Strmsound:
+        return DebugWarningFlag_NotEnoughStrmsound;
+
+    case DebugSoundType_Wavesound:
+        return DebugWarningFlag_NotEnoughWavesound;
+
+    default:
+        return DebugWarningFlag_NotEnoughSeqsound;
+    }
+}
 } // namespace nn::atk::detail 
 } // namespace nn::atk
