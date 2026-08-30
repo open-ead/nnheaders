@@ -556,6 +556,10 @@ const SoundArchiveFile::StreamTrackInfoTable* SoundArchiveFile::StreamSoundInfo:
     return util::ConstBytePtr(this, toTrackInfoTable.offset).Get<StreamTrackInfoTable>();
 }
 
+const SoundArchiveFile::SendValue& SoundArchiveFile::StreamSoundInfo::GetSendValue() const {
+    return *util::ConstBytePtr(this, toSendValue.offset).Get<SendValue>();
+}
+
 u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
