@@ -589,6 +589,13 @@ const Util::Table<u32>& SoundArchiveFile::SequenceSoundInfo::GetBankIdTable() co
     return *util::ConstBytePtr(this, toBankIdTable.offset).Get<Util::Table<u32>>();
 }
 
+void SoundArchiveFile::SequenceSoundInfo::GetBankIds(u32* bankIds) const {
+    const Util::Table<u32>& table {GetBankIdTable()};
+
+    for (u32 i {0}; i < SoundArchive::SequenceBankMax; ++i)
+        bankIds[i] = i < table.count ? table.item[i] : SoundArchive::InvalidId;
+}
+
 u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
