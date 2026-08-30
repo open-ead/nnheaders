@@ -13,7 +13,6 @@ enum DebugWarningFlag {
 };
 
 void Debug_SetWarningFlag(DebugWarningFlag warning, bool enable);
-// extern u32 gWarningFlag;
 
 namespace detail {
 enum DebugSoundType {
