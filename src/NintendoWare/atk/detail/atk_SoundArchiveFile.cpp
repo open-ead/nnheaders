@@ -1,7 +1,6 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
 #include <cstring>
-#include "nn/util/util_BytePtr.h"
 
 namespace nn::atk::detail {
 namespace {
@@ -708,5 +707,12 @@ const SoundArchiveFile::InternalFileInfo* SoundArchiveFile::FileInfo::GetInterna
         return nullptr;
 
     return util::ConstBytePtr(this, toFileLocation.offset).Get<InternalFileInfo>();
+}
+
+const SoundArchiveFile::ExternalFileInfo* SoundArchiveFile::FileInfo::GetExternalFileInfo() const {
+    if (GetFileLocationType() != FileLocationType_External)
+        return nullptr;
+
+    return util::ConstBytePtr(this, toFileLocation.offset).Get<ExternalFileInfo>();
 }
 } // namespace nn::atk::detail

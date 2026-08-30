@@ -90,20 +90,24 @@ public:
 
         const NodeData* GetNodeDataBy(const char* str, size_t len = 0) const;
 
-        void* operator[](int idx) const {
+        void* operator[]([[maybe_unused]] int idx) const {
             // TODO
+            return nullptr;
         }
 
-        void* operator[](u32 idx) const {
+        void* operator[]([[maybe_unused]] u32 idx) const {
             // TODO
+            return nullptr;
         }
 
-        void* operator[](const char* str) const {
+        void* operator[]([[maybe_unused]] const char* str) const {
             // TODO
+            return nullptr;
         }
 
-        void* operator()(const char* str, size_t len) const {
+        void* operator()([[maybe_unused]] const char* str, [[maybe_unused]] size_t len) const {
             // TODO
+            return nullptr;
         }
         
         u32 GetDataCount() const;
