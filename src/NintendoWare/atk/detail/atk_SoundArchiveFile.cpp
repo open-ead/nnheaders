@@ -585,6 +585,10 @@ u8 SoundArchiveFile::WaveSoundInfo::GetIsReleasePriorityFix() const {
     return Util::DivideBy8bit(value, 1);
 }
 
+const Util::Table<u32>& SoundArchiveFile::SequenceSoundInfo::GetBankIdTable() const {
+    return *util::ConstBytePtr(this, toBankIdTable.offset).Get<Util::Table<u32>>();
+}
+
 u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
