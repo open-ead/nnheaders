@@ -675,4 +675,14 @@ u32 SoundArchiveFile::PlayerInfo::GetPlayerHeapSize() const {
 
     return value;
 }
+
+u32 SoundArchiveFile::WaveArchiveInfo::GetWaveCount() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, WaveArchiveInfoBitFlag_WaveCount)};
+
+    if (!result)
+        return DefaultWarcWaveCount;
+
+    return value;
+}
 } // namespace nn::atk::detail
