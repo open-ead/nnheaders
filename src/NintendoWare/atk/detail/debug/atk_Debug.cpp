@@ -44,12 +44,13 @@ u32 GetWarningBitFlag(DebugWarningFlag warning) {
 }
 } // anonymous namespace
 
-// NON_MATCHING
 void Debug_SetWarningFlag(DebugWarningFlag warning, bool enable) {
     u32 bitFlag {GetWarningBitFlag(warning)};
 
     if (enable)
-        gWarningFlag = bitFlag | gWarningFlag;
+        gWarningFlag |= bitFlag;
+    else
+        gWarningFlag &= ~bitFlag;
 }
 
 namespace detail {
