@@ -565,6 +565,16 @@ const SoundArchiveFile::SendValue& SoundArchiveFile::StreamSoundInfo::GetSendVal
     return *util::ConstBytePtr(this, toSendValue.offset).Get<SendValue>();
 }
 
+u8 SoundArchiveFile::WaveSoundInfo::GetChannelPriority() const {
+    u32 value;
+    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlag_Priority)};
+
+    if (!result)
+        return DefaultChannelPriority;
+
+    return Util::DivideBy8bit(value, 0);
+}
+
 u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
     u32 value;
     bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
