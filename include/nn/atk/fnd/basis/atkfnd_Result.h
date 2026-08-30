@@ -54,7 +54,7 @@ public:
     }
 
     bool IsFailed() const {
-        return value == FndResultType_Failed;
+        return value == static_cast<u32>(FndResultType_Failed);
     }
 
     const char* ToString();
