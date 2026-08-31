@@ -28,4 +28,8 @@ const WaveArchiveFile::FileBlock* WaveArchiveFile::FileHeader::GetFileBlock() co
 u32 WaveArchiveFile::FileHeader::GetFileBlockOffset() const {
     return GetReferenceBy(ElementType_WaveArchiveFile_FileBlock)->offset;
 }
+
+u32 WaveArchiveFile::FileHeader::GetInfoBlockSize() const {
+    return GetReferenceBy(ElementType_WaveArchiveFile_InfoBlock)->size;
+}
 } // namespace nn::atk::detail
