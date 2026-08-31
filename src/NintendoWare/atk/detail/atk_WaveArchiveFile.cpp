@@ -16,4 +16,8 @@ const Util::ReferenceWithSize* WaveArchiveFile::FileHeader::GetReferenceBy(u16 t
 u32 WaveArchiveFile::FileHeader::GetInfoBlockOffset() const {
     return GetReferenceBy(ElementType_WaveArchiveFile_InfoBlock)->offset;
 }
+
+const WaveArchiveFile::InfoBlock* WaveArchiveFile::FileHeader::GetInfoBlock() const {
+    return util::ConstBytePtr(this, GetInfoBlockOffset()).Get<InfoBlock>();
+}
 } // namespace nn::atk::detail
