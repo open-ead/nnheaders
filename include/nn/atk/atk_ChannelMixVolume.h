@@ -5,25 +5,25 @@
 namespace nn::atk {
 class ChannelMixVolume {
 public:
-    constexpr static u8 ChannelCountMax = 24; 
+    static const int ChannelCountMax = 24;
 
     ChannelMixVolume();
+    explicit ChannelMixVolume(const MixVolume& mixVolume);
+    ChannelMixVolume(const float* pVolume, int volumeCount);
     
+    bool SetChannelCount(int channelCount);
+    int GetChannelCount() const;
+
+    bool SetChannelVolume(int channelIndex, float volume);
+    float GetChannelVolume(int channelIndex) const;
+
+    bool SetChannelVolume(int channelIndex, const float* pVolume, int volumeCount);
+
     void InitializeChannelVolume();
 
-    explicit ChannelMixVolume(const MixVolume& mixVolume);
-    ChannelMixVolume(const f32* channelVolumes, s32 channelCount);
-
-    bool SetChannelCount(s32 channelCount);
-    
-    bool SetChannelVolume(s32 channel, f32 volume);
-    f32 GetChannelVolume(s32 channel) const;
-
-    bool SetChannelVolume(s32 channel, const f32*, s32);
-
 private:
-    s32 m_ChannelCount;
-    f32 m_ChannelVolume[ChannelCountMax];
+    int m_ChannelCount;
+    float m_ChannelVolume[ChannelCountMax];
 };
 static_assert(sizeof(ChannelMixVolume) == 0x64);
 } // namespace nn::atk

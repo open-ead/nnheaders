@@ -6,46 +6,59 @@
 #include <nn/atk/fnd/os/atkfnd_CriticalSection.h>
 
 namespace nn::atk {
-class FsSoundArchive : SoundArchive {
+class FsSoundArchive : public SoundArchive {
 public:
+    static const int BufferAlignSize {64};
+
+    struct OpenArg {
+
+    };
+
+    FsSoundArchive();
+    ~FsSoundArchive() override;
+
+    bool Open(const char* path);
+    bool Open(const char* path, const OpenArg* arg);
+    void Close();
+
+    size_t GetHeaderSize() const;
+
+    bool LoadHeader(void* buffer, size_t size);
+
+    size_t GetLabelStringDataSize() const;
+
+    bool LoadLabelStringData(void* buffer, size_t size);
+
+    size_t detail_GetRequiredStreamBufferSize() const override;
+    const void* detail_GetFileAddress(ItemId itemId) const override;
+
     enum FileAccessMode {
         FileAccessMode_Always,
         FileAccessMode_InFunction
     };
 
-    constexpr static u32 BufferAlignSize = 64;
+    void SetFileAccessMode(FileAccessMode value);
+    FileAccessMode GetFileAccessMode() const;
 
-    FsSoundArchive();
-    ~FsSoundArchive() override;
+    void FileAccessBegin() const override;
+    void FileAccessEnd() const override;
 
-    void Close();
-    bool Open(const char* path);
-
-    bool LoadFileHeader();
-
+protected:
     detail::fnd::FileStream* OpenStream(void* buffer, size_t size, 
                                         position_t begin, size_t length) const override;
 
     detail::fnd::FileStream* OpenExtStream(void* buffer, size_t size, const char* extFilePath,
                                            void* cacheBuffer, size_t cacheSize) const override;
 
-    size_t detail_GetRequiredStreamBufferSize() const override;
-
-    bool LoadHeader(void* buffer, size_t size);
-    bool LoadLabelStringData(void* buffer, size_t size);
-
-    void FileAccessBegin() const override;
-    void FileAccessEnd() const override;
-
-    void* detail_GetFileAddress(ItemId itemId) override;
+    bool LoadFileHeader();
 
 private:
     detail::SoundArchiveFileReader m_ArchiveReader;
     detail::fnd::FileStreamImpl m_FileStream;
-    bool m_IsOpened;
-    u8 m_FileAccessMode;
+    bool m_IsOpened {false};
+    u8 m_FileAccessMode {FileAccessMode_Always};
     u8 m_Padding[2];
-    u32 m_FileAccessCount;
+    u32 m_FileAccessCount {0};
     char m_SoundArchiveFullPath[SoundArchive::FilePathMax];
     detail::fnd::CriticalSection m_FileOpenCloseLock;
 };
