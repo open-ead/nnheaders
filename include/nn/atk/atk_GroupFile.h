@@ -8,15 +8,26 @@ struct GroupFile {
     struct FileBlock;
     struct InfoExBlock;
     struct FileHeader : Util::SoundFileHeader {
-
-        InfoBlock* GetInfoBlock() const;
-        FileBlock* GetFileBlock() const;
-        InfoExBlock* GetInfoExBlock() const;
-
+        const InfoBlock* GetInfoBlock() const;
+        const FileBlock* GetFileBlock() const;
+        const InfoExBlock* GetInfoExBlock() const;
     };
 
+    struct GroupItemInfo;
     struct InfoBlockBody {
         Util::ReferenceTable referenceTableOfGroupItemInfo;
+
+        u32 GetGroupItemInfoCount() const { 
+            return referenceTableOfGroupItemInfo.count; 
+        }
+
+        const GroupItemInfo* GetGroupItemInfo(u32 index) const {
+            if (GetGroupItemInfoCount() <= index)
+                return nullptr;
+
+            return util::ConstBytePtr(this, referenceTableOfGroupItemInfo.item[index].offset)
+                    .Get<GroupItemInfo>();
+        }
     };
 
     struct InfoBlock {
@@ -24,30 +35,52 @@ struct GroupFile {
         InfoBlockBody body;
     };
 
-    struct FileBlockBody {/* unknown structure */};
+    struct FileBlockBody;
+    struct GroupItemInfo {
+        u32 fileId;
+        Util::ReferenceWithSize embeddedItemInfo;
+
+        static const u32 OffsetForLink {0xffffffff};
+        static const u32 SizeForLink   {0xffffffff};
+
+        const void* GetFileLocation(const FileBlockBody* fileBlockBody) const {
+            // TODO: check if this is int or u32 comparison
+            if (static_cast<u32>(embeddedItemInfo.offset) == OffsetForLink)
+                return nullptr;
+
+            return util::ConstBytePtr(fileBlockBody, embeddedItemInfo.offset).Get();
+        }
+    };
+    static_assert(sizeof(GroupItemInfo) == 0x10);
+
+    struct FileBlockBody {/* empty structure */};
 
     struct FileBlock {
         BinaryBlockHeader header;
         FileBlockBody body;
     };
 
+    struct GroupItemInfoEx;
     struct InfoExBlockBody {
         Util::ReferenceTable referenceTableOfGroupItemInfoEx;
+
+        u32 GetGroupItemInfoExCount() const {
+            return referenceTableOfGroupItemInfoEx.count;
+        }
+
+        const GroupItemInfoEx* GetGroupItemInfoEx(u32 index) const {
+            if (GetGroupItemInfoExCount() <= index)
+                return nullptr;
+
+            return util::ConstBytePtr(this, referenceTableOfGroupItemInfoEx.item[index].offset)
+                    .Get<GroupItemInfoEx>();
+        }
     };
 
     struct InfoExBlock {
         BinaryBlockHeader header;
         InfoExBlockBody body;
     };
-
-    struct GroupItemInfo {
-        constexpr static s32 OffsetForLink = -1;
-        constexpr static s32 SizeForLink = -1;
-
-        u32 fileId;
-        Util::ReferenceWithSize embeddedItemInfo;
-    };
-    static_assert(sizeof(GroupItemInfo) == 0x10);
 
     struct GroupItemInfoEx {
         u32 itemId;
