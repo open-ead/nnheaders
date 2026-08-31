@@ -21,6 +21,10 @@ u32 WaveArchiveFile::FileHeader::GetInfoBlockOffset() const {
     return GetReferenceBy(ElementType_WaveArchiveFile_InfoBlock)->offset;
 }
 
+const WaveArchiveFile::FileBlock* WaveArchiveFile::FileHeader::GetFileBlock() const {
+    return util::ConstBytePtr(this, GetFileBlockOffset()).Get<FileBlock>();
+}
+
 u32 WaveArchiveFile::FileHeader::GetFileBlockOffset() const {
     return GetReferenceBy(ElementType_WaveArchiveFile_FileBlock)->offset;
 }
