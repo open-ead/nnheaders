@@ -12,4 +12,9 @@ const GroupFile::FileBlock* GroupFile::FileHeader::GetFileBlock() const {
     return util::ConstBytePtr(GetBlock(ElementType_GroupFile_FileBlock))
             .Get<FileBlock>();
 }
+
+const GroupFile::InfoExBlock* GroupFile::FileHeader::GetInfoExBlock() const {
+    return util::ConstBytePtr(GetBlock(ElementType_GroupFile_InfoExBlock))
+            .Get<InfoExBlock>();
+}
 } // namespace nn::atk::detail
