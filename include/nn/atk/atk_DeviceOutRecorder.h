@@ -103,13 +103,13 @@ public:
         void Write(const s16* sampleBuffer, u32 samples);
         u32 IncrementPosition(u32 position, u32 length) const;
 
-        s16* m_SampleBuffer;
-        u32 m_MaxBufferSamples;
-        u32 m_MaxSamples;
-        std::atomic_uint m_ValidSamples;
-        u32 m_ReadPosition;
-        u32 m_WritePosition;
-        u32 m_ReadBlockSamples;
+        s16* m_SampleBuffer {nullptr};
+        u32 m_MaxBufferSamples {0};
+        u32 m_MaxSamples {0};
+        std::atomic_uint m_ValidSamples {0};
+        u32 m_ReadPosition {0};
+        u32 m_WritePosition {0};
+        u32 m_ReadBlockSamples {1};
         WriteState m_WriteState;
         const char* m_DeviceName;
     };
@@ -178,12 +178,12 @@ private:
     void OnExit();
     bool OnWriteSamples(bool isForceWriteMode);
 
-    volatile State m_State;
-    u32 m_Channels;
-    OutputMode m_OutputMode;
-    bool m_IsLeadSilenceTrimming;
-    u32 m_MaxSamples;
-    u32 m_WrittenSamples;
+    volatile State m_State {State_NotInitialized};
+    u32 m_Channels {0};
+    OutputMode m_OutputMode {OutputMode_Stereo};
+    bool m_IsLeadSilenceTrimming {false};
+    u32 m_MaxSamples {0};
+    u32 m_WrittenSamples {0};
     detail::fnd::Thread m_Thread;
     void* m_ThreadStack;
     os::MessageQueue m_MessageQueue;

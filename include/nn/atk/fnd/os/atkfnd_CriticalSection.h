@@ -5,6 +5,9 @@
 namespace nn::atk::detail::fnd {
 class CriticalSection {
 public:
+    CriticalSection()
+        : m_Mutex(true) {}
+
     void lock();
     bool tryLock();
     void unlock();
