@@ -1,13 +1,15 @@
 #pragma once
 
+#include <nn/os.h>
+
 #include <nn/atk/atk_MultiVoice.h>
+#include <nn/atk/atk_ProfileReader.h>
 
 namespace nn::atk::detail::driver {
-class StreamChannel {
-public:
+struct StreamChannel {
     void AppendWaveBuffer(WaveBuffer* pBuffer, bool lastFlag);
+    os::Tick GetProcessTick(const SoundProfile& profile);
 
-private:
     void* m_pBufferAddress;
     MultiVoice* m_pVoice;
     WaveBuffer m_WaveBuffer[32];
@@ -18,7 +20,7 @@ static_assert(sizeof(StreamChannel) == 0x1080);
 
 class StreamTrack {
 public:
-    StreamTrack();
+    StreamTrack() = default;
     ~StreamTrack();
     
 private:
