@@ -47,7 +47,7 @@ struct WaveArchiveFile {
         InfoBlockBody body;
     };
 
-    struct FileBlockBody {  };
+    struct FileBlockBody {/* empty structure */};
 
     struct FileBlock {
         BinaryBlockHeader header;
