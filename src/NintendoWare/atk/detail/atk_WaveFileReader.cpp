@@ -115,7 +115,8 @@ bool WaveFileReader::ReadWaveInfo(WaveInfo* info, const void* waveDataOffsetOrig
     return true;
 }
 
-const void* WaveFileReader::GetWaveDataAddress(const WaveFile::ChannelInfo* info, const void* waveDataOffsetOrigin) const {
+const void* WaveFileReader::GetWaveDataAddress(const WaveFile::ChannelInfo* info, 
+                                               [[maybe_unused]] const void* waveDataOffsetOrigin) const {
     return info->GetSamplesAddress(m_pDataBlockBody);
 }
 } // namespace nn::atk::detail

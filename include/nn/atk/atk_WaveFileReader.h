@@ -18,7 +18,8 @@ public:
 
     bool ReadWaveInfo(WaveInfo* info, const void* waveDataOffsetOrigin) const;
 
-    const void* GetWaveDataAddress(const WaveFile::ChannelInfo* info, const void* waveDataOffsetOrigin) const;
+    const void* GetWaveDataAddress(const WaveFile::ChannelInfo* info, 
+                                   [[maybe_unused]] const void* waveDataOffsetOrigin) const;
 
 private:
     const WaveFile::FileHeader* m_pHeader {};
