@@ -17,4 +17,11 @@ void StreamBufferPool::Initialize(void* buffer, size_t size, int blockCount) {
     for (int i {0}; i < BlockMax / BitPerByte; ++i)
         m_AllocFlags[i] = 0;
 }
+
+void StreamBufferPool::Finalize() {
+    m_Buffer = nullptr;
+    m_BufferSize = 0;
+    m_BlockSize = 0;
+    m_BlockCount = 0;
+}
 } // namespace nn::atk::detail::driver
