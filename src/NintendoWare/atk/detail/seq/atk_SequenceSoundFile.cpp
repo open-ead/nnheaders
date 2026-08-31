@@ -27,7 +27,7 @@ const char* SequenceSoundFile::LabelBlockBody::GetLabel(int index) const {
 const char* SequenceSoundFile::LabelBlockBody::GetLabelByOffset(u32 offset) const {
     for (int i {0}; i < GetLabelCount(); ++i) {
         const LabelInfo* labelInfo {GetLabelInfo(i)};
-        if (labelInfo->referToSequenceData.offset == offset)
+        if (static_cast<u32>(labelInfo->referToSequenceData.offset) == offset)
             return labelInfo->label;
     }
 

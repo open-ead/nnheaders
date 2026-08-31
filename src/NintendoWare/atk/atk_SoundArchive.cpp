@@ -7,7 +7,7 @@
 
 #include <nn/atk/atk_SoundArchiveFileReader.h>
 #include <nn/atk/atk_SoundArchiveParametersHook.h>
-#include "nn/atk/fnd/string/atkfnd_String.h"
+#include <nn/atk/fnd/string/atkfnd_String.h>
 
 namespace nn::atk {
 SoundArchive::SoundArchive() {
