@@ -21,4 +21,8 @@ void FileStreamProxy::Close() {
 void FileStreamProxy::Flush() {
     m_pFileStream->Flush();
 }
+
+bool FileStreamProxy::IsOpened() const {
+    return m_pFileStream->IsOpened();
+}
 } // namespace nn::atk::detail::fnd
