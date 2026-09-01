@@ -1,5 +1,7 @@
 #include <nn/atk/fnd/io/atkfnd_FileStreamProxy.h>
 
+#include <algorithm>
+
 namespace nn::atk::detail::fnd {
 FileStreamProxy::FileStreamProxy(FileStream* fileStream, position_t offset, size_t fileSize)
     : m_pFileStream{fileStream}, m_Offset{offset}, m_FileSize{fileSize} {}
@@ -48,5 +50,33 @@ size_t FileStreamProxy::Read(void* buffer, size_t length, FndResult* result) {
 
 size_t FileStreamProxy::Write(const void* buffer, size_t length, FndResult* result) {
     return m_pFileStream->Write(buffer, length, result);
+}
+
+// NON_MATCHING: wrong csel cond and wrong use of registers
+FndResult FileStreamProxy::Seek(position_t offset, fnd::Stream::SeekOrigin origin) {
+    position_t fileSizeEndPosition = m_FileSize;
+
+    switch (origin) {
+    case SeekOrigin_Begin:
+        offset = m_Offset + offset;
+        break;
+    case SeekOrigin_End:
+        offset = m_Offset + (fileSizeEndPosition - offset);
+        break;
+    case SeekOrigin_Current:
+        offset = m_pFileStream->GetCurrentPosition() + offset;
+        break; 
+    default:
+        return FndResult{FndResultType_Failed};
+    }
+
+    offset = std::min(m_Offset + fileSizeEndPosition, offset);
+    offset = std::min(m_Offset, offset);
+
+    return m_pFileStream->Seek(offset, origin);
+}
+
+position_t FileStreamProxy::GetCurrentPosition() const {
+    return m_pFileStream->GetCurrentPosition();
 }
 } // namespace nn::atk::detail::fnd

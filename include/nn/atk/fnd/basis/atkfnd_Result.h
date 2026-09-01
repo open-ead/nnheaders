@@ -5,14 +5,14 @@
 namespace nn::atk::detail::fnd {
 enum FndResultType {
     FndResultType_ErrorFlagMask = 1 << 31,
-    FndResultType_CategoryMask = 0b1111111 << 24,
-    FndResultType_CodeMask = 0xffffff,
+    FndResultType_CategoryMask  = 0b1111111 << 24,
+    FndResultType_CodeMask      = 0xffffff,
 
     FndResultType_CategoryBitOffset = 24,
-    FndResultType_ErrorFlag = FndResultType_ErrorFlagMask,
+    FndResultType_ErrorFlag         = FndResultType_ErrorFlagMask,
 
-    FndResultType_CategorySystem = 0,
-    FndResultType_CategoryIo = 1 << FndResultType_CategoryBitOffset,
+    FndResultType_CategorySystem    = 0,
+    FndResultType_CategoryIo        = 1 << FndResultType_CategoryBitOffset,
     
     FndResultType_True = FndResultType_CategorySystem,
     FndResultType_False,
