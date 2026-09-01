@@ -19,7 +19,7 @@ public:
         SeekOrigin_Current,
     };
 
-    virtual ~Stream();
+    virtual ~Stream() = default;
 
 protected:
     Stream() = default;

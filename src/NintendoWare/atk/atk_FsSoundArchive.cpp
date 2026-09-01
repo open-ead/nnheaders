@@ -1,9 +1,13 @@
 #include <nn/atk/atk_FsSoundArchive.h>
-#include "nn/atk/fnd/io/atkfnd_FileStream.h"
-#include "nn/atk/fnd/os/atkfnd_ScopedLock.h"
+
+#include <nn/atk/fnd/os/atkfnd_ScopedLock.h>
 
 namespace nn::atk {
 FsSoundArchive::FsSoundArchive() = default;
+
+FsSoundArchive::~FsSoundArchive() {
+    Close();
+}
 
 void FsSoundArchive::Close() {
     FileAccessBegin();
@@ -18,11 +22,11 @@ void FsSoundArchive::Close() {
 
 void FsSoundArchive::FileAccessBegin() const {
     if (m_FileAccessMode == FileAccessMode_InFunction) {
-        auto lock = detail::fnd::ScopedLock<detail::fnd::CriticalSection>{const_cast<FsSoundArchive*>(this)->m_FileOpenCloseLock};
+        auto lock = detail::fnd::ScopedLock<detail::fnd::CriticalSection>{m_FileOpenCloseLock};
         if (m_FileAccessCount == 0)
-            const_cast<FsSoundArchive*>(this)->m_FileStream.Open(m_SoundArchiveFullPath, detail::fnd::FileStream::AccessMode_Read);
+            m_FileStream.Open(m_SoundArchiveFullPath, detail::fnd::FileStream::AccessMode_Read);
     
-        const_cast<FsSoundArchive*>(this)->m_FileAccessCount++;
+        ++m_FileAccessCount;
     }
 }
 } // namespace nn::atk

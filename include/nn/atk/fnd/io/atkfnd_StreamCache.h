@@ -35,7 +35,7 @@ public:
 
     FndResult Seek(position_t offset, Stream::SeekOrigin origin);
 
-    virtual ~StreamCache();
+    virtual ~StreamCache() = default;
 
 private:
     Stream* m_Stream{};

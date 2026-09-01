@@ -54,13 +54,13 @@ protected:
 
 private:
     detail::SoundArchiveFileReader m_ArchiveReader;
-    detail::fnd::FileStreamImpl m_FileStream;
+    mutable detail::fnd::FileStreamImpl m_FileStream;
     bool m_IsOpened {false};
     u8 m_FileAccessMode {FileAccessMode_Always};
     u8 m_Padding[2];
-    u32 m_FileAccessCount {0};
+    mutable u32 m_FileAccessCount {0};
     char m_SoundArchiveFullPath[SoundArchive::FilePathMax];
-    detail::fnd::CriticalSection m_FileOpenCloseLock;
+    mutable detail::fnd::CriticalSection m_FileOpenCloseLock;
 };
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(FsSoundArchive) == 0x618);
