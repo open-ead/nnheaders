@@ -29,4 +29,8 @@ bool FileStreamProxy::IsOpened() const {
 bool FileStreamProxy::CanRead() const {
     return m_pFileStream->CanRead();
 }
+
+bool FileStreamProxy::CanWrite() const {
+    return m_pFileStream->CanWrite();
+}
 } // namespace nn::atk::detail::fnd
