@@ -39,6 +39,25 @@ bool FsSoundArchive::LoadHeader(void* buffer, size_t size) {
     return false;
 }
 
+bool FsSoundArchive::LoadLabelStringData(void* buffer, size_t size) {
+    const s32 stringBlockOffset {m_ArchiveReader.GetStringBlockOffset()};
+    const u32 stringBlockSize {m_ArchiveReader.GetStringBlockSize()};
+
+    if (stringBlockOffset != detail::Util::Reference::InvalidOffset && size >= stringBlockSize) {
+        FileAccessBegin();
+        m_FileStream.Seek(stringBlockOffset, detail::fnd::Stream::SeekOrigin_Begin);
+        size_t readSize {m_FileStream.Read(buffer, stringBlockSize, nullptr)};
+
+        if (readSize == stringBlockSize) {
+            FileAccessEnd();
+            m_ArchiveReader.SetStringBlock(buffer);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void FsSoundArchive::FileAccessBegin() const {
     if (m_FileAccessMode == FileAccessMode_InFunction) {
         auto lock = detail::fnd::ScopedLock<detail::fnd::CriticalSection>{m_FileOpenCloseLock};

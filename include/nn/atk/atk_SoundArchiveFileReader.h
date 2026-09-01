@@ -65,9 +65,11 @@ public:
 
     int GetInfoBlockOffset() const { return m_Header.GetInfoBlockOffset(); }
     int GetFileBlockOffset() const { return m_Header.GetFileBlockOffset(); }
+    int GetStringBlockOffset() const { return m_Header.GetStringBlockOffset(); }
 
     u32 GetInfoBlockSize() const { return m_Header.GetInfoBlockSize(); }
     u32 GetFileBlockSize() const { return m_Header.GetFileBlockSize(); }
+    u32 GetStringBlockSize() const { return m_Header.GetStringBlockSize(); }
 
 private:
     friend SoundArchive;
