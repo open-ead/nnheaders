@@ -33,4 +33,8 @@ bool FileStreamProxy::CanRead() const {
 bool FileStreamProxy::CanWrite() const {
     return m_pFileStream->CanWrite();
 }
+
+bool FileStreamProxy::CanSeek() const {
+    return m_pFileStream->CanSeek();
+}
 } // namespace nn::atk::detail::fnd
