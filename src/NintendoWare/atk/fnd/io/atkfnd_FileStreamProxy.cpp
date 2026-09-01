@@ -25,4 +25,8 @@ void FileStreamProxy::Flush() {
 bool FileStreamProxy::IsOpened() const {
     return m_pFileStream->IsOpened();
 }
+
+bool FileStreamProxy::CanRead() const {
+    return m_pFileStream->CanRead();
+}
 } // namespace nn::atk::detail::fnd
