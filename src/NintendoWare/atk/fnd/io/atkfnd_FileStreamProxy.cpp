@@ -91,4 +91,8 @@ void FileStreamProxy::DisableCache() {
 bool FileStreamProxy::IsCacheEnabled() const {
     return m_pFileStream->IsCacheEnabled();
 }
+
+int FileStreamProxy::GetIoBufferAlignment() const {
+    return m_pFileStream->GetIoBufferAlignment();
+}
 } // namespace nn::atk::detail::fnd
