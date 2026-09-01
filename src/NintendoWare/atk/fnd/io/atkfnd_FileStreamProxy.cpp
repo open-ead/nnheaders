@@ -87,4 +87,8 @@ void FileStreamProxy::EnableCache(void* buffer, size_t length) {
 void FileStreamProxy::DisableCache() {
     m_pFileStream->DisableCache();
 }
+
+bool FileStreamProxy::IsCacheEnabled() const {
+    return m_pFileStream->IsCacheEnabled();
+}
 } // namespace nn::atk::detail::fnd
