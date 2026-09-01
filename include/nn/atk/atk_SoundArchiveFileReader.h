@@ -63,7 +63,11 @@ public:
     bool ReadSoundUserParam(u32*, u32, s32) const;
     const detail::Util::Table<u32>* GetAttachedGroupTable(u32) const;
 
+    int GetInfoBlockOffset() const { return m_Header.GetInfoBlockOffset(); }
     int GetFileBlockOffset() const { return m_Header.GetFileBlockOffset(); }
+
+    u32 GetInfoBlockSize() const { return m_Header.GetInfoBlockSize(); }
+    u32 GetFileBlockSize() const { return m_Header.GetFileBlockSize(); }
 
 private:
     friend SoundArchive;
