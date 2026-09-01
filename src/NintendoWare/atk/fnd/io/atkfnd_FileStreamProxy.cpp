@@ -99,4 +99,8 @@ int FileStreamProxy::GetIoBufferAlignment() const {
 bool FileStreamProxy::CanSetFsAccessLog() const {
     return m_pFileStream->CanSetFsAccessLog();
 }
+
+void* FileStreamProxy::SetFsAccessLog(FsAccessLog* pFsAccessLog) {
+    return m_pFileStream->SetFsAccessLog(pFsAccessLog);
+}
 } // namespace nn::atk::detail::fnd
