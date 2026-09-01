@@ -41,4 +41,8 @@ bool FileStreamProxy::CanSeek() const {
 size_t FileStreamProxy::GetSize() const {
     return m_pFileStream->GetSize();
 }
+
+size_t FileStreamProxy::Read(void* buffer, size_t length, FndResult* result) {
+    return m_pFileStream->Read(buffer, length, result);
+}
 } // namespace nn::atk::detail::fnd
