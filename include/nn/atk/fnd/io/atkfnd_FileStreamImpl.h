@@ -49,10 +49,10 @@ public:
         }
         
         position_t GetCurrentPosition() const override {
-            return m_Owner->GetCurrentPosition();
+            return m_Owner->m_CurrentPosition;
         }
 
-        ~DirectStream() override;
+        ~DirectStream() override = default;
 
     private:
         friend FileStreamImpl;
@@ -63,7 +63,7 @@ public:
 
     FileStreamImpl();
     explicit FileStreamImpl(void*);
-    ~FileStreamImpl() override;
+    ~FileStreamImpl() override = default;
 
     FndResult Open(const char* filePath, AccessMode accessMode) override;
     void Close() override;

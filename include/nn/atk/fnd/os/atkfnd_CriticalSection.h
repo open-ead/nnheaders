@@ -8,7 +8,7 @@ public:
     CriticalSection()
         : m_Mutex(true) {}
 
-    ~CriticalSection();
+    ~CriticalSection() = default;
 
     void Enter() {
         // TODO
