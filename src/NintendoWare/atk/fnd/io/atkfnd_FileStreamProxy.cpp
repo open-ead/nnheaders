@@ -79,4 +79,8 @@ FndResult FileStreamProxy::Seek(position_t offset, fnd::Stream::SeekOrigin origi
 position_t FileStreamProxy::GetCurrentPosition() const {
     return m_pFileStream->GetCurrentPosition();
 }
+
+void FileStreamProxy::EnableCache(void* buffer, size_t length) {
+    m_pFileStream->EnableCache(buffer, length);
+}
 } // namespace nn::atk::detail::fnd
