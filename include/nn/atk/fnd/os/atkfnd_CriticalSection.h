@@ -8,9 +8,32 @@ public:
     CriticalSection()
         : m_Mutex(true) {}
 
-    void lock();
-    bool tryLock();
-    void unlock();
+    ~CriticalSection();
+
+    void Enter() {
+        // TODO
+    }
+
+    bool TryEnter() {
+        // TODO
+        return true;
+    }
+
+    void Leave() {
+        // TODO
+    }
+
+    void Lock() {
+        m_Mutex.Lock();
+    }
+
+    bool TryLock() {
+        return m_Mutex.TryLock();
+    }
+    
+    void Unlock() {
+        m_Mutex.Unlock();
+    }
     
 private:
     os::Mutex m_Mutex;
