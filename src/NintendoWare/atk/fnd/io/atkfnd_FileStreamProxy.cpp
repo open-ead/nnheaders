@@ -95,4 +95,8 @@ bool FileStreamProxy::IsCacheEnabled() const {
 int FileStreamProxy::GetIoBufferAlignment() const {
     return m_pFileStream->GetIoBufferAlignment();
 }
+
+bool FileStreamProxy::CanSetFsAccessLog() const {
+    return m_pFileStream->CanSetFsAccessLog();
+}
 } // namespace nn::atk::detail::fnd
