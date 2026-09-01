@@ -1,6 +1,9 @@
 #include <nn/atk/atk_FsSoundArchive.h>
 
+#include <new>
+
 #include <nn/atk/fnd/os/atkfnd_ScopedLock.h>
+#include <nn/atk/fnd/io/atkfnd_FileStreamProxy.h>
 
 namespace nn::atk {
 FsSoundArchive::FsSoundArchive() = default;
@@ -85,6 +88,55 @@ void FsSoundArchive::FileAccessEnd() const {
         if (m_FileAccessCount != 0)
             --m_FileAccessCount;
     }
+}
+
+// NON_MATCHING
+detail::fnd::FileStream* FsSoundArchive::OpenStream(void* buffer, size_t size, 
+                                                    position_t begin, size_t length) const {
+    detail::fnd::FileStream* stream {};
+    if (sizeof(detail::fnd::FileStreamProxy) <= size && m_IsOpened) {
+        stream = new (buffer) detail::fnd::FileStreamProxy(&m_FileStream, begin, length);
+    }
+
+    return stream;
+}
+
+// NON_MATCHING
+detail::fnd::FileStream* FsSoundArchive::OpenExtStream(void* buffer, size_t size, const char* extFilePath,
+                                                       void* cacheBuffer, size_t cacheSize) const {
+    detail::fnd::FileStream* fileStream {};
+    if (size >= sizeof(detail::fnd::FileStreamImpl) && m_IsOpened) {
+        fileStream = new (buffer) detail::fnd::FileStreamImpl();
+
+        fileStream->Open(extFilePath, detail::fnd::FileStreamImpl::AccessMode_Read);
+
+        if (!fileStream->IsOpened()) {
+            fileStream = nullptr;
+        }
+        else {
+            if (cacheBuffer != nullptr && cacheSize != 0)
+                fileStream->EnableCache(cacheBuffer, cacheSize);
+        }
+    }
+
+    return fileStream;
+}
+
+bool FsSoundArchive::LoadFileHeader() {
+    const int Align = 256;
+    const size_t headerAlignSize = 256;
+
+    char headerArea[sizeof(detail::SoundArchiveFile::FileHeader) + headerAlignSize + Align];
+    void* file {util::BytePtr(headerArea).AlignUp(Align).Get()};
+    
+    size_t readSize {m_FileStream.Read(file, headerAlignSize, nullptr)};
+
+    if (readSize != headerAlignSize) 
+        return false;
+    
+    m_ArchiveReader.Initialize(file);
+    Initialize(&m_ArchiveReader);
+    return true;
 }
 } // namespace nn::atk
 
