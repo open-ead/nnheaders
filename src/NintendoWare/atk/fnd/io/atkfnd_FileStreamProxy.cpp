@@ -83,4 +83,8 @@ position_t FileStreamProxy::GetCurrentPosition() const {
 void FileStreamProxy::EnableCache(void* buffer, size_t length) {
     m_pFileStream->EnableCache(buffer, length);
 }
+
+void FileStreamProxy::DisableCache() {
+    m_pFileStream->DisableCache();
+}
 } // namespace nn::atk::detail::fnd
