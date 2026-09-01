@@ -3,11 +3,9 @@
 #include <nn/atk/fnd/io/atkfnd_FileStream.h>
 
 namespace nn::atk::detail::fnd {
-class FileStreamProxy : FileStream {
+class FileStreamProxy : public FileStream {
 public:
-    FileStreamProxy(const FileStream& fileStream, 
-                    position_t offset, size_t fileSize);
-    
+    FileStreamProxy(FileStream* fileStream, position_t offset, size_t fileSize);
     ~FileStreamProxy() override;
 
     FndResult Open(const char* filePath, AccessMode openMode) override;
@@ -32,14 +30,13 @@ public:
     void DisableCache() override;
     bool IsCacheEnabled() const override;
 
-    s32 GetIoBufferAlignment() const override;
+    int GetIoBufferAlignment() const override;
 
     bool CanSetFsAccessLog() const override;
 
     void* SetFsAccessLog(FsAccessLog* pFsAccessLog) override;
 
     position_t GetCachePosition() override;
-
     size_t GetCachedLength() override;
 
 private:
