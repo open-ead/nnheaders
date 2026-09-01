@@ -75,5 +75,16 @@ void FsSoundArchive::FileAccessBegin() const {
         ++m_FileAccessCount;
     }
 }
+
+void FsSoundArchive::FileAccessEnd() const {
+    if (m_FileAccessMode == FileAccessMode_InFunction) {
+        auto lock = detail::fnd::ScopedLock<detail::fnd::CriticalSection>{m_FileOpenCloseLock};
+        if (m_FileAccessCount == 1)
+            m_FileStream.Close();
+        
+        if (m_FileAccessCount != 0)
+            --m_FileAccessCount;
+    }
+}
 } // namespace nn::atk
 
