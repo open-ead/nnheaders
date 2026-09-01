@@ -37,4 +37,8 @@ bool FileStreamProxy::CanWrite() const {
 bool FileStreamProxy::CanSeek() const {
     return m_pFileStream->CanSeek();
 }
+
+size_t FileStreamProxy::GetSize() const {
+    return m_pFileStream->GetSize();
+}
 } // namespace nn::atk::detail::fnd
