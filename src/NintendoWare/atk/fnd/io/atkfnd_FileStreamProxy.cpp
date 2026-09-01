@@ -17,4 +17,8 @@ FndResult FileStreamProxy::Open(const char* filePath, AccessMode openMode) {
 void FileStreamProxy::Close() {
     m_pFileStream->Close();
 }
+
+void FileStreamProxy::Flush() {
+    m_pFileStream->Flush();
+}
 } // namespace nn::atk::detail::fnd
