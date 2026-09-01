@@ -62,6 +62,10 @@ size_t FsSoundArchive::detail_GetRequiredStreamBufferSize() const {
     return 8;
 }
 
+const void* FsSoundArchive::detail_GetFileAddress([[maybe_unused]] ItemId itemId) const {
+    return nullptr;
+} 
+
 void FsSoundArchive::FileAccessBegin() const {
     if (m_FileAccessMode == FileAccessMode_InFunction) {
         auto lock = detail::fnd::ScopedLock<detail::fnd::CriticalSection>{m_FileOpenCloseLock};
