@@ -1,6 +1,7 @@
 #include <nn/atk/fnd/io/atkfnd_FileStreamProxy.h>
 
 #include <algorithm>
+#include "nn/atk/fnd/basis/atkfnd_Config.h"
 
 namespace nn::atk::detail::fnd {
 FileStreamProxy::FileStreamProxy(FileStream* fileStream, position_t offset, size_t fileSize)
@@ -102,5 +103,9 @@ bool FileStreamProxy::CanSetFsAccessLog() const {
 
 void* FileStreamProxy::SetFsAccessLog(FsAccessLog* pFsAccessLog) {
     return m_pFileStream->SetFsAccessLog(pFsAccessLog);
+}
+
+position_t FileStreamProxy::GetCachePosition() {
+    return m_pFileStream->GetCachePosition();
 }
 } // namespace nn::atk::detail::fnd
