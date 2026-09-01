@@ -9,4 +9,8 @@ FileStreamProxy::~FileStreamProxy() {
     m_FileSize = 0;
     m_pFileStream = nullptr;
 }
+
+FndResult FileStreamProxy::Open(const char* filePath, AccessMode openMode) {
+    return m_pFileStream->Open(filePath, openMode);
+}
 } // namespace nn::atk::detail::fnd
