@@ -108,4 +108,8 @@ void* FileStreamProxy::SetFsAccessLog(FsAccessLog* pFsAccessLog) {
 position_t FileStreamProxy::GetCachePosition() {
     return m_pFileStream->GetCachePosition();
 }
+
+size_t FileStreamProxy::GetCachedLength() {
+    return m_pFileStream->GetCachedLength();
+}
 } // namespace nn::atk::detail::fnd
