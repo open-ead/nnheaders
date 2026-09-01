@@ -13,4 +13,8 @@ FileStreamProxy::~FileStreamProxy() {
 FndResult FileStreamProxy::Open(const char* filePath, AccessMode openMode) {
     return m_pFileStream->Open(filePath, openMode);
 }
+
+void FileStreamProxy::Close() {
+    m_pFileStream->Close();
+}
 } // namespace nn::atk::detail::fnd
