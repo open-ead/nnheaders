@@ -2,7 +2,7 @@
 
 #include <atomic>
 
-#include <nn/os.h>
+#include <nn/os/os_Event.h>
 #include <nn/os/os_MessageQueue.h>
 #include <nn/util/util_BytePtr.h>
 
@@ -13,6 +13,7 @@
 namespace nn::atk {
 class DeviceOutRecorder : public detail::fnd::Thread::Handler {
     NN_NO_COPY(DeviceOutRecorder);
+    
 public:
     static const u32 RecordingBufferSize = 0x5a000;
     static const u32 DefaultWriteBlockPerSamples = 0x10000;
