@@ -4,39 +4,46 @@
 #include <nn/atk/fnd/io/atkfnd_FileStream.h>
 
 namespace nn::atk::detail {
+
 class WavOutFileStream {
 public:
-    constexpr static u8 FileIoBufferAlignment = 8;
+    static const int FileIoBufferAlignment = alignof(char);
 
     WavOutFileStream();
     ~WavOutFileStream();
 
-    bool Open(fnd::FileStream& stream, s32, u64);
-    
-    bool WriteHeader(s32, u64);
-
+    bool Open(fnd::FileStream& stream, int channels, size_t samplesPerSec);
     void Close();
 
-    bool FlushBuffer();
+    size_t Write(const void* buf, size_t length);
+    bool Seek(position_t offset, fnd::FileStream::SeekOrigin origin);
 
-    u64 CalcRiffChunkSize(u64);
+    bool IsAvailable() const;
+
+    size_t GetSize() const;
+
+    position_t Tell() const;
+
+    void SetCacheBuffer(char* buf, size_t length);
+
+private:
+    bool WriteHeader(int channels, size_t samplesPerSec);
 
     bool UpdateRiffChunkSize();
     bool UpdateDataChunkSize();
+    size_t CalcRiffChunkSize(size_t dataSize);
 
-    size_t Write(const void* buffer, size_t size);
     size_t WriteDirect(const void* buf, size_t length, fnd::FndResult* result);
 
-    bool Seek(position_t offset, fnd::Stream::SeekOrigin origin);
+    size_t FlushBuffer();
 
-    void SetCacheBuffer(char* cacheBuffer, size_t cacheBufferSize);
-
-private:
-    fnd::FileStream* m_pFileStream;
-    size_t m_WaveDataSize;
-    bool m_IsWaveDataSizeCalculating;
-    char* m_Buffer;
-    size_t m_BufferLength;
-    size_t m_ValidBufferLength;
+    fnd::FileStream* m_pFileStream{};
+    size_t m_WaveDataSize{0};
+    bool m_IsWaveDataSizeCalculating{false};
+    char* m_Buffer{};
+    size_t m_BufferLength{0};
+    size_t m_ValidBufferLength{0};
 };
-} // namespace nn::atk::detail
+static_assert(sizeof(WavOutFileStream) == 0x30);
+
+}  // namespace nn::atk::detail
