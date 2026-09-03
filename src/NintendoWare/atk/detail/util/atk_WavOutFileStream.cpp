@@ -11,8 +11,17 @@ WavOutFileStream::WavOutFileStream() = default;
 
 WavOutFileStream::~WavOutFileStream() = default;
 
+// NON_MATCHING: requires WavOutFileStream::WriteHeader
 bool WavOutFileStream::Open(fnd::FileStream& stream, int channels, size_t samplesPerSec) {
+    m_pFileStream = &stream;
 
+    if (WriteHeader(channels, samplesPerSec)) {
+        m_WaveDataSize = 0;
+        m_IsWaveDataSizeCalculating = true;
+        return true;
+    }
+
+    return false;
 }
 
 // NON_MATCHING: reordering of instructions
