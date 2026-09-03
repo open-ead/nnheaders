@@ -4,4 +4,6 @@ namespace nn::atk::detail {
 
 WavOutFileStream::WavOutFileStream() = default;
 
+WavOutFileStream::~WavOutFileStream() = default;
+
 }  // namespace nn::atk::detail
