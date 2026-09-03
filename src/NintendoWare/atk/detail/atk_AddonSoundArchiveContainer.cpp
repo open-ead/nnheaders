@@ -3,6 +3,7 @@
 #include <nn/util/util_StringUtil.h>
 
 namespace nn::atk::detail {
+
 AddonSoundArchiveContainer::AddonSoundArchiveContainer() = default;
 
 AddonSoundArchiveContainer::~AddonSoundArchiveContainer() {
@@ -11,8 +12,8 @@ AddonSoundArchiveContainer::~AddonSoundArchiveContainer() {
     m_pSoundDataManager = nullptr;
 }
 
-bool AddonSoundArchiveContainer::Initialize(const char* soundArchiveName, 
-                                            const AddonSoundArchive* pSoundArchive, 
+bool AddonSoundArchiveContainer::Initialize(const char* soundArchiveName,
+                                            const AddonSoundArchive* pSoundArchive,
                                             const SoundDataManager* pSoundDataManager) {
     util::Strlcpy(m_SoundArchiveName, soundArchiveName, sizeof(m_SoundArchiveName));
     m_IsActive = true;
@@ -30,12 +31,17 @@ void AddonSoundArchiveContainer::Finalize() {
 }
 
 bool AddonSoundArchiveContainer::IsSameName(const char* name) const {
-    int nameLength {util::Strnlen(name, SoundArchiveNameLengthMax)};
+    int nameLength{util::Strnlen(name, SoundArchiveNameLengthMax)};
 
     if (nameLength == SoundArchiveNameLengthMax)
         return false;
 
-    int result {util::Strncmp(name, m_SoundArchiveName, SoundArchiveNameLengthMax)};
+    int result{util::Strncmp(name, m_SoundArchiveName, SoundArchiveNameLengthMax)};
     return result == 0;
 }
-} // namespace nn::atk::detail
+
+void AddonSoundArchiveContainer::SetAddTick(const os::Tick& tick) {
+    m_AddTick = tick;
+}
+
+}  // namespace nn::atk::detail
