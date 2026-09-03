@@ -18,7 +18,7 @@ public:
     size_t Write(const void* buf, size_t length);
     bool Seek(position_t offset, fnd::FileStream::SeekOrigin origin);
 
-    bool IsAvailable() const;
+    bool IsAvailable() const { return m_pFileStream != nullptr && m_pFileStream->IsOpened(); }
 
     size_t GetSize() const;
 

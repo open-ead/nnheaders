@@ -24,6 +24,11 @@ bool WavOutFileStream::Open(fnd::FileStream& stream, int channels, size_t sample
     return false;
 }
 
+void WavOutFileStream::SetCacheBuffer(char* buf, size_t length) {
+    m_Buffer = buf;
+    m_BufferLength = length;
+}
+
 // NON_MATCHING: reordering of instructions
 bool WavOutFileStream::WriteHeader(int channels, size_t samplesPerSec) {
     char buffer[sizeof(WaveBinaryHeader) + FileIoBufferAlignment];
@@ -43,4 +48,5 @@ bool WavOutFileStream::WriteHeader(int channels, size_t samplesPerSec) {
     size_t result {Write(header, sizeof(WaveBinaryHeader))};
     return result == sizeof(WaveBinaryHeader);
 }
+
 }  // namespace nn::atk::detail
