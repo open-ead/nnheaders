@@ -6,11 +6,13 @@
 #include <nn/atk/fnd/binary/atkfnd_PrimitiveTypes.h>
 
 namespace nn::atk::detail {
+
 struct ChunkHeader {
     ChunkHeader() = default;
 
-    explicit ChunkHeader(u32 id);
-    ChunkHeader(u32 id, u32 size);
+    explicit ChunkHeader(u32 id) : id{id}, size{0} {};
+
+    ChunkHeader(u32 id, u32 size) : id{id}, size{size} {};
 
     u32 id;
     fnd::PcBinU32 size;
@@ -18,20 +20,20 @@ struct ChunkHeader {
 static_assert(sizeof(ChunkHeader) == 0x8);
 
 struct RiffChunk {
-    static const u32 ValidId {1179011410}; // "RIFF"
+    static const u32 ValidId {0x46464952}; // "RIFF"
 
     RiffChunk() = default;
 
     bool IsValid();
 
-    ChunkHeader header;
+    ChunkHeader header{ValidId};
     u32 formatType;
 };
 static_assert(sizeof(RiffChunk) == 0xc);
 
 struct FmtChunk {
-    static const u32 ValidId {0x20746d66}; // "fmt "
-    static const u16 FormatPcm {SampleFormat_PcmS16};
+    static const u32 ValidId{0x20746d66}; // "fmt "
+    static const u16 FormatPcm{SampleFormat_PcmS16};
 
     FmtChunk() = default;
 
@@ -39,7 +41,7 @@ struct FmtChunk {
 
     bool IsValid();
 
-    ChunkHeader header;
+    ChunkHeader header{ValidId, sizeof(FmtChunk) - sizeof(ChunkHeader)};
     fnd::PcBinU16 formatTag;
     fnd::PcBinU16 channels;
     fnd::PcBinU32 samplesPerSec;
@@ -56,7 +58,7 @@ struct DataChunk {
 
     bool IsValid();
 
-    ChunkHeader header;
+    ChunkHeader header{ValidId};
 };
 static_assert(sizeof(DataChunk) == 0x8);
 
@@ -68,4 +70,5 @@ struct WaveBinaryHeader {
     DataChunk dataChunk;
 };
 static_assert(sizeof(WaveBinaryHeader) == 0x2c);
+
 } // namespace nn::atk::detail
