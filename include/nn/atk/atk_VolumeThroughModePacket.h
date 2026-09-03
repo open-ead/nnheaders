@@ -7,20 +7,22 @@ class VolumeThroughModePacket {
 public:
     using VolumeThroughModeArray = ValueArray<u8>;
 
-    static size_t GetRequiredMemSize(s32 busCount);
+    VolumeThroughModePacket();
 
-    bool Initialize(void* buffer, size_t size, s32 busCount);
+    static size_t GetRequiredMemSize(int busCount);
 
+    bool Initialize(void* buffer, size_t size, int busCount);
     void Finalize();
-
     void Reset();
+
+    int GetBusCount() const { return m_VolumeThroughMode.GetCount(); }
 
     VolumeThroughModePacket& operator=(const VolumeThroughModePacket& rhs);
 
 private:
     VolumeThroughModeArray m_VolumeThroughMode;
     bool m_IsVolumeThroughModeUsed;
-    f32 m_BinaryVolume;
+    float m_BinaryVolume;
 };
 static_assert(sizeof(VolumeThroughModePacket) == 0x18);
-} // namespace nn::atk::detail
+}  // namespace nn::atk::detail

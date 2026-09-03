@@ -71,7 +71,7 @@ const void* FsSoundArchive::detail_GetFileAddress([[maybe_unused]] ItemId itemId
 
 void FsSoundArchive::FileAccessBegin() const {
     if (m_FileAccessMode == FileAccessMode_InFunction) {
-        auto lock = detail::fnd::ScopedLock<detail::fnd::CriticalSection>{m_FileOpenCloseLock};
+        detail::fnd::ScopedLock<detail::fnd::CriticalSection> lock{m_FileOpenCloseLock};
         if (m_FileAccessCount == 0)
             m_FileStream.Open(m_SoundArchiveFullPath, detail::fnd::FileStream::AccessMode_Read);
     
@@ -81,7 +81,7 @@ void FsSoundArchive::FileAccessBegin() const {
 
 void FsSoundArchive::FileAccessEnd() const {
     if (m_FileAccessMode == FileAccessMode_InFunction) {
-        auto lock = detail::fnd::ScopedLock<detail::fnd::CriticalSection>{m_FileOpenCloseLock};
+        detail::fnd::ScopedLock<detail::fnd::CriticalSection> lock{m_FileOpenCloseLock};
         if (m_FileAccessCount == 1)
             m_FileStream.Close();
         

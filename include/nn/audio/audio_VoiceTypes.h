@@ -31,7 +31,7 @@ struct VoiceType {
 
     static const int BiquadFilterCountMax = 2;
 
-    VoiceInfo* _pVoiceInfo;
+    VoiceInfo* _pVoiceInfo{};
 };
 static_assert(sizeof(VoiceType) == 0x8);
 } // namespace nn::audio
