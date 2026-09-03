@@ -10,7 +10,7 @@ struct AdpcmContext {
 static_assert(sizeof(AdpcmContext) == 0x6);
 
 struct AdpcmParameter {
-    u16 coefficients[16];
+    u16 coefficients[16] = {0};
 };
 static_assert(sizeof(AdpcmParameter) == 0x20);
 } // namespace nn::audio

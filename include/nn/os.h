@@ -141,8 +141,6 @@ void WaitLightEvent(LightEventType*);
 bool TimedWaitLightEvent(LightEventType*, nn::TimeSpan);
 void ClearLightEvent(LightEventType*);
 
-TimeSpan ConvertToTimeSpan(Tick ticks);
-
 // SEMAPHORES
 void InitializeSemaphore(SemaphoreType* semaphore, s32 initial_count, s32 max_count);
 void FinalizeSemaphore(SemaphoreType* semaphore);
@@ -189,8 +187,6 @@ void SetUserExceptionHandler(void (*)(UserExceptionInfo*), void*, ulong, UserExc
 
 // OTHER
 void GenerateRandomBytes(void*, u64);
-nn::os::Tick GetSystemTick();
-nn::os::Tick GetSystemTickFrequency();
 u64 GetThreadAvailableCoreMask();
 void SetMemoryHeapSize(u64 size);
 

@@ -157,11 +157,11 @@ struct AdshrCurve {
 static_assert(sizeof(AdshrCurve) == 0x5);
 
 struct BiquadFilterCoefficients {
-    s16 b0;
-    s16 b1;
-    s16 b2;
-    s16 a1;
-    s16 a2;
+    s16 b0 {0};
+    s16 b1 {0};
+    s16 b2 {0};
+    s16 a1 {0};
+    s16 a2 {0};
 };
 static_assert(sizeof(BiquadFilterCoefficients) == 0xa);
 
@@ -249,7 +249,9 @@ enum OutputMode {
 };
 
 struct OutputMix {
-    f32 channelGain[24];
+    OutputMix() = default;
+
+    f32 channelGain[24] = {0};
 };
 static_assert(sizeof(OutputMix) == 0x60);
 
@@ -380,19 +382,19 @@ static_assert(sizeof(VoiceInfo) == 0x20);
 
 class VoiceParam {
 public:
-    VoiceParam();
+    VoiceParam() = default;
 
     void Initialize();
 
 private:
-    float m_Volume;
-    float m_Pitch;
-    OutputMix m_TvMix;
-    bool m_MonoFilterFlag;
-    bool m_BiquadFilterFlag;
-    BiquadFilterCoefficients m_BiquadFilterCoefficients;
-    u16 m_MonoFilterCutoff;
-    u8 m_InterpolationType;
+    float m_Volume {0};
+    float m_Pitch {0};
+    OutputMix m_TvMix {};
+    bool m_MonoFilterFlag {false};
+    bool m_BiquadFilterFlag {false};
+    BiquadFilterCoefficients m_BiquadFilterCoefficients {};
+    u16 m_MonoFilterCutoff {0};
+    u8 m_InterpolationType {0};
 };
 static_assert(sizeof(VoiceParam) == 0x78);
 
