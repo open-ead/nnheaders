@@ -3,12 +3,18 @@
 #include <nn/types.h>
 
 namespace nn::atk::detail {
+
 struct CurveLfoParam {
+    float depth;
+    float speed;
+    u32 delay;
+    u8 range;
+    u8 curve;
+    u8 phase;
+    u8 padding[1];
+
     enum CurveType {
         CurveType_Min,
-        CurveType_UserMin = 0x40,
-        CurveType_Max = 0x7f,
-        CurveType_UserMax = CurveType_Max,
 
         CurveType_Sine = CurveType_Min,
         CurveType_Triangle,
@@ -16,40 +22,45 @@ struct CurveLfoParam {
         CurveType_Square,
         CurveType_Random,
 
-        CurveType_Count = 0x80,
+        CurveType_UserMin = 64,
+        CurveType_Max = 127,
+        CurveType_UserMax = CurveType_Max,
+
+        CurveType_Count,
     };
 
-    void Initialize();
+    CurveLfoParam();
 
-    f32 depth;
-    f32 speed;
-    u32 delay;
-    u8 range;
-    u8 curve;
-    u8 phase;
-    u8 padding[1];
+    void Initialize();
 };
 static_assert(sizeof(CurveLfoParam) == 0x10);
 
 class CurveLfo {
 public:
-    using CurveFunc = f32(*)(f32);
+
+    CurveLfo() = default;
+    
+    void Reset();
+    void Update(int msec);
+
+    float GetValue() const;
+
+    void SetParam(const CurveLfoParam& param) { m_Param = param; }
+    CurveLfoParam& GetParam() { return m_Param; }
+    const CurveLfoParam& GetParam() const { return m_Param; }
 
     static void InitializeCurveTable();
 
-    void RegisterUserCurve(CurveFunc curveFunc, u32);
-    void UnregisterUserCurve(u32);
+    using CurveFunc = float(*)(float);
 
-    void Reset();
-    void Update(s32 msec);
-
-    f32 GetValue() const;
+    void RegisterUserCurve(CurveFunc func, u32 index);
+    void UnregisterUserCurve(u32 index);
 
 private:
     CurveLfoParam m_Param;
     u32 m_DelayCounter;
-    f32 m_Counter;
-    f32 m_RandomValue;
+    float m_Counter;
+    float m_RandomValue;
     bool m_IsStart;
     bool m_IsNext;
     u8 m_Padding[2];

@@ -31,7 +31,7 @@ float CurveTriangle(float arg) {
     return gradients[tmp] * arg + intercepts[tmp];
 }
 
-float CurveRandom(float arg) {
+float CurveRandom([[maybe_unused]] float arg) {
     u16 rand{Util::CalcRandom()};
     float ret{rand / 65535.0f};
 
@@ -42,6 +42,14 @@ CurveLfo::CurveFunc g_CurveFuncTable[128];
 
 }  // anonymous namespace
 
+void CurveLfo::Reset() {
+    m_Counter = 0.0f;
+    m_RandomValue = 1.0f;
+    m_DelayCounter = 0;
+    m_IsStart = false;
+    m_IsNext = false;
+}
+
 void CurveLfo::InitializeCurveTable() {
     std::memset(static_cast<void*>(g_CurveFuncTable), 0, sizeof(g_CurveFuncTable));
     g_CurveFuncTable[0] = CurveSine;
@@ -50,4 +58,5 @@ void CurveLfo::InitializeCurveTable() {
     g_CurveFuncTable[3] = CurveSaw;
     g_CurveFuncTable[4] = CurveSquare;
 }
+
 }  // namespace nn::atk::detail
