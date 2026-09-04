@@ -65,7 +65,7 @@ public:
 
     private:
         BlockList m_BlockList;
-        bool m_UseCallback;
+        bool m_UseCallback{true};
     };
     static_assert(sizeof(Section) == 0x28);
 
