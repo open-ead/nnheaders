@@ -50,6 +50,29 @@ void CurveLfo::Reset() {
     m_IsNext = false;
 }
 
+void CurveLfo::Update(int msec) {
+    if (m_DelayCounter < m_Param.delay && m_DelayCounter + msec <= m_Param.delay) {
+        m_DelayCounter += msec;
+        return;
+    }
+
+    if (m_DelayCounter < m_Param.delay) {
+        msec -= m_Param.delay - m_DelayCounter;
+        m_DelayCounter = m_Param.delay;
+    }
+
+    if (m_Param.speed > 0.0f) {
+        if (!m_IsStart) {
+            m_Counter = m_Param.phase / 127.0f;
+            m_IsStart = true;
+        }
+
+        m_Counter += (m_Param.speed * msec) / 1000.0f;
+        m_IsNext = m_Counter >= 1.0f;
+        m_Counter -= static_cast<s32>(m_Counter);
+    }
+}
+
 void CurveLfo::InitializeCurveTable() {
     std::memset(static_cast<void*>(g_CurveFuncTable), 0, sizeof(g_CurveFuncTable));
     g_CurveFuncTable[0] = CurveSine;
