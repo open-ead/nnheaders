@@ -38,6 +38,55 @@ void CurveAdshr::Reset(float initDecibel) {
     m_Status = Status_Attack;
 }
 
+void CurveAdshr::Update(int msec) {
+    switch (m_Status) {
+    case Status_Attack:
+        for (; msec > 0; --msec) {
+            m_Value *= m_Attack;
+
+            if (m_Value > -1.0f / 32.0f) {
+                m_Value = 0.0f;
+                m_Status = Status_Hold;
+                m_HoldCounter = m_Hold;
+                break;
+            }
+        }
+
+        break;
+
+    case Status_Hold:
+        if (msec < m_HoldCounter) {
+            m_HoldCounter -= static_cast<u16>(msec);
+        } else {
+            msec -= m_HoldCounter;
+            m_HoldCounter = 0;
+            m_Status = Status_Decay;
+        }
+
+        if (m_Status != Status_Decay)
+            break;
+
+    case Status_Decay: {
+        const float sustainDecay = CurveAdshr::CalcDecibelSquare(m_Sustain);
+
+        m_Value -= m_Decay * msec;
+        if (m_Value < sustainDecay) {
+            m_Value = sustainDecay;
+            m_Status = Status_Sustain;
+        }
+
+        break;
+    }
+
+    case Status_Sustain:
+        break;
+
+    case Status_Release:
+        m_Value -= m_Release * msec;
+        break;
+    }
+}
+
 float CurveAdshr::GetValue() const {
     if (m_Status == Status_Attack && m_Attack == 0)
         return 0;
@@ -113,6 +162,10 @@ float CurveAdshr::CalcRelease(int release) {
         return static_cast<float>((release * 2) + 1) / 128.0f / 5.0f;
 
     return (60.0f / static_cast<float>(126 - release)) / 5.0f;
+}
+
+s16 CurveAdshr::CalcDecibelSquare(int scale) {
+    return DecibelSquareTable[scale];
 }
 
 }  // namespace nn::atk::detail
