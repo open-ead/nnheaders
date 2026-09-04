@@ -11,15 +11,19 @@ void CurveAdshr::SetDecay(int decay) {
     m_Decay = CalcRelease(decay);
 }
 
+void CurveAdshr::SetSustain(int sustain) {
+    m_Sustain = sustain;
+}
+
 void CurveAdshr::SetRelease(int release) {
     m_Release = CalcRelease(release);
 }
 
 float CurveAdshr::CalcRelease(int release) {
-    if (release == ReleaseInit)
+    if (release == 127)
         return 4.0f * 128 * 128 - 1;
 
-    if (release == ReleaseInit - 1)
+    if (release == 126)
         return 120 / 5.0f;
 
     if (release < 50)
