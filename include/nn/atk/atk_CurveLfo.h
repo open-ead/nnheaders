@@ -3,12 +3,6 @@
 #include <nn/types.h>
 
 namespace nn::atk::detail {
-f32 CurveSine(f32 arg);
-f32 CurveTriangle(f32 arg);
-f32 CurveSaw(f32 arg);
-f32 CurveSquare(f32 arg);
-f32 CurveRandom(f32 arg);
-
 struct CurveLfoParam {
     enum CurveType {
         CurveType_Min,
@@ -62,5 +56,4 @@ private:
 };
 static_assert(sizeof(CurveLfo) == 0x20);
 
-static CurveLfo::CurveFunc g_CurveFuncTable[5];
 } // namespace nn::atk::detail
