@@ -7,6 +7,10 @@ void CurveAdshr::Reset(float initDecibel) {
     m_Status = Status_Attack;
 }
 
+void CurveAdshr::SetDecay(int decay) {
+    m_Decay = CalcRelease(decay);
+}
+
 float CurveAdshr::CalcRelease(int release) {
     if (release == ReleaseInit)
         return 4.0f * 128 * 128 - 1;
