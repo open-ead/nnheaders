@@ -48,6 +48,10 @@ void CurveAdshr::SetAttack(int attack) {
     m_Attack = attackTable[attack];
 }
 
+void CurveAdshr::SetHold(int hold) {
+    m_Hold = static_cast<u16>((hold + 1) * (hold + 1) / 4);
+}
+
 void CurveAdshr::SetDecay(int decay) {
     m_Decay = CalcRelease(decay);
 }
