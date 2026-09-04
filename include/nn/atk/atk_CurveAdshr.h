@@ -14,7 +14,7 @@ public:
         Status_Release,
     };
 
-    static constexpr float VolumeInit = -90.4;
+    static const float VolumeInit;
     static const int AttackInit = 127;
     static const int HoldInit = 0;
     static const int DecayInit = 127;
@@ -24,7 +24,7 @@ public:
     static const int DecibelSquareTableSize = 128;
     static const int CalcDecibelScaleMax = 127;
 
-    static const u16 DecibelSquareTable[DecibelSquareTableSize];
+    static const s16 DecibelSquareTable[DecibelSquareTableSize];
 
     CurveAdshr();
 
