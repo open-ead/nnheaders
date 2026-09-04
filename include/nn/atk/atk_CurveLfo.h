@@ -53,8 +53,8 @@ public:
 
     using CurveFunc = float(*)(float);
 
-    void RegisterUserCurve(CurveFunc func, u32 index);
-    void UnregisterUserCurve(u32 index);
+    static CurveFunc RegisterUserCurve(CurveFunc func, u32 index);
+    static CurveFunc UnregisterUserCurve(u32 index);
 
 private:
     CurveLfoParam m_Param;
