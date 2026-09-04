@@ -14,7 +14,7 @@ public:
         Status_Release,
     };
 
-    static const float VolumeInit;
+    static constexpr float VolumeInit = -90.4;
     static const int AttackInit = 127;
     static const int HoldInit = 0;
     static const int DecayInit = 127;
