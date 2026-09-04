@@ -60,6 +60,15 @@ CurveLfo::CurveFunc CurveLfo::RegisterUserCurve(CurveFunc func, u32 index) {
     return tmp;
 }
 
+CurveLfo::CurveFunc CurveLfo::UnregisterUserCurve(u32 index) {
+    s32 tableIndex = {static_cast<s32>(index + CurveLfoParam::CurveType_UserMin)};
+    
+    CurveFunc tmp{g_CurveFuncTable[tableIndex]};
+    g_CurveFuncTable[tableIndex] = nullptr;
+
+    return tmp;
+}
+
 void CurveLfo::Reset() {
     m_Counter = 0.0f;
     m_RandomValue = 1.0f;
