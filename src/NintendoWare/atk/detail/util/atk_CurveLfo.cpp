@@ -42,6 +42,15 @@ CurveLfo::CurveFunc g_CurveFuncTable[128];
 
 }  // anonymous namespace
 
+void CurveLfo::InitializeCurveTable() {
+    std::memset(static_cast<void*>(g_CurveFuncTable), 0, sizeof(g_CurveFuncTable));
+    g_CurveFuncTable[0] = CurveSine;
+    g_CurveFuncTable[1] = CurveTriangle;
+    g_CurveFuncTable[2] = CurveRandom;
+    g_CurveFuncTable[3] = CurveSaw;
+    g_CurveFuncTable[4] = CurveSquare;
+}
+
 void CurveLfo::Reset() {
     m_Counter = 0.0f;
     m_RandomValue = 1.0f;
@@ -73,13 +82,34 @@ void CurveLfo::Update(int msec) {
     }
 }
 
-void CurveLfo::InitializeCurveTable() {
-    std::memset(static_cast<void*>(g_CurveFuncTable), 0, sizeof(g_CurveFuncTable));
-    g_CurveFuncTable[0] = CurveSine;
-    g_CurveFuncTable[1] = CurveTriangle;
-    g_CurveFuncTable[2] = CurveRandom;
-    g_CurveFuncTable[3] = CurveSaw;
-    g_CurveFuncTable[4] = CurveSquare;
+float CurveLfo::GetValue() const {
+    if (m_Param.depth == 0.0f)
+        return 0.0f;
+
+    if (m_DelayCounter < m_Param.delay)
+        return 0.0f;
+
+    CurveFunc func{g_CurveFuncTable[m_Param.curve]};
+
+    float value{0};
+
+    if (func != nullptr) {
+        if (m_Param.curve == CurveLfoParam::CurveType_Random) {
+            if (m_IsNext)
+                m_RandomValue = func(m_Counter);
+
+            value = m_RandomValue;
+        } else {
+            value = func(m_Counter);
+        }
+    } else {
+        value = 1.0f;
+    }
+
+    value *= m_Param.depth;
+    value *= static_cast<float>(m_Param.range);
+
+    return value;
 }
 
 }  // namespace nn::atk::detail
