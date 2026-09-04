@@ -6,21 +6,34 @@
 #include <nn/atk/fnd/basis/atkfnd_FrameHeapImpl.h>
 
 namespace nn::atk::detail {
+
 class FrameHeap {
 public:
-    using DisposeCallback = void(*)(void*, size_t, void*);
-    using HeapCallback = void(*)(void*);
+    using DisposeCallback = void (*)(void*, size_t, void*);
+    using HeapCallback = void (*)(void*);
 
-    constexpr static s32 HeapAlign = 64;
+    static const int HeapAlign{64};
 
     class Block {
     public:
-        Block();
+        Block(void* buffer, size_t size, DisposeCallback callback, 
+              void* callbackArg, HeapCallback heapCallback, void* heapCallbackArg)
+              : m_pBuffer{buffer}, m_Size{size}, 
+                m_Callback{callback}, m_pCallbackArg{callbackArg},
+                m_HeapCallback{heapCallback}, m_pHeapCallbackArg{heapCallbackArg} {}
+
+        void* GetBufferAddr() { return m_pBuffer; }
+        const void* GetBufferAddr() const { return m_pBuffer; }
+
+        size_t GetBufferSize() const { return m_Size; }
+        DisposeCallback GetDisposeCallback() const { return m_Callback; }
+        void* GetDisposeCallbackArg() const { return m_pCallbackArg; }
+        HeapCallback GetHeapCallback() const { return m_HeapCallback; }
+        void* GetHeapCallbackArg() const { return m_pHeapCallbackArg; }
+
+        util::IntrusiveListNode m_Link;
 
     private:
-        friend FrameHeap;
-        
-        util::IntrusiveListNode m_Link;
         void* m_pBuffer;
         size_t m_Size;
         DisposeCallback m_Callback;
@@ -29,59 +42,68 @@ public:
         void* m_pHeapCallbackArg;
     };
 
-    using BlockList = util::IntrusiveList<Block, 
-                        util::IntrusiveListMemberNodeTraits<Block, &Block::m_Link>>;
+    using BlockList =
+        util::IntrusiveList<Block, util::IntrusiveListMemberNodeTraits<Block, &Block::m_Link>>;
 
     class Section {
     public:
         Section();
         ~Section();
 
-        void* AppendBlock(Block* block);
-        
-        void Dump(const SoundDataManager&, const SoundArchive&) const;
+        void AppendBlock(Block* block);
 
-    private:
-        friend FrameHeap;
+        const BlockList& GetBlockList() const { return m_BlockList; }
+        BlockList& GetBlockList() { return m_BlockList; }
+
+        void* GetAddr() { return this; }
+
+        void SetUseCallback(bool use) { m_UseCallback = use; }
+
+        void Dump(const SoundDataManager& mgr, const SoundArchive& arc) const;
 
         util::IntrusiveListNode m_Link;
+
+    private:
         BlockList m_BlockList;
         bool m_UseCallback;
     };
-    
-    using SectionList = util::IntrusiveList<Section, 
+    static_assert(sizeof(Section) == 0x28);
+
+    using SectionList =
+        util::IntrusiveList<Section,
                             util::IntrusiveListMemberNodeTraits<Section, &Section::m_Link>>;
 
     FrameHeap();
     ~FrameHeap();
 
-    void Destroy();
-
     bool Create(void* startAddress, size_t size);
-
-    bool NewSection();
-    void ClearSection();
-
-    void Clear();
+    void Destroy();
 
     void* Alloc(size_t size, DisposeCallback callback, void* callbackArg, 
                 HeapCallback heapCallback, void* heapCallbackArg);
 
-    s32 SaveState();
+    void Clear();
 
-    bool ProcessCallback(s32 level);
+    int SaveState();
+    void LoadState(int level);
 
-    void LoadState(s32 state);
-
-    s32 GetCurrentLevel() const;
+    int GetCurrentLevel() const;
     size_t GetSize() const;
     size_t GetFreeSize() const;
 
-    void Dump(const SoundDataManager&, const SoundArchive&) const;
+    bool IsValid() const;
+
+    void Dump(const SoundDataManager& mgr, const SoundArchive& arc) const;
+
+    bool ProcessCallback(int level);
 
 private:
-    fnd::FrameHeapImpl* m_pHeap;
+    bool NewSection();
+    void ClearSection();
+
+    fnd::FrameHeapImpl* m_pHeap{};
     SectionList m_SectionList;
 };
 static_assert(sizeof(FrameHeap) == 0x18);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail
