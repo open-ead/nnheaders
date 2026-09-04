@@ -46,14 +46,14 @@ public:
     static s16 CalcDecibelSquare(int scale);
 
 private:
-    Status m_Status{Status_Attack};
-    float m_Value{-904.0};
-    float m_Decay{65535.0};
-    float m_Release{65535.0};
-    float m_Attack{0.0};
-    u16 m_Hold{0};
+    Status m_Status;
+    float m_Value;
+    float m_Decay;
+    float m_Release;
+    float m_Attack;
+    u16 m_Hold;
     u16 m_HoldCounter;
-    u8 m_Sustain{127};
+    u8 m_Sustain;
     u8 m_Padding[3];
 };
 static_assert(sizeof(CurveAdshr) == 0x1c);

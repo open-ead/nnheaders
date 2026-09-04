@@ -7,34 +7,25 @@
 namespace nn::atk::detail::fnd {
 class FileStreamImpl : public FileStream {
     NN_NO_COPY(FileStreamImpl);
+
 public:
     class DirectStream : public Stream {
     public:
         DirectStream() = default;
 
         void Initialize(FileStreamImpl& fileStream);
-        
+
         void Close() override {}
 
-        bool IsOpened() const override {
-            return m_Owner->IsOpened();
-        }
-        
-        bool CanRead() const override {
-            return m_Owner->CanRead();
-        }
+        bool IsOpened() const override { return m_Owner->IsOpened(); }
 
-        bool CanWrite() const override {
-            return m_Owner->CanWrite();
-        }
+        bool CanRead() const override { return m_Owner->CanRead(); }
 
-        bool CanSeek() const override {
-            return m_Owner->CanSeek();
-        }
+        bool CanWrite() const override { return m_Owner->CanWrite(); }
 
-        size_t GetSize() const override {
-            return m_Owner->GetSize();
-        }
+        bool CanSeek() const override { return m_Owner->CanSeek(); }
+
+        size_t GetSize() const override { return m_Owner->GetSize(); }
 
         size_t Read(void* buf, size_t length, FndResult* result) override {
             return m_Owner->ReadDirect(buf, length, result);
@@ -47,10 +38,8 @@ public:
         FndResult Seek(position_t offset, SeekOrigin origin) override {
             return m_Owner->SeekDirect(offset, origin);
         }
-        
-        position_t GetCurrentPosition() const override {
-            return m_Owner->m_CurrentPosition;
-        }
+
+        position_t GetCurrentPosition() const override { return m_Owner->m_CurrentPosition; }
 
         ~DirectStream() override = default;
 
@@ -80,10 +69,8 @@ public:
     size_t Read(void* buf, size_t length, FndResult* result) override;
     size_t Write(const void* buf, size_t length, FndResult* result) override;
     FndResult Seek(position_t offset, SeekOrigin origin) override;
-    
-    position_t GetCurrentPosition() const override {
-        return m_CurrentPosition;
-    }
+
+    position_t GetCurrentPosition() const override { return m_CurrentPosition; }
 
     void EnableCache(void* buffer, size_t length) override;
     void DisableCache() override;
@@ -104,14 +91,14 @@ private:
 
     void ValidateAlignment([[maybe_unused]] const void* buf) const;
 
-    fs::FileHandle m_FileHandle {0};
-    bool m_IsOpened {false};
+    fs::FileHandle m_FileHandle{0};
+    bool m_IsOpened{false};
     u8 m_Padding[3];
     size_t m_FileSize;
-    position_t m_CurrentPosition {0};
+    position_t m_CurrentPosition{0};
     StreamCache m_StreamCache;
     DirectStream m_DirectStream;
-    FsAccessLog* m_pAccessLog {nullptr};
+    FsAccessLog* m_pAccessLog{nullptr};
 };
 static_assert(sizeof(FileStreamImpl) == 0x80);
-} // namespace nn::atk::detail::fnd
+}  // namespace nn::atk::detail::fnd
