@@ -91,7 +91,7 @@ public:
     size_t GetSize() const;
     size_t GetFreeSize() const;
 
-    bool IsValid() const;
+    bool IsValid() const { return m_pHeap != nullptr; }
 
     void Dump(const SoundDataManager& mgr, const SoundArchive& arc) const;
 
