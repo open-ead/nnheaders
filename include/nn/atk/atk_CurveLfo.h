@@ -60,7 +60,7 @@ private:
     CurveLfoParam m_Param;
     u32 m_DelayCounter;
     float m_Counter;
-    float m_RandomValue;
+    mutable float m_RandomValue;
     bool m_IsStart;
     bool m_IsNext;
     u8 m_Padding[2];
