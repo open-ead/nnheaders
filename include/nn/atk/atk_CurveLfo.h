@@ -29,7 +29,7 @@ struct CurveLfoParam {
         CurveType_Count,
     };
 
-    CurveLfoParam();
+    CurveLfoParam() = default;
 
     void Initialize();
 };
