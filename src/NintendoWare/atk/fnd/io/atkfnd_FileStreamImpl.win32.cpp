@@ -1,37 +1,37 @@
 #include <nn/atk/fnd/io/atkfnd_FileStreamImpl.h>
 
+#include <algorithm>
+
 #include <nn/fs/fs_files.h>
 
+#include <nn/atk/fnd/basis/atkfnd_Inlines.h>
+
 namespace nn::atk::detail::fnd {
+
 namespace {
-fs::OpenMode ConvertAccessMode(FileStream::AccessMode accessMode) {
+fs::OpenMode ConvertAccessMode(FileStream::AccessMode accessMode) {}
 
-}
-
-// NON_MATCHING: still unsure of logic.
 position_t GetSeekPosition(FileStreamImpl& target, position_t offset, Stream::SeekOrigin origin) {
     position_t targetSizeEnd = target.GetSize();
-    position_t result {0};
+    position_t result{0};
 
     switch (origin) {
     case Stream::SeekOrigin_Begin:
-        result = offset >= 0 ? offset : 0;
+        result = std::max(offset, 0L);
         break;
     case Stream::SeekOrigin_End:
-        result = targetSizeEnd - (offset < 0 ? offset : 0);
+        result = targetSizeEnd - std::min(offset, 0L);
         break;
     case Stream::SeekOrigin_Current:
-        if (offset > 0) {
-            position_t position {target.GetCurrentPosition()};
-            if (position + offset <= targetSizeEnd)
-                result = position + offset;
-            else
-                result = targetSizeEnd;
-        }
-        else if (offset < 0) {
-            if (0 < target.GetCurrentPosition() + offset)
-                result = target.GetCurrentPosition() + offset;
-        }
+        if (offset > 0)
+            result = ClampMax(target.GetCurrentPosition() + offset, targetSizeEnd);
+
+        else if (offset >= 0)
+            result = target.GetCurrentPosition();
+
+        else if (target.GetCurrentPosition() > -offset)
+            result = target.GetCurrentPosition() + offset;
+
         break;
     default:
         result = 0;
@@ -40,7 +40,7 @@ position_t GetSeekPosition(FileStreamImpl& target, position_t offset, Stream::Se
 
     return result;
 }
-} // anonymous namespace
+}  // anonymous namespace
 
 FileStreamImpl::FileStreamImpl() {
     m_DirectStream.m_Owner = this;
@@ -66,7 +66,7 @@ bool FileStreamImpl::IsOpened() const {
 // NON_MATCHING: needs symbol for nn::diag::detail::AbortImpl
 size_t FileStreamImpl::GetSize() const {
     s64 fileSize;
-    Result result {fs::GetFileSize(&fileSize, m_FileHandle)};
+    Result result{fs::GetFileSize(&fileSize, m_FileHandle)};
 
     if (result.IsSuccess())
         return fileSize & 0xffffffff;
@@ -81,16 +81,15 @@ int FileStreamImpl::GetIoBufferAlignment() const {
 size_t FileStreamImpl::ReadDirect(void* buf, size_t length, FndResult* result) {
     ValidateAlignment(buf);
 
-    size_t readFileLength {0};
-    Result nnResult {fs::ReadFile(&readFileLength, m_FileHandle, m_CurrentPosition, buf, length)};
+    size_t readFileLength{0};
+    Result nnResult{fs::ReadFile(&readFileLength, m_FileHandle, m_CurrentPosition, buf, length)};
 
     FndResult readResult;
 
     if (nnResult.IsSuccess()) {
         readResult = FndResult{readFileLength != length};
         m_CurrentPosition += readFileLength;
-    }
-    else {
+    } else {
         readResult = FndResult{FndResultType_IoError};
     }
 
@@ -106,14 +105,12 @@ size_t FileStreamImpl::WriteDirect(const void* buf, size_t length, FndResult* re
     FndResult writeResult;
 
     fs::WriteOption option;
-    Result nnResult {fs::WriteFile(m_FileHandle, m_CurrentPosition, buf, length, option)};
-
+    Result nnResult{fs::WriteFile(m_FileHandle, m_CurrentPosition, buf, length, option)};
 
     if (nnResult.IsSuccess()) {
         writeResult = FndResult{FndResultType_True};
         m_CurrentPosition += length;
-    }
-    else {
+    } else {
         writeResult = FndResult{FndResultType_IoError};
     }
 
@@ -123,10 +120,10 @@ size_t FileStreamImpl::WriteDirect(const void* buf, size_t length, FndResult* re
     return length;
 }
 
-// NON_MATCHING: needs GetSeekPosition
 FndResult FileStreamImpl::SeekDirect(position_t offset, SeekOrigin origin) {
-    position_t seekPosition {GetSeekPosition(*this, offset, origin)};
+    position_t seekPosition{GetSeekPosition(*this, offset, origin)};
     m_CurrentPosition = seekPosition;
     return FndResult{FndResultType_True};
 }
-} // namespace nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd
