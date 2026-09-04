@@ -2,6 +2,16 @@
 
 namespace nn::atk::detail {
 
+void CurveAdshr::Initialize(float initDecibel) {
+    SetAttack(AttackInit);
+    SetHold(HoldInit);
+    SetDecay(DecayInit);
+    SetSustain(SustainInit);
+    SetRelease(ReleaseInit);
+
+    Reset(initDecibel);
+}
+
 void CurveAdshr::Reset(float initDecibel) {
     m_Value = initDecibel * 10;
     m_Status = Status_Attack;
