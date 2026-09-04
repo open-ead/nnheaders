@@ -130,4 +130,13 @@ float CurveLfo::GetValue() const {
     return value;
 }
 
+void CurveLfoParam::Initialize() {
+    depth = 0.0f;
+    speed = 6.25f;
+    delay = 0;
+    range = 1;
+    curve = CurveType_Sine;
+    phase = 0;
+}
+
 }  // namespace nn::atk::detail
