@@ -35,7 +35,7 @@ public:
 
     void EnableCache([[maybe_unused]] void* buffer, [[maybe_unused]] size_t length) override {}
     void DisableCache() override {}
-    bool IsCacheEnabled() const override;
+    bool IsCacheEnabled() const override { return false; }
 
     int GetIoBufferAlignment() const override;
 
