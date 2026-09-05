@@ -96,7 +96,30 @@ bool FrameHeap::NewSection() {
     return false;
 }
 
+// NON_MATCHING: bad implementation
+// Commented out to prevent inlining in other functions
+// void FrameHeap::ClearSection() {
+//     bool alreadyUseCallback{ProcessCallback(0)};
+
+//     if (!m_SectionList.empty()) {
+//         auto& section{m_SectionList.back()};
+
+//         if (alreadyUseCallback)
+//             section.SetUseCallback(false);
+
+//         section.~Section();
+//         for (auto it{m_SectionList.begin()}; it != m_SectionList.end(); ++it) {
+//             m_SectionList.erase(it);
+
+//         }
+//     }
+// }
+
 FrameHeap::Section::Section() = default;
+
+FrameHeap::Section::~Section() {
+    m_BlockList.clear();
+}
 
 void FrameHeap::Section::AppendBlock(Block* block) {
     m_BlockList.push_back(*block);

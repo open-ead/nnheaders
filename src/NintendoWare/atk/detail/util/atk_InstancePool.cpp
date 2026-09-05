@@ -33,4 +33,13 @@ void* PoolImpl::AllocImpl() {
     return head;
 }
 
+int PoolImpl::CountImpl() const {
+    int count {0};
+    
+    for (PoolImpl* ptr {m_pNext}; ptr != nullptr; ptr = ptr->m_pNext)
+        ++count;
+
+    return count;
+}
+
 }  // namespace nn::atk::detail

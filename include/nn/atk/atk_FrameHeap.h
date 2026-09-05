@@ -22,6 +22,8 @@ public:
                 m_Callback{callback}, m_pCallbackArg{callbackArg},
                 m_HeapCallback{heapCallback}, m_pHeapCallbackArg{heapCallbackArg} {}
 
+        ~Block() = default;
+
         void* GetBufferAddr() { return m_pBuffer; }
         const void* GetBufferAddr() const { return m_pBuffer; }
 
@@ -58,6 +60,7 @@ public:
 
         void* GetAddr() { return this; }
 
+        bool GetUseCallback() const { return m_UseCallback; }
         void SetUseCallback(bool use) { m_UseCallback = use; }
 
         void Dump(const SoundDataManager& mgr, const SoundArchive& arc) const;
