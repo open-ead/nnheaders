@@ -23,7 +23,12 @@ public:
     size_t GetSize() const override { return m_Size; }
 
     size_t Read(void* buf, size_t length, fnd::FndResult* result) override;
-    size_t Write(const void* buf, size_t length, fnd::FndResult* result) override;
+
+    size_t Write([[maybe_unused]] const void* buf, [[maybe_unused]] size_t length,
+                 [[maybe_unused]] fnd::FndResult* result) override {
+        return 0;
+    }
+
     fnd::FndResult Seek(position_t offset, fnd::Stream::SeekOrigin origin) override;
 
     position_t GetCurrentPosition() const override;
