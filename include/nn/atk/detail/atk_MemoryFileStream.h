@@ -12,15 +12,15 @@ public:
 
     fnd::FndResult Open(const char* filePath, AccessMode openMode) override;
     void Close() override;
-    void Flush() override;
+    void Flush() override {}
 
-    bool IsOpened() const override;
+    bool IsOpened() const override { return m_pBuffer != nullptr; }
 
-    bool CanRead() const override;
-    bool CanWrite() const override;
-    bool CanSeek() const override;
+    bool CanRead() const override { return true; }
+    bool CanWrite() const override { return false; }
+    bool CanSeek() const override { return true; }
 
-    size_t GetSize() const override;
+    size_t GetSize() const override { return m_Size; }
 
     size_t Read(void* buf, size_t length, fnd::FndResult* result) override;
     size_t Write(const void* buf, size_t length, fnd::FndResult* result) override;
