@@ -31,12 +31,12 @@ void FrameHeap::Destroy() {
     }
 }
 
-// NON_MATCHING: missing initialization of padding bytes
 bool FrameHeap::NewSection() {
     void* buffer {m_pHeap->Alloc(sizeof(Section), HeapAlign / 16)};
 
     if (buffer != nullptr) {
-        auto* section = new (buffer) Section;
+        std::memset(buffer, 0, sizeof(Section));
+        auto* section{new (buffer) Section};
         m_SectionList.push_back(*section);
 
         return true;
