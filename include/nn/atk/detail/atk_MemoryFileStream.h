@@ -8,7 +8,7 @@ namespace nn::atk::detail {
 class MemoryFileStream : public fnd::FileStream {
 public:
     MemoryFileStream(const void* buffer, size_t size);
-    ~MemoryFileStream() override;
+    ~MemoryFileStream() override = default;
 
     fnd::FndResult Open(const char* filePath, AccessMode openMode) override;
     void Close() override;
