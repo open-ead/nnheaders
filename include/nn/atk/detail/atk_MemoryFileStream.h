@@ -45,7 +45,7 @@ public:
     }
 
     position_t GetCachePosition() override { return 0; }
-    size_t GetCachedLength() override;
+    size_t GetCachedLength() override { return 0; }
 
 private:
     const void* m_pBuffer;
