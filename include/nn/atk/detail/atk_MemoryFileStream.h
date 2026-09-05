@@ -37,7 +37,7 @@ public:
     void DisableCache() override {}
     bool IsCacheEnabled() const override { return false; }
 
-    int GetIoBufferAlignment() const override;
+    int GetIoBufferAlignment() const override { return alignof(char); }
 
     bool CanSetFsAccessLog() const override;
     void* SetFsAccessLog(fnd::FsAccessLog* pFsAccessLog) override;
