@@ -44,7 +44,7 @@ public:
         return nullptr;
     }
 
-    position_t GetCachePosition() override;
+    position_t GetCachePosition() override { return 0; }
     size_t GetCachedLength() override;
 
 private:
