@@ -31,7 +31,7 @@ public:
 
     fnd::FndResult Seek(position_t offset, fnd::Stream::SeekOrigin origin) override;
 
-    position_t GetCurrentPosition() const override;
+    position_t GetCurrentPosition() const override { return m_Position; }
 
     void EnableCache(void* buffer, size_t length) override;
     void DisableCache() override;
