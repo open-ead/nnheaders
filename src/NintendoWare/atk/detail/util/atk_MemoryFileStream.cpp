@@ -16,4 +16,6 @@ void MemoryFileStream::Close() {
     m_Position = 0;
 }
 
+void MemoryFileStream::Flush() {}
+
 }  // namespace nn::atk::detail
