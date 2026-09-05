@@ -22,7 +22,8 @@ bool FrameHeap::Create(void* startAddress, size_t size) {
     startAddress = util::BytePtr(startAddress).AlignUp(fnd::HeapBase::DefaultAlignment).Get();
 
     if (startAddress <= endAddress) {
-        m_pHeap = fnd::FrameHeapImpl::Create(startAddress, fnd::GetOffsetFromPtr(startAddress, endAddress), 0);
+        m_pHeap = fnd::FrameHeapImpl::Create(startAddress,
+                                             fnd::GetOffsetFromPtr(startAddress, endAddress), 0);
 
         if (m_pHeap != nullptr)
             return NewSection();
@@ -40,14 +41,33 @@ void FrameHeap::Destroy() {
     }
 }
 
+void* FrameHeap::Alloc(size_t size, DisposeCallback callback, void* callbackArg,
+                       HeapCallback heapCallback, void* heapCallbackArg) {
+    const size_t blockSize{sizeof(Block)};
+    const size_t allocSize{(size + 127) & ~63};
+
+    void* mem{m_pHeap->Alloc(allocSize, blockSize)};
+
+    if (mem == nullptr)
+        return nullptr;
+
+    void* buffer{util::BytePtr(mem, blockSize).Get()};
+
+    Block* block{new (mem)
+                     Block(buffer, size, callback, callbackArg, heapCallback, heapCallbackArg)};
+    m_SectionList.back().AppendBlock(block);
+
+    return buffer;
+}
+
 void FrameHeap::Clear() {
     ClearSection();
     m_pHeap->Free(fnd::FrameHeapImpl::FreeAllMode);
-    bool result = NewSection();
+    [[maybe_unused]] bool result = NewSection();
 }
 
 bool FrameHeap::NewSection() {
-    void* buffer {m_pHeap->Alloc(sizeof(Section), fnd::HeapBase::DefaultAlignment)};
+    void* buffer{m_pHeap->Alloc(sizeof(Section), fnd::HeapBase::DefaultAlignment)};
 
     if (buffer != nullptr) {
         std::memset(buffer, 0, sizeof(Section));
