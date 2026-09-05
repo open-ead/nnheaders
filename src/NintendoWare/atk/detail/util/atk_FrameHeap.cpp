@@ -10,8 +10,6 @@ namespace nn::atk::detail {
 
 FrameHeap::FrameHeap() = default;
 
-FrameHeap::Section::Section() = default;
-
 FrameHeap::~FrameHeap() {
     Destroy();
 }
@@ -60,6 +58,12 @@ bool FrameHeap::NewSection() {
     }
 
     return false;
+}
+
+FrameHeap::Section::Section() = default;
+
+void FrameHeap::Section::AppendBlock(Block* block) {
+    m_BlockList.push_back(*block);
 }
 
 }  // namespace nn::atk::detail
