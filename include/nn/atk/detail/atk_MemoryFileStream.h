@@ -33,7 +33,7 @@ public:
 
     position_t GetCurrentPosition() const override { return m_Position; }
 
-    void EnableCache(void* buffer, size_t length) override;
+    void EnableCache([[maybe_unused]] void* buffer, [[maybe_unused]] size_t length) override {}
     void DisableCache() override;
     bool IsCacheEnabled() const override;
 
