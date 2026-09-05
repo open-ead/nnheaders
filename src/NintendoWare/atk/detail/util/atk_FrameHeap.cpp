@@ -1,9 +1,10 @@
-#include <cstddef>
 #include <nn/atk/atk_FrameHeap.h>
 
+#include <cstring>
+
 #include <nn/util/util_BytePtr.h>
-#include "nn/atk/fnd/basis/atkfnd_FrameHeapImpl.h"
-#include "nn/atk/fnd/basis/atkfnd_Inlines.h"
+
+#include <nn/atk/fnd/basis/atkfnd_Inlines.h>
 
 namespace nn::atk::detail {
 
@@ -39,6 +40,12 @@ void FrameHeap::Destroy() {
         m_pHeap->Destroy();
         m_pHeap = nullptr;
     }
+}
+
+void FrameHeap::Clear() {
+    ClearSection();
+    m_pHeap->Free(fnd::FrameHeapImpl::FreeAllMode);
+    bool result = NewSection();
 }
 
 bool FrameHeap::NewSection() {
