@@ -1,5 +1,7 @@
 #include <nn/atk/detail/atk_MemoryFileStream.h>
 
+#include <algorithm>
+
 namespace nn::atk::detail {
 
 MemoryFileStream::MemoryFileStream(const void* buffer, size_t size)
@@ -16,6 +18,14 @@ void MemoryFileStream::Close() {
     m_Position = 0;
 }
 
-void MemoryFileStream::Flush() {}
+size_t MemoryFileStream::Read(void* buf, size_t length, fnd::FndResult* result) {
+    size_t readLen{std::min(length, m_Size - m_Position)};
+
+    std::memcpy(buf, reinterpret_cast<const char*>(m_pBuffer) + m_Position, readLen);
+
+    m_Position += readLen;
+
+    return readLen;
+}
 
 }  // namespace nn::atk::detail
