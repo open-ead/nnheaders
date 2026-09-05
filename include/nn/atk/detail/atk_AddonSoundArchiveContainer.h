@@ -36,7 +36,7 @@ public:
 
 private:
     bool m_IsActive{false};
-    u8 m_Padding[3];
+    [[maybe_unused]] u8 m_Padding[3];
     const SoundArchive* m_pSoundArchive{};
     const SoundDataManager* m_pSoundDataManager{};
     char m_SoundArchiveName[SoundArchiveNameLengthMax];

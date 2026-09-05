@@ -41,6 +41,7 @@ public:
         HeapCallback m_HeapCallback;
         void* m_pHeapCallbackArg;
     };
+    static_assert(sizeof(Block) == 0x40);
 
     using BlockList =
         util::IntrusiveList<Block, util::IntrusiveListMemberNodeTraits<Block, &Block::m_Link>>;

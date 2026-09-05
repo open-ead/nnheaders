@@ -13,19 +13,19 @@ size_t AudioRendererPerformanceReader::GetRequiredMemorySize(int performanceInfo
     return size;
 }
 
-void AudioRendererPerformanceReader::Initialize(int performanceInfoCount, void* buffer, size_t bufferSize) {
+void AudioRendererPerformanceReader::Initialize(int performanceInfoCount, void* buffer, [[maybe_unused]] size_t bufferSize) {
     m_PerformanceInfoCount = performanceInfoCount;
     
     auto ptr {util::BytePtr(buffer)};
     m_pPerformanceInfo = ptr.Get<PerformanceInfo>();
 
-    ptr += performanceInfoCount * sizeof(PerformanceInfo);
+    ptr += static_cast<ptrdiff_t>(performanceInfoCount * sizeof(PerformanceInfo));
     
     const size_t performanceBufferSize {SoundSystem::GetPerformanceFrameBufferSize()};
     for (int i {0}; i < m_PerformanceInfoCount; ++i) {
         m_pPerformanceInfo[i].performanceBuffer = ptr.Get();
         m_pPerformanceInfo[i].performanceBufferSize = performanceBufferSize;
-        ptr += performanceBufferSize;
+        ptr += static_cast<ptrdiff_t>(performanceBufferSize);
     }
 
     m_WriteIndex = 0;
