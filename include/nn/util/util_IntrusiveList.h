@@ -79,8 +79,18 @@ public:
         reference operator*() const { return *m_Node; }
 
         pointer operator->() const;
-        const_iterator& operator++();
-        const_iterator operator++(int);
+
+        const_iterator& operator++() {
+            m_Node = m_Node->GetNext();
+            return *this;
+        }
+
+        const_iterator operator++(int) {
+            const_iterator temporary(*this);
+            ++(*this);
+            return temporary;
+        }
+
         const_iterator& operator--();
         const_iterator operator--(int);
         bool operator==(const const_iterator&) const;
@@ -149,7 +159,7 @@ public:
     iterator iterator_to(reference value) { return iterator(&value); }
     const_iterator iterator_to(reference value) const { return iterator(&value); }
 
-    size_type size() const;
+    size_type size() const { return std::distance(begin(), end()); }
 
     bool empty() const { return !m_Root.IsLinked(); }
 
@@ -308,8 +318,9 @@ public:
         return m_Implementation.iterator_to(ToNode(value));
     }
 
-    size_type size() const;
-    bool empty() const;
+    size_type size() const { return m_Implementation.size(); }
+
+    bool empty() const { return m_Implementation.empty(); }
 
     iterator erase(const_iterator position) {
         detail::IntrusiveListImplementation::iterator result =
