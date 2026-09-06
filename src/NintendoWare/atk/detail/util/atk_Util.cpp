@@ -603,7 +603,8 @@ u16 Util::CalcLpfFreq(float scale) {
 }
 
 // NON_MATCHING: wrong order of operations
-BiquadFilterCoefficients Util::CalcLowPassFilterCoefficients(int frequency, int sampleRate, bool isTableUsed) {
+BiquadFilterCoefficients Util::CalcLowPassFilterCoefficients(int frequency, int sampleRate,
+                                                             bool isTableUsed) {
     if (isTableUsed) {
         int index{FindLpfFreqTableIndex(frequency)};
 
@@ -612,10 +613,9 @@ BiquadFilterCoefficients Util::CalcLowPassFilterCoefficients(int frequency, int 
 
         if (sampleRate == 48000)
             return LowPassFilterCoefficientsTable48000[index];
-        
+
         NN_UNEXPECTED_DEFAULT;
-    }
-    else {
+    } else {
         float coef;
         float filterParam;
         util::AngleIndex angle = (static_cast<s64>(frequency) << 32) / sampleRate;
@@ -696,14 +696,14 @@ float Util::CalcVolumeRatio(float dB) {
 
 u16 Util::CalcRandom() {
     static u32 u;
-    
+
     u *= 0x19660d;
     u += 0x3c6ef35f;
     return u >> 16;
 }
 
 size_t Util::GetSampleByByte(size_t byte, SampleFormat format) {
-    size_t samples {0};
+    size_t samples{0};
     size_t frac;
 
     switch (format) {
@@ -723,7 +723,7 @@ size_t Util::GetSampleByByte(size_t byte, SampleFormat format) {
     case SampleFormat_PcmS16:
         samples = byte >> 1;
         break;
-        
+
     default:
         break;
     }
@@ -732,7 +732,7 @@ size_t Util::GetSampleByByte(size_t byte, SampleFormat format) {
 }
 
 size_t Util::GetByteBySample(size_t samples, SampleFormat format) {
-    size_t byte {0};
+    size_t byte{0};
     size_t frac;
 
     switch (format) {
@@ -752,12 +752,16 @@ size_t Util::GetByteBySample(size_t samples, SampleFormat format) {
     case SampleFormat_PcmS16:
         byte = samples << 1;
         break;
-        
+
     default:
         break;
     }
 
     return byte;
+}
+
+bool Util::IsValidMemoryForDsp([[maybe_unused]] const void* ptr, [[maybe_unused]] size_t size) {
+    return true;
 }
 
 }  // namespace nn::atk::detail
