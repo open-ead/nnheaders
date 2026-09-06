@@ -50,7 +50,7 @@ public:
     static float CalcVolumeRatio(float dB);
     static u16 CalcRandom();
 
-    static size_t GetSampleByByte(size_t samples, SampleFormat format);
+    static size_t GetSampleByByte(size_t byte, SampleFormat format);
     static size_t GetByteBySample(size_t samples, SampleFormat format);
 
     static bool IsValidMemoryForDsp(const void* ptr, size_t size);
