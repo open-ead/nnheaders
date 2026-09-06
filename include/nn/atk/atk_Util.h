@@ -224,10 +224,10 @@ public:
         return static_cast<u16>(value >> (16 * index));
     }
 
-    const void* GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchive& arc,
-                            const SoundArchivePlayer& player);
-    const void* GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchive& arc,
-                            const PlayerHeapDataManager* mgr);
+    static const void* GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchive& arc,
+                                   const SoundArchivePlayer& player);
+    static const void* GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchive& arc,
+                                   const PlayerHeapDataManager* mgr);
 
     enum WaveArchiveLoadStatus {
         WaveArchiveLoadStatus_Error = -2,

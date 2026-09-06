@@ -5,7 +5,8 @@
 #include <nn/atk/fnd/io/atkfnd_FileStream.h>
 
 namespace nn::atk {
-namespace detail{
+
+namespace detail {
 class SoundArchiveFileReader;
 class SoundArchiveParametersHook;
 struct SoundArchiveFilesHook;
@@ -14,17 +15,17 @@ namespace driver {
 class StreamSoundLoader;
 }
 
-} // namespace nn::atk::detail
+}  // namespace detail
 
 class SoundArchive {
 public:
     using ItemId = u32;
 
-    static const ItemId InvalidId = 0xffffffff;
+    static const ItemId InvalidId{0xffffffff};
 
-    static const int UserParamIndexMax = 3;
-    static const u32 ResultInvalidSoundId = 0;
-    static const u32 InvalidUserParam = 0xffffffff;
+    static const int UserParamIndexMax{3};
+    static const u32 ResultInvalidSoundId{0};
+    static const u32 InvalidUserParam{0xffffffff};
 
     enum SoundType {
         SoundType_Invalid,
@@ -72,7 +73,7 @@ public:
     };
     static_assert(sizeof(Sound3DInfo) == 0xc);
 
-    static const u32 SequenceBankMax = 4;
+    static const u32 SequenceBankMax{4};
     struct SequenceSoundInfo {
         u32 startOffset;
         u32 bankIds[SequenceBankMax];
@@ -84,7 +85,7 @@ public:
     };
     static_assert(sizeof(SequenceSoundInfo) == 0x1c);
 
-    static const u32 StreamTrackCount = 8;
+    static const u32 StreamTrackCount{8};
     struct StreamTrackInfo {
         u8 volume;
         u8 pan;
@@ -151,12 +152,12 @@ public:
     static_assert(sizeof(BankInfo) == 0x4);
 
     struct WaveArchiveInfo {
-        u32 fileId;
+        u32 fileId{SoundArchive::InvalidId};
         u32 waveCount;
-        bool isLoadIndividual;
+        bool isLoadIndividual{false};
         u8 padding[3];
 
-        WaveArchiveInfo();
+        WaveArchiveInfo() = default;
     };
     static_assert(sizeof(WaveArchiveInfo) == 0xc);
 
@@ -199,12 +200,12 @@ public:
     static_assert(sizeof(SoundArchivePlayerInfo) == 0x24);
 
     struct FileInfo {
-        static const u32 InvalidOffset = 0xffffffff; 
-        static const u32 InvalidSize = 0xffffffff;
+        static const u32 InvalidOffset{0xffffffff};
+        static const u32 InvalidSize{0xffffffff};
 
-        u32 fileSize {InvalidSize};
-        u32 offsetFromFileBlockHead {InvalidOffset};
-        const char* externalFilePath {};
+        u32 fileSize{InvalidSize};
+        u32 offsetFromFileBlockHead{InvalidOffset};
+        const char* externalFilePath{};
 
         FileInfo() = default;
     };
@@ -219,12 +220,12 @@ public:
     bool IsAvailable() const;
 
     u32 GetSoundCount() const;
-    u32 GetGroupCount() const; 
-    u32 GetPlayerCount() const; 
-    u32 GetSoundGroupCount() const; 
-    u32 GetBankCount() const; 
-    u32 GetWaveArchiveCount() const; 
-    u32 detail_GetFileCount() const; 
+    u32 GetGroupCount() const;
+    u32 GetPlayerCount() const;
+    u32 GetSoundGroupCount() const;
+    u32 GetBankCount() const;
+    u32 GetWaveArchiveCount() const;
+    u32 detail_GetFileCount() const;
 
     const char* GetItemLabel(ItemId id) const;
     ItemId GetItemId(const char* pStr) const;
@@ -284,11 +285,11 @@ public:
     virtual const void* detail_GetFileAddress(FileId fileId) const = 0;
     virtual size_t detail_GetRequiredStreamBufferSize() const = 0;
 
-    detail::fnd::FileStream* detail_OpenFileStream(FileId fileId, void* buffer, size_t size, 
+    detail::fnd::FileStream* detail_OpenFileStream(FileId fileId, void* buffer, size_t size,
                                                    void* cacheBuffer, size_t cacheSize) const;
     const detail::Util::Table<u32>* detail_GetAttachedGroupTable(FileId fileId) const;
-    
-    detail::SoundArchiveParametersHook* detail_GetParametersHook() const { 
+
+    detail::SoundArchiveParametersHook* detail_GetParametersHook() const {
         return m_pParametersHook;
     }
 
@@ -297,13 +298,14 @@ public:
     }
 
     void SetExternalFileRoot(const char* extFileRoot);
-    
-    bool ReadStreamSoundFilePath(char* outFilePathBuffer, size_t filePathBufferSize, ItemId soundId) const;
+
+    bool ReadStreamSoundFilePath(char* outFilePathBuffer, size_t filePathBufferSize,
+                                 ItemId soundId) const;
 
     virtual void FileAccessBegin() const;
     virtual void FileAccessEnd() const;
 
-    const char* detail_GetExternalFileFullPath(const char* externalFilePath, char* pathBuffer, 
+    const char* detail_GetExternalFileFullPath(const char* externalFilePath, char* pathBuffer,
                                                size_t bufSize) const;
 
     virtual bool IsAddon() const;
@@ -312,25 +314,28 @@ protected:
     void Initialize(detail::SoundArchiveFileReader* fileReader);
     void Finalize();
 
-    virtual detail::fnd::FileStream* OpenStream(void* buffer, size_t size, 
-                                                position_t begin, size_t length) const = 0;
-    virtual detail::fnd::FileStream* OpenExtStream(void* buffer, size_t size, const char* extFilePath,
-                                                   void* cacheBuffer, size_t cacheSize) const = 0;
+    virtual detail::fnd::FileStream* OpenStream(void* buffer, size_t size, position_t begin,
+                                                size_t length) const = 0;
+    virtual detail::fnd::FileStream* OpenExtStream(void* buffer, size_t size,
+                                                   const char* extFilePath, void* cacheBuffer,
+                                                   size_t cacheSize) const = 0;
 
-    detail::fnd::FileStream* OpenExtStreamImpl(void* buffer, size_t size, const char* externalFilePath, 
-                                               void* cacheBuffer, size_t cacheSize) const;
-    
-    static const s32 FilePathMax = 639;
+    detail::fnd::FileStream* OpenExtStreamImpl(void* buffer, size_t size,
+                                               const char* externalFilePath, void* cacheBuffer,
+                                               size_t cacheSize) const;
+
+    static const s32 FilePathMax{639};
 
 private:
     friend detail::driver::StreamSoundLoader;
 
-    detail::SoundArchiveFileReader* m_pFileReader {};
-    detail::SoundArchiveParametersHook* m_pParametersHook {};
+    detail::SoundArchiveFileReader* m_pFileReader{};
+    detail::SoundArchiveParametersHook* m_pParametersHook{};
     char m_ExtFileRoot[FilePathMax];
     u32 m_FileBlockOffset;
 };
 static_assert(sizeof(SoundArchive) == 0x2a0);
 
 class AddonSoundArchive : public SoundArchive {};
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk

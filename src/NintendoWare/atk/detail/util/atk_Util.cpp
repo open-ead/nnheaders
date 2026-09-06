@@ -2,8 +2,10 @@
 
 #include <cmath>
 
-#include <nn/atk/fnd/basis/atkfnd_Inlines.h>
 #include <nn/util/util_Arithmetic.h>
+
+#include <nn/atk/atk_SoundArchivePlayer.h>
+#include <nn/atk/fnd/basis/atkfnd_Inlines.h>
 
 namespace nn::atk::detail {
 
@@ -762,6 +764,22 @@ size_t Util::GetByteBySample(size_t samples, SampleFormat format) {
 
 bool Util::IsValidMemoryForDsp([[maybe_unused]] const void* ptr, [[maybe_unused]] size_t size) {
     return true;
+}
+
+const void* Util::GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchive& arc,
+                              const SoundArchivePlayer& player) {
+    SoundArchive::WaveArchiveInfo info;
+    if (!arc.ReadWaveArchiveInfo(waveArchiveId, &info))
+        return nullptr;
+
+    const void* warcFile{player.detail_GetFileAddress(info.fileId)};
+    if (warcFile == nullptr)
+        return nullptr;
+
+    WaveArchiveFileReader reader{warcFile, info.isLoadIndividual};
+    const void* waveFile{reader.GetWaveFile(waveIndex)};
+
+    return waveFile;
 }
 
 }  // namespace nn::atk::detail
