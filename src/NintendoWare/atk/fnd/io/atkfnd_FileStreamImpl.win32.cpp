@@ -24,7 +24,7 @@ position_t GetSeekPosition(FileStreamImpl& target, position_t offset, Stream::Se
         break;
     case Stream::SeekOrigin_Current:
         if (offset > 0)
-            result = ClampMax(target.GetCurrentPosition() + offset, targetSizeEnd);
+            result = Clamp(target.GetCurrentPosition() + offset, LONG_MIN, targetSizeEnd);
 
         else if (offset >= 0)
             result = target.GetCurrentPosition();
