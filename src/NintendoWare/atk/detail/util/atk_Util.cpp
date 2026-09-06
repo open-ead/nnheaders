@@ -599,4 +599,24 @@ u16 Util::CalcLpfFreq(float scale) {
     return freq;
 }
 
+int Util::FindLpfFreqTableIndex(int frequency) {
+    int lowIndex{0};
+    int highIndex{CalcLpfFreqTableSize - 1};
+
+    while (lowIndex <= highIndex) {
+        const int index{(lowIndex + highIndex) / 2};
+
+        if (CalcLpfFreqTable[index] < frequency)
+            lowIndex = index + 1;
+
+        else if (CalcLpfFreqTable[index] > frequency)
+            highIndex = index - 1;
+
+        else
+            return index;
+    }
+
+    return -1;
+}
+
 }  // namespace nn::atk::detail
