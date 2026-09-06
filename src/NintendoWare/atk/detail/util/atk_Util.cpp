@@ -702,4 +702,33 @@ u16 Util::CalcRandom() {
     return u >> 16;
 }
 
+size_t Util::GetByteBySample(size_t samples, SampleFormat format) {
+    size_t byte {0};
+    size_t frac;
+
+    switch (format) {
+    case SampleFormat_DspAdpcm:
+        byte = (samples / 14) * 8;
+        frac = samples % 14;
+
+        if (frac != 0)
+            byte += (frac + 1) / 2 + 1;
+
+        break;
+
+    case SampleFormat_PcmS8:
+        byte = samples;
+        break;
+
+    case SampleFormat_PcmS16:
+        byte = samples << 1;
+        break;
+        
+    default:
+        break;
+    }
+
+    return byte;
+}
+
 }  // namespace nn::atk::detail
