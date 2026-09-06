@@ -25,6 +25,9 @@ struct WaveSoundNoteInfo {
     u8 surroundPan;
     u8 volume;
     f32 pitch;
+
+    WaveSoundNoteInfo()
+        : adshr(0, 0, 0, 0, 0) {};
 };
 static_assert(sizeof(WaveSoundNoteInfo) == 0x18);
 

@@ -15,7 +15,7 @@ bool StreamSoundFileLoader::LoadFileHeader(StreamSoundFileReader* reader, void* 
         if (loadSize <= size) {
             m_pStream->Seek(0, fnd::FileStream::SeekOrigin_Begin);
             readSize = m_pStream->Read(buffer, loadSize, nullptr);
-            if (readSize == (int)loadSize) {
+            if (static_cast<s64>(readSize) == static_cast<int>(loadSize)) {
                 reader->Initialize(buffer);
                 m_SeekBlockOffset = reader->GetSeekBlockOffset();
                 m_RegionDataOffset = reader->GetRegionDataOffset();
@@ -33,7 +33,7 @@ bool StreamSoundFileLoader::ReadSeekBlockData(u16* yn1, u16* yn2, int blockIndex
     size_t readDataSize {SeekInfoMaxSize};
     size_t readOffset {m_SeekBlockOffset + sizeof(BinaryBlockHeader) + blockIndex * readDataSize};
 
-    m_pStream->Seek(readOffset, fnd::FileStream::SeekOrigin_Begin);
+    m_pStream->Seek(static_cast<position_t>(readOffset), fnd::FileStream::SeekOrigin_Begin);
     if (readDataSize <= 64) {
         const int Align {64};
         u16 bufferBase[128];
