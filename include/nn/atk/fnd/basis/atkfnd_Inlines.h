@@ -6,11 +6,11 @@ namespace nn::atk::detail::fnd {
 
 template <typename T>
 inline T Clamp(T x, T low, T high) {
-    if (x < low)
-        return low;
-
     if (x > high)
         return high;
+
+    if (x < low)
+        return low;
 
     return x;
 }
