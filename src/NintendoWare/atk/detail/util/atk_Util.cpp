@@ -694,4 +694,12 @@ float Util::CalcVolumeRatio(float dB) {
     return Decibel2RatioTable[index];
 }
 
+u16 Util::CalcRandom() {
+    static u32 u;
+    
+    u *= 0x19660d;
+    u += 0x3c6ef35f;
+    return u >> 16;
+}
+
 }  // namespace nn::atk::detail
