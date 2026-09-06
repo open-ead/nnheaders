@@ -7,6 +7,8 @@ namespace atk {
 
 class SoundArchive {
 public:
+    struct SequenceSoundInfo;
+
     const char* GetItemLabel(u32 id) const;
     u32 GetItemId(const char* label) const;
 };
