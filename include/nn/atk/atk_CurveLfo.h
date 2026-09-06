@@ -37,9 +37,8 @@ static_assert(sizeof(CurveLfoParam) == 0x10);
 
 class CurveLfo {
 public:
-
     CurveLfo() = default;
-    
+
     void Reset();
     void Update(int msec);
 
@@ -51,7 +50,7 @@ public:
 
     static void InitializeCurveTable();
 
-    using CurveFunc = float(*)(float);
+    using CurveFunc = float (*)(float);
 
     static CurveFunc RegisterUserCurve(CurveFunc func, u32 index);
     static CurveFunc UnregisterUserCurve(u32 index);
@@ -63,8 +62,8 @@ private:
     mutable float m_RandomValue;
     bool m_IsStart;
     bool m_IsNext;
-    u8 m_Padding[2];
+    [[maybe_unused]] u8 m_Padding[2];
 };
 static_assert(sizeof(CurveLfo) == 0x20);
 
-} // namespace nn::atk::detail
+}  // namespace nn::atk::detail

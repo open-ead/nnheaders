@@ -821,7 +821,7 @@ Util::WaveArchiveLoadStatus Util::GetWaveArchiveOfBank(LoadItemInfo& warcLoadInf
         return WaveArchiveLoadStatus_NotYet;
 
     SoundArchive::WaveArchiveInfo warcInfo;
-    bool isReadWarcInfo{arc.ReadWaveArchiveInfo(pWaveId->waveArchiveId, &warcInfo)};
+    [[maybe_unused]] bool isReadWarcInfo{arc.ReadWaveArchiveInfo(pWaveId->waveArchiveId, &warcInfo)};
 
     warcLoadInfo.itemId = pWaveId->waveArchiveId;
     warcLoadInfo.address = waveArchiveFile;
@@ -837,6 +837,32 @@ Util::WaveArchiveLoadStatus Util::GetWaveArchiveOfBank(LoadItemInfo& warcLoadInf
     }
 
     return WaveArchiveLoadStatus_Ok;
+}
+
+const void* Util::GetWaveFileOfWaveSound(const void* wsdFile, u32 index, const SoundArchive& arc,
+                                         const SoundArchiveLoader& mgr) {
+    WaveSoundFileReader reader{wsdFile};
+    WaveSoundNoteInfo noteInfo{};
+    
+    [[maybe_unused]] bool isReadNoteInfo{reader.ReadNoteInfo(&noteInfo, index, 0)};
+    // if (!isReadNoteInfo)
+    //     return nullptr;
+
+    const void* waveArchiveFile{mgr.detail_GetFileAddressByItemId(noteInfo.waveArchiveId)};
+    if (waveArchiveFile == nullptr)
+       return nullptr;
+
+    SoundArchive::WaveArchiveInfo warcInfo;
+    [[maybe_unused]] bool isReadWarcInfo{arc.ReadWaveArchiveInfo(noteInfo.waveArchiveId, &warcInfo)};
+    // if (!isReadWarcInfo)
+    //     return nullptr;
+
+    WaveArchiveFileReader warcReader{waveArchiveFile, warcInfo.isLoadIndividual};
+    const void* waveFile{warcReader.GetWaveFile(noteInfo.waveIndex)};
+    if (waveFile == nullptr)
+        return nullptr;
+
+    return waveFile;
 }
 
 }  // namespace nn::atk::detail

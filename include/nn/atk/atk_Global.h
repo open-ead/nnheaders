@@ -147,7 +147,32 @@ enum FsPriority {
     FsPriority_Low,
 };
 
-struct AdshrCurve {
+class AdshrCurve {
+public:
+    AdshrCurve(u8 a, u8 d, u8 s, u8 h, u8 r)
+        : m_Attack{a}, m_Decay{d}, m_Sustain{s}, m_Hold{h}, m_Release{r} {} 
+
+    u8 GetAttack() const { return m_Attack; }
+
+    void SetAttack(u8 attack) { m_Attack = attack; }
+
+    u8 GetDecay() const { return m_Decay; }
+    
+    void SetDecay(u8 decay) { m_Decay = decay; }
+
+    u8 GetSustain() const { return m_Sustain; }
+    
+    void SetSustain(u8 sustain) { m_Sustain = sustain; }
+
+    u8 GetHold() const { return m_Hold; }
+    
+    void SetHold(u8 hold) { m_Hold = hold; }
+
+    u8 GetRelease() const { return m_Release; }
+    
+    void SetRelease(u8 release) { m_Release = release; }
+
+private:
     u8 m_Attack;
     u8 m_Decay;
     u8 m_Sustain;
