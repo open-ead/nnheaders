@@ -1,6 +1,9 @@
 #include <nn/atk/atk_Util.h>
 
+#include <cmath>
+
 #include <nn/atk/fnd/basis/atkfnd_Inlines.h>
+#include <nn/util/util_Arithmetic.h>
 
 namespace nn::atk::detail {
 
@@ -599,6 +602,36 @@ u16 Util::CalcLpfFreq(float scale) {
     return freq;
 }
 
+// NON_MATCHING: wrong order of operations
+BiquadFilterCoefficients Util::CalcLowPassFilterCoefficients(int frequency, int sampleRate, bool isTableUsed) {
+    if (isTableUsed) {
+        int index{FindLpfFreqTableIndex(frequency)};
+
+        if (sampleRate == 32000)
+            return LowPassFilterCoefficientsTable32000[index];
+
+        if (sampleRate == 48000)
+            return LowPassFilterCoefficientsTable48000[index];
+        
+        NN_UNEXPECTED_DEFAULT;
+    }
+    else {
+        float coef;
+        float filterParam;
+        util::AngleIndex angle = (static_cast<s64>(frequency) << 32) / sampleRate;
+        coef = 2.0f - util::CosTable(angle);
+        filterParam = sqrt(coef * coef - 1.0f);
+
+        BiquadFilterCoefficients parameter;
+
+        parameter.b1 = filterParam;
+        parameter.b0 = (filterParam - coef) * -16384.0f;
+        parameter.b2 = coef;
+
+        return parameter;
+    }
+}
+
 int Util::FindLpfFreqTableIndex(int frequency) {
     int lowIndex{0};
     int highIndex{CalcLpfFreqTableSize - 1};
@@ -617,6 +650,28 @@ int Util::FindLpfFreqTableIndex(int frequency) {
     }
 
     return -1;
+}
+
+float Util::CalcPanRatio(float pan, const PanInfo& info, OutputMode mode) {
+    pan = (fnd::FloatClamp(pan, -1.0f, 1.0f) + 1.0f) / 2.0f;
+
+    const float* table;
+    if (!info.isEnableFrontBypass && mode == OutputMode_Surround)
+        table = PanTableTableForSurround[info.curve];
+    else
+        table = PanTableTable[info.curve];
+
+    float ratio{table[static_cast<s32>(pan * PanTableMax + 0.5f)]};
+
+    if (info.centerZeroFlag)
+        ratio /= table[PanTableCenter];
+
+    if (info.zeroClampFlag)
+        ratio = fnd::Clamp(ratio, 0.0f, 1.0f);
+    else
+        ratio = fnd::Clamp(ratio, 0.0f, 2.0f);
+
+    return ratio;
 }
 
 }  // namespace nn::atk::detail
