@@ -798,4 +798,45 @@ const void* Util::GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchi
     return waveFile;
 }
 
+Util::WaveArchiveLoadStatus Util::GetWaveArchiveOfBank(LoadItemInfo& warcLoadInfo,
+                                                       bool& isLoadIndividual, const void* bankFile,
+                                                       const SoundArchive& arc,
+                                                       const SoundArchiveLoader& mgr) {
+    warcLoadInfo.itemId = SoundArchive::InvalidId;
+    warcLoadInfo.address = nullptr;
+    isLoadIndividual = false;
+
+    BankFileReader reader{bankFile};
+    const WaveIdTable* table{reader.GetWaveIdTable()};
+    if (table == nullptr)
+        return WaveArchiveLoadStatus_Error;
+
+    if (table->GetCount() == 0)
+        return WaveArchiveLoadStatus_Noneed;
+
+    const WaveId* pWaveId{table->GetWaveId(0)};
+
+    const void* waveArchiveFile{mgr.detail_GetFileAddressByItemId(pWaveId->waveArchiveId)};
+    if (waveArchiveFile == nullptr)
+        return WaveArchiveLoadStatus_NotYet;
+
+    SoundArchive::WaveArchiveInfo warcInfo;
+    bool isReadWarcInfo{arc.ReadWaveArchiveInfo(pWaveId->waveArchiveId, &warcInfo)};
+
+    warcLoadInfo.itemId = pWaveId->waveArchiveId;
+    warcLoadInfo.address = waveArchiveFile;
+
+    isLoadIndividual = warcInfo.isLoadIndividual;
+
+    if (isLoadIndividual) {
+        WaveArchiveFileReader reader{waveArchiveFile, isLoadIndividual};
+        for (u32 i{0}; i < table->GetCount(); ++i) {
+            if (!reader.IsLoaded(pWaveId->waveIndex))
+                return WaveArchiveLoadStatus_Partly;
+        }
+    }
+
+    return WaveArchiveLoadStatus_Ok;
+}
+
 }  // namespace nn::atk::detail
