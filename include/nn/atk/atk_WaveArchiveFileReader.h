@@ -30,6 +30,8 @@ public:
 
     void* SetWaveFile(u32 waveIndex, const void* pWaveFile);
 
+    bool IsLoaded(u32 index) { return m_IsInitialized && GetWaveFile(index) != nullptr; }
+
 private:
     WaveArchiveFile::FileHeader* m_pHeader;
     WaveArchiveFile::InfoBlockBody* m_pInfoBlockBody;

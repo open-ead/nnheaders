@@ -6,7 +6,7 @@
 namespace nn::atk::detail {
 struct LoadItemInfo {
     SoundArchive::ItemId itemId;
-    void* address;
+    const void* address;
 };
 static_assert(sizeof(LoadItemInfo) == 0x10);
 
