@@ -782,4 +782,20 @@ const void* Util::GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchi
     return waveFile;
 }
 
+const void* Util::GetWaveFile(u32 waveArchiveId, u32 waveIndex, const SoundArchive& arc,
+                              const PlayerHeapDataManager* mgr) {
+    SoundArchive::WaveArchiveInfo info;
+    if (!arc.ReadWaveArchiveInfo(waveArchiveId, &info))
+        return nullptr;
+
+    const void* warcFile{mgr->GetFileAddress(info.fileId)};
+    if (warcFile == nullptr)
+        return nullptr;
+
+    WaveArchiveFileReader reader{warcFile, info.isLoadIndividual};
+    const void* waveFile{reader.GetWaveFile(waveIndex)};
+
+    return waveFile;
+}
+
 }  // namespace nn::atk::detail
