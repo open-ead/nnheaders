@@ -5,21 +5,22 @@
 namespace nn::atk::detail::fnd {
 
 template <typename T>
-inline T ClampMin(T x, T low) {
-    return x < low ? low : x;
-}
-
-template <typename T>
-inline T ClampMax(T x, T high) {
-    return x > high ? high : x;
-}
-
-template <typename T>
 inline T Clamp(T x, T low, T high) {
-    return ClampMax(ClampMin(x, low), high);
+    if (x < low)
+        return low;
+
+    if (x > high)
+        return high;
+
+    return x;
 }
 
-inline float FloatClamp(float value, float min, float max);
+inline float FloatClamp(float value, float min, float max) {
+    if (value >= min)
+        return value < max ? value : max;
+
+    return min;
+}
 
 template <typename ValueT>
 inline ValueT RoundUp(ValueT x, int base);
