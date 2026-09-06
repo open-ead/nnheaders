@@ -674,4 +674,16 @@ float Util::CalcPanRatio(float pan, const PanInfo& info, OutputMode mode) {
     return ratio;
 }
 
+float Util::CalcSurroundPanRatio(float surroundPan, const PanInfo& info) {
+    surroundPan = fnd::FloatClamp(surroundPan, 0.0f, 2.0f) / 2.0f;
+
+    const float* table{PanTableTableForSurround[info.curve]};
+
+    float ratio{table[static_cast<s32>(surroundPan * PanTableMax + 0.5f)]};
+
+    ratio = fnd::Clamp(ratio, 0.0f, 2.0f);
+
+    return ratio;
+}
+
 }  // namespace nn::atk::detail
