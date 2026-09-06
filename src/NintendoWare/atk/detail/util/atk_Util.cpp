@@ -686,4 +686,12 @@ float Util::CalcSurroundPanRatio(float surroundPan, const PanInfo& info) {
     return ratio;
 }
 
+float Util::CalcVolumeRatio(float dB) {
+    dB = fnd::Clamp<float>(dB, -90.4f, 6.0f);
+
+    int index{static_cast<int>(dB * 10.0f) - VolumeDbMin};
+
+    return Decibel2RatioTable[index];
+}
+
 }  // namespace nn::atk::detail
