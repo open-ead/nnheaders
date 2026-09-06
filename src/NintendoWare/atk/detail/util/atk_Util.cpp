@@ -702,6 +702,35 @@ u16 Util::CalcRandom() {
     return u >> 16;
 }
 
+size_t Util::GetSampleByByte(size_t byte, SampleFormat format) {
+    size_t samples {0};
+    size_t frac;
+
+    switch (format) {
+    case SampleFormat_DspAdpcm:
+        samples = (byte / 8) * 14;
+        frac = byte & 7;
+
+        if (frac != 0)
+            samples += frac * 2 - 2;
+
+        break;
+
+    case SampleFormat_PcmS8:
+        samples = byte;
+        break;
+
+    case SampleFormat_PcmS16:
+        samples = byte >> 1;
+        break;
+        
+    default:
+        break;
+    }
+
+    return samples;
+}
+
 size_t Util::GetByteBySample(size_t samples, SampleFormat format) {
     size_t byte {0};
     size_t frac;
