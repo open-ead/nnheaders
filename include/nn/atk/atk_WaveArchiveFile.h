@@ -35,7 +35,7 @@ struct WaveArchiveFile {
         u32 GetSize(u32 index) const { return table.item[index].size; }
 
         u32 GetOffsetFromFileBlockBody(u32 index) const {
-            return offsetof(WaveArchiveFile::FileBlock, body) + table.item[index].offset;
+            return table.item[index].offset;
         }
 
         static const u32 InvalidOffset = 0xffffffff;
