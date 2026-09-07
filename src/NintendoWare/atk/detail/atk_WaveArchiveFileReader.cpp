@@ -55,10 +55,15 @@ void WaveArchiveFileReader::Finalize() {
     }
 }
 
+void WaveArchiveFileReader::InitializeFileTable() {
+    for (u32 i{0}; i < GetWaveFileCount(); ++i)
+        m_pLoadTable->waveFile[i] = nullptr;
+}
+
 u32 WaveArchiveFileReader::GetWaveFileCount() const {
     if (!m_IsInitialized)
         return 0;
-    
+
     return m_pInfoBlockBody->table.count;
 }
 
