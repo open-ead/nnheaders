@@ -15,7 +15,7 @@ public:
     const void* GetSequenceData() const;
 
     bool GetOffsetByLabel(const char* label, u32* offsetPtr) const;
-    bool GetLabelByOffset(u32 offset) const;
+    const char* GetLabelByOffset(u32 offset) const;
 
     int GetLabelCount() const { return m_pLabelBlockBody->GetLabelCount(); }
 
