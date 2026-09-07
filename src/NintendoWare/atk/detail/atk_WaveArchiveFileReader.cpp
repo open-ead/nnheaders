@@ -55,6 +55,13 @@ void WaveArchiveFileReader::Finalize() {
     }
 }
 
+u32 WaveArchiveFileReader::GetWaveFileCount() const {
+    if (!m_IsInitialized)
+        return 0;
+    
+    return m_pInfoBlockBody->table.count;
+}
+
 bool WaveArchiveFileReader::HasIndividualLoadTable() const {
     if (!m_IsInitialized)
         return false;
