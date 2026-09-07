@@ -1,6 +1,7 @@
 #pragma once
 
 namespace nn::atk::detail {
+
 template <typename ValueType, typename CountType>
 class MoveValue {
 public:
@@ -25,9 +26,10 @@ public:
     CountType GetRemainingCount() const;
 
 private:
-    ValueType m_Origin {};
-    ValueType m_Target {};
-    CountType m_Frame {};
-    CountType m_Counter {};
+    ValueType m_Origin{0};
+    ValueType m_Target{0};
+    CountType m_Frame{0};
+    CountType m_Counter{0};
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail
