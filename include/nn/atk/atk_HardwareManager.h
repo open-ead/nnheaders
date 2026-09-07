@@ -2,6 +2,8 @@
 
 #include <atomic>
 
+#include <nn/os.h>
+
 #include <nn/audio/audio_MemoryPoolTypes.h>
 #include <nn/audio/audio_SinkTypes.h>
 

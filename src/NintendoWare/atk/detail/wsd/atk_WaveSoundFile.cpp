@@ -4,23 +4,18 @@
 
 namespace nn::atk::detail {
 namespace {
-const u8 WsdDefaultPan {64};
-const s8 WsdDefaultSurroundPan {0};
-const float WsdDefaultPitch {1.0};
-const u8 WsdDefaultMainSend {127};
-const u8 WsdDefaultFxSend {0};
-const AdshrCurve WsdDefaultAdshrCurve {
-    127,
-    127,
-    127,
-    127,
-    127
-};
-const u8 WsdDefaultLpfFreq {64};
-const u8 WsdDefaultBiquadType {0};
-const u8 WsdDefaultBiquadValue {0};
-const u8 WsdDefaultKey {64};
-const u8 WsdDefaultVolume {96};
+
+const u8 WsdDefaultPan{64};
+const s8 WsdDefaultSurroundPan{0};
+const float WsdDefaultPitch{1.0};
+const u8 WsdDefaultMainSend{127};
+const u8 WsdDefaultFxSend{0};
+const AdshrCurve WsdDefaultAdshrCurve{127, 127, 127, 127, 127};
+const u8 WsdDefaultLpfFreq{64};
+const u8 WsdDefaultBiquadType{0};
+const u8 WsdDefaultBiquadValue{0};
+const u8 WsdDefaultKey{64};
+const u8 WsdDefaultVolume{96};
 
 enum WaveSoundInfoBitFlagWsd {
     WaveSoundInfoBitFlagWsd_Pan = 0,
@@ -46,23 +41,24 @@ struct SendValueWsd {
     u8 mainSend;
     Util::Table<u8, u8> fxSend;
 };
-} // anonymous namespace
+
+}  // anonymous namespace
 
 const WaveSoundFile::InfoBlock* WaveSoundFile::FileHeader::GetInfoBlock() const {
     return util::ConstBytePtr(GetBlock(ElementType_WaveSoundFile_InfoBlock))
-            .Get<WaveSoundFile::InfoBlock>();
+        .Get<WaveSoundFile::InfoBlock>();
 }
 
-const WaveSoundFile::WaveSoundData& WaveSoundFile::InfoBlockBody::GetWaveSoundData(u32 index) const {
-    return *util::ConstBytePtr(
-                GetWaveSoundDataReferenceTable()
-                .GetReferedItem(index, ElementType_WaveSoundFile_WaveSoundMetaData)
-            ).Get<WaveSoundData>();
+const WaveSoundFile::WaveSoundData&
+WaveSoundFile::InfoBlockBody::GetWaveSoundData(u32 index) const {
+    return *util::ConstBytePtr(GetWaveSoundDataReferenceTable().GetReferedItem(
+                                   index, ElementType_WaveSoundFile_WaveSoundMetaData))
+                .Get<WaveSoundData>();
 }
 
 const Util::ReferenceTable& WaveSoundFile::InfoBlockBody::GetWaveSoundDataReferenceTable() const {
     return *util::ConstBytePtr(this, toWaveSoundDataReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+                .Get<Util::ReferenceTable>();
 }
 
 const Util::WaveIdTable& WaveSoundFile::InfoBlockBody::GetWaveIdTable() const {
@@ -74,32 +70,32 @@ const WaveSoundFile::WaveSoundInfo& WaveSoundFile::WaveSoundData::GetWaveSoundIn
 }
 
 const Util::ReferenceTable& WaveSoundFile::WaveSoundData::GetTrackInfoReferenceTable() const {
-    return *util::ConstBytePtr(this, toTrackInfoReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+    return *util::ConstBytePtr(this, toTrackInfoReferenceTable.offset).Get<Util::ReferenceTable>();
 }
 
 const Util::ReferenceTable& WaveSoundFile::WaveSoundData::GetNoteInfoReferenceTable() const {
-    return *util::ConstBytePtr(this, toNoteInfoReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+    return *util::ConstBytePtr(this, toNoteInfoReferenceTable.offset).Get<Util::ReferenceTable>();
 }
 
 const WaveSoundFile::TrackInfo& WaveSoundFile::WaveSoundData::GetTrackInfo(u32 index) const {
     const void* pTrackInfo;
-    pTrackInfo = GetTrackInfoReferenceTable().GetReferedItem(index, ElementType_WaveSoundFile_TrackInfo);
+    pTrackInfo =
+        GetTrackInfoReferenceTable().GetReferedItem(index, ElementType_WaveSoundFile_TrackInfo);
 
     return *util::ConstBytePtr(pTrackInfo).Get<TrackInfo>();
 }
 
 const WaveSoundFile::NoteInfo& WaveSoundFile::WaveSoundData::GetNoteInfo(u32 index) const {
     const void* pNoteInfo;
-    pNoteInfo = GetNoteInfoReferenceTable().GetReferedItem(index, ElementType_WaveSoundFile_NoteInfo);
+    pNoteInfo =
+        GetNoteInfoReferenceTable().GetReferedItem(index, ElementType_WaveSoundFile_NoteInfo);
 
     return *util::ConstBytePtr(pNoteInfo).Get<NoteInfo>();
 }
 
 u8 WaveSoundFile::WaveSoundInfo::GetPan() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Pan)};
+    bool result{optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Pan)};
     if (result)
         return Util::DivideBy8bit(value, 0);
 
@@ -108,7 +104,7 @@ u8 WaveSoundFile::WaveSoundInfo::GetPan() const {
 
 s8 WaveSoundFile::WaveSoundInfo::GetSurroundPan() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Pan)};
+    bool result{optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Pan)};
     if (result)
         return static_cast<s8>(Util::DivideBy8bit(value, 1));
 
@@ -117,7 +113,7 @@ s8 WaveSoundFile::WaveSoundInfo::GetSurroundPan() const {
 
 float WaveSoundFile::WaveSoundInfo::GetPitch() const {
     float value;
-    bool result {optionParameter.GetValueF32(&value, WaveSoundInfoBitFlagWsd_Pitch)};
+    bool result{optionParameter.GetValueF32(&value, WaveSoundInfoBitFlagWsd_Pitch)};
     if (result)
         return value;
 
@@ -126,29 +122,29 @@ float WaveSoundFile::WaveSoundInfo::GetPitch() const {
 
 void WaveSoundFile::WaveSoundInfo::GetSendValue(u8* mainSend, u8* fxSend, u8 fxSendCount) const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Send)};
+    bool result{optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Send)};
 
     if (result) {
         const SendValueWsd& sendValue = *util::ConstBytePtr(this, value).Get<SendValueWsd>();
 
         *mainSend = sendValue.mainSend;
-        int countSize {sendValue.fxSend.count > AuxBus_Count ? AuxBus_Count : sendValue.fxSend.count};
+        int countSize{sendValue.fxSend.count > AuxBus_Count ? AuxBus_Count :
+                                                              sendValue.fxSend.count};
 
-        for (int i {0}; i < countSize; ++i)
+        for (int i{0}; i < countSize; ++i)
             fxSend[i] = sendValue.fxSend.item[i];
-    }
-    else {
+    } else {
         *mainSend = WsdDefaultMainSend;
-        for (int i {0}; i < fxSendCount; ++i)
+        for (int i{0}; i < fxSendCount; ++i)
             fxSend[i] = WsdDefaultFxSend;
     }
 }
 
 const AdshrCurve& WaveSoundFile::WaveSoundInfo::GetAdshrCurve() const {
     u32 offsetToReference;
-    bool result {optionParameter.GetValue(&offsetToReference, WaveSoundInfoBitFlagWsd_Envelope)};
+    bool result{optionParameter.GetValue(&offsetToReference, WaveSoundInfoBitFlagWsd_Envelope)};
     if (result) {
-        const auto& ref {*util::ConstBytePtr(this, offsetToReference).Get<Util::Reference>()};
+        const auto& ref{*util::ConstBytePtr(this, offsetToReference).Get<Util::Reference>()};
         return *util::ConstBytePtr(&ref, ref.offset).Get<AdshrCurve>();
     }
 
@@ -157,7 +153,7 @@ const AdshrCurve& WaveSoundFile::WaveSoundInfo::GetAdshrCurve() const {
 
 u8 WaveSoundFile::WaveSoundInfo::GetLpfFreq() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Filter)};
+    bool result{optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Filter)};
     if (result)
         return Util::DivideBy8bit(value, 0);
 
@@ -166,7 +162,7 @@ u8 WaveSoundFile::WaveSoundInfo::GetLpfFreq() const {
 
 u8 WaveSoundFile::WaveSoundInfo::GetBiquadType() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Filter)};
+    bool result{optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Filter)};
     if (result)
         return Util::DivideBy8bit(value, 1);
 
@@ -175,7 +171,7 @@ u8 WaveSoundFile::WaveSoundInfo::GetBiquadType() const {
 
 u8 WaveSoundFile::WaveSoundInfo::GetBiquadValue() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Filter)};
+    bool result{optionParameter.GetValue(&value, WaveSoundInfoBitFlagWsd_Filter)};
     if (result)
         return Util::DivideBy8bit(value, 2);
 
@@ -183,20 +179,20 @@ u8 WaveSoundFile::WaveSoundInfo::GetBiquadValue() const {
 }
 
 const Util::ReferenceTable& WaveSoundFile::TrackInfo::GetNoteEventReferenceTable() const {
-    return *util::ConstBytePtr(this, toNoteEventReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+    return *util::ConstBytePtr(this, toNoteEventReferenceTable.offset).Get<Util::ReferenceTable>();
 }
 
 const WaveSoundFile::NoteEvent& WaveSoundFile::TrackInfo::GetNoteEvent(u32 index) const {
     const void* pNoteEvent;
-    pNoteEvent = GetNoteEventReferenceTable().GetReferedItem(index, ElementType_WaveSoundFile_NoteEvent);
+    pNoteEvent =
+        GetNoteEventReferenceTable().GetReferedItem(index, ElementType_WaveSoundFile_NoteEvent);
 
     return *util::ConstBytePtr(pNoteEvent).Get<NoteEvent>();
 }
 
 u8 WaveSoundFile::NoteInfo::GetOriginalKey() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, NoteInfoBitFlag_Key)};
+    bool result{optionParameter.GetValue(&value, NoteInfoBitFlag_Key)};
     if (result)
         return Util::DivideBy8bit(value, 0);
 
@@ -205,7 +201,7 @@ u8 WaveSoundFile::NoteInfo::GetOriginalKey() const {
 
 u8 WaveSoundFile::NoteInfo::GetVolume() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, NoteInfoBitFlag_Volume)};
+    bool result{optionParameter.GetValue(&value, NoteInfoBitFlag_Volume)};
     if (result)
         return Util::DivideBy8bit(value, 0);
 
@@ -214,7 +210,7 @@ u8 WaveSoundFile::NoteInfo::GetVolume() const {
 
 u8 WaveSoundFile::NoteInfo::GetPan() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, NoteInfoBitFlag_Pan)};
+    bool result{optionParameter.GetValue(&value, NoteInfoBitFlag_Pan)};
     if (result)
         return Util::DivideBy8bit(value, 0);
 
@@ -223,7 +219,7 @@ u8 WaveSoundFile::NoteInfo::GetPan() const {
 
 u8 WaveSoundFile::NoteInfo::GetSurroundPan() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, NoteInfoBitFlag_Pan)};
+    bool result{optionParameter.GetValue(&value, NoteInfoBitFlag_Pan)};
     if (result)
         return Util::DivideBy8bit(value, 1);
 
@@ -232,7 +228,7 @@ u8 WaveSoundFile::NoteInfo::GetSurroundPan() const {
 
 float WaveSoundFile::NoteInfo::GetPitch() const {
     float value;
-    bool result {optionParameter.GetValueF32(&value, NoteInfoBitFlag_Pitch)};
+    bool result{optionParameter.GetValueF32(&value, NoteInfoBitFlag_Pitch)};
     if (result)
         return value;
 
@@ -242,32 +238,33 @@ float WaveSoundFile::NoteInfo::GetPitch() const {
 // NON_MATCHING
 void WaveSoundFile::NoteInfo::GetSendValue(u8* mainSend, u8** fxSend, u8 fxSendCount) const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, NoteInfoBitFlag_Send)};
+    bool result{optionParameter.GetValue(&value, NoteInfoBitFlag_Send)};
 
     if (!result) {
         *mainSend = WsdDefaultMainSend;
-        for (int i {0}; i < fxSendCount; ++i)
+        for (int i{0}; i < fxSendCount; ++i)
             fxSend[i][0] = WsdDefaultFxSend;
-    }
-    else {
+    } else {
         const SendValueWsd& sendValue = *util::ConstBytePtr(this, value).Get<SendValueWsd>();
 
         *mainSend = sendValue.mainSend;
-        int countSize {sendValue.fxSend.count > AuxBus_Count ? AuxBus_Count : sendValue.fxSend.count};
-        
-        for (int i {0}; i < countSize; ++i)
+        int countSize{sendValue.fxSend.count > AuxBus_Count ? AuxBus_Count :
+                                                              sendValue.fxSend.count};
+
+        for (int i{0}; i < countSize; ++i)
             fxSend[i][0] = sendValue.fxSend.item[i];
     }
 }
 
 const AdshrCurve& WaveSoundFile::NoteInfo::GetAdshrCurve() const {
     u32 offsetToReference;
-    bool result {optionParameter.GetValue(&offsetToReference, NoteInfoBitFlag_Envelope)};
+    bool result{optionParameter.GetValue(&offsetToReference, NoteInfoBitFlag_Envelope)};
     if (result) {
-        const auto& ref {*util::ConstBytePtr(this, offsetToReference).Get<Util::Reference>()};
+        const auto& ref{*util::ConstBytePtr(this, offsetToReference).Get<Util::Reference>()};
         return *util::ConstBytePtr(&ref, ref.offset).Get<AdshrCurve>();
     }
 
     return WsdDefaultAdshrCurve;
 }
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail
