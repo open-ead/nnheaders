@@ -45,10 +45,10 @@ private:
         return m_pLoadTable->waveFile[waveIndex];
     }
 
-    const WaveArchiveFile::FileHeader* m_pHeader;
-    const WaveArchiveFile::InfoBlockBody* m_pInfoBlockBody;
-    IndividualLoadTable* m_pLoadTable;
-    bool m_IsInitialized;
+    const WaveArchiveFile::FileHeader* m_pHeader{};
+    const WaveArchiveFile::InfoBlockBody* m_pInfoBlockBody{};
+    IndividualLoadTable* m_pLoadTable{};
+    bool m_IsInitialized{false};
 };
 static_assert(sizeof(WaveArchiveFileReader) == 0x20);
 
