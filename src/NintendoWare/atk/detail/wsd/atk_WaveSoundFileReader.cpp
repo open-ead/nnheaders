@@ -38,4 +38,10 @@ u32 WaveSoundFileReader::GetWaveSoundCount() const {
     return m_pInfoBlockBody->GetWaveSoundCount();
 }
 
+u32 WaveSoundFileReader::GetNoteInfoCount(u32 index) const {
+    const WaveSoundFile::WaveSoundData& wsdData{m_pInfoBlockBody->GetWaveSoundData(index)};
+
+    return wsdData.GetNoteCount();
+}
+
 }  // namespace nn::atk::detail
