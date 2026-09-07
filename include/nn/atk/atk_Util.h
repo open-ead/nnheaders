@@ -261,7 +261,12 @@ public:
     struct WaveIdTable {
         Table<WaveId> table;
 
-        const WaveId* GetWaveId(u32 index) const { return &table.item[index]; }
+        const WaveId* GetWaveId(u32 index) const { 
+            if (index < table.count)
+                return &table.item[index];
+
+            return nullptr;
+        }
 
         u32 GetCount() const { return table.count; }
     };
