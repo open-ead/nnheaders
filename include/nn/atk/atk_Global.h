@@ -4,6 +4,7 @@
 #include <nn/atk/atk_Config.h>
 
 namespace nn::atk {
+
 enum WaveType {
     WaveType_Invalid = -1,
     WaveType_Nwwav,
@@ -150,26 +151,26 @@ enum FsPriority {
 class AdshrCurve {
 public:
     AdshrCurve(u8 a, u8 d, u8 s, u8 h, u8 r)
-        : m_Attack{a}, m_Decay{d}, m_Sustain{s}, m_Hold{h}, m_Release{r} {} 
+        : m_Attack{a}, m_Decay{d}, m_Sustain{s}, m_Hold{h}, m_Release{r} {}
 
     u8 GetAttack() const { return m_Attack; }
 
     void SetAttack(u8 attack) { m_Attack = attack; }
 
     u8 GetDecay() const { return m_Decay; }
-    
+
     void SetDecay(u8 decay) { m_Decay = decay; }
 
     u8 GetSustain() const { return m_Sustain; }
-    
+
     void SetSustain(u8 sustain) { m_Sustain = sustain; }
 
     u8 GetHold() const { return m_Hold; }
-    
+
     void SetHold(u8 hold) { m_Hold = hold; }
 
     u8 GetRelease() const { return m_Release; }
-    
+
     void SetRelease(u8 release) { m_Release = release; }
 
 private:
@@ -182,11 +183,11 @@ private:
 static_assert(sizeof(AdshrCurve) == 0x5);
 
 struct BiquadFilterCoefficients {
-    s16 b0 {0};
-    s16 b1 {0};
-    s16 b2 {0};
-    s16 a1 {0};
-    s16 a2 {0};
+    s16 b0{0};
+    s16 b1{0};
+    s16 b2{0};
+    s16 a1{0};
+    s16 a2{0};
 };
 static_assert(sizeof(BiquadFilterCoefficients) == 0xa);
 
@@ -331,7 +332,7 @@ enum SinglePlayType {
     SinglePlayType_PrioritizeOldest,
     SinglePlayType_PrioritizeOldestEffectiveDuration,
     SinglePlayType_PrioritizeOldestWithDuration = SinglePlayType_PrioritizeOldestEffectiveDuration,
-    
+
     SinglePlayType_PrioritizeNewest,
     SinglePlayType_PrioritizeNewestEffectiveDuration,
     SinglePlayType_PrioritizeNewestWithDuration = SinglePlayType_PrioritizeNewestEffectiveDuration,
@@ -412,14 +413,14 @@ public:
     void Initialize();
 
 private:
-    float m_Volume {0};
-    float m_Pitch {0};
-    OutputMix m_TvMix {};
-    bool m_MonoFilterFlag {false};
-    bool m_BiquadFilterFlag {false};
-    BiquadFilterCoefficients m_BiquadFilterCoefficients {};
-    u16 m_MonoFilterCutoff {0};
-    u8 m_InterpolationType {0};
+    float m_Volume{0};
+    float m_Pitch{0};
+    OutputMix m_TvMix{};
+    bool m_MonoFilterFlag{false};
+    bool m_BiquadFilterFlag{false};
+    BiquadFilterCoefficients m_BiquadFilterCoefficients{};
+    u16 m_MonoFilterCutoff{0};
+    u8 m_InterpolationType{0};
 };
 static_assert(sizeof(VoiceParam) == 0x78);
 
@@ -444,13 +445,12 @@ struct WaveInfo {
 };
 static_assert(sizeof(WaveInfo) == 0xa0);
 
-static const OutputMix DefaultTvMix{{1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 
-                                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
-                                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
-                                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
-} // namespace nn::atk::detail
+static const OutputMix DefaultTvMix{{1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+}  // namespace detail
 
-using SoundFrameUserCallback = void(*)(std::uintptr_t); 
-using SoundThreadUserCallback = void(*)(std::uintptr_t);
-using SoundStopCallback = void(*)();
-} // namespace nn::atk
+using SoundFrameUserCallback = void (*)(std::uintptr_t);
+using SoundThreadUserCallback = void (*)(std::uintptr_t);
+using SoundStopCallback = void (*)();
+
+}  // namespace nn::atk
