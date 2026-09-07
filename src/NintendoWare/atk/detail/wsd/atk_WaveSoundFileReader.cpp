@@ -50,4 +50,8 @@ u32 WaveSoundFileReader::GetTrackInfoCount(u32 index) const {
     return wsdData.GetTrackCount();
 }
 
+bool WaveSoundFileReader::IsFilterSupportedVersion() const {
+    return m_pHeader->header.version >= FilterSupportedVersionWsd;
+}
+
 }  // namespace nn::atk::detail
