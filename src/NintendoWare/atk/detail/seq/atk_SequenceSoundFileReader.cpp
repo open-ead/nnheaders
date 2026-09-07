@@ -45,4 +45,8 @@ const void* SequenceSoundFileReader::GetSequenceData() const {
     return m_pDataBlockBody;
 }
 
+bool SequenceSoundFileReader::GetOffsetByLabel(const char* label, u32* offsetPtr) const {
+    return m_pLabelBlockBody->GetOffsetByLabel(label, offsetPtr);
+}
+
 }  // namespace nn::atk::detail
