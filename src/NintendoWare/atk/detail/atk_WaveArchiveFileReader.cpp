@@ -46,6 +46,15 @@ void WaveArchiveFileReader::Initialize(const void* pWaveArchiveFile, bool isIndi
                        .Get<IndividualLoadTable>();
 }
 
+void WaveArchiveFileReader::Finalize() {
+    if (m_IsInitialized) {
+        m_pHeader = nullptr;
+        m_pInfoBlockBody = nullptr;
+        m_pLoadTable = nullptr;
+        m_IsInitialized = false;
+    }
+}
+
 bool WaveArchiveFileReader::HasIndividualLoadTable() const {
     if (!m_IsInitialized)
         return false;
