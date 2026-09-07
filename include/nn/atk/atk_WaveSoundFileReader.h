@@ -9,7 +9,7 @@ struct WaveSoundInfo {
     u8 pan;
     u8 surroundPan;
     u8 mainSend;
-    u8 fxSend[DefaultBusCount - 1];
+    u8 fxSend[AuxBus_Count];
     u8 lpfFreq;
     u8 biquadType;
     u8 biquadValue;
