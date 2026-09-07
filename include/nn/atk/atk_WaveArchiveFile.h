@@ -3,24 +3,25 @@
 #include <nn/atk/atk_Util.h>
 
 namespace nn::atk::detail {
+
 struct WaveArchiveFile {
-    static const int BlockCount {2};
+    static const int BlockCount{2};
 
     struct InfoBlock;
     struct FileBlock;
     struct FileHeader : BinaryFileHeader {
     public:
         Util::ReferenceWithSize toBlocks[BlockCount];
-        
+
         const InfoBlock* GetInfoBlock() const;
         const FileBlock* GetFileBlock() const;
-        
+
         u32 GetInfoBlockSize() const;
         u32 GetFileBlockSize() const;
 
         u32 GetInfoBlockOffset() const;
         u32 GetFileBlockOffset() const;
-        
+
     private:
         const Util::ReferenceWithSize* GetReferenceBy(u16 typeId) const;
     };
@@ -31,12 +32,10 @@ struct WaveArchiveFile {
 
         u32 GetWaveFileCount() const { return table.count; }
 
-        u32 GetSize(u32 index) const {
-            return table.item[index].size;
-        }
+        u32 GetSize(u32 index) const { return table.item[index].size; }
 
         u32 GetOffsetFromFileBlockBody(u32 index) const {
-            return table.item[index].offset;
+            return offsetof(WaveArchiveFile::FileBlock, body) + table.item[index].offset;
         }
 
         static const u32 InvalidOffset = 0xffffffff;
@@ -47,7 +46,8 @@ struct WaveArchiveFile {
         InfoBlockBody body;
     };
 
-    struct FileBlockBody {/* empty structure */};
+    struct FileBlockBody { /* empty structure */
+    };
 
     struct FileBlock {
         BinaryBlockHeader header;
@@ -55,4 +55,5 @@ struct WaveArchiveFile {
     };
     static_assert(sizeof(FileBlock) == 0xc);
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail
