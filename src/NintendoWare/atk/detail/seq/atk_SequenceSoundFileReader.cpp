@@ -41,4 +41,8 @@ SequenceSoundFileReader::SequenceSoundFileReader(const void* sequenceFile) {
     m_pLabelBlockBody = &labelBlock->body;
 }
 
+const void* SequenceSoundFileReader::GetSequenceData() const {
+    return m_pDataBlockBody;
+}
+
 }  // namespace nn::atk::detail
