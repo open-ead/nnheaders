@@ -262,10 +262,10 @@ public:
         Table<WaveId> table;
 
         const WaveId* GetWaveId(u32 index) const { 
-            if (index < table.count)
-                return &table.item[index];
-
-            return nullptr;
+            if (index >= table.count)
+                return nullptr;
+            
+            return &table.item[index];
         }
 
         u32 GetCount() const { return table.count; }
@@ -273,8 +273,12 @@ public:
 
     template <typename CHILD>
     class Singleton {
+        Singleton() = default;
+
     public:
         static CHILD& GetInstance();
+
+        friend CHILD;
     };
 
     static int GetSubMixBusFromMainBus();
