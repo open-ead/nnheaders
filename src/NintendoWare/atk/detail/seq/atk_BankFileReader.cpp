@@ -22,6 +22,10 @@ bool IsValidFileHeaderBank(const void* bankFile) {
 
 BankFileReader::BankFileReader() = default;
 
+BankFileReader::BankFileReader(const void* bankFile) {
+    Initialize(bankFile);
+}
+
 void BankFileReader::Initialize(const void* bankFile) {
     if (bankFile == nullptr || !IsValidFileHeaderBank(bankFile))
         return;
