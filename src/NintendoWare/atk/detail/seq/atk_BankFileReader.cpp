@@ -52,7 +52,7 @@ bool BankFileReader::ReadVelocityRegionInfo(VelocityRegionInfo* info, int progra
                                             int velocity) const {
     if (!m_IsInitialized || programNo < 0 || programNo >= GetInstrumentCount())
         return false;
-    
+
     const BankFile::Instrument* instrument{m_pInfoBlockBody->GetInstrument(programNo)};
     if (instrument == nullptr)
         return false;
@@ -82,8 +82,7 @@ bool BankFileReader::ReadVelocityRegionInfo(VelocityRegionInfo* info, int progra
         info->keyGroup = velocityRegion->GetKeyGroup();
         info->interpolationType = velocityRegion->GetInterpolationType();
         info->adshrCurve = velocityRegion->GetAdshrCurve();
-    }
-    else {
+    } else {
         info->originalKey = regionParameter->originalKey;
         info->volume = regionParameter->volume;
         info->pan = regionParameter->pan;
@@ -93,8 +92,15 @@ bool BankFileReader::ReadVelocityRegionInfo(VelocityRegionInfo* info, int progra
         info->interpolationType = regionParameter->interpolationType;
         info->adshrCurve = regionParameter->adshrCurve;
     }
-        
+
     return true;
+}
+
+const Util::WaveIdTable* BankFileReader::GetWaveIdTable() const {
+    if (!m_IsInitialized)
+        return nullptr;
+
+    return &m_pInfoBlockBody->GetWaveIdTable();
 }
 
 }  // namespace nn::atk::detail

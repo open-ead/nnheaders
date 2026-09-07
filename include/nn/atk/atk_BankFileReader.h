@@ -3,6 +3,7 @@
 #include <nn/atk/atk_BankFile.h>
 
 namespace nn::atk::detail {
+
 struct VelocityRegionInfo {
     u32 waveArchiveId;
     u32 waveIndex;
@@ -15,8 +16,7 @@ struct VelocityRegionInfo {
     u8 keyGroup;
     u8 interpolationType;
 
-    VelocityRegionInfo() 
-        : adshrCurve(0, 0, 0, 0, 0) {};
+    VelocityRegionInfo() : adshrCurve(0, 0, 0, 0, 0) {};
 };
 static_assert(sizeof(VelocityRegionInfo) == 0x18);
 
@@ -41,11 +41,11 @@ public:
 
     int GetInstrumentCount() const { return m_pInfoBlockBody->GetInstrumentCount(); }
 
-
 private:
     const BankFile::FileHeader* m_pHeader{};
     const BankFile::InfoBlockBody* m_pInfoBlockBody{};
     bool m_IsInitialized{false};
 };
 static_assert(sizeof(BankFileReader) == 0x18);
+
 }  // namespace nn::atk::detail
