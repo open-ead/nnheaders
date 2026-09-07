@@ -40,4 +40,12 @@ void BankFileReader::Initialize(const void* bankFile) {
     }
 }
 
+void BankFileReader::Finalize() {
+    if (m_IsInitialized) {
+        m_IsInitialized = false;
+        m_pHeader = nullptr;
+        m_pInfoBlockBody = nullptr;
+    }
+}
+
 }  // namespace nn::atk::detail
