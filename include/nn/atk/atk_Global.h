@@ -5,31 +5,54 @@
 
 namespace nn::atk {
 
-enum WaveType {
-    WaveType_Invalid = -1,
-    WaveType_Nwwav,
-    WaveType_Dspadpcm,
+using SoundFrameUserCallback = void (*)(uintptr_t);
+using SoundThreadUserCallback = void (*)(uintptr_t);
+using SoundStopCallback = void (*)();
+
+enum OutputMode {
+    OutputMode_Monaural,
+    OutputMode_Stereo,
+    OutputMode_Surround,
+    OutputMode_Dpl2,
+    OutputMode_Count,
 };
 
-struct WaveBuffer {
-    enum Status {
-        Status_Free,
-        Status_Wait,
-        Status_Play,
-        Status_Done,
-    };
+static const u32 InvalidSoundId{0xffffffff};
 
-    void* bufferAddress;
-    size_t bufferSize;
-    size_t sampleLength;
-    position_t sampleOffset;
-    AdpcmContext* pAdpcmContext;
-    void* userParam;
-    bool loopFlag;
-    Status status;
-    WaveBuffer* next;
+// DWARF shows this initialized as 18446744073709551615
+static const int InvalidStreamJumpRegionIndex{-1};
+
+static const int RegionNameLengthMax{63};
+
+static const int PlayerPriorityMin{0};
+static const int PlayerPriorityMax{127};
+
+enum OutputDeviceIndex {
+    OutputDeviceIndex_Main,
+    OutputDeviceIndex_Count,
 };
-static_assert(sizeof(WaveBuffer) == 0x40);
+
+enum OutputLineIndex {
+    OutputLineIndex_Main = 0,
+    OutputLineIndex_ReservedMax = 1,
+
+    OutputLineIndex_User0 = 16,
+    OutputLineIndex_User1 = 17,
+    OutputLineIndex_User2 = 18,
+    OutputLineIndex_User3 = 19,
+
+    OutputLineIndex_Max = 32,
+};
+
+enum OutputLine {
+    OutputLine_Main = 1 << OutputLineIndex_Main,
+    OutputLine_ReservedMax = 1 << OutputLineIndex_ReservedMax,
+
+    OutputLine_User0 = 1 << OutputLineIndex_User0,
+    OutputLine_User1 = 1 << OutputLineIndex_User1,
+    OutputLine_User2 = 1 << OutputLineIndex_User2,
+    OutputLine_User3 = 1 << OutputLineIndex_User3,
+};
 
 enum AuxBus {
     AuxBus_A,
@@ -38,11 +61,120 @@ enum AuxBus {
     AuxBus_Count,
 };
 
+enum SampleFormat {
+    SampleFormat_PcmS8,
+    SampleFormat_PcmS16,
+    SampleFormat_DspAdpcm,
+    SampleFormat_PcmS32,
+};
+
+enum SequenceMute {
+    SequenceMute_Off,
+    SequenceMute_NoStop,
+    SequenceMute_Release,
+    SequenceMute_Stop,
+};
+
+enum OutputDevice {
+    OutputDevice_Main,
+    OutputDevice_Count,
+};
+
+enum ChannelIndex {
+    ChannelIndex_FrontLeft,
+    ChannelIndex_FrontRight,
+    ChannelIndex_RearLeft,
+    ChannelIndex_RearRight,
+    ChannelIndex_FrontCenter,
+    ChannelIndex_Lfe,
+    ChannelIndex_Count,
+};
+
+static const u32 WaveChannelMax{2};
+
+static const u32 SeqBankMax{4};
+
+enum PanMode {
+    PanMode_Dual,
+    PanMode_Balance,
+    PanMode_Invalid,
+};
+
+enum PanCurve {
+    PanCurve_Sqrt,
+    PanCurve_Sqrt0Db,
+    PanCurve_Sqrt0DbClamp,
+    PanCurve_Sincos,
+    PanCurve_Sincos0Db,
+    PanCurve_Sincos0DbClamp,
+    PanCurve_Linear,
+    PanCurve_Linear0Db,
+    PanCurve_Linear0DbClamp,
+    PanCurve_Invalid,
+};
+
+enum SinglePlayType {
+    SinglePlayType_None,
+    SinglePlayType_PrioritizeOldest,
+    SinglePlayType_PrioritizeOldestEffectiveDuration,
+    SinglePlayType_PrioritizeOldestWithDuration = SinglePlayType_PrioritizeOldestEffectiveDuration,
+
+    SinglePlayType_PrioritizeNewest,
+    SinglePlayType_PrioritizeNewestEffectiveDuration,
+    SinglePlayType_PrioritizeNewestWithDuration = SinglePlayType_PrioritizeNewestEffectiveDuration,
+};
+
+enum WaveType {
+    WaveType_Invalid = -1,
+    WaveType_Nwwav,
+    WaveType_Dspadpcm,
+};
+
+struct DspAdpcmParam {
+    u16 coef[8][2];
+    u16 predScale;
+    u16 yn1;
+    u16 yn2;
+};
+static_assert(sizeof(DspAdpcmParam) == 0x26);
+
+class AdshrCurve {
+public:
+    AdshrCurve(u8 a, u8 d, u8 s, u8 h, u8 r)
+        : m_Attack{a}, m_Decay{d}, m_Sustain{s}, m_Hold{h}, m_Release{r} {}
+
+    u8 GetAttack() const { return m_Attack; }
+
+    void SetAttack(u8 attack) { m_Attack = attack; }
+
+    u8 GetDecay() const { return m_Decay; }
+
+    void SetDecay(u8 decay) { m_Decay = decay; }
+
+    u8 GetSustain() const { return m_Sustain; }
+
+    void SetSustain(u8 sustain) { m_Sustain = sustain; }
+
+    u8 GetHold() const { return m_Hold; }
+
+    void SetHold(u8 hold) { m_Hold = hold; }
+
+    u8 GetRelease() const { return m_Release; }
+
+    void SetRelease(u8 release) { m_Release = release; }
+
+private:
+    u8 m_Attack;
+    u8 m_Decay;
+    u8 m_Sustain;
+    u8 m_Hold;
+    u8 m_Release;
+};
+static_assert(sizeof(AdshrCurve) == 0x5);
+
 enum BiquadFilterType {
     BiquadFilterType_Inherit = -1,
-    BiquadFilterType_Min = -1,
-    BiquadFilterType_DataMin = 0,
-
+    
     BiquadFilterType_None = 0,
     BiquadFilterType_LowPassFilter,
     BiquadFilterType_HighPassFilter,
@@ -55,7 +187,7 @@ enum BiquadFilterType {
     BiquadFilterType_BandPassFilter1024Nw4fCompatible48k,
     BiquadFilterType_BandPassFilter2048Nw4fCompatible48k,
 
-    BiquadFilterType_UserMin = 0x40,
+    BiquadFilterType_UserMin = 64,
 
     BiquadFilterType_User0 = BiquadFilterType_UserMin,
     BiquadFilterType_User1,
@@ -122,18 +254,116 @@ enum BiquadFilterType {
     BiquadFilterType_User62,
     BiquadFilterType_User63,
 
-    BiquadFilterType_Max = 0x7f,
-    BiquadFilterType_UserMax = 0x7f,
+    BiquadFilterType_UserMax = 127,
+
+    BiquadFilterType_DataMin = 0,
+    BiquadFilterType_Min = BiquadFilterType_Inherit,
+
+    BiquadFilterType_Max = BiquadFilterType_UserMax,
 };
 
-enum ChannelIndex {
-    ChannelIndex_FrontLeft,
-    ChannelIndex_FrontRight,
-    ChannelIndex_RearLeft,
-    ChannelIndex_RearRight,
-    ChannelIndex_FrontCenter,
-    ChannelIndex_Lfe,
-    ChannelIndex_Count,
+enum SampleRateConverterType {
+    SampleRateConverterType_None,
+    SampleRateConverterType_Linear,
+    SampleRateConverterType_4Tap,
+};
+
+struct OutputMix {
+    static const int ChannelCountMax{24};
+
+    float channelGain[ChannelCountMax]{};
+
+    void Initialize();
+};
+static_assert(sizeof(OutputMix) == 0x60);
+
+struct WaveBuffer {
+    enum Status {
+        Status_Free,
+        Status_Wait,
+        Status_Play,
+        Status_Done,
+    };
+
+    const void* bufferAddress;
+    size_t bufferSize;
+    position_t sampleLength;
+    position_t sampleOffset;
+    const AdpcmContext* pAdpcmContext;
+    void* userParam;
+    bool loopFlag;
+    Status status;
+    WaveBuffer* next;
+
+    WaveBuffer() = default;
+    ~WaveBuffer();
+
+    void Initialize();
+    void Dump();
+};
+static_assert(sizeof(WaveBuffer) == 0x40);
+
+struct BiquadFilterCoefficients {
+    s16 b0{0};
+    s16 b1{0};
+    s16 b2{0};
+    s16 a1{0};
+    s16 a2{0};
+};
+static_assert(sizeof(BiquadFilterCoefficients) == 0xa);
+
+enum MixMode {
+    MixMode_Pan = 0,
+    MixMode_MixVolume = 1,
+    MixMode_Mixparameter = 1,
+    MixMode_Count = 2,
+};
+
+struct MixVolume {
+    union {
+        struct {
+            float frontLeft;
+            float frontRight;
+            float rearLeft;
+            float rearRight;
+            float frontCenter;
+            float lowFrequencyEffect;
+        };
+        float channel[ChannelIndex_Count];
+    };
+};
+static_assert(sizeof(MixVolume) == 0x18);
+
+struct MixParameter {
+    union {
+        struct {
+            float fL;
+            float fR;
+            float rL;
+            float rR;
+            float fC;
+            float lfe;
+        };
+        float ch[ChannelIndex_Count];
+    };
+
+    MixParameter() { fL = fR = rL = rR = fC = lfe = 1.0f; }
+
+    MixParameter(float _fL, float _fR, float _rL, float _rR, float _fC, float _lfe)
+        : fL{_fL}, fR{_fR}, rL{_rL}, rR{_rR}, fC{_fC}, lfe{_lfe} {}
+};
+static_assert(sizeof(MixParameter) == 0x18);
+
+enum UpdateType {
+    UpdateType_AudioFrame,
+    UpdateType_GameFrame,
+};
+
+enum PauseMode {
+    PauseMode_Default = 0,
+
+    PauseMode_Nw4fSndCompatible = PauseMode_Default,
+    PauseMode_PauseImmediately,
 };
 
 enum CircularBufferSinkState {
@@ -148,221 +378,11 @@ enum FsPriority {
     FsPriority_Low,
 };
 
-class AdshrCurve {
-public:
-    AdshrCurve(u8 a, u8 d, u8 s, u8 h, u8 r)
-        : m_Attack{a}, m_Decay{d}, m_Sustain{s}, m_Hold{h}, m_Release{r} {}
-
-    u8 GetAttack() const { return m_Attack; }
-
-    void SetAttack(u8 attack) { m_Attack = attack; }
-
-    u8 GetDecay() const { return m_Decay; }
-
-    void SetDecay(u8 decay) { m_Decay = decay; }
-
-    u8 GetSustain() const { return m_Sustain; }
-
-    void SetSustain(u8 sustain) { m_Sustain = sustain; }
-
-    u8 GetHold() const { return m_Hold; }
-
-    void SetHold(u8 hold) { m_Hold = hold; }
-
-    u8 GetRelease() const { return m_Release; }
-
-    void SetRelease(u8 release) { m_Release = release; }
-
-private:
-    u8 m_Attack;
-    u8 m_Decay;
-    u8 m_Sustain;
-    u8 m_Hold;
-    u8 m_Release;
-};
-static_assert(sizeof(AdshrCurve) == 0x5);
-
-struct BiquadFilterCoefficients {
-    s16 b0{0};
-    s16 b1{0};
-    s16 b2{0};
-    s16 a1{0};
-    s16 a2{0};
-};
-static_assert(sizeof(BiquadFilterCoefficients) == 0xa);
-
-struct DspAdpcmParam {
-    u16 coef[8][2];
-    u16 predScale;
-    u16 yn1;
-    u16 yn2;
-};
-static_assert(sizeof(DspAdpcmParam) == 0x26);
-
-enum MixMode {
-    MixMode_Pan = 0,
-    MixMode_MixVolume = 1,
-    MixMode_Mixparameter = 1,
-    MixMode_Count = 2,
-};
-
-struct MixParameter {
-    union {
-        struct {
-            f32 fL;
-            f32 fR;
-            f32 rL;
-            f32 rR;
-            f32 fC;
-            f32 lfe;
-        };
-        float ch[ChannelIndex_Count];
-    };
-
-    // why does this work
-    MixParameter() { fL = fR = rL = rR = fC = lfe = 1.0f; }
-
-    MixParameter(float _fL, float _fR, float _rL, float _rR, float _fC, float _lfe)
-        : fL{_fL}, fR{_fR}, rL{_rL}, rR{_rR}, fC{_fC}, lfe{_lfe} {}
-};
-static_assert(sizeof(MixParameter) == 0x18);
-
-struct MixVolume {
-    union {
-        struct {
-            f32 frontLeft;
-            f32 frontRight;
-            f32 rearLeft;
-            f32 rearRight;
-            f32 frontCenter;
-            f32 lowFrequencyEffect;
-        };
-        float channel[ChannelIndex_Count];
-    };
-};
-static_assert(sizeof(MixVolume) == 0x18);
-
-enum OutputDevice {
-    OutputDevice_Main,
-    OutputDevice_Count,
-};
-
-enum OutputDeviceIndex {
-    OutputDeviceIndex_Main,
-    OutputDeviceIndex_Count,
-};
-
-enum OutputLine {
-    OutputLine_Main = 1,
-    OutputLine_ReservedMax = 2,
-
-    OutputLine_User0 = 0x10000,
-    OutputLine_User1 = 0x20000,
-    OutputLine_User2 = 0x40000,
-    OutputLine_User3 = 0x80000,
-};
-
-enum OutputLineIndex {
-    OutputLineIndex_Main = 1,
-    OutputLineIndex_ReservedMax = 2,
-
-    OutputLineIndex_User0 = 0x10000,
-    OutputLineIndex_User1 = 0x20000,
-    OutputLineIndex_User2 = 0x40000,
-    OutputLineIndex_User3 = 0x80000,
-};
-
-enum OutputMode {
-    OutputMode_Monaural,
-    OutputMode_Stereo,
-    OutputMode_Surround,
-    OutputMode_Dpl2,
-    OutputMode_Count,
-};
-
-struct OutputMix {
-    OutputMix() = default;
-
-    f32 channelGain[24]{0};
-};
-static_assert(sizeof(OutputMix) == 0x60);
-
-enum PanCurve {
-    PanCurve_Sqrt,
-    PanCurve_Sqrt0Db,
-    PanCurve_Sqrt0DbClamp,
-    PanCurve_Sincos,
-    PanCurve_Sincos0Db,
-    PanCurve_Sincos0DbClamp,
-    PanCurve_Linear,
-    PanCurve_Linear0Db,
-    PanCurve_Linear0DbClamp,
-    PanCurve_Invalid,
-};
-
-enum PanMode {
-    PanMode_Dual,
-    PanMode_Balance,
-    PanMode_Invalid,
-};
-
-enum PauseMode {
-    PauseMode_Default = 0,
-
-    PauseMode_Nw4fSndCompatible = PauseMode_Default,
-    PauseMode_PauseImmediately,
-};
-
-enum SampleFormat {
-    SampleFormat_PcmS8,
-    SampleFormat_PcmS16,
-    SampleFormat_DspAdpcm,
-    SampleFormat_PcmS32,
-};
-
-enum SampleRateConverterType {
-    SampleRateConverterType_None,
-    SampleRateConverterType_Linear,
-    SampleRateConverterType_4Tap,
-};
-
-enum SequenceMute {
-    SequenceMute_Off,
-    SequenceMute_NoStop,
-    SequenceMute_Release,
-    SequenceMute_Stop,
-};
-
-enum SinglePlayType {
-    SinglePlayType_None,
-    SinglePlayType_PrioritizeOldest,
-    SinglePlayType_PrioritizeOldestEffectiveDuration,
-    SinglePlayType_PrioritizeOldestWithDuration = SinglePlayType_PrioritizeOldestEffectiveDuration,
-
-    SinglePlayType_PrioritizeNewest,
-    SinglePlayType_PrioritizeNewestEffectiveDuration,
-    SinglePlayType_PrioritizeNewestWithDuration = SinglePlayType_PrioritizeNewestEffectiveDuration,
-};
-
-struct StreamDataInfo {};
-
-enum UpdateType {
-    UpdateType_AudioFrame,
-    UpdateType_GameFrame,
-};
-
 enum VolumeThroughModeBitFlag {
     VolumeThroughMode_Binary = 1,
 };
 
 namespace detail {
-
-enum DecodeMode {
-    DecodeMode_Invalid = -1,
-    DecodeMode_Default,
-    DecodeMode_Cpu,
-    DecodeMode_Accelerator,
-};
 
 struct DspAdpcmLoopParam {
     u16 loopPredScale;
@@ -371,38 +391,72 @@ struct DspAdpcmLoopParam {
 };
 static_assert(sizeof(DspAdpcmLoopParam) == 0x6);
 
-struct OutputBusMixVolume {
-    float volume[2][24];
+struct WaveInfo {
+    struct ChannelParam {
+        const void* dataAddress;
+        int dataSize;
+        DspAdpcmParam adpcmParam;
+        DspAdpcmLoopParam adpcmLoopParam;
+    };
+    static_assert(sizeof(ChannelParam) == 0x38);
+
+    SampleFormat sampleFormat;
+    bool loopFlag;
+    int channelCount;
+    int sampleRate;
+    position_t loopStartFrame;
+    position_t loopEndFrame;
+    position_t originalLoopStartFrame;
+    size_t dataSize;
+    ChannelParam channelParam[WaveChannelMax];
+
+    void Dump();
 };
-static_assert(sizeof(OutputBusMixVolume) == 0xc0);
+static_assert(sizeof(WaveInfo) == 0xa0);
+
+static const int DefaultBusCount{4};
 
 struct OutputParam {
     float volume;
     u32 mixMode;
-    MixParameter mixParameter[2];
+    MixParameter mixParameter[WaveChannelMax];
     float pan;
     float span;
-    float send[AuxBus_Count + 1];
+    float send[DefaultBusCount];
 
     void Initialize() {
         volume = 1.0f;
         mixMode = MixMode_Pan;
         pan = 0.0f;
         span = 0.0f;
-        for (int i{0}; i < 4; ++i)
+        for (int i{0}; i < DefaultBusCount; ++i)
             send[i] = 0.0f;
     }
-
-    OutputParam() = default;
 };
 static_assert(sizeof(OutputParam) == 0x50);
+
+struct OutputBusMixVolume {
+    float volume[WaveChannelMax][OutputMix::ChannelCountMax];
+
+    void Initialize();
+};
+static_assert(sizeof(OutputBusMixVolume) == 0xc0);
+
+enum DecodeMode {
+    DecodeMode_Invalid = -1,
+    DecodeMode_Default,
+    DecodeMode_Cpu,
+    DecodeMode_Accelerator,
+};
+
+static const int MaxPerformanceBufferCount{3};
 
 struct SoundInstanceConfig {
     bool isBusMixVolumeEnabled;
     bool isVolumeThroughModeEnabled;
-    s32 busCount;
+    int busCount;
 };
-static_assert(sizeof(SoundInstanceConfig) == 8);
+static_assert(sizeof(SoundInstanceConfig) == 0x8);
 
 enum StreamFileType {
     StreamFileType_Bfstm,
@@ -414,15 +468,6 @@ enum VoiceState {
     VoiceState_Stop,
     VoiceState_Pause,
 };
-
-struct VoiceInfo {
-    VoiceState voiceState;
-    WaveBuffer::Status waveBufferStatus;
-    void* waveBufferTag;
-    u32 playPosition;
-    void* userId;
-};
-static_assert(sizeof(VoiceInfo) == 0x20);
 
 class VoiceParam {
 public:
@@ -442,34 +487,20 @@ private:
 };
 static_assert(sizeof(VoiceParam) == 0x78);
 
-struct WaveInfo {
-    struct ChannelParam {
-        const void* dataAddress;
-        int dataSize;
-        DspAdpcmParam adpcmParam;
-        DspAdpcmLoopParam adpcmLoopParam;
-    };
-    static_assert(sizeof(ChannelParam) == 0x38);
-
-    SampleFormat sampleFormat;
-    bool loopFlag;
-    int channelCount;
-    int sampleRate;
-    position_t loopStartFrame;
-    position_t loopEndFrame;
-    position_t originalLoopStartFrame;
-    size_t dataSize;
-    ChannelParam channelParam[2];
+struct VoiceInfo {
+    VoiceState voiceState;
+    WaveBuffer::Status waveBufferStatus;
+    void* waveBufferTag;
+    u32 playPosition;
+    void* userId;
 };
-static_assert(sizeof(WaveInfo) == 0xa0);
+static_assert(sizeof(VoiceInfo) == 0x20);
 
-static const OutputMix DefaultTvMix{{1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+static const int FilePathMax{639};
+static const int PpcIoBufferAlign{64};
+
+static const int StreamBlockCountMin{2};
 
 }  // namespace detail
-
-using SoundFrameUserCallback = void (*)(std::uintptr_t);
-using SoundThreadUserCallback = void (*)(std::uintptr_t);
-using SoundStopCallback = void (*)();
 
 }  // namespace nn::atk
