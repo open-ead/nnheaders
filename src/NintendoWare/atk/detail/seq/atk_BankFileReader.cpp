@@ -48,4 +48,53 @@ void BankFileReader::Finalize() {
     }
 }
 
+bool BankFileReader::ReadVelocityRegionInfo(VelocityRegionInfo* info, int programNo, int key,
+                                            int velocity) const {
+    if (!m_IsInitialized || programNo < 0 || programNo >= GetInstrumentCount())
+        return false;
+    
+    const BankFile::Instrument* instrument{m_pInfoBlockBody->GetInstrument(programNo)};
+    if (instrument == nullptr)
+        return false;
+
+    const BankFile::KeyRegion* keyRegion{instrument->GetKeyRegion(key)};
+    if (keyRegion == nullptr)
+        return false;
+
+    const BankFile::VelocityRegion* velocityRegion{keyRegion->GetVelocityRegion(velocity)};
+    if (velocityRegion == nullptr)
+        return false;
+
+    const Util::WaveId* pWaveId{m_pInfoBlockBody->GetWaveId(velocityRegion->waveIdTableIndex)};
+    if (pWaveId == nullptr || pWaveId->waveIndex == 0xffffffff)
+        return false;
+
+    info->waveArchiveId = pWaveId->waveArchiveId;
+    info->waveIndex = pWaveId->waveIndex;
+
+    const BankFile::RegionParameter* regionParameter{velocityRegion->GetRegionParameter()};
+    if (regionParameter == nullptr) {
+        info->originalKey = velocityRegion->GetOriginalKey();
+        info->volume = velocityRegion->GetVolume();
+        info->pan = velocityRegion->GetPan();
+        info->pitch = velocityRegion->GetPitch();
+        info->isIgnoreNoteOff = velocityRegion->IsIgnoreNoteOff();
+        info->keyGroup = velocityRegion->GetKeyGroup();
+        info->interpolationType = velocityRegion->GetInterpolationType();
+        info->adshrCurve = velocityRegion->GetAdshrCurve();
+    }
+    else {
+        info->originalKey = regionParameter->originalKey;
+        info->volume = regionParameter->volume;
+        info->pan = regionParameter->pan;
+        info->pitch = regionParameter->pitch;
+        info->isIgnoreNoteOff = regionParameter->isIgnoreNoteOff;
+        info->keyGroup = regionParameter->keyGroup;
+        info->interpolationType = regionParameter->interpolationType;
+        info->adshrCurve = regionParameter->adshrCurve;
+    }
+        
+    return true;
+}
+
 }  // namespace nn::atk::detail

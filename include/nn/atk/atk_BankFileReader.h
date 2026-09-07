@@ -39,7 +39,7 @@ public:
 
     const void* GetBankFileAddress() const { return m_pHeader; }
 
-    int GetInstrumentCount() { return m_pInfoBlockBody->GetInstrumentCount(); }
+    int GetInstrumentCount() const { return m_pInfoBlockBody->GetInstrumentCount(); }
 
 
 private:
