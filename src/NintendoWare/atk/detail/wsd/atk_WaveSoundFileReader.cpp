@@ -34,4 +34,8 @@ WaveSoundFileReader::WaveSoundFileReader(const void* waveSoundFile) {
     }
 }
 
+u32 WaveSoundFileReader::GetWaveSoundCount() const {
+    return m_pInfoBlockBody->GetWaveSoundCount();
+}
+
 }  // namespace nn::atk::detail
