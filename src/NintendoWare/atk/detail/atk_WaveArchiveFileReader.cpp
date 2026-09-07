@@ -64,7 +64,14 @@ u32 WaveArchiveFileReader::GetWaveFileCount() const {
     if (!m_IsInitialized)
         return 0;
 
-    return m_pInfoBlockBody->table.count;
+    return m_pInfoBlockBody->GetWaveFileCount();
+}
+
+u32 WaveArchiveFileReader::GetWaveFileSize(u32 waveIndex) const {
+    if (!m_IsInitialized)
+        return 0;
+
+    return m_pInfoBlockBody->GetSize(waveIndex);
 }
 
 bool WaveArchiveFileReader::HasIndividualLoadTable() const {
