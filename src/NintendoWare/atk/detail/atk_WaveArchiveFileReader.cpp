@@ -74,6 +74,16 @@ u32 WaveArchiveFileReader::GetWaveFileSize(u32 waveIndex) const {
     return m_pInfoBlockBody->GetSize(waveIndex);
 }
 
+u32 WaveArchiveFileReader::GetWaveFileOffsetFromFileHead(u32 waveIndex) const {
+    u32 result{0};
+
+    if (m_IsInitialized)
+        result = m_pHeader->GetFileBlockOffset() +
+                 m_pInfoBlockBody->GetOffsetFromFileBlockBody(waveIndex);
+
+    return result;
+}
+
 bool WaveArchiveFileReader::HasIndividualLoadTable() const {
     if (!m_IsInitialized)
         return false;
