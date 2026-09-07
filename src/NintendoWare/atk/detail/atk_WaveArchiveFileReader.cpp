@@ -27,6 +27,26 @@ WaveArchiveFileReader::WaveArchiveFileReader() {
     m_pHeader = nullptr;
 }
 
+void WaveArchiveFileReader::Initialize(const void* pWaveArchiveFile, bool isIndividual) {
+    if (pWaveArchiveFile == nullptr || !IsValidFileHeaderWar(pWaveArchiveFile))
+        return;
+
+    m_pHeader = reinterpret_cast<const WaveArchiveFile::FileHeader*>(pWaveArchiveFile);
+
+    m_pInfoBlockBody = &m_pHeader->GetInfoBlock()->body;
+    m_IsInitialized = true;
+
+    m_pLoadTable = nullptr;
+
+    if (!isIndividual || !HasIndividualLoadTable())
+        return;
+
+    m_pLoadTable = util::BytePtr(const_cast<void*>(pWaveArchiveFile))
+                       .Advance(m_pHeader->GetFileBlockOffset() +
+                                sizeof(WaveArchiveFileReader::SignatureWarcTable))
+                       .Get<IndividualLoadTable>();
+}
+
 bool WaveArchiveFileReader::HasIndividualLoadTable() const {
     if (!m_IsInitialized)
         return false;
