@@ -51,7 +51,8 @@ u32 WaveSoundFileReader::GetTrackInfoCount(u32 index) const {
 }
 
 bool WaveSoundFileReader::ReadWaveSoundInfo(WaveSoundInfo* dst, u32 index) const {
-    const WaveSoundFile::WaveSoundInfo& src{m_pInfoBlockBody->GetWaveSoundData(index).GetWaveSoundInfo()};
+    const WaveSoundFile::WaveSoundInfo& src{
+        m_pInfoBlockBody->GetWaveSoundData(index).GetWaveSoundInfo()};
 
     dst->pitch = src.GetPitch();
     dst->pan = src.GetPan();
@@ -63,12 +64,31 @@ bool WaveSoundFileReader::ReadWaveSoundInfo(WaveSoundInfo* dst, u32 index) const
         dst->lpfFreq = src.GetLpfFreq();
         dst->biquadType = src.GetBiquadType();
         dst->biquadValue = src.GetBiquadValue();
+    } else {
+        dst->lpfFreq = 64;     // WsdDefaultLpfFreq
+        dst->biquadType = 0;   // WsdDefaultBiquadType
+        dst->biquadValue = 0;  // WsdDefaultBiquadValue
     }
-    else {
-        dst->lpfFreq = 64; // WsdDefaultLpfFreq
-        dst->biquadType = 0; // WsdDefaultBiquadType
-        dst->biquadValue = 0; // WsdDefaultBiquadValue
-    }
+
+    return true;
+}
+
+bool WaveSoundFileReader::ReadNoteInfo(WaveSoundNoteInfo* dst, u32 index, u32 noteIndex) const {
+    const WaveSoundFile::NoteInfo& src{
+        m_pInfoBlockBody->GetWaveSoundData(index).GetNoteInfo(noteIndex)};
+
+    const Util::WaveId* pWaveId{m_pInfoBlockBody->GetWaveIdTable().GetWaveId(src.waveIdTableIndex)};
+    if (pWaveId == nullptr)
+        return false;
+
+    dst->waveArchiveId = pWaveId->waveArchiveId;
+    dst->waveIndex = static_cast<s32>(pWaveId->waveIndex);
+    dst->pitch = src.GetPitch();
+    dst->adshr = src.GetAdshrCurve();
+    dst->originalKey = src.GetOriginalKey();
+    dst->pan = src.GetPan();
+    dst->surroundPan = src.GetSurroundPan();
+    dst->volume = src.GetVolume();
 
     return true;
 }
