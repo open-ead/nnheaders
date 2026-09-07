@@ -50,6 +50,29 @@ u32 WaveSoundFileReader::GetTrackInfoCount(u32 index) const {
     return wsdData.GetTrackCount();
 }
 
+bool WaveSoundFileReader::ReadWaveSoundInfo(WaveSoundInfo* dst, u32 index) const {
+    const WaveSoundFile::WaveSoundInfo& src{m_pInfoBlockBody->GetWaveSoundData(index).GetWaveSoundInfo()};
+
+    dst->pitch = src.GetPitch();
+    dst->pan = src.GetPan();
+    dst->surroundPan = src.GetSurroundPan();
+    src.GetSendValue(&dst->mainSend, dst->fxSend, AuxBus_Count);
+    dst->adshr = src.GetAdshrCurve();
+
+    if (IsFilterSupportedVersion()) {
+        dst->lpfFreq = src.GetLpfFreq();
+        dst->biquadType = src.GetBiquadType();
+        dst->biquadValue = src.GetBiquadValue();
+    }
+    else {
+        dst->lpfFreq = 64; // WsdDefaultLpfFreq
+        dst->biquadType = 0; // WsdDefaultBiquadType
+        dst->biquadValue = 0; // WsdDefaultBiquadValue
+    }
+
+    return true;
+}
+
 bool WaveSoundFileReader::IsFilterSupportedVersion() const {
     return m_pHeader->header.version >= FilterSupportedVersionWsd;
 }
