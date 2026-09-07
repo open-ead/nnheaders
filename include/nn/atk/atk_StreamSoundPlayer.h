@@ -7,6 +7,17 @@
 #include <nn/atk/atk_StreamTrack.h>
 
 namespace nn::atk::detail {
+struct StreamDataInfo {
+    bool loopFlag;
+    s32 sampleRate;
+    s64 loopStart;
+    s64 loopEnd;
+    s64 compatibleLoopStart;
+    s64 compatibleLoopEnd;
+    s32 channelCount;
+};
+static_assert(sizeof(StreamDataInfo) == 0x30);
+
 struct StreamSoundDataInfo {
     bool loopFlag;
     s32 sampleRate;
@@ -189,6 +200,7 @@ public:
     bool IsBufferEmpty() const;
 
     bool ReadStreamDataInfo(StreamDataInfo* strmDataInfo) const;
+    bool ReadStreamDataInfo(StreamSoundDataInfo* strmDataInfo) const;
 
     position_t GetPlaySamplePosition(bool) const;
     f32 GetFilledBufferPercentage() const;
