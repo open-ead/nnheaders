@@ -97,6 +97,22 @@ const void* WaveArchiveFileReader::GetWaveFile(u32 waveIndex) const {
     return GetWaveFileForWhole(waveIndex);
 }
 
+const void* WaveArchiveFileReader::SetWaveFile(u32 waveIndex, const void* pWaveFile) {
+    if (!m_IsInitialized)
+        return nullptr;
+
+    if (m_pLoadTable == nullptr)
+        return nullptr;
+
+    if (waveIndex >= m_pInfoBlockBody->GetWaveFileCount())
+        return nullptr;
+
+    const void* preAddress{GetWaveFileForIndividual(waveIndex)};
+    m_pLoadTable->waveFile[waveIndex] = pWaveFile;
+
+    return preAddress;
+}
+
 bool WaveArchiveFileReader::HasIndividualLoadTable() const {
     if (!m_IsInitialized)
         return false;

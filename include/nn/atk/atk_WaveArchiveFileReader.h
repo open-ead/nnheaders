@@ -24,14 +24,14 @@ public:
     u32 GetWaveFileOffsetFromFileHead(u32 waveIndex) const;
 
     const void* GetWaveFile(u32 waveIndex) const;
-    void* SetWaveFile(u32 waveIndex, const void* pWaveFile);
+    const void* SetWaveFile(u32 waveIndex, const void* pWaveFile);
 
     bool IsLoaded(u32 waveIndex) { return m_IsInitialized && GetWaveFile(waveIndex) != nullptr; }
 
     bool HasIndividualLoadTable() const;
 
     struct IndividualLoadTable {
-        void* waveFile[1];
+        const void* waveFile[1];
     };
 
 private:
