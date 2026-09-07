@@ -35,13 +35,13 @@ public:
     };
 
 private:
-    const void* GetWaveFileForWhole(u32 waveIndex) {
+    const void* GetWaveFileForWhole(u32 waveIndex) const {
         u32 offset{m_pInfoBlockBody->GetOffsetFromFileBlockBody(waveIndex)};
 
-        return util::ConstBytePtr(m_pHeader, offset).Get();
+        return util::ConstBytePtr(&m_pHeader->GetFileBlock()->body, offset).Get();
     }
 
-    const void* GetWaveFileForIndividual(u32 waveIndex) {
+    const void* GetWaveFileForIndividual(u32 waveIndex) const {
         return m_pLoadTable->waveFile[waveIndex];
     }
 
