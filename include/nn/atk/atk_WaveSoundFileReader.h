@@ -4,12 +4,12 @@
 
 namespace nn::atk::detail {
 struct WaveSoundInfo {
-    f32 pitch;
+    float pitch;
     AdshrCurve adshr;
     u8 pan;
     u8 surroundPan;
     u8 mainSend;
-    u8 fxSend[3];
+    u8 fxSend[DefaultBusCount - 1];
     u8 lpfFreq;
     u8 biquadType;
     u8 biquadValue;
@@ -24,7 +24,7 @@ struct WaveSoundNoteInfo {
     u8 pan;
     u8 surroundPan;
     u8 volume;
-    f32 pitch;
+    float pitch;
 
     WaveSoundNoteInfo()
         : adshr(0, 0, 0, 0, 0) {};
@@ -33,23 +33,25 @@ static_assert(sizeof(WaveSoundNoteInfo) == 0x18);
 
 class WaveSoundFileReader {
 public:
-    constexpr static s32 SignatureFile = 0x44535746; // FWSD
+    static const u32 SignatureFile{0x44535746}; // FWSD
 
     explicit WaveSoundFileReader(const void* waveSoundFile);
 
-    s32 GetWaveSoundCount() const;
-    s32 GetNoteInfoCount(u32) const;
-    s32 GetTrackInfoCount(u32) const;
+    bool IsAvailable() const { return m_pHeader != nullptr; }
+
+    u32 GetWaveSoundCount() const;
+    u32 GetNoteInfoCount(u32 index) const;
+    u32 GetTrackInfoCount(u32 index) const;
 
     bool ReadWaveSoundInfo(WaveSoundInfo* dst, u32 index) const;
 
+    bool ReadNoteInfo(WaveSoundNoteInfo* dst, u32 index, u32 noteIndex) const;
+    
     bool IsFilterSupportedVersion() const;
 
-    bool ReadNoteInfo(WaveSoundNoteInfo* dst, u32 index, u32 noteIndex) const;
-
 private:
-    WaveSoundFile::FileHeader* m_pHeader;
-    WaveSoundFile::InfoBlockBody* m_pInfoBlockBody;
+    const WaveSoundFile::FileHeader* m_pHeader{};
+    const WaveSoundFile::InfoBlockBody* m_pInfoBlockBody{};
 };
 static_assert(sizeof(WaveSoundFileReader) == 0x10);
 } // namespace nn::atk::detail
