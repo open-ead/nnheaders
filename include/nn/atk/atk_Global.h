@@ -216,8 +216,14 @@ struct MixParameter {
             f32 fC;
             f32 lfe;
         };
-        float ch[6];
+        float ch[ChannelIndex_Count];
     };
+
+    // why does this work
+    MixParameter() { fL = fR = rL = rR = fC = lfe = 1.0f; }
+
+    MixParameter(float _fL, float _fR, float _rL, float _rR, float _fC, float _lfe)
+        : fL{_fL}, fR{_fR}, rL{_rL}, rR{_rR}, fC{_fC}, lfe{_lfe} {}
 };
 static_assert(sizeof(MixParameter) == 0x18);
 
@@ -231,7 +237,7 @@ struct MixVolume {
             f32 frontCenter;
             f32 lowFrequencyEffect;
         };
-        float channel[6];
+        float channel[ChannelIndex_Count];
     };
 };
 static_assert(sizeof(MixVolume) == 0x18);
@@ -277,7 +283,7 @@ enum OutputMode {
 struct OutputMix {
     OutputMix() = default;
 
-    f32 channelGain[24] = {0};
+    f32 channelGain[24]{0};
 };
 static_assert(sizeof(OutputMix) == 0x60);
 
@@ -350,6 +356,7 @@ enum VolumeThroughModeBitFlag {
 };
 
 namespace detail {
+
 enum DecodeMode {
     DecodeMode_Invalid = -1,
     DecodeMode_Default,
@@ -375,7 +382,18 @@ struct OutputParam {
     MixParameter mixParameter[2];
     float pan;
     float span;
-    float send[4];
+    float send[AuxBus_Count + 1];
+
+    void Initialize() {
+        volume = 1.0f;
+        mixMode = MixMode_Pan;
+        pan = 0.0f;
+        span = 0.0f;
+        for (int i{0}; i < 4; ++i)
+            send[i] = 0.0f;
+    }
+
+    OutputParam() = default;
 };
 static_assert(sizeof(OutputParam) == 0x50);
 
@@ -447,6 +465,7 @@ static_assert(sizeof(WaveInfo) == 0xa0);
 
 static const OutputMix DefaultTvMix{{1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                                      0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+
 }  // namespace detail
 
 using SoundFrameUserCallback = void (*)(std::uintptr_t);

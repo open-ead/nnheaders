@@ -3,6 +3,7 @@
 namespace nn::atk::detail {
 
 namespace {
+
 const u32 SignatureInfoBlockBank{0x4f464e49};  // INFO
 
 const u32 SupportedFileVersionBank{0x10000};
@@ -18,6 +19,7 @@ bool IsValidFileHeaderBank(const void* bankFile) {
 
     return isSupportedVersion;
 }
+
 }  // anonymous namespace
 
 BankFileReader::BankFileReader() = default;
