@@ -3,40 +3,53 @@
 #include <nn/atk/atk_WaveArchiveFile.h>
 
 namespace nn::atk::detail {
+
 class WaveArchiveFileReader {
 public:
-    constexpr static s32 SignatureFile = 0x52415746; // FWAR
-    constexpr static s32 SignatureWarcTable = 0x54415746; // FWAT
+    static const u32 SignatureFile = 0x52415746;       // FWAR
+    static const u32 SignatureWarcTable = 0x54415746;  // FWAT
+
+    WaveArchiveFileReader(const void* pWaveArchiveFile, bool isIndividual);
+    WaveArchiveFileReader();
+
+    void Initialize(const void* pWaveArchiveFile, bool isIndividual);
+    void Finalize();
+
+    void InitializeFileTable();
+
+    bool IsAvailable() const { return m_pHeader != nullptr; }
+
+    u32 GetWaveFileCount() const;
+    u32 GetWaveFileSize(u32 waveIndex) const;
+    u32 GetWaveFileOffsetFromFileHead(u32 waveIndex) const;
+
+    const void* GetWaveFile(u32 waveIndex) const;
+    void* SetWaveFile(u32 waveIndex, const void* pWaveFile);
+
+    bool IsLoaded(u32 waveIndex) { return m_IsInitialized && GetWaveFile(waveIndex) != nullptr; }
+
+    bool HasIndividualLoadTable() const;
 
     struct IndividualLoadTable {
         void* waveFile[1];
     };
 
-    WaveArchiveFileReader();
-    WaveArchiveFileReader(const void* pWaveArchiveFile, bool isIndividual);
-    
-    void Initialize(const void* pWaveArchiveFile, bool isIndividual);
-
-    bool HasIndividualLoadTable() const;
-
-    void Finalize();
-
-    void InitializeFileTable();
-
-    u32 GetWaveFileCount() const;
-    void* GetWaveFile(u32 waveIndex) const;
-    u32 GetWaveFileSize(u32 waveIndex) const;
-    u32 GetWaveFileOffsetFromFileHead(u32 waveIndex) const;
-
-    void* SetWaveFile(u32 waveIndex, const void* pWaveFile);
-
-    bool IsLoaded(u32 index) { return m_IsInitialized && GetWaveFile(index) != nullptr; }
-
 private:
-    WaveArchiveFile::FileHeader* m_pHeader;
-    WaveArchiveFile::InfoBlockBody* m_pInfoBlockBody;
+    const void* GetWaveFileForWhole(u32 waveIndex) {
+        u32 offset{m_pInfoBlockBody->GetOffsetFromFileBlockBody(waveIndex)};
+
+        return util::ConstBytePtr(m_pHeader, offset).Get();
+    }
+
+    const void* GetWaveFileForIndividual(u32 waveIndex) {
+        return m_pLoadTable->waveFile[waveIndex];
+    }
+
+    const WaveArchiveFile::FileHeader* m_pHeader;
+    const WaveArchiveFile::InfoBlockBody* m_pInfoBlockBody;
     IndividualLoadTable* m_pLoadTable;
     bool m_IsInitialized;
 };
 static_assert(sizeof(WaveArchiveFileReader) == 0x20);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

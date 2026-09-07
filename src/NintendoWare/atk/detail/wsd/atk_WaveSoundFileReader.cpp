@@ -11,12 +11,12 @@ const u32 CurrentFileVersionWsd{0x10100};
 const u32 FilterSupportedVersionWsd{0x10100};
 
 bool IsValidFileHeaderWsd(const void* waveSoundFile) {
-    const BinaryFileHeader* header{util::ConstBytePtr(waveSoundFile).Get<BinaryFileHeader>()};
+    const BinaryFileHeader& header{*util::ConstBytePtr(waveSoundFile).Get<BinaryFileHeader>()};
 
-    bool isSupportedVersion{header->signature == WaveSoundFileReader::SignatureFile &&
-                            header->byteOrder == BinaryFileHeader::ValidByteOrderMark &&
-                            header->version >= SupportedFileVersionWsd &&
-                            header->version <= CurrentFileVersionWsd};
+    bool isSupportedVersion{header.signature == WaveSoundFileReader::SignatureFile &&
+                            header.byteOrder == BinaryFileHeader::ValidByteOrderMark &&
+                            header.version >= SupportedFileVersionWsd &&
+                            header.version <= CurrentFileVersionWsd};
 
     return isSupportedVersion;
 }
