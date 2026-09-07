@@ -20,11 +20,10 @@ bool IsValidFileHeaderWar(const void* waveArchiveData) {
 
 }  // anonymous namespace
 
-WaveArchiveFileReader::WaveArchiveFileReader() {
-    m_IsInitialized = false;
-    m_pInfoBlockBody = nullptr;
-    m_pLoadTable = nullptr;
-    m_pHeader = nullptr;
+WaveArchiveFileReader::WaveArchiveFileReader() = default;
+
+WaveArchiveFileReader::WaveArchiveFileReader(const void* pWaveArchiveFile, bool isIndividual) {
+    Initialize(pWaveArchiveFile, isIndividual);
 }
 
 void WaveArchiveFileReader::Initialize(const void* pWaveArchiveFile, bool isIndividual) {
