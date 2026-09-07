@@ -12,7 +12,7 @@ public:
 
     bool IsAvailable() const { return m_pHeader != nullptr; }
 
-    const void* GetSequenceData();
+    const void* GetSequenceData() const;
 
     bool GetOffsetByLabel(const char* label, u32* offsetPtr) const;
     bool GetLabelByOffset(u32 offset) const;
