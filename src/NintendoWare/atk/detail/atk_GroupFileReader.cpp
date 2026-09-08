@@ -71,4 +71,17 @@ u32 GroupFileReader::GetGroupItemExCount() const {
     return m_pInfoExBlockBody->GetGroupItemInfoExCount();
 }
 
+bool GroupFileReader::ReadGroupItemInfoEx(GroupFile::GroupItemInfoEx* out, u32 index) const {
+    if (m_pInfoExBlockBody == nullptr)
+        return false;
+
+    const GroupFile::GroupItemInfoEx* groupItemInfo{m_pInfoExBlockBody->GetGroupItemInfoEx(index)};
+    if (groupItemInfo == nullptr)
+        return false;
+
+    *out = *groupItemInfo;
+
+    return true;
+}
+
 }  // namespace nn::atk::detail
