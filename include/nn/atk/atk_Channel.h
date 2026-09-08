@@ -118,7 +118,7 @@ public:
     void SetLfoParam(const CurveLfoParam& param, int i) { m_Lfo[i].SetParam(param); }
     void SetLfoTarget(LfoTarget type, int i) { m_LfoTarget[i] = type; }
 
-    void SetPriority(int priority);
+    void SetPriority(int priority) { m_pVoice->SetPriority(priority); }
 
     void SetReleasePriorityFix(bool fix) { m_ReleasePriorityFixFlag = fix; }
     void SetIsIgnoreNoteOff(bool flag) { m_IsIgnoreNoteOff = flag; }

@@ -102,4 +102,9 @@ void Channel::Release() {
     m_PauseFlag = 0;
 }
 
+void Channel::UpdateSweep(int count) {
+    m_SweepCounter =
+        m_SweepCounter + count <= m_SweepLength ? m_SweepCounter + count : m_SweepLength;
+}
+
 }  // namespace nn::atk::detail::driver
