@@ -84,6 +84,13 @@ void Channel::Stop() {
     m_ActiveFlag = 0;
 }
 
+void Channel::NoteOff() {
+    if (m_IsIgnoreNoteOff != 0)
+        return;
+
+    Release();
+}
+
 void Channel::Release() {
     if (!IsRelease()) {
         if (m_pVoice != nullptr && m_ReleasePriorityFixFlag == 0)
