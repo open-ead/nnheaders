@@ -171,10 +171,11 @@ public:
 
     void SetUpdateType(UpdateType updateType) { m_pVoice->SetUpdateType(updateType); }
     UpdateType GetUpdateType() const { return m_pVoice->GetUpdateType(); }
-
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetOutputReceiver(OutputReceiver* pOutputReceiver) {
         m_pVoice->SetOutputReceiver(pOutputReceiver);
     }
+#endif
 
     os::Tick GetProcessTick(const SoundProfile& profile) {
         return m_pVoice->GetProcessTick(profile);
@@ -249,6 +250,9 @@ private:
     WaveBuffer m_WaveBuffer[WaveBufferMax][WaveChannelMax];
     AdpcmContext m_AdpcmContext[WaveChannelMax];
     AdpcmContext m_AdpcmLoopContext[WaveChannelMax];
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    u32 m_StartOffsetSamples;
+#endif
     position_t m_LoopStartFrame;
     position_t m_OriginalLoopStartFrame;
     bool m_LoopFlag;

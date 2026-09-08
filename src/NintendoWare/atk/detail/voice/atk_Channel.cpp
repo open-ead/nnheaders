@@ -112,7 +112,24 @@ void Channel::SetTvAdditionalParam(const OutputAdditionalParam& param) {
     if (m_pTvAdditionalParam != nullptr)
         *m_pTvAdditionalParam = param;
 }
-
 #endif
+
+position_t Channel::GetCurrentPlayingSample(bool isOriginalSamplePosition) const {
+    if (m_ActiveFlag == 0)
+        return 0;
+
+    position_t playSamplePosition{m_pVoice->GetCurrentPlayingSample()};
+
+    if (isOriginalSamplePosition && m_LoopFlag) {
+        position_t loopEnd{m_WaveBuffer[0][0].sampleLength +
+                           (-m_LoopStartFrame + m_OriginalLoopStartFrame)};
+        position_t originalLoopEnd{m_OriginalLoopStartFrame + playSamplePosition - loopEnd};
+
+        if (playSamplePosition > loopEnd)
+            playSamplePosition = originalLoopEnd;
+    }
+
+    return playSamplePosition;
+}
 
 }  // namespace nn::atk::detail::driver
