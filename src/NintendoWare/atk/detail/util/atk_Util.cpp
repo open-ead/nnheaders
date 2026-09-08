@@ -688,6 +688,47 @@ float Util::CalcSurroundPanRatio(float surroundPan, const PanInfo& info) {
     return ratio;
 }
 
+float Util::CalcPitchRatio(int pitch_) {
+    const int Range{PitchDivisionRange*12};
+
+    int pitch{pitch_};
+
+    int octave{0};
+
+    while (pitch < 0) {
+        --octave;
+        pitch += Range;
+    }
+
+    while (pitch >= Range) {
+        ++octave;
+        pitch -= Range;
+    }
+
+    int note{pitch / PitchDivisionRange};
+    pitch -= note * PitchDivisionRange;
+
+    f32 ratio{1.0f};
+
+    while (octave > 0) {
+        ratio *= 2.0f;
+        --octave;
+    }
+
+    while (octave < 0) {
+        ratio /= 2.0f;
+        ++octave;
+    }
+
+    if (note != 0)
+        ratio *= NoteTable[note];
+
+    if (pitch != 0)
+        ratio *= PitchTable[pitch];
+
+    return ratio;
+}
+
 float Util::CalcVolumeRatio(float dB) {
     dB = fnd::Clamp<float>(dB, -90.4f, 6.0f);
 
