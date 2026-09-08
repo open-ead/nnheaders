@@ -102,6 +102,11 @@ void Channel::Release() {
     m_PauseFlag = 0;
 }
 
+void Channel::SetBiquadFilter(int type, float value) {
+    m_BiquadType = static_cast<u8>(type);
+    m_BiquadValue = value;
+}
+
 void Channel::UpdateSweep(int count) {
     m_SweepCounter =
         m_SweepCounter + count <= m_SweepLength ? m_SweepCounter + count : m_SweepLength;
