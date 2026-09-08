@@ -115,7 +115,7 @@ public:
     void SetLfoTarget(LfoTarget type, int i) { m_LfoTarget[i] = type; }
 
     void SetPriority(int priority);
-    
+
     void SetReleasePriorityFix(bool fix) { m_ReleasePriorityFixFlag = fix; }
     void SetIsIgnoreNoteOff(bool flag) { m_IsIgnoreNoteOff = flag; }
 
@@ -183,7 +183,7 @@ private:
 
         void Initialize(Channel* channel) { m_pChannel = channel; }
 
-        ~Disposer() override;
+        ~Disposer() override = default;
 
         void InvalidateData(const void* start, const void* end) override;
 
