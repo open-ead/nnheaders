@@ -296,7 +296,7 @@ struct WaveBuffer {
     WaveBuffer* next;
 
     WaveBuffer() { Initialize(); };
-    ~WaveBuffer();
+    ~WaveBuffer() = default;
 
     void Initialize() {
         bufferAddress = nullptr;
