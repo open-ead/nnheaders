@@ -20,6 +20,8 @@ public:
 
     void Dispose(const void* mem, size_t size);
 
+    static DisposeCallbackManager* GetInstance();
+
 private:
     CallbackList m_CallbackList;
 };

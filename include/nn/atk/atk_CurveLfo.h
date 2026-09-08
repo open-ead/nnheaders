@@ -57,11 +57,11 @@ public:
 
 private:
     CurveLfoParam m_Param;
-    u32 m_DelayCounter;
-    float m_Counter;
-    mutable float m_RandomValue;
-    bool m_IsStart;
-    bool m_IsNext;
+    u32 m_DelayCounter{0};
+    float m_Counter{0.0f};
+    mutable float m_RandomValue{1.0f};
+    bool m_IsStart{false};
+    bool m_IsNext{false};
     [[maybe_unused]] u8 m_Padding[2];
 };
 static_assert(sizeof(CurveLfo) == 0x20);

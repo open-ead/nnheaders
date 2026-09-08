@@ -5,6 +5,8 @@
 namespace nn::atk::detail::driver {
 class DisposeCallback {
 public:
+    DisposeCallback() = default;
+
     virtual ~DisposeCallback() = default;
 
     virtual void InvalidateData(const void* start, const void* end) = 0;
