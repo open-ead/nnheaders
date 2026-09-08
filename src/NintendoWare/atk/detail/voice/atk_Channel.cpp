@@ -107,4 +107,12 @@ void Channel::UpdateSweep(int count) {
         m_SweepCounter + count <= m_SweepLength ? m_SweepCounter + count : m_SweepLength;
 }
 
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+void Channel::SetTvAdditionalParam(const OutputAdditionalParam& param) {
+    if (m_pTvAdditionalParam != nullptr)
+        *m_pTvAdditionalParam = param;
+}
+
+#endif
+
 }  // namespace nn::atk::detail::driver
