@@ -70,7 +70,11 @@ public:
                bool isContextCalculationSkipMode);
 
     void Stop();
-    void Pause(bool flag);
+
+    void Pause(bool flag) {
+        m_PauseFlag = flag;
+        m_pVoice->Pause(m_PauseFlag);
+    }
 
     void NoteOff();
     void Release();

@@ -47,11 +47,12 @@ void Channel::Start(const WaveInfo& waveInfo, int length, position_t startOffset
     AppendWaveBuffer(waveInfo, startOffsetSamples);
 
     m_pVoice->Start();
-    
+
     m_ActiveFlag = 1;
 }
 
-void Channel::Start(const WaveInfo& waveInfo, int length, position_t startOffsetSamples, bool isContextCalculationSkipMode) {
+void Channel::Start(const WaveInfo& waveInfo, int length, position_t startOffsetSamples,
+                    bool isContextCalculationSkipMode) {
     m_Length = length;
 
     for (int i{0}; i < ModCount; ++i)
@@ -81,6 +82,17 @@ void Channel::Stop() {
     m_pVoice = nullptr;
     m_PauseFlag = 0;
     m_ActiveFlag = 0;
+}
+
+void Channel::Release() {
+    if (!IsRelease()) {
+        if (m_pVoice != nullptr && m_ReleasePriorityFixFlag == 0)
+            m_pVoice->SetPriority(PriorityRelease);
+
+        m_CurveAdshr.SetStatus(CurveAdshr::Status_Release);
+    }
+
+    m_PauseFlag = 0;
 }
 
 }  // namespace nn::atk::detail::driver
