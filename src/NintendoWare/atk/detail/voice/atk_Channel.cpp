@@ -71,4 +71,16 @@ void Channel::Start(const WaveInfo& waveInfo, int length, position_t startOffset
     m_ActiveFlag = 1;
 }
 
+void Channel::Stop() {
+    if (m_pVoice == nullptr)
+        return;
+
+    m_pVoice->Stop();
+    m_pVoice->Free();
+
+    m_pVoice = nullptr;
+    m_PauseFlag = 0;
+    m_ActiveFlag = 0;
+}
+
 }  // namespace nn::atk::detail::driver
