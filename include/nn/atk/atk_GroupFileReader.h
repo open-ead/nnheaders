@@ -3,17 +3,20 @@
 #include <nn/atk/atk_GroupFile.h>
 
 namespace nn::atk::detail {
+
 struct GroupItemLocationInfo {
     u32 fileId;
-    void* address;
+    const void* address;
 };
 static_assert(sizeof(GroupItemLocationInfo) == 0x10);
 
 class GroupFileReader {
 public:
-    constexpr static s64 SignatureFile = 0x50524746; // FGRP
+    static const u32 SignatureFile{0x50524746};  // FGRP
 
     explicit GroupFileReader(const void* groupFile);
+
+    u32 GetGroupItemCount() const { return m_pInfoBlockBody->GetGroupItemInfoCount(); }
 
     bool ReadGroupItemLocationInfo(GroupItemLocationInfo* out, u32 index) const;
 
@@ -22,9 +25,10 @@ public:
     bool ReadGroupItemInfoEx(GroupFile::GroupItemInfoEx* out, u32 index) const;
 
 private:
-    GroupFile::InfoBlockBody* m_pInfoBlockBody;
-    GroupFile::FileBlockBody* m_pFileBlockBody;
-    GroupFile::InfoExBlockBody* m_pInfoExBlockBody;
+    const GroupFile::InfoBlockBody* m_pInfoBlockBody{};
+    const GroupFile::FileBlockBody* m_pFileBlockBody{};
+    const GroupFile::InfoExBlockBody* m_pInfoExBlockBody{};
 };
 static_assert(sizeof(GroupFileReader) == 0x18);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail
