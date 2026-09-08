@@ -50,4 +50,18 @@ GroupFileReader::GroupFileReader(const void* groupFile) {
     }
 }
 
+bool GroupFileReader::ReadGroupItemLocationInfo(GroupItemLocationInfo* out, u32 index) const {
+    if (m_pInfoBlockBody == nullptr)
+        return false;
+
+    const GroupFile::GroupItemInfo* groupItemInfo{m_pInfoBlockBody->GetGroupItemInfo(index)};
+    if (groupItemInfo == nullptr)
+        return false;
+
+    out->fileId = groupItemInfo->fileId;
+    out->address = groupItemInfo->GetFileLocation(m_pFileBlockBody);
+
+    return true;
+}
+
 }  // namespace nn::atk::detail
