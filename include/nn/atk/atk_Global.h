@@ -174,7 +174,7 @@ static_assert(sizeof(AdshrCurve) == 0x5);
 
 enum BiquadFilterType {
     BiquadFilterType_Inherit = -1,
-    
+
     BiquadFilterType_None = 0,
     BiquadFilterType_LowPassFilter,
     BiquadFilterType_HighPassFilter,
@@ -295,10 +295,21 @@ struct WaveBuffer {
     Status status;
     WaveBuffer* next;
 
-    WaveBuffer() = default;
+    WaveBuffer() { Initialize(); };
     ~WaveBuffer();
 
-    void Initialize();
+    void Initialize() {
+        bufferAddress = nullptr;
+        bufferSize = 0;
+        sampleLength = 0;
+        sampleOffset = 0;
+        pAdpcmContext = nullptr;
+        userParam = nullptr;
+        loopFlag = false;
+        status = Status_Free;
+        next = nullptr;
+    }
+
     void Dump();
 };
 static_assert(sizeof(WaveBuffer) == 0x40);

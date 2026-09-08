@@ -4,6 +4,7 @@
 
 #include <nn/atk/atk_OutputAdditionalParam.h>
 #include <nn/atk/atk_Voice.h>
+#include <nn/atk/atk_ProfileReader.h>
 
 namespace nn::atk::detail::driver {
 class MultiVoiceManager;
@@ -119,6 +120,9 @@ public:
     void SetOutputReceiver(OutputReceiver* pOutputReceiver);
 #endif
     void SetSubMixIndex(s32 subMixIndex);
+    
+    void SetUpdateType(UpdateType updateType) { m_UpdateType = updateType; }
+    UpdateType GetUpdateType() const { return m_UpdateType; }
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     void CalcPreMixVolume(PreMixVolume* mix, const OutputParam& param, 
@@ -152,7 +156,9 @@ public:
     static u64 FrameToByte(s64, SampleFormat);
     static void CalcOffsetAdpcmParam(AdpcmContext* context, const AdpcmParam& param, 
                                      position_t offsetSamples, const void* dataAddress);
-    
+
+    os::Tick GetProcessTick(const SoundProfile& profile);
+
 private:
     friend MultiVoiceManager;
 
