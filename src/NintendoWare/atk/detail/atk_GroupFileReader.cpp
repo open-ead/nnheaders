@@ -64,4 +64,11 @@ bool GroupFileReader::ReadGroupItemLocationInfo(GroupItemLocationInfo* out, u32 
     return true;
 }
 
+u32 GroupFileReader::GetGroupItemExCount() const {
+    if (m_pInfoExBlockBody == nullptr)
+        return 0;
+
+    return m_pInfoExBlockBody->GetGroupItemInfoExCount();
+}
+
 }  // namespace nn::atk::detail
