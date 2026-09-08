@@ -29,7 +29,7 @@ public:
     CurveAdshr();
 
     void Initialize(float initDecibel);
-    void Reset(float initDecibel);
+    void Reset(float initDecibel = VolumeInit);
     void Update(int msec);
     float GetValue() const;
 
