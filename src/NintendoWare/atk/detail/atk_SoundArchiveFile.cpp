@@ -4,54 +4,51 @@
 
 namespace nn::atk::detail {
 namespace {
-const u32 DefaultStringId {0xffffffff};
-const PanMode DefaultPanMode {PanMode_Dual};
-const PanCurve DefaultPanCurve {PanCurve_Sqrt};
-const SinglePlayType DefaultSinglePlayType {SinglePlayType_None};
-const u16 DefaultSinglePlayEffectiveDuration {0xffff};
-const u8 DefaultPlayerPriority {64};
-const u8 DefaultChannelPriority {64};
-const u8 DefaultActorPlayerId {0};
-const u8 DefaultIsReleasePriorityFix {0};
-const bool DefaultIsFrontBypass {false};
-const u32 DefaultUserParam {0xffffffff};
-const u32 DefaultSeqStartOffset {0};
-const u32 DefaultWarcWaveCount {0};
-const u32 DefaultPlayerHeapSize {0};
+
+const u32 DefaultStringId{0xffffffff};
+const PanMode DefaultPanMode{PanMode_Dual};
+const PanCurve DefaultPanCurve{PanCurve_Sqrt};
+const SinglePlayType DefaultSinglePlayType{SinglePlayType_None};
+const u16 DefaultSinglePlayEffectiveDuration{0xffff};
+const u8 DefaultPlayerPriority{64};
+const u8 DefaultChannelPriority{64};
+const u8 DefaultActorPlayerId{0};
+const u8 DefaultIsReleasePriorityFix{0};
+const bool DefaultIsFrontBypass{false};
+const u32 DefaultUserParam{0xffffffff};
+const u32 DefaultSeqStartOffset{0};
+const u32 DefaultWarcWaveCount{0};
+const u32 DefaultPlayerHeapSize{0};
 
 enum SoundInfoBitFlag {
-    SoundInfoBitFlag_StringId           = 0,
-    SoundInfoBitFlag_PanParam           = 1,
-    SoundInfoBitFlag_PlayerParam        = 2,
-    SoundInfoBitFlag_SinglePlayParam    = 3,
+    SoundInfoBitFlag_StringId = 0,
+    SoundInfoBitFlag_PanParam = 1,
+    SoundInfoBitFlag_PlayerParam = 2,
+    SoundInfoBitFlag_SinglePlayParam = 3,
 
-    SoundInfoBitFlag_OffsetTo3dParam    = 8,
-    SoundInfoBitFlag_OffsetToSendParam  = 9,
-    SoundInfoBitFlag_OffsetToModParam   = 10,
-    SoundInfoBitFlag_OffsetToRvlParam   = 16,
-    SoundInfoBitFlag_OffsetToCtrParam   = 17,
-    SoundInfoBitFlag_OffsetToCafeParam  = 18,
+    SoundInfoBitFlag_OffsetTo3dParam = 8,
+    SoundInfoBitFlag_OffsetToSendParam = 9,
+    SoundInfoBitFlag_OffsetToModParam = 10,
+    SoundInfoBitFlag_OffsetToRvlParam = 16,
+    SoundInfoBitFlag_OffsetToCtrParam = 17,
+    SoundInfoBitFlag_OffsetToCafeParam = 18,
 
-    SoundInfoBitFlag_UserParam3         = 28,
-    SoundInfoBitFlag_UserParam2         = 29,
-    SoundInfoBitFlag_UserParam1         = 30,
-    SoundInfoBitFlag_UserParam          = 31,
+    SoundInfoBitFlag_UserParam3 = 28,
+    SoundInfoBitFlag_UserParam2 = 29,
+    SoundInfoBitFlag_UserParam1 = 30,
+    SoundInfoBitFlag_UserParam = 31,
 };
 
-const int UserParamIndex[4] { 
-    SoundInfoBitFlag_UserParam, 
-    SoundInfoBitFlag_UserParam1, 
-    SoundInfoBitFlag_UserParam2, 
-    SoundInfoBitFlag_UserParam3
-};
+const int UserParamIndex[4]{SoundInfoBitFlag_UserParam, SoundInfoBitFlag_UserParam1,
+                            SoundInfoBitFlag_UserParam2, SoundInfoBitFlag_UserParam3};
 
 enum WaveSoundInfoBitFlag {
     WaveSoundInfoBitFlag_Priority = 0,
 };
 
 enum SequenceSoundInfoBitFlag {
-    SequenceSoundInfoBitFlag_StartOffset    = 0,
-    SequenceSoundInfoBitFlag_Priority       = 1,
+    SequenceSoundInfoBitFlag_StartOffset = 0,
+    SequenceSoundInfoBitFlag_Priority = 1,
 };
 
 enum BankInfoBitFlag {
@@ -59,8 +56,8 @@ enum BankInfoBitFlag {
 };
 
 enum PlayerInfoBitFlag {
-    PlayerInfoBitFlag_StringId  = 0,
-    PlayerInfoBitFlag_HeapSize  = 1,
+    PlayerInfoBitFlag_StringId = 0,
+    PlayerInfoBitFlag_HeapSize = 1,
 };
 
 enum SoundGroupInfoBitFlag {
@@ -72,13 +69,14 @@ enum GroupInfoBitFlag {
 };
 
 enum WaveArchiveInfoBitFlag {
-    WaveArchiveInfoBitFlag_StringId     = 0,
-    WaveArchiveInfoBitFlag_WaveCount    = 1,
+    WaveArchiveInfoBitFlag_StringId = 0,
+    WaveArchiveInfoBitFlag_WaveCount = 1,
 };
-} // anonymous namespace
+
+}  // anonymous namespace
 
 const Util::ReferenceWithSize* SoundArchiveFile::FileHeader::GetReferenceBy(u16 typeId) const {
-    for (int i {0}; i < BlockCount; ++i) {
+    for (int i{0}; i < BlockCount; ++i) {
         if (toBlocks[i].typeId == typeId)
             return &toBlocks[i];
     }
@@ -121,10 +119,10 @@ const char* SoundArchiveFile::StringBlockBody::GetString(SoundArchive::StringId 
     if (stringId == SoundArchive::InvalidId)
         return nullptr;
 
-    const StringTable* table {GetStringTable()};
+    const StringTable* table{GetStringTable()};
     if (table == nullptr)
         return nullptr;
-    
+
     return table->GetString(stringId);
 }
 
@@ -133,20 +131,21 @@ void SoundArchiveFile::StringBlockBody::DumpTree() const {
 }
 
 u32 SoundArchiveFile::StringBlockBody::GetItemIdImpl(Sections section, const char* str) const {
-    const PatriciaTree* tree {GetPatriciaTree(section)};
-    const PatriciaTree::NodeData* nodeData {tree->GetNodeDataBy(str)};
+    const PatriciaTree* tree{GetPatriciaTree(section)};
+    const PatriciaTree::NodeData* nodeData{tree->GetNodeDataBy(str)};
 
     if (nodeData == nullptr)
         return SoundArchive::InvalidId;
 
-    const char* nodeDataStr {GetString(nodeData->stringId)};
+    const char* nodeDataStr{GetString(nodeData->stringId)};
     if (std::strcmp(str, nodeDataStr) != 0)
         return SoundArchive::InvalidId;
 
     return nodeData->itemId;
 }
 
-const SoundArchiveFile::PatriciaTree::NodeData* SoundArchiveFile::PatriciaTree::GetNodeDataBy(const char* str, size_t len) const {
+const SoundArchiveFile::PatriciaTree::NodeData*
+SoundArchiveFile::PatriciaTree::GetNodeDataBy(const char* str, size_t len) const {
     if (rootIdx >= nodeTable.count)
         return nullptr;
 
@@ -170,12 +169,13 @@ const SoundArchiveFile::PatriciaTree::NodeData* SoundArchiveFile::PatriciaTree::
     return &node->nodeData;
 }
 
-const SoundArchiveFile::SoundInfo* SoundArchiveFile::InfoBlockBody::GetSoundInfo(SoundArchive::ItemId itemId) const {
+const SoundArchiveFile::SoundInfo*
+SoundArchiveFile::InfoBlockBody::GetSoundInfo(SoundArchive::ItemId itemId) const {
     if (Util::GetItemType(itemId) != ItemType_Sound)
         return nullptr;
 
-    u32 index {Util::GetItemIndex(itemId)};
-    const Util::ReferenceTable& table {GetSoundInfoReferenceTable()};
+    u32 index{Util::GetItemIndex(itemId)};
+    const Util::ReferenceTable& table{GetSoundInfoReferenceTable()};
 
     if (index >= table.count)
         return nullptr;
@@ -183,12 +183,13 @@ const SoundArchiveFile::SoundInfo* SoundArchiveFile::InfoBlockBody::GetSoundInfo
     return util::ConstBytePtr(table.GetReferedItem(index)).Get<SoundInfo>();
 }
 
-const SoundArchiveFile::BankInfo* SoundArchiveFile::InfoBlockBody::GetBankInfo(SoundArchive::ItemId itemId) const {
+const SoundArchiveFile::BankInfo*
+SoundArchiveFile::InfoBlockBody::GetBankInfo(SoundArchive::ItemId itemId) const {
     if (Util::GetItemType(itemId) != ItemType_Bank)
         return nullptr;
 
-    u32 index {Util::GetItemIndex(itemId)};
-    const Util::ReferenceTable& table {GetBankInfoReferenceTable()};
+    u32 index{Util::GetItemIndex(itemId)};
+    const Util::ReferenceTable& table{GetBankInfoReferenceTable()};
 
     if (index >= table.count)
         return nullptr;
@@ -196,12 +197,13 @@ const SoundArchiveFile::BankInfo* SoundArchiveFile::InfoBlockBody::GetBankInfo(S
     return util::ConstBytePtr(table.GetReferedItem(index)).Get<BankInfo>();
 }
 
-const SoundArchiveFile::PlayerInfo* SoundArchiveFile::InfoBlockBody::GetPlayerInfo(SoundArchive::ItemId itemId) const {
+const SoundArchiveFile::PlayerInfo*
+SoundArchiveFile::InfoBlockBody::GetPlayerInfo(SoundArchive::ItemId itemId) const {
     if (Util::GetItemType(itemId) != ItemType_Player)
         return nullptr;
 
-    u32 index {Util::GetItemIndex(itemId)};
-    const Util::ReferenceTable& table {GetPlayerInfoReferenceTable()};
+    u32 index{Util::GetItemIndex(itemId)};
+    const Util::ReferenceTable& table{GetPlayerInfoReferenceTable()};
 
     if (index >= table.count)
         return nullptr;
@@ -209,12 +211,13 @@ const SoundArchiveFile::PlayerInfo* SoundArchiveFile::InfoBlockBody::GetPlayerIn
     return util::ConstBytePtr(table.GetReferedItem(index)).Get<PlayerInfo>();
 }
 
-const SoundArchiveFile::SoundGroupInfo* SoundArchiveFile::InfoBlockBody::GetSoundGroupInfo(SoundArchive::ItemId itemId) const {
+const SoundArchiveFile::SoundGroupInfo*
+SoundArchiveFile::InfoBlockBody::GetSoundGroupInfo(SoundArchive::ItemId itemId) const {
     if (Util::GetItemType(itemId) != ItemType_SoundGroup)
         return nullptr;
 
-    u32 index {Util::GetItemIndex(itemId)};
-    const Util::ReferenceTable& table {GetSoundGroupInfoReferenceTable()};
+    u32 index{Util::GetItemIndex(itemId)};
+    const Util::ReferenceTable& table{GetSoundGroupInfoReferenceTable()};
 
     if (index >= table.count)
         return nullptr;
@@ -222,12 +225,13 @@ const SoundArchiveFile::SoundGroupInfo* SoundArchiveFile::InfoBlockBody::GetSoun
     return util::ConstBytePtr(table.GetReferedItem(index)).Get<SoundGroupInfo>();
 }
 
-const SoundArchiveFile::GroupInfo* SoundArchiveFile::InfoBlockBody::GetGroupInfo(SoundArchive::ItemId itemId) const {
+const SoundArchiveFile::GroupInfo*
+SoundArchiveFile::InfoBlockBody::GetGroupInfo(SoundArchive::ItemId itemId) const {
     if (Util::GetItemType(itemId) != ItemType_Group)
         return nullptr;
 
-    u32 index {Util::GetItemIndex(itemId)};
-    const Util::ReferenceTable& table {GetGroupInfoReferenceTable()};
+    u32 index{Util::GetItemIndex(itemId)};
+    const Util::ReferenceTable& table{GetGroupInfoReferenceTable()};
 
     if (index >= table.count)
         return nullptr;
@@ -235,12 +239,13 @@ const SoundArchiveFile::GroupInfo* SoundArchiveFile::InfoBlockBody::GetGroupInfo
     return util::ConstBytePtr(table.GetReferedItem(index)).Get<GroupInfo>();
 }
 
-const SoundArchiveFile::WaveArchiveInfo* SoundArchiveFile::InfoBlockBody::GetWaveArchiveInfo(SoundArchive::ItemId itemId) const {
+const SoundArchiveFile::WaveArchiveInfo*
+SoundArchiveFile::InfoBlockBody::GetWaveArchiveInfo(SoundArchive::ItemId itemId) const {
     if (Util::GetItemType(itemId) != ItemType_WaveArchive)
         return nullptr;
 
-    u32 index {Util::GetItemIndex(itemId)};
-    const Util::ReferenceTable& table {GetWaveArchiveInfoReferenceTable()};
+    u32 index{Util::GetItemIndex(itemId)};
+    const Util::ReferenceTable& table{GetWaveArchiveInfoReferenceTable()};
 
     if (index >= table.count)
         return nullptr;
@@ -248,9 +253,10 @@ const SoundArchiveFile::WaveArchiveInfo* SoundArchiveFile::InfoBlockBody::GetWav
     return util::ConstBytePtr(table.GetReferedItem(index)).Get<WaveArchiveInfo>();
 }
 
-const SoundArchiveFile::FileInfo* SoundArchiveFile::InfoBlockBody::GetFileInfo(SoundArchive::FileId itemId) const {
-    u32 index {Util::GetItemIndex(itemId)};
-    const Util::ReferenceTable& table {GetFileInfoReferenceTable()};
+const SoundArchiveFile::FileInfo*
+SoundArchiveFile::InfoBlockBody::GetFileInfo(SoundArchive::FileId itemId) const {
+    u32 index{Util::GetItemIndex(itemId)};
+    const Util::ReferenceTable& table{GetFileInfoReferenceTable()};
 
     if (index >= table.count)
         return nullptr;
@@ -260,7 +266,7 @@ const SoundArchiveFile::FileInfo* SoundArchiveFile::InfoBlockBody::GetFileInfo(S
 
 u32 SoundArchiveFile::SoundInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -270,7 +276,7 @@ u32 SoundArchiveFile::SoundInfo::GetStringId() const {
 
 u32 SoundArchiveFile::BankInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, BankInfoBitFlag_StringId)};
+    bool result{optionParameter.GetValue(&value, BankInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -280,7 +286,7 @@ u32 SoundArchiveFile::BankInfo::GetStringId() const {
 
 u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -290,7 +296,7 @@ u32 SoundArchiveFile::WaveArchiveInfo::GetStringId() const {
 
 u32 SoundArchiveFile::SoundGroupInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -300,7 +306,7 @@ u32 SoundArchiveFile::SoundGroupInfo::GetStringId() const {
 
 u32 SoundArchiveFile::GroupInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, GroupInfoBitFlag_StringId)};
+    bool result{optionParameter.GetValue(&value, GroupInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -310,7 +316,7 @@ u32 SoundArchiveFile::GroupInfo::GetStringId() const {
 
 u32 SoundArchiveFile::PlayerInfo::GetStringId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, PlayerInfoBitFlag_StringId)};
+    bool result{optionParameter.GetValue(&value, PlayerInfoBitFlag_StringId)};
 
     if (!result)
         return DefaultStringId;
@@ -318,44 +324,44 @@ u32 SoundArchiveFile::PlayerInfo::GetStringId() const {
     return value;
 }
 
-const SoundArchiveFile::SoundArchivePlayerInfo* SoundArchiveFile::InfoBlockBody::GetSoundArchivePlayerInfo() const {
-    return util::ConstBytePtr(this, toSoundArchivePlayerInfo.offset)
-            .Get<SoundArchivePlayerInfo>();
+const SoundArchiveFile::SoundArchivePlayerInfo*
+SoundArchiveFile::InfoBlockBody::GetSoundArchivePlayerInfo() const {
+    return util::ConstBytePtr(this, toSoundArchivePlayerInfo.offset).Get<SoundArchivePlayerInfo>();
 }
 
 SoundArchive::FileId SoundArchiveFile::InfoBlockBody::GetItemFileId(SoundArchive::ItemId id) const {
-    SoundArchive::FileId fileId {SoundArchive::InvalidId};
+    SoundArchive::FileId fileId{SoundArchive::InvalidId};
 
     switch (Util::GetItemType(id)) {
     case ItemType_Sound: {
-        const SoundInfo* info {GetSoundInfo(id)};
+        const SoundInfo* info{GetSoundInfo(id)};
         if (info != nullptr)
             fileId = info->fileId;
         break;
     }
     case ItemType_Bank: {
-        const BankInfo* info {GetBankInfo(id)};
+        const BankInfo* info{GetBankInfo(id)};
         if (info != nullptr)
             fileId = info->fileId;
         break;
     }
     case ItemType_WaveArchive: {
-        const WaveArchiveInfo* info {GetWaveArchiveInfo(id)};
+        const WaveArchiveInfo* info{GetWaveArchiveInfo(id)};
         if (info != nullptr)
             fileId = info->fileId;
         break;
     }
     case ItemType_Group: {
-        const GroupInfo* info {GetGroupInfo(id)};
+        const GroupInfo* info{GetGroupInfo(id)};
         if (info != nullptr)
             fileId = info->fileId;
         break;
     }
     case ItemType_SoundGroup: {
-        const SoundGroupInfo* info {GetSoundGroupInfo(id)};
+        const SoundGroupInfo* info{GetSoundGroupInfo(id)};
         if (info != nullptr) {
-            SoundArchive::ItemId soundId {info->startId};
-            const SoundInfo* soundInfo {GetSoundInfo(soundId)};
+            SoundArchive::ItemId soundId{info->startId};
+            const SoundInfo* soundInfo{GetSoundInfo(soundId)};
             if (soundInfo != nullptr)
                 fileId = soundInfo->fileId;
         }
@@ -368,42 +374,43 @@ SoundArchive::FileId SoundArchiveFile::InfoBlockBody::GetItemFileId(SoundArchive
     return fileId;
 }
 
-SoundArchive::StringId SoundArchiveFile::InfoBlockBody::GetItemStringId(SoundArchive::ItemId id) const {
-    SoundArchive::StringId stringId {SoundArchive::InvalidId};
+SoundArchive::StringId
+SoundArchiveFile::InfoBlockBody::GetItemStringId(SoundArchive::ItemId id) const {
+    SoundArchive::StringId stringId{SoundArchive::InvalidId};
 
     switch (Util::GetItemType(id)) {
     case ItemType_Sound: {
-        const SoundInfo* info {GetSoundInfo(id)};
+        const SoundInfo* info{GetSoundInfo(id)};
         if (info != nullptr)
             stringId = info->GetStringId();
         break;
     }
     case ItemType_Bank: {
-        const BankInfo* info {GetBankInfo(id)};
+        const BankInfo* info{GetBankInfo(id)};
         if (info != nullptr)
             stringId = info->GetStringId();
         break;
     }
     case ItemType_WaveArchive: {
-        const WaveArchiveInfo* info {GetWaveArchiveInfo(id)};
+        const WaveArchiveInfo* info{GetWaveArchiveInfo(id)};
         if (info != nullptr)
             stringId = info->GetStringId();
         break;
     }
     case ItemType_Group: {
-        const GroupInfo* info {GetGroupInfo(id)};
+        const GroupInfo* info{GetGroupInfo(id)};
         if (info != nullptr)
             stringId = info->GetStringId();
         break;
     }
     case ItemType_SoundGroup: {
-        const SoundGroupInfo* info {GetSoundGroupInfo(id)};
+        const SoundGroupInfo* info{GetSoundGroupInfo(id)};
         if (info != nullptr)
             stringId = info->GetStringId();
         break;
     }
     case ItemType_Player:
-        const PlayerInfo* info {GetPlayerInfo(id)};
+        const PlayerInfo* info{GetPlayerInfo(id)};
         if (info != nullptr)
             stringId = info->GetStringId();
         break;
@@ -412,13 +419,14 @@ SoundArchive::StringId SoundArchiveFile::InfoBlockBody::GetItemStringId(SoundArc
     return stringId;
 }
 
-SoundArchive::FileId SoundArchiveFile::InfoBlockBody::GetItemPrefetchFileId(SoundArchive::ItemId id) const {
-    SoundArchive::FileId fileId {SoundArchive::InvalidId};
+SoundArchive::FileId
+SoundArchiveFile::InfoBlockBody::GetItemPrefetchFileId(SoundArchive::ItemId id) const {
+    SoundArchive::FileId fileId{SoundArchive::InvalidId};
 
-    const SoundInfo* info {GetSoundInfo(id)};
+    const SoundInfo* info{GetSoundInfo(id)};
 
     if (info != nullptr && info->GetSoundType() == SoundArchive::SoundType_Stream) {
-        const SoundArchiveFile::StreamSoundInfo& streamSoundInfo {info->GetStreamSoundInfo()};
+        const SoundArchiveFile::StreamSoundInfo& streamSoundInfo{info->GetStreamSoundInfo()};
         fileId = streamSoundInfo.prefetchFileId;
     }
 
@@ -426,45 +434,42 @@ SoundArchive::FileId SoundArchiveFile::InfoBlockBody::GetItemPrefetchFileId(Soun
 }
 
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetSoundInfoReferenceTable() const {
-    return *util::ConstBytePtr(this, toSoundInfoReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+    return *util::ConstBytePtr(this, toSoundInfoReferenceTable.offset).Get<Util::ReferenceTable>();
 }
 
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetBankInfoReferenceTable() const {
-    return *util::ConstBytePtr(this, toBankInfoReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+    return *util::ConstBytePtr(this, toBankInfoReferenceTable.offset).Get<Util::ReferenceTable>();
 }
 
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetPlayerInfoReferenceTable() const {
-    return *util::ConstBytePtr(this, toPlayerInfoReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+    return *util::ConstBytePtr(this, toPlayerInfoReferenceTable.offset).Get<Util::ReferenceTable>();
 }
 
-const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetSoundGroupInfoReferenceTable() const {
+const Util::ReferenceTable&
+SoundArchiveFile::InfoBlockBody::GetSoundGroupInfoReferenceTable() const {
     return *util::ConstBytePtr(this, toSoundGroupInfoReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+                .Get<Util::ReferenceTable>();
 }
 
-const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetWaveArchiveInfoReferenceTable() const {
+const Util::ReferenceTable&
+SoundArchiveFile::InfoBlockBody::GetWaveArchiveInfoReferenceTable() const {
     return *util::ConstBytePtr(this, toWaveArchiveInfoReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+                .Get<Util::ReferenceTable>();
 }
 
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetGroupInfoReferenceTable() const {
-    return *util::ConstBytePtr(this, toGroupInfoReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+    return *util::ConstBytePtr(this, toGroupInfoReferenceTable.offset).Get<Util::ReferenceTable>();
 }
 
 const Util::ReferenceTable& SoundArchiveFile::InfoBlockBody::GetFileInfoReferenceTable() const {
-    return *util::ConstBytePtr(this, toFileInfoReferenceTable.offset)
-            .Get<Util::ReferenceTable>();
+    return *util::ConstBytePtr(this, toFileInfoReferenceTable.offset).Get<Util::ReferenceTable>();
 }
 
 SoundArchive::SoundType SoundArchiveFile::SoundInfo::GetSoundType() const {
     switch (toDetailSoundInfo.typeId) {
     case ElementType_SoundArchiveFile_SequenceSoundInfo:
         return SoundArchive::SoundType_Sequence;
-    
+
     case ElementType_SoundArchiveFile_StreamSoundInfo:
         return SoundArchive::SoundType_Stream;
 
@@ -484,27 +489,29 @@ const SoundArchiveFile::WaveSoundInfo& SoundArchiveFile::SoundInfo::GetWaveSound
     return *util::ConstBytePtr(this, toDetailSoundInfo.offset).Get<WaveSoundInfo>();
 }
 
-const SoundArchiveFile::AdvancedWaveSoundInfo& SoundArchiveFile::SoundInfo::GetAdvancedWaveSoundInfo() const {
+const SoundArchiveFile::AdvancedWaveSoundInfo&
+SoundArchiveFile::SoundInfo::GetAdvancedWaveSoundInfo() const {
     return *util::ConstBytePtr(this, toDetailSoundInfo.offset).Get<AdvancedWaveSoundInfo>();
 }
 
-const SoundArchiveFile::SequenceSoundInfo& SoundArchiveFile::SoundInfo::GetSequenceSoundInfo() const {
+const SoundArchiveFile::SequenceSoundInfo&
+SoundArchiveFile::SoundInfo::GetSequenceSoundInfo() const {
     return *util::ConstBytePtr(this, toDetailSoundInfo.offset).Get<SequenceSoundInfo>();
 }
 
 const SoundArchiveFile::Sound3DInfo* SoundArchiveFile::SoundInfo::GetSound3DInfo() const {
     u32 offset;
-    bool result {optionParameter.GetValue(&offset, SoundInfoBitFlag_OffsetTo3dParam)};
-    
+    bool result{optionParameter.GetValue(&offset, SoundInfoBitFlag_OffsetTo3dParam)};
+
     if (!result)
         return nullptr;
-    
+
     return util::ConstBytePtr(this, offset).Get<Sound3DInfo>();
 }
 
 PanMode SoundArchiveFile::SoundInfo::GetPanMode() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_PanParam)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_PanParam)};
 
     if (!result)
         return DefaultPanMode;
@@ -514,7 +521,7 @@ PanMode SoundArchiveFile::SoundInfo::GetPanMode() const {
 
 PanCurve SoundArchiveFile::SoundInfo::GetPanCurve() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_PanParam)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_PanParam)};
 
     if (!result)
         return DefaultPanCurve;
@@ -524,7 +531,7 @@ PanCurve SoundArchiveFile::SoundInfo::GetPanCurve() const {
 
 SinglePlayType SoundArchiveFile::SoundInfo::GetSinglePlayType() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_SinglePlayParam)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_SinglePlayParam)};
 
     if (!result)
         return DefaultSinglePlayType;
@@ -534,7 +541,7 @@ SinglePlayType SoundArchiveFile::SoundInfo::GetSinglePlayType() const {
 
 u16 SoundArchiveFile::SoundInfo::GetSinglePlayEffectiveDuration() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_SinglePlayParam)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_SinglePlayParam)};
 
     if (!result)
         return DefaultSinglePlayEffectiveDuration;
@@ -544,7 +551,7 @@ u16 SoundArchiveFile::SoundInfo::GetSinglePlayEffectiveDuration() const {
 
 u8 SoundArchiveFile::SoundInfo::GetPlayerPriority() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_PlayerParam)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_PlayerParam)};
 
     if (!result)
         return DefaultPlayerPriority;
@@ -554,7 +561,7 @@ u8 SoundArchiveFile::SoundInfo::GetPlayerPriority() const {
 
 u8 SoundArchiveFile::SoundInfo::GetActorPlayerId() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_PlayerParam)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_PlayerParam)};
 
     if (!result)
         return DefaultActorPlayerId;
@@ -564,7 +571,7 @@ u8 SoundArchiveFile::SoundInfo::GetActorPlayerId() const {
 
 u32 SoundArchiveFile::SoundInfo::GetUserParam() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_UserParam)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_UserParam)};
 
     if (!result)
         return DefaultUserParam;
@@ -578,7 +585,7 @@ bool SoundArchiveFile::SoundInfo::ReadUserParam(u32* pOutValue, int index) const
 
 bool SoundArchiveFile::SoundInfo::IsFrontBypass() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SoundInfoBitFlag_OffsetToCtrParam)};
+    bool result{optionParameter.GetValue(&value, SoundInfoBitFlag_OffsetToCtrParam)};
 
     if (!result)
         return DefaultIsFrontBypass;
@@ -586,18 +593,21 @@ bool SoundArchiveFile::SoundInfo::IsFrontBypass() const {
     return value & 1;
 }
 
-const SoundArchiveFile::StreamTrackInfoTable* SoundArchiveFile::StreamSoundInfo::GetTrackInfoTable() const {
+const SoundArchiveFile::StreamTrackInfoTable*
+SoundArchiveFile::StreamSoundInfo::GetTrackInfoTable() const {
     if (!toTrackInfoTable.IsValidTypeId(ElementType_Table_ReferenceTable))
         return nullptr;
-    
+
     return util::ConstBytePtr(this, toTrackInfoTable.offset).Get<StreamTrackInfoTable>();
 }
 
-const SoundArchiveFile::StreamSoundExtension* SoundArchiveFile::StreamSoundInfo::GetStreamSoundExtension() const {
-    if (!toStreamSoundExtension.IsValidOffset() || 
-        !toStreamSoundExtension.IsValidTypeId(ElementType_SoundArchiveFile_StreamSoundExtensionInfo))
+const SoundArchiveFile::StreamSoundExtension*
+SoundArchiveFile::StreamSoundInfo::GetStreamSoundExtension() const {
+    if (!toStreamSoundExtension.IsValidOffset() ||
+        !toStreamSoundExtension.IsValidTypeId(
+            ElementType_SoundArchiveFile_StreamSoundExtensionInfo))
         return nullptr;
-    
+
     return util::ConstBytePtr(this, toStreamSoundExtension.offset).Get<StreamSoundExtension>();
 }
 
@@ -607,7 +617,7 @@ const SoundArchiveFile::SendValue& SoundArchiveFile::StreamSoundInfo::GetSendVal
 
 u8 SoundArchiveFile::WaveSoundInfo::GetChannelPriority() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlag_Priority)};
+    bool result{optionParameter.GetValue(&value, WaveSoundInfoBitFlag_Priority)};
 
     if (!result)
         return DefaultChannelPriority;
@@ -617,7 +627,7 @@ u8 SoundArchiveFile::WaveSoundInfo::GetChannelPriority() const {
 
 u8 SoundArchiveFile::WaveSoundInfo::GetIsReleasePriorityFix() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, WaveSoundInfoBitFlag_Priority)};
+    bool result{optionParameter.GetValue(&value, WaveSoundInfoBitFlag_Priority)};
 
     if (!result)
         return DefaultIsReleasePriorityFix;
@@ -630,15 +640,15 @@ const Util::Table<u32>& SoundArchiveFile::SequenceSoundInfo::GetBankIdTable() co
 }
 
 void SoundArchiveFile::SequenceSoundInfo::GetBankIds(u32* bankIds) const {
-    const Util::Table<u32>& table {GetBankIdTable()};
+    const Util::Table<u32>& table{GetBankIdTable()};
 
-    for (u32 i {0}; i < SoundArchive::SequenceBankMax; ++i)
+    for (u32 i{0}; i < SoundArchive::SequenceBankMax; ++i)
         bankIds[i] = i < table.count ? table.item[i] : SoundArchive::InvalidId;
 }
 
 u32 SoundArchiveFile::SequenceSoundInfo::GetStartOffset() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SequenceSoundInfoBitFlag_StartOffset)};
+    bool result{optionParameter.GetValue(&value, SequenceSoundInfoBitFlag_StartOffset)};
 
     if (!result)
         return DefaultSeqStartOffset;
@@ -648,7 +658,7 @@ u32 SoundArchiveFile::SequenceSoundInfo::GetStartOffset() const {
 
 u8 SoundArchiveFile::SequenceSoundInfo::GetChannelPriority() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SequenceSoundInfoBitFlag_Priority)};
+    bool result{optionParameter.GetValue(&value, SequenceSoundInfoBitFlag_Priority)};
 
     if (!result)
         return DefaultChannelPriority;
@@ -658,7 +668,7 @@ u8 SoundArchiveFile::SequenceSoundInfo::GetChannelPriority() const {
 
 bool SoundArchiveFile::SequenceSoundInfo::IsReleasePriorityFix() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, SequenceSoundInfoBitFlag_Priority)};
+    bool result{optionParameter.GetValue(&value, SequenceSoundInfoBitFlag_Priority)};
 
     if (!result)
         return DefaultIsReleasePriorityFix == 0;
@@ -668,7 +678,7 @@ bool SoundArchiveFile::SequenceSoundInfo::IsReleasePriorityFix() const {
 
 u32 SoundArchiveFile::PlayerInfo::GetPlayerHeapSize() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, PlayerInfoBitFlag_HeapSize)};
+    bool result{optionParameter.GetValue(&value, PlayerInfoBitFlag_HeapSize)};
 
     if (!result)
         return DefaultPlayerHeapSize;
@@ -678,7 +688,7 @@ u32 SoundArchiveFile::PlayerInfo::GetPlayerHeapSize() const {
 
 u32 SoundArchiveFile::WaveArchiveInfo::GetWaveCount() const {
     u32 value;
-    bool result {optionParameter.GetValue(&value, WaveArchiveInfoBitFlag_WaveCount)};
+    bool result{optionParameter.GetValue(&value, WaveArchiveInfoBitFlag_WaveCount)};
 
     if (!result)
         return DefaultWarcWaveCount;
@@ -693,7 +703,7 @@ SoundArchiveFile::FileLocationType SoundArchiveFile::FileInfo::GetFileLocationTy
 
     case ElementType_SoundArchiveFile_ExternalFileInfo:
         return FileLocationType_External;
-    
+
     case 0:
         return FileLocationType_None;
 
@@ -715,4 +725,5 @@ const SoundArchiveFile::ExternalFileInfo* SoundArchiveFile::FileInfo::GetExterna
 
     return util::ConstBytePtr(this, toFileLocation.offset).Get<ExternalFileInfo>();
 }
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail
