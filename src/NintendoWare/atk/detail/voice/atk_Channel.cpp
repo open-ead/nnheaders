@@ -1,6 +1,8 @@
 #include <nn/atk/atk_Channel.h>
 
+#include <nn/atk/atk_ChannelManager.h>
 #include <nn/atk/atk_DisposeCallbackManager.h>
+#include <nn/atk/atk_MultiVoiceManager.h>
 
 namespace nn::atk::detail::driver {
 
@@ -12,6 +14,31 @@ u8 GetNwInterpolationTypeFromHardwareManager() {
 }
 
 }  // anonymous namespace
+
+Channel* Channel::AllocChannel(int voiceChannelCount, int priority, ChannelCallback callback,
+                               void* callbackData) {
+    Channel* channel{ChannelManager::GetInstance()->Alloc()};
+
+    if (channel == nullptr) {
+        Util::WarningLogger::GetInstance().Log(0, 0, 0);
+        return nullptr;
+    }
+
+    channel->m_AllocFlag = 1;
+
+    MultiVoice* voice{MultiVoiceManager::GetInstance()->AllocVoice(voiceChannelCount, priority,
+                                                                   VoiceCallbackFunc, channel)};
+
+    if (voice == nullptr) {
+        ChannelManager::GetInstance()->Free(channel);
+        return nullptr;
+    }
+
+    channel->m_pVoice = voice;
+    channel->InitParam(callback, callbackData);
+
+    return channel;
+}
 
 Channel::Channel() {
     m_Disposer.Initialize(this);
