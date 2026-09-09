@@ -38,7 +38,10 @@ struct ThreadType {
     ThreadFunction _threadFunction;
     FiberType* _currentFiber;
     FiberType* _initialFiber;
+    // may be inaccurate: SDK 4.4.0 has the field while 7.3.2 and 20.5.6 does not
+#if NN_SDK_VER < NN_MAKE_VER(5, 0, 0)
     uint32_t _lockHistory;
+#endif
     uintptr_t _tlsValueArray[32];
     char _threadNameBuffer[32];
     const char* _namePointer;
@@ -47,7 +50,11 @@ struct ThreadType {
     detail::InternalThreadHandle _handle;
 };
 #ifdef SWITCH
+#if NN_SDK_VER < NN_MAKE_VER(5, 0, 0)  // see _lockHistory above
 static_assert(sizeof(ThreadType) == 0x1C0, "Wrong size");
+#else
+static_assert(sizeof(ThreadType) == 0x1B8, "Wrong size");
+#endif
 #endif
 
 }  // namespace os
