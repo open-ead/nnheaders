@@ -40,8 +40,13 @@ Channel* Channel::AllocChannel(int voiceChannelCount, int priority, ChannelCallb
     return channel;
 }
 
-void Channel::FreeChannel(Channel *channel) {
+void Channel::FreeChannel(Channel* channel) {
     ChannelManager::GetInstance()->Free(channel);
+}
+
+void Channel::DetachChannel(Channel* channel) {
+    channel->m_Callback = nullptr;
+    channel->m_CallbackData = nullptr;
 }
 
 Channel::Channel() {

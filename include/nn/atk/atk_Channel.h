@@ -47,7 +47,6 @@ private:
 public:
     static Channel* AllocChannel(int voiceChannelCount, int priority, ChannelCallback callback,
                                  void* callbackData);
-
     static void FreeChannel(Channel* channel);
     static void DetachChannel(Channel* channel);
 
