@@ -347,4 +347,98 @@ void Channel::InitParam(ChannelCallback callback, void* callbackData) {
     m_Velocity = 1.0f;
 }
 
+void Channel::AppendWaveBuffer(const WaveInfo& waveInfo, position_t startOffsetSamples,
+                               bool isContextCalculationSkipMode) {
+    m_LoopFlag = waveInfo.loopFlag;
+    m_LoopStartFrame = waveInfo.loopStartFrame;
+    m_OriginalLoopStartFrame = waveInfo.originalLoopStartFrame;
+
+    if (startOffsetSamples > 0 && waveInfo.sampleFormat == SampleFormat_DspAdpcm)
+        startOffsetSamples = startOffsetSamples / 14 * 14;
+
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    m_StartOffsetSamples = startOffsetSamples;
+#endif
+
+    const int sdkVoiceCount{m_pVoice->GetSdkVoiceCount()};
+
+    for (int ch{0}; ch < sdkVoiceCount; ++ch) {
+        const void* originalDataAddress{waveInfo.channelParam[ch].dataAddress};
+
+        AdpcmContext& adpcmContext{m_AdpcmContext[ch]};
+        AdpcmContext& adpcmLoopContext{m_AdpcmLoopContext[ch]};
+
+        if (waveInfo.sampleFormat == SampleFormat_DspAdpcm) {
+            const DspAdpcmParam* pParam{&waveInfo.channelParam[ch].adpcmParam};
+
+            AdpcmParam param;
+            for (int i{0}; i < 8; ++i) {
+                for (int j{0}; j < 2; ++j)
+                    param.coefficients[(i * sizeof(u16)) + j] = pParam->coef[i][j];
+            }
+
+            if (startOffsetSamples == 0) {
+                adpcmContext.audioAdpcmContext.predScale = pParam->predScale;
+                adpcmContext.audioAdpcmContext.history[0] = static_cast<s16>(pParam->yn1);
+                adpcmContext.audioAdpcmContext.history[1] = static_cast<s16>(pParam->yn2);
+            } else if (isContextCalculationSkipMode) {
+                adpcmContext.audioAdpcmContext.predScale = 0;
+                adpcmContext.audioAdpcmContext.history[0] = 0;
+                adpcmContext.audioAdpcmContext.history[1] = 0;
+            } else {
+                adpcmContext.audioAdpcmContext.predScale = pParam->predScale;
+                adpcmContext.audioAdpcmContext.history[0] = static_cast<s16>(pParam->yn1);
+                adpcmContext.audioAdpcmContext.history[1] = static_cast<s16>(pParam->yn2);
+                MultiVoice::CalcOffsetAdpcmParam(&adpcmContext, param, startOffsetSamples,
+                                                 originalDataAddress);
+            }
+
+            if (waveInfo.loopFlag) {
+                const DspAdpcmLoopParam* pLoopParam{&waveInfo.channelParam[ch].adpcmLoopParam};
+                adpcmLoopContext.audioAdpcmContext.predScale = pLoopParam->loopPredScale;
+                adpcmLoopContext.audioAdpcmContext.history[0] =
+                    static_cast<s16>(pLoopParam->loopYn1);
+                adpcmLoopContext.audioAdpcmContext.history[1] =
+                    static_cast<s16>(pLoopParam->loopYn2);
+            }
+
+            m_pVoice->SetAdpcmParam(ch, param);
+        }
+
+        {
+            WaveBuffer* pBuffer0{&m_WaveBuffer[ch][0]};
+            WaveBuffer* pBuffer1{&m_WaveBuffer[ch][1]};
+
+            pBuffer0->bufferAddress = originalDataAddress;
+            pBuffer0->bufferSize = waveInfo.channelParam[ch].dataSize;
+            pBuffer0->sampleOffset = startOffsetSamples;
+            pBuffer0->sampleLength = waveInfo.loopEndFrame;
+            pBuffer0->loopFlag = false;
+
+            if (waveInfo.sampleFormat == SampleFormat_DspAdpcm)
+                pBuffer0->pAdpcmContext = &adpcmContext;
+            else
+                pBuffer0->pAdpcmContext = nullptr;
+
+            if (waveInfo.loopFlag) {
+                pBuffer1->bufferAddress = originalDataAddress;
+                pBuffer1->bufferSize = waveInfo.channelParam[ch].dataSize;
+                pBuffer1->sampleOffset = m_LoopStartFrame;
+                pBuffer1->sampleLength = waveInfo.loopEndFrame;
+                pBuffer1->loopFlag = true;
+
+                if (waveInfo.sampleFormat == SampleFormat_DspAdpcm)
+                    pBuffer1->pAdpcmContext = &adpcmLoopContext;
+                else
+                    pBuffer1->pAdpcmContext = nullptr;
+
+                m_pVoice->AppendWaveBuffer(ch, pBuffer0, false);
+                m_pVoice->AppendWaveBuffer(ch, pBuffer1, true);
+            } else {
+                m_pVoice->AppendWaveBuffer(ch, pBuffer0, true);
+            }
+        }
+    }
+}
+
 }  // namespace nn::atk::detail::driver

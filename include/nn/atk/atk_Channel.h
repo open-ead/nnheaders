@@ -245,7 +245,7 @@ private:
     AdpcmContext m_AdpcmContext[WaveChannelMax];
     AdpcmContext m_AdpcmLoopContext[WaveChannelMax];
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    u32 m_StartOffsetSamples;
+    position_t m_StartOffsetSamples;
 #endif
     position_t m_LoopStartFrame;
     position_t m_OriginalLoopStartFrame;
