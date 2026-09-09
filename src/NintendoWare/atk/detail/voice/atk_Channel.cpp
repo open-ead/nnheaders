@@ -20,11 +20,10 @@ u8 GetNwInterpolationTypeFromHardwareManager() {
     case SampleRateConverterType_Linear:
         result = 1;
         break;
-        
+
     case SampleRateConverterType_4Tap:
         // result = 0;
         break;
-
     }
 
     return result;
@@ -228,6 +227,40 @@ position_t Channel::GetCurrentPlayingSample(bool isOriginalSamplePosition) const
     }
 
     return playSamplePosition;
+}
+
+void Channel::Disposer::InvalidateData(const void* start, const void* end) {
+    if (m_pChannel->m_pVoice == nullptr)
+        return;
+
+    bool disposeFlag{false};
+    int sdkVoiceCount{m_pChannel->m_pVoice->GetSdkVoiceCount()};
+
+    for (int channelIndex{0}; channelIndex < sdkVoiceCount; ++channelIndex) {
+        for (int waveBufferIndex{0}; waveBufferIndex < WaveBufferMax; ++waveBufferIndex) {
+            const WaveBuffer& waveBuffer{m_pChannel->m_WaveBuffer[channelIndex][waveBufferIndex]};
+
+            if (waveBuffer.status == WaveBuffer::Status_Done)
+                continue;
+
+            const void* bufferEnd{
+                util::ConstBytePtr(waveBuffer.bufferAddress,
+                                   Util::GetByteBySample(waveBuffer.sampleLength,
+                                                         m_pChannel->m_pVoice->GetFormat()))
+                    .Get()};
+
+            if (start <= bufferEnd && end >= waveBuffer.bufferAddress) {
+                disposeFlag = true;
+                break;
+            }
+        }
+    }
+
+    if (disposeFlag) {
+        m_pChannel->CallChannelCallback(ChannelCallbackStatus_Cancel);
+        m_pChannel->Stop();
+        Channel::FreeChannel(m_pChannel);
+    }
 }
 
 float Channel::GetSweepValue() const {
