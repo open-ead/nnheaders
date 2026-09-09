@@ -2,6 +2,7 @@
 
 #include <nn/atk/atk_ChannelManager.h>
 #include <nn/atk/atk_DisposeCallbackManager.h>
+#include <nn/atk/atk_HardwareManager.h>
 #include <nn/atk/atk_MultiVoiceManager.h>
 
 namespace nn::atk::detail::driver {
@@ -9,8 +10,24 @@ namespace nn::atk::detail::driver {
 namespace {
 
 u8 GetNwInterpolationTypeFromHardwareManager() {
-    // TODO
-    u8 result;
+    u8 result{0};
+
+    switch (HardwareManager::GetInstance().GetSrcType()) {
+    case SampleRateConverterType_None:
+        result = 2;
+        break;
+
+    case SampleRateConverterType_Linear:
+        result = 1;
+        break;
+        
+    case SampleRateConverterType_4Tap:
+        // result = 0;
+        break;
+
+    }
+
+    return result;
 }
 
 }  // anonymous namespace
@@ -225,6 +242,76 @@ float Channel::GetSweepValue() const {
     sweep /= static_cast<float>(m_SweepLength);
 
     return sweep;
+}
+
+void Channel::InitParam(ChannelCallback callback, void* callbackData) {
+    m_pNextLink = nullptr;
+
+    m_Callback = callback;
+    m_CallbackData = callbackData;
+
+    m_PauseFlag = 0;
+    m_AutoSweep = 1;
+    m_ReleasePriorityFixFlag = 0;
+    m_IsIgnoreNoteOff = 0;
+
+    m_LoopFlag = false;
+    m_LoopStartFrame = 0;
+    m_OriginalLoopStartFrame = 0;
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    m_StartOffsetSamples = 0;
+#endif
+    m_Length = 0;
+
+    m_Key = KeyInit;
+    m_OriginalKey = OriginalKeyInit;
+
+    m_InitPan = 0.0f;
+    m_InitSurroundPan = 0.0f;
+
+    m_Tune = 1.0f;
+
+    m_Cent = 0.0f;
+    m_CentPitch = 1.0f;
+
+    m_UserVolume = 1.0f;
+    m_UserPitch = 0.0f;
+    m_UserPitchRatio = 1.0f;
+    m_UserLpfFreq = 0.0f;
+
+    m_BiquadType = BiquadFilterType_None;
+    m_BiquadValue = 0.0f;
+
+    m_OutputLineFlag = OutputLine_Main;
+
+    m_TvParam.Initialize();
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+    if (m_pTvAdditionalParam != nullptr)
+        m_pTvAdditionalParam->Reset();
+#endif
+
+    m_SilenceVolume.InitValue(SilenceVolumeMax);
+
+    m_SweepPitch = 0.0f;
+    m_SweepCounter = 0;
+    m_SweepLength = 0;
+
+    m_CurveAdshr.Initialize();
+    for (int i{0}; i < ModCount; ++i) {
+        m_Lfo[i].GetParam().Initialize();
+        m_LfoTarget[i] = LfoTarget_Invalid;
+    }
+
+    m_PanMode = PanMode_Dual;
+    m_PanCurve = PanCurve_Sqrt;
+
+    m_KeyGroupId = 0;
+
+    m_InterpolationType = GetNwInterpolationTypeFromHardwareManager();
+
+    m_InstrumentVolume = 1.0f;
+
+    m_Velocity = 1.0f;
 }
 
 }  // namespace nn::atk::detail::driver
