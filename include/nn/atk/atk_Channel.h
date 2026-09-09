@@ -122,12 +122,7 @@ public:
     void SetReleasePriorityFix(bool fix) { m_ReleasePriorityFixFlag = fix; }
     void SetIsIgnoreNoteOff(bool flag) { m_IsIgnoreNoteOff = flag; }
 
-    void SetSweepParam(float sweepPitch, int sweepTime, bool autoUpdate) {
-        m_SweepPitch = sweepPitch;
-        m_SweepLength = sweepTime;
-        m_AutoSweep = autoUpdate;
-        m_SweepCounter = 0;
-    }
+    void SetSweepParam(float sweepPitch, int sweepTime, bool autoUpdate);
 
     bool IsAutoUpdateSweep() const { return m_AutoSweep != 0; }
     void UpdateSweep(int count);

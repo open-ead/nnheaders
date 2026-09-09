@@ -176,6 +176,13 @@ void Channel::SetBiquadFilter(int type, float value) {
     m_BiquadValue = value;
 }
 
+void Channel::SetSweepParam(float sweepPitch, int sweepTime, bool autoUpdate) {
+    m_SweepPitch = sweepPitch;
+    m_SweepLength = sweepTime;
+    m_AutoSweep = autoUpdate;
+    m_SweepCounter = 0;
+}
+
 void Channel::UpdateSweep(int count) {
     m_SweepCounter =
         m_SweepCounter + count <= m_SweepLength ? m_SweepCounter + count : m_SweepLength;
