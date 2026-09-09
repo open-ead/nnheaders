@@ -142,6 +142,8 @@ public:
 
     MultiVoice* detail_GetSdkVoice(s32) const;
 
+    int GetSdkVoiceCount() const { return m_ChannelCount; }
+
     position_t GetCurrentPlayingSample() const;
     SampleFormat GetFormat() const;
 
