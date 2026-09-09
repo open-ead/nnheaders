@@ -63,10 +63,12 @@ public:
     void Update(bool doPeriodicProc);
 
     void CallChannelCallback(ChannelCallbackStatus status);
-
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     void Start(const WaveInfo& waveInfo, int length, position_t startOffsetSamples);
+#else
     void Start(const WaveInfo& waveInfo, int length, position_t startOffsetSamples,
                bool isContextCalculationSkipMode);
+#endif
 
     void Stop();
 
@@ -193,9 +195,12 @@ private:
     float GetSweepValue() const;
     void InitParam(ChannelCallback callback, void* callbackData);
 
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     void AppendWaveBuffer(const WaveInfo& waveInfo, position_t startOffsetSamples);
+#else
     void AppendWaveBuffer(const WaveInfo& waveInfo, position_t startOffsetSamples,
                           bool isContextCalculationSkipMode);
+#endif
 
     Disposer m_Disposer;
     CurveAdshr m_CurveAdshr;

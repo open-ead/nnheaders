@@ -116,7 +116,12 @@ void Channel::CallChannelCallback(ChannelCallbackStatus status) {
     m_CallbackData = nullptr;
 }
 
-void Channel::Start(const WaveInfo& waveInfo, int length, position_t startOffsetSamples) {
+void Channel::Start(const WaveInfo& waveInfo, int length, position_t startOffsetSamples
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+                    ,
+                    bool isContextCalculationSkipMode
+#endif
+) {
     m_Length = length;
 
     for (int i{0}; i < ModCount; ++i)
@@ -129,28 +134,11 @@ void Channel::Start(const WaveInfo& waveInfo, int length, position_t startOffset
     m_pVoice->SetSampleRate(waveInfo.sampleRate);
     m_pVoice->SetInterpolationType(m_InterpolationType);
 
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     AppendWaveBuffer(waveInfo, startOffsetSamples);
-
-    m_pVoice->Start();
-
-    m_ActiveFlag = 1;
-}
-
-void Channel::Start(const WaveInfo& waveInfo, int length, position_t startOffsetSamples,
-                    bool isContextCalculationSkipMode) {
-    m_Length = length;
-
-    for (int i{0}; i < ModCount; ++i)
-        m_Lfo[i].Reset();
-
-    m_CurveAdshr.Reset();
-
-    m_SweepCounter = 0;
-    m_pVoice->SetSampleFormat(waveInfo.sampleFormat);
-    m_pVoice->SetSampleRate(waveInfo.sampleRate);
-    m_pVoice->SetInterpolationType(m_InterpolationType);
-
+#else
     AppendWaveBuffer(waveInfo, startOffsetSamples, isContextCalculationSkipMode);
+#endif
 
     m_pVoice->Start();
 
@@ -347,8 +335,12 @@ void Channel::InitParam(ChannelCallback callback, void* callbackData) {
     m_Velocity = 1.0f;
 }
 
-void Channel::AppendWaveBuffer(const WaveInfo& waveInfo, position_t startOffsetSamples,
-                               bool isContextCalculationSkipMode) {
+void Channel::AppendWaveBuffer(const WaveInfo& waveInfo, position_t startOffsetSamples
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+                               ,
+                               bool isContextCalculationSkipMode
+#endif
+) {
     m_LoopFlag = waveInfo.loopFlag;
     m_LoopStartFrame = waveInfo.loopStartFrame;
     m_OriginalLoopStartFrame = waveInfo.originalLoopStartFrame;
@@ -381,10 +373,13 @@ void Channel::AppendWaveBuffer(const WaveInfo& waveInfo, position_t startOffsetS
                 adpcmContext.audioAdpcmContext.predScale = pParam->predScale;
                 adpcmContext.audioAdpcmContext.history[0] = static_cast<s16>(pParam->yn1);
                 adpcmContext.audioAdpcmContext.history[1] = static_cast<s16>(pParam->yn2);
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
             } else if (isContextCalculationSkipMode) {
                 adpcmContext.audioAdpcmContext.predScale = 0;
                 adpcmContext.audioAdpcmContext.history[0] = 0;
                 adpcmContext.audioAdpcmContext.history[1] = 0;
+
+#endif
             } else {
                 adpcmContext.audioAdpcmContext.predScale = pParam->predScale;
                 adpcmContext.audioAdpcmContext.history[0] = static_cast<s16>(pParam->yn1);
