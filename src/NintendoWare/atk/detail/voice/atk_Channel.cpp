@@ -213,4 +213,18 @@ position_t Channel::GetCurrentPlayingSample(bool isOriginalSamplePosition) const
     return playSamplePosition;
 }
 
+float Channel::GetSweepValue() const {
+    if (m_SweepPitch == 0.0f)
+        return 0.0f;
+
+    if (m_SweepCounter >= m_SweepLength)
+        return 0.0f;
+
+    float sweep{m_SweepPitch};
+    sweep *= static_cast<float>(m_SweepLength - m_SweepCounter);
+    sweep /= static_cast<float>(m_SweepLength);
+
+    return sweep;
+}
+
 }  // namespace nn::atk::detail::driver
