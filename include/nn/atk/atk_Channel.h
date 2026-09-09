@@ -190,7 +190,7 @@ private:
         Channel* m_pChannel{};
     };
 
-    int GetSweepValue() const;
+    float GetSweepValue() const;
     void InitParam(ChannelCallback callback, void* callbackData);
 
     void AppendWaveBuffer(const WaveInfo& waveInfo, position_t startOffsetSamples);
