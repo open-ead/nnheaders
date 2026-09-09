@@ -10,8 +10,8 @@ public:
     void InitValue(ValueType value) {
         m_Origin = value;
         m_Target = value;
-        m_Counter = 0;
         m_Frame = 0;
+        m_Counter = 0;
     }
 
     void SetTarget(ValueType targetValue, CountType frames) {

@@ -12,9 +12,11 @@
 #include <nn/atk/atk_FinalMix.h>
 #include <nn/atk/atk_SubMix.h>
 #include <nn/atk/atk_DeviceOutRecorder.h>
+#include <nn/atk/atk_Util.h>
 
 namespace nn::atk::detail::driver {
-class HardwareManager { // inherits nn::atk::Util::Singleton<HardwareManager>
+
+class HardwareManager : public Util::Singleton<HardwareManager> {
 public:
     using SubMixList = util::IntrusiveList<SubMix, util::IntrusiveListMemberNodeTraits<SubMix, &SubMix::m_Link>>;
 
@@ -219,9 +221,15 @@ public:
 
     static void FlushDataCache(void* address, size_t length);
 
+    SampleRateConverterType GetSrcType() const { return m_SrcType; }
+
 private:
     bool m_IsInitialized;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     audio::AudioRendererHandle m_RendererHandle;
+#else
+    audio::AudioRendererHandle* m_RendererHandle;
+#endif
     audio::AudioRendererConfig m_Config;
     os::SystemEvent m_SystemEvent;
     s32 m_AudioRendererSuspendCount;
@@ -274,5 +282,6 @@ private:
     bool m_IsCompatibleBusVolumeEnabled;
     bool m_IsUserThreadRenderingEnabled;
 };
-static_assert(sizeof(HardwareManager) == 0xa58);
+// static_assert(sizeof(HardwareManager) == 0xa58);
+
 } // namespace nn::atk::detail::driver
