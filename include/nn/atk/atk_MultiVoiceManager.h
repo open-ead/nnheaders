@@ -44,6 +44,8 @@ public:
 
     VoiceList* GetVoiceList() const;
 
+    static MultiVoiceManager* GetInstance();
+
 private:
     bool m_Initialized;
     VoiceList m_PrioVoiceList;

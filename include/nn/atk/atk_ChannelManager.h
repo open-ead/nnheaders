@@ -25,6 +25,8 @@ public:
     void UpdateAllChannel();
     void UpdateAudioFrameChannel();
 
+    static ChannelManager* GetInstance();
+
 private:
     ChannelPool m_Pool;
     ChannelList m_ChannelList;
