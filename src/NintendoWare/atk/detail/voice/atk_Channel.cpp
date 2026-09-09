@@ -49,6 +49,39 @@ void Channel::DetachChannel(Channel* channel) {
     channel->m_CallbackData = nullptr;
 }
 
+void Channel::VoiceCallbackFunc(MultiVoice* voice, MultiVoice::VoiceCallbackStatus status,
+                                void* arg) {
+    ChannelCallbackStatus chStatus{ChannelCallbackStatus_Finish};
+    auto* channel{static_cast<Channel*>(arg)};
+
+    switch (status) {
+    case MultiVoice::VoiceCallbackStatus_FinishWave:
+        voice->Free();
+        chStatus = ChannelCallbackStatus_Finish;
+        break;
+
+    case MultiVoice::VoiceCallbackStatus_Cancel:
+        voice->Free();
+        chStatus = ChannelCallbackStatus_Cancel;
+        break;
+
+    case MultiVoice::VoiceCallbackStatus_DropVoice:
+        chStatus = ChannelCallbackStatus_Drop;
+        break;
+
+    case MultiVoice::VoiceCallbackStatus_DropDsp:
+        chStatus = ChannelCallbackStatus_Drop;
+        break;
+    }
+
+    channel->CallChannelCallback(chStatus);
+
+    channel->m_pVoice = nullptr;
+    channel->m_PauseFlag = 0;
+    channel->m_ActiveFlag = 0;
+    channel->m_AllocFlag = 0;
+}
+
 Channel::Channel() {
     m_Disposer.Initialize(this);
     DisposeCallbackManager::GetInstance()->RegisterDisposeCallback(&m_Disposer);
