@@ -30,7 +30,7 @@ Channel* Channel::AllocChannel(int voiceChannelCount, int priority, ChannelCallb
                                                                    VoiceCallbackFunc, channel)};
 
     if (voice == nullptr) {
-        ChannelManager::GetInstance()->Free(channel);
+        FreeChannel(channel);
         return nullptr;
     }
 
@@ -38,6 +38,10 @@ Channel* Channel::AllocChannel(int voiceChannelCount, int priority, ChannelCallb
     channel->InitParam(callback, callbackData);
 
     return channel;
+}
+
+void Channel::FreeChannel(Channel *channel) {
+    ChannelManager::GetInstance()->Free(channel);
 }
 
 Channel::Channel() {
