@@ -19,7 +19,7 @@ class Mutex {
 public:
     explicit Mutex(bool recursive) { InitializeMutex(&m_Mutex, recursive, 0); }
 
-    Mutex(bool recursive, s32 lockLevel) { InitializeMutex(&m_Mutex, recursive, lockLevel); };
+    Mutex(bool recursive, s32 lockLevel) { InitializeMutex(&m_Mutex, recursive, lockLevel); }
 
     ~Mutex() { FinalizeMutex(&m_Mutex); }
 
@@ -29,7 +29,7 @@ public:
 
     void Unlock() { UnlockMutex(&m_Mutex); }
 
-    bool IsLockedByCurrentThread() const { return IsMutexLockedByCurrentThread(&m_Mutex); };
+    bool IsLockedByCurrentThread() const { return IsMutexLockedByCurrentThread(&m_Mutex); }
 
     void lock() { Lock(); }
 
