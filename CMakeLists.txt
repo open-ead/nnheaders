@@ -236,6 +236,15 @@ add_library(NintendoSDK OBJECT
         include/nn/audio.h
         include/nn/friends.h
         include/nn/mem.h
+        include/nn/err.h
+        include/nn/err/ApplicationErrorArg.h
+        include/nn/err/detail.h
+        include/nn/err/ErrorCode.h
+        include/nn/err/ErrorMessageDatabaseVersion.h
+        include/nn/err/ErrorResultVariant.h
+        include/nn/err/ResultBacktrace.h
+        include/nn/err/SystemErrorArg.h
+        include/nn/err/detail/MessageKind.h
 
         include/nvn/nvn_Cpp.h
         include/nvn/nvn_CppFuncPtrBase.h
