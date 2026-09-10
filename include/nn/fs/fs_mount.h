@@ -3,7 +3,7 @@
 #include <nn/fs/fs_types.h>
 
 namespace nn::ncm {
-enum class SystemDataId { Err = 0x801 };
+enum class SystemDataId : u64 { Err = 0x10000000000801 };
 }  // namespace nn::ncm
 
 namespace nn::fs {

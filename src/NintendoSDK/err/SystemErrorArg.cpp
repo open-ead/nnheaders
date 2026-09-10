@@ -1,24 +1,5 @@
 #include <nn/err/SystemErrorArg.h>
-
-namespace nn::util {
-template <typename T>
-inline int Strlcpy(T* pOutDst, const T* pSrc, int count) {
-    int length = 0;
-
-    if (count > 0) {
-        while (--count && *pSrc) {
-            *pOutDst++ = *pSrc++;
-            ++length;
-        }
-        *pOutDst++ = '\0';
-    }
-
-    while (*pSrc++)
-        ++length;
-
-    return length;
-}
-}  // namespace nn::util
+#include <nn/util/util_StringUtil.h>
 
 namespace nn::err {
 SystemErrorArg::SystemErrorArg() {
