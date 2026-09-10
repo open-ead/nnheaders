@@ -180,10 +180,8 @@ void* ReadMessageFile(char16* outBuffer, s32* outMessageLength, size_t messageBu
 
         diag::detail::AbortImpl("", "", "", 0, &result,
 #if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
-                                "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue:
-                                    0x %
-                                    08x ", " result ", result.GetModule(),
-                                    result.GetDescription(),
+                                "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
+                                "result", result.GetModule(), result.GetDescription(),
                                 result.GetInnerValueForDebug()
 #else
                                 ""
