@@ -77,7 +77,7 @@ void MakeErrorInfoMessageFilePath(char* outErrorInfoMessageFilePath,
                                   size_t errorInfoMessageFilePathBufferSize, ErrorCode errorCode,
                                   settings::LanguageCode languageCode, MessageKind messageKind) {
     if (messageKind > MessageKind::FlvButton) {
-        nn::detail::UnexpectedDefaultImpl("", "", 0);
+        NN_UNEXPECTED_DEFAULT;
     }
 
     const char* messageKindStr = sMessageKindStrs[static_cast<s8>(messageKind)];
@@ -102,9 +102,14 @@ bool ErrorMessageDataExists(ErrorCode errorCode) {
 
     if (result != fs::ResultPathNotFound()) {
         diag::detail::AbortImpl("", "", "", 0, &result,
+#if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
                                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                                 "result", result.GetModule(), result.GetDescription(),
-                                result.GetInnerValueForDebug());
+                                result.GetInnerValueForDebug()
+#else
+                                ""
+#endif
+        );
     }
 
     return false;
@@ -127,9 +132,14 @@ bool CategoryExists(u32 category) {
 
     if (result != fs::ResultPathNotFound()) {
         diag::detail::AbortImpl("", "", "", 0, &result,
+#if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
                                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                                 "result", result.GetModule(), result.GetDescription(),
-                                result.GetInnerValueForDebug());
+                                result.GetInnerValueForDebug()
+#else
+                                ""
+#endif
+        );
     }
 
     return false;
@@ -152,69 +162,91 @@ bool DefaultErrorMessageDataExists(u32 category) {
 
     if (result != fs::ResultPathNotFound()) {
         diag::detail::AbortImpl("", "", "", 0, &result,
+#if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
                                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                                 "result", result.GetModule(), result.GetDescription(),
-                                result.GetInnerValueForDebug());
+                                result.GetInnerValueForDebug()
+#else
+                                ""
+#endif
+        );
     }
 
     return false;
+}
+
+static inline bool test(s32* outMessageLength, s64 fileSize, size_t messageBufferSize) {
+    *outMessageLength = fileSize;
+
+    return messageBufferSize <= static_cast<size_t>(fileSize);
 }
 
 void* ReadMessageFile(char16* outBuffer, s32* outMessageLength, size_t messageBufferSize,
                       ErrorCode errorCode, settings::LanguageCode languageCode,
                       MessageKind messageKind) {
     char errorInfoMessageFilePath[32];
+    fs::FileHandle fileHandle;
+    s64 fileSize;
+
     MakeErrorInfoMessageFilePath(errorInfoMessageFilePath, sizeof(errorInfoMessageFilePath),
                                  errorCode, languageCode, messageKind);
 
-    fs::FileHandle fileHandle;
     Result result = fs::OpenFile(&fileHandle, errorInfoMessageFilePath, fs::OpenMode_Read);
 
-    if (result.IsSuccess()) {
-        s64 fileSize;
-        result = fs::GetFileSize(&fileSize, fileHandle);
-
-        if (result.IsFailure()) {
+    if (result.IsFailure()) {
+        if (result != fs::ResultPathNotFound()) {
             diag::detail::AbortImpl(
                 "", "", "", 0, &result,
-                "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
-                "fs::GetFileSize(&fileSize, fileHandle)", result.GetModule(),
-                result.GetDescription(), result.GetInnerValueForDebug());
+#if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
+                "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x", "result",
+                result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug()
+#else
+                ""
+#endif
+            );
         }
 
-        if (fileSize != 0) {
-            *outMessageLength = fileSize;
+        *outMessageLength = 0;
+        *outBuffer = u'\0';
 
-            if (messageBufferSize <= static_cast<size_t>(fileSize)) {
-                diag::detail::AbortImpl("", "", "", 0);
-            }
-
-            result = fs::ReadFile(fileHandle, 0, outBuffer, static_cast<size_t>(fileSize));
-
-            if (result.IsFailure()) {
-                diag::detail::AbortImpl(
-                    "", "", "", 0, &result,
-                    "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
-                    "fs::ReadFile(fileHandle, 0, outBuffer, static_cast<size_t>(fileSize))",
-                    result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug());
-            }
-
-            outBuffer[*outMessageLength] = u'\0';
-            fs::CloseFile(fileHandle);
-
-            return nullptr;
-        }
+        return nullptr;
     }
 
-    if (result != fs::ResultPathNotFound()) {
+    result = fs::GetFileSize(&fileSize, fileHandle);
+
+    if (result.IsFailure()) {
         diag::detail::AbortImpl("", "", "", 0, &result,
+#if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
                                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
-                                "result", result.GetModule(), result.GetDescription(),
-                                result.GetInnerValueForDebug());
+                                "fs::GetFileSize(&fileSize, fileHandle)", result.GetModule(),
+                                result.GetDescription(), result.GetInnerValueForDebug()
+#else
+                                ""
+#endif
+        );
     }
 
-    *outMessageLength = 0;
-    *outBuffer = u'\0';
+    if (fileSize % 2 != 0 || test(outMessageLength, fileSize, messageBufferSize)) {
+        diag::detail::AbortImpl("", "", "", 0);
+    }
+
+    result = fs::ReadFile(fileHandle, 0, outBuffer, static_cast<size_t>(fileSize));
+
+    if (result.IsFailure()) {
+        diag::detail::AbortImpl(
+            "", "", "", 0, &result,
+#if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
+            "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
+            "fs::ReadFile(fileHandle, 0, outBuffer, static_cast<size_t>(fileSize))",
+            result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug()
+#else
+            ""
+#endif
+        );
+    }
+
+    outBuffer[*outMessageLength] = u'\0';
+    fs::CloseFile(fileHandle);
 
     return nullptr;
 }
@@ -235,9 +267,14 @@ void ReadVersion(ErrorMessageDatabaseVersion* outVersion) {
     if (result.IsFailure()) {
         diag::detail::AbortImpl(
             "", "", "", 0, &result,
+#if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
             "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
             "nn::fs::OpenFile(&fileHandle, infoFilePath, nn::fs::OpenMode_Read)",
-            result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug());
+            result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug()
+#else
+            ""
+#endif
+        );
     }
 
     result = fs::ReadFile(fileHandle, 0, outVersion, sizeof(ErrorMessageDatabaseVersion));
@@ -245,9 +282,14 @@ void ReadVersion(ErrorMessageDatabaseVersion* outVersion) {
     if (result.IsFailure()) {
         diag::detail::AbortImpl(
             "", "", "", 0, &result,
+#if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
             "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
             "nn::fs::ReadFile(fileHandle, 0, outVersion, sizeof(ErrorMessageDatabaseVersion))",
-            result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug());
+            result.GetModule(), result.GetDescription(), result.GetInnerValueForDebug()
+#else
+            ""
+#endif
+        );
     }
 
     fs::CloseFile(fileHandle);
@@ -273,10 +315,15 @@ void ReadMessageFile(char16* outBuffer, size_t bufferSize, const char* errorCode
 
     if (result.IsFailure()) {
         diag::detail::AbortImpl("", "", "", 0, &result,
+#if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
                                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                                 "nn::fs::OpenFile(&fileHandle, filePath, nn::fs::OpenMode_Read)",
                                 result.GetModule(), result.GetDescription(),
-                                result.GetInnerValueForDebug());
+                                result.GetInnerValueForDebug()
+#else
+                                ""
+#endif
+        );
     }
 
     u64 bytesRead;
@@ -284,10 +331,15 @@ void ReadMessageFile(char16* outBuffer, size_t bufferSize, const char* errorCode
 
     if (result.IsFailure()) {
         diag::detail::AbortImpl("", "", "", 0, &result,
+#if NN_SDK_VER < NN_MAKE_VER(1, 0, 0)
                                 "Failed: %s\n  Module: %d\n  Description: %d\n  InnerValue: 0x%08x",
                                 "nn::fs::ReadFile(&readSize, fileHandle, 0, outBuffer, bufferSize)",
                                 result.GetModule(), result.GetDescription(),
-                                result.GetInnerValueForDebug());
+                                result.GetInnerValueForDebug()
+#else
+                                ""
+#endif
+        );
     }
 
     u64 fileRead = bufferSize - 1;

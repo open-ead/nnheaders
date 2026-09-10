@@ -296,7 +296,7 @@ if(NVN_API)
     target_compile_definitions(NintendoSDK PRIVATE NVN_API_${NVN_API})
 endif()
 
-function(nn_ver TARGET ID)
+function(nn_ver TARGET ID SCOPE)
     set(VER ${${ID}})
     string(REPLACE "." ";" VER "${VER}")
 
@@ -312,7 +312,7 @@ function(nn_ver TARGET ID)
     list(POP_FRONT VER MAJOR MINOR PATCH)
 
     foreach(VAR IN ITEMS MAJOR MINOR PATCH)
-        target_compile_definitions(${TARGET} INTERFACE ${ID}_${VAR}=${${VAR}})
+        target_compile_definitions(${TARGET} ${SCOPE} ${ID}_${VAR}=${${VAR}})
     endforeach()
 endfunction()
 
@@ -327,12 +327,12 @@ function(build_sdk)
             ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/NintendoSDK/err/SystemErrorArg.cpp
     )
     target_include_directories(nnsdk PRIVATE ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/include/)
-    nn_ver(nnsdk NN_WARE)
-    nn_ver(nnsdk NN_SDK)
+    nn_ver(nnsdk NN_WARE PRIVATE)
+    nn_ver(nnsdk NN_SDK PRIVATE)
     target_compile_definitions(nnsdk PRIVATE NN_SDK_TYPE="${NN_SDK_TYPE}")
 endfunction()
 
-nn_ver(NintendoSDK NN_WARE)
-nn_ver(NintendoSDK NN_SDK)
+nn_ver(NintendoSDK NN_WARE INTERFACE)
+nn_ver(NintendoSDK NN_SDK INTERFACE)
 target_compile_definitions(NintendoSDK INTERFACE NN_SDK_TYPE="${NN_SDK_TYPE}")
 
