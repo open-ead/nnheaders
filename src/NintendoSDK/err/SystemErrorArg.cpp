@@ -2,12 +2,14 @@
 #include <nn/util/util_StringUtil.h>
 
 namespace nn::err {
+// NON_MATCHING
 SystemErrorArg::SystemErrorArg() {
     mDialogMessage[0] = '\0';
     mFullScreenMessage[0] = '\0';
     mLanguageCode.code[0] = '\0';
 }
 
+// NON_MATCHING
 SystemErrorArg::SystemErrorArg(ErrorCode errorCode, const char* dialogMessage,
                                const char* fullScreenMessage,
                                const settings::LanguageCode& languageCode)
