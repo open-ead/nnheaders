@@ -311,7 +311,7 @@ function(nn_ver ID)
   list(POP_FRONT VER MAJOR MINOR PATCH)
   
   foreach(VAR IN ITEMS MAJOR MINOR PATCH)
-    target_compile_definitions(NintendoSDK PRIVATE ${ID}_${VAR}=${${VAR}})
+    target_compile_definitions(NintendoSDK PUBLIC ${ID}_${VAR}=${${VAR}})
   endforeach()
 endfunction()
 
