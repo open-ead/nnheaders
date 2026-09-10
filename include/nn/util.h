@@ -8,9 +8,7 @@
 #include <cstdarg>
 #include <nn/types.h>
 
-namespace nn {
-namespace util {
-
+namespace nn::util {
 enum CharacterEncodingResult { Success, BadLength, InvalidFormat };
 
 CharacterEncodingResult PickOutCharacterFromUtf8String(char*, char const** str);
@@ -24,8 +22,7 @@ s32 VSNPrintf(char* s, size_t n, const char* format, va_list arg);
 s32 TVSNPrintf(char* s, size_t n, const char* format, va_list arg);
 
 void ReferSymbol(const void*);
-}  // namespace util
-}  // namespace nn
+}  // namespace nn::util
 
 #define NN_MAKE_VER(major, minor, patch) (((major) << 16) | ((minor) << 8) | (patch))
 
@@ -70,9 +67,7 @@ void ReferSymbol(const void*);
     CLASS& operator=(CLASS&&) = delete
 
 namespace nn::detail {
-
-[[noreturn]] void UnexpectedDefaultImpl(const char*, const char*, int);
-
+[[noreturn]] void UnexpectedDefaultImpl(const char*, const char*, s32);
 }  // namespace nn::detail
 
 // todo: ifdef to support debug functionality?
