@@ -1,31 +1,41 @@
 #pragma once
 
+#include <nn/err/ApplicationErrorArg.h>
+#include <nn/err/ErrorCode.h>
+#include <nn/err/ErrorResultVariant.h>
+#include <nn/err/ResultBacktrace.h>
+#include <nn/err/SystemErrorArg.h>
 #include <nn/settings.h>
+#include <nn/time.h>
+#include <nn/types.h>
 
-namespace nn {
-namespace err {
-enum ErrorCodeCategoryType : u32 {
-    unk1,
-    unk2,
-};
+namespace nn::err {
+class ErrorMessageDatabaseVersion;
+// TODO
+class EulaData;
+class ErrorViewerJumpDestination {};
 
-class ApplicationErrorArg {
-public:
-    ApplicationErrorArg();
-    ApplicationErrorArg(u32 error_code, const char* dialog_message, const char* fullscreen_message,
-                        const nn::settings::LanguageCode& languageCode);
-    void SetApplicationErrorCodeNumber(u32 error_code);
-    void SetDialogMessage(const char* message);
-    void SetFullScreenMessage(const char* message);
-
-    u64 unk;
-    u32 error_code;
-    nn::settings::LanguageCode language_code;
-    char dialog_message[2048];
-    char fullscreen_message[2048];
-};
-
-u32 MakeErrorCode(ErrorCodeCategoryType err_category_type, u32 errorCodeNumber);
+ErrorCode ConvertResultToErrorCode(const Result& result);
+bool CreateErrorViewerStartupParamForRecordedError(void*, u64*, u64, const char*, const char*,
+                                                   time::PosixTime);
+void ExecuteJump(ErrorViewerJumpDestination destination);
+void GetErrorCodeString(char* outErrorCodeString, size_t errorCodeStrBufferSize,
+                        ErrorCode errorCode);
+void* GetErrorMessageDatabaseVersion(ErrorMessageDatabaseVersion* outVersion);
+ErrorCode MakeErrorCode(u32 category, u32 number);
 void ShowApplicationError(const ApplicationErrorArg& arg);
-}  // namespace err
-}  // namespace nn
+void ShowError(Result result);
+void ShowError(ErrorCode errorCode);
+void ShowError(const ErrorResultVariant& errorResultVariant);
+void ShowError(Result result, ResultBacktrace& backtrace);
+void ShowErrorRecord(Result result, time::PosixTime timestamp);
+void ShowErrorRecord(ErrorCode errorCode, time::PosixTime timestamp);
+void ShowErrorRecord(const void*, u64);
+void ShowErrorWithoutJump(Result result);
+void ShowErrorWithoutJump(ErrorCode errorCode);
+void ShowEula(settings::system::RegionCode regionCode);
+void ShowSystemError(const SystemErrorArg& arg);
+void ShowSystemUpdateEula(settings::system::RegionCode regionCode, EulaData& data);
+void ShowUnacceptableAddOnContentVersionError();
+void ShowUnacceptableApplicationVersionError();
+}  // namespace nn::err
