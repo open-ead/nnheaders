@@ -4,6 +4,7 @@
 #include <nn/os/detail/os_InternalCriticalSection.h>
 #include <nn/os/detail/os_ThreadTypes-os.horizon.h>
 #include <nn/os/os_ThreadCommon.h>
+#include <nn/util.h>
 #include <nn/util/util_TypedStorage.h>
 
 namespace nn {
