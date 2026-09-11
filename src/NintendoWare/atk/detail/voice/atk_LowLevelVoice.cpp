@@ -43,6 +43,10 @@ bool LowLevelVoice::IsAvailable() const {
     return m_IsAvailable;
 }
 
+void LowLevelVoice::SetAvailable(bool isAvailable) {
+    m_IsAvailable = isAvailable;
+}
+
 void LowLevelVoice::AppendWaveBuffer(WaveBuffer* waveBuffer) {
     waveBuffer->next = nullptr;
     waveBuffer->status = WaveBuffer::Status_Wait;
