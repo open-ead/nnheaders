@@ -229,6 +229,17 @@ void LowLevelVoice::UpdatePitch(const VoiceParam& voiceParam) {
     audio::SetVoicePitch(&m_Voice, pitch);
 }
 
+void LowLevelVoice::UpdateBiquadFilter(const VoiceParam& voiceParam) {
+    audio::BiquadFilterParameter parameter;
+    parameter.denominator[0] = voiceParam.m_BiquadFilterCoefficients.a1;
+    parameter.denominator[1] = voiceParam.m_BiquadFilterCoefficients.a2;
+    parameter.numerator[0] = voiceParam.m_BiquadFilterCoefficients.b0;
+    parameter.numerator[1] = voiceParam.m_BiquadFilterCoefficients.b1;
+    parameter.numerator[2] = voiceParam.m_BiquadFilterCoefficients.b2;
+    parameter.enable = voiceParam.m_BiquadFilterFlag;
+    audio::SetVoiceBiquadFilterParameter(&m_Voice, 0, parameter);
+}
+
 float LowLevelVoice::GetClampedVoiceVolume(float volume) {
     return fnd::FloatClamp(volume, 0.0f, 128.0f);
 }
