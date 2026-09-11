@@ -4,15 +4,38 @@
 
 #include <nn/atk/atk_HardwareManager.h>
 
+namespace {
+
+const s32 LowLevelVoiceInitialPriority{0};
+const int LowLevelVoiceInitialSampleRate{32000};
+const nn::atk::SampleFormat LowLevelVoiceInitialSampleFormat{nn::atk::SampleFormat_PcmS16};
+const nn::atk::detail::VoiceState LowLevelVoiceInitialVoiceState{nn::atk::detail::VoiceState_Stop};
+
+const size_t LowLevelVoiceAlignedSize{sizeof(nn::atk::detail::LowLevelVoice)};
+
+int ConvertAtkPriorityToAudioPriority(s32 atkPriority) {
+    if (atkPriority == 255)
+        return 0;
+
+    return 255 - atkPriority;
+}
+
+int GetOutputReceiverMixBufferIndex(const nn::atk::OutputReceiver* pOutputReceiver, int channel, int bus) {
+
+}
+
+}  // anonymous namespace
+
 namespace nn::atk::detail {
 
-LowLevelVoice::LowLevelVoice() = default;
+LowLevelVoice::LowLevelVoice() 
+    : m_State{LowLevelVoiceInitialVoiceState} {};
 
 void LowLevelVoice::Initialize() {
-    m_Priority = 0;
+    m_Priority = LowLevelVoiceInitialPriority;
     m_IsAvailable = true;
-    m_SampleRate = 32000;
-    m_SampleFormat = SampleFormat_PcmS16;
+    m_SampleRate = LowLevelVoiceInitialSampleRate;
+    m_SampleFormat = LowLevelVoiceInitialSampleFormat;
     m_PlayPosition = 0;
 #if NN_WARE_VER < NN_MAKE_VER(4, 0, 0)
     _c0 = 0;
@@ -94,6 +117,15 @@ void LowLevelVoice::UpdateState(OutputMode outputMode) {
     }
 }
 
+void LowLevelVoice::SetPriority(s32 priority) {
+    m_Priority = priority;
+
+    if (!audio::IsVoiceValid(&m_Voice))
+        return;
+
+    audio::SetVoicePriority(&m_Voice, ConvertAtkPriorityToAudioPriority(m_Priority));
+}
+
 void LowLevelVoice::UpdateStatePlay(bool isRun, OutputMode outputMode) {
     UpdateWaveBuffer(isRun, outputMode);
     UpdateVoiceParam(m_VoiceParam, outputMode);
@@ -107,9 +139,9 @@ void LowLevelVoice::UpdateStateStop(bool isRun) {
 }
 
 void LowLevelVoice::UpdateStatePause(bool isRun, OutputMode outputMode) {
-    if (!isRun) 
+    if (!isRun)
         return;
-    
+
     UpdateVoiceParam(m_VoiceParam, outputMode);
     audio::SetVoicePlayState(&m_Voice, audio::VoiceType::PlayState_Pause);
 }
