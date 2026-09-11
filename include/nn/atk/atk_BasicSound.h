@@ -418,7 +418,7 @@ public:
     int GetRemainingFadeFrames() const;
     int GetRemainingPauseFadeFrames() const;
     int GetRemainingMuteFadeFrames() const;
-    int GetPlayerPriority() const;  // inlined?
+    int GetPlayerPriority() const { return m_Priority; }
 
     void CalculateSoundParamCalculationValues(SoundParamCalculationValues* pOutValue) const;
 

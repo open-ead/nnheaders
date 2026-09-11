@@ -12,7 +12,8 @@ void BasicSound::StartPrepared() {
 }
 
 void BasicSound::Stop(int fadeFrames) {
-    if ((fadeFrames <= 0 || m_PauseState == PauseState_Paused) || (!m_StartFlag && !m_StartedFlag)) {
+    if ((fadeFrames <= 0 || m_PauseState == PauseState_Paused) ||
+        (!m_StartFlag && !m_StartedFlag)) {
         Finalize();
         return;
     }
@@ -35,12 +36,54 @@ void BasicSound::ForceStop() {
     Finalize();
 }
 
+void BasicSound::Pause(bool flag, int fadeFrames) {
+    Pause(flag, fadeFrames, PauseMode_Default);
+}
+
+void BasicSound::Pause(bool flag, int fadeFrames, PauseMode pauseMode) {
+    int frames;
+    if (flag) {
+        switch (m_PauseState) {
+        case PauseState_Normal:
+        case PauseState_Unpausing:
+        case PauseState_Pausing:
+            frames = static_cast<int>(fadeFrames * m_PauseFadeVolume.GetValue());
+            frames = frames > 0 ? frames : 1;
+            m_PauseFadeVolume.SetTarget(0.0f, frames);
+            m_PauseState = PauseState_Pausing;
+            m_UnPauseFlag = false;
+            break;
+        case PauseState_Paused:
+        default:
+            return;
+        }
+    } else {
+        switch (m_PauseState - 1) {
+        case PauseState_Normal:
+        case PauseState_Pausing:
+        case PauseState_Paused:
+            frames = static_cast<int>(fadeFrames * (1.0f - m_PauseFadeVolume.GetValue()));
+            frames = frames > 0 ? frames : 1;
+            m_PauseFadeVolume.SetTarget(1.0f, frames);
+            m_PauseState = PauseState_Unpausing;
+            m_UnPauseFlag = true;
+            break;
+        case PauseState_Unpausing:
+        default:
+            return;
+        }
+    }
+
+    m_PauseMode = pauseMode;
+}
+
 void BasicSound::SetPlayerPriority(int priority) {
     m_Priority = priority;
-    
+
     if (m_pSoundPlayer != nullptr)
         m_pSoundPlayer->detail_SortPriorityList(this);
-    
+
     OnUpdatePlayerPriority();
 }
+
 }  // namespace nn::atk::detail
