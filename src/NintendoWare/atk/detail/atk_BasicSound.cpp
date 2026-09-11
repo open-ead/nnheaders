@@ -115,7 +115,15 @@ void BasicSound::Mute(bool flag, int fadeFrames) {
 void BasicSound::SetAutoStopCounter(int frames) {
     m_AutoStopCounter = frames;
     m_AutoStopFlag = frames > 0;
-} 
+}
+
+void BasicSound::FadeIn(int frames) {
+    if (m_FadeOutFlag || m_UpdateCounter > 0)
+        return;
+
+    m_FadeVolume.InitValue(0.0f);
+    m_FadeVolume.SetTarget(1.0f, frames);
+}
 
 void BasicSound::SetPlayerPriority(int priority) {
     m_Priority = priority;
