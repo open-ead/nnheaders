@@ -100,8 +100,18 @@ void LowLevelVoice::UpdateStatePlay(bool isRun, OutputMode outputMode) {
 }
 
 void LowLevelVoice::UpdateStateStop(bool isRun) {
-    if (isRun)
-        audio::SetVoicePlayState(&m_Voice, audio::VoiceType::PlayState_Stop);
+    if (!isRun)
+        return;
+
+    audio::SetVoicePlayState(&m_Voice, audio::VoiceType::PlayState_Stop);
+}
+
+void LowLevelVoice::UpdateStatePause(bool isRun, OutputMode outputMode) {
+    if (!isRun) 
+        return;
+    
+    UpdateVoiceParam(m_VoiceParam, outputMode);
+    audio::SetVoicePlayState(&m_Voice, audio::VoiceType::PlayState_Pause);
 }
 
 void LowLevelVoice::UpdatePlayPosition() {
