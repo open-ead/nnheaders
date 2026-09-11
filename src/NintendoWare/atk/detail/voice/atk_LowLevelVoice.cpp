@@ -75,4 +75,9 @@ void LowLevelVoice::FreeAllWaveBuffer() {
     m_LastAppendBuffer = nullptr;
 }
 
+void LowLevelVoice::UpdateStateStop(bool isRun) {
+    if (isRun)
+        audio::SetVoicePlayState(&m_Voice, audio::VoiceType::PlayState_Stop);
+}
+
 }  // namespace nn::atk::detail
