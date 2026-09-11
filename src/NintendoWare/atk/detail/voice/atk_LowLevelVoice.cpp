@@ -153,6 +153,23 @@ void LowLevelVoice::SetState(VoiceState state) {
     }
 }
 
+void LowLevelVoice::UpdateVoiceInfo(VoiceInfo* voiceInfo) const {
+    voiceInfo->userId = m_pVoice;
+    voiceInfo->voiceState = m_State;
+
+    volatile WaveBuffer* pListBegin{m_WaveBufferListBegin};
+
+    if (m_WaveBufferListBegin != nullptr) {
+        voiceInfo->waveBufferStatus = pListBegin->status;
+        voiceInfo->waveBufferTag = pListBegin->userParam;
+    }
+    else {
+        voiceInfo->waveBufferStatus = WaveBuffer::Status_Free;
+    }
+
+    voiceInfo->playPosition = m_PlayPosition;
+}
+
 void LowLevelVoice::UpdateStatePlay(bool isRun, OutputMode outputMode) {
     UpdateWaveBuffer(isRun, outputMode);
     UpdateVoiceParam(m_VoiceParam, outputMode);
