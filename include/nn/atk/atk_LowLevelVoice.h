@@ -78,7 +78,6 @@ private:
     void SetVoiceMixVolume(float mixVolume, int destinationIndex);
 
     float GetClampedVoiceVolume(float volume);
-
     AdpcmParam m_AdpcmParam{};
     audio::VoiceType m_Voice{};
     bool m_IsAvailable{false};
@@ -100,37 +99,38 @@ private:
     Voice* m_pVoice{};
     audio::NodeId m_NodeId{0};
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    bool _ec{true}; //0xec
+    bool _ec{true};  // 0xec
 #endif
 };
 static_assert(sizeof(LowLevelVoice) == 0x100);
 
 class LowLevelVoiceAllocator {
 public:
-    constexpr static u32 Unassigned = -1;
+    static const int Unassigned{-1};
 
     LowLevelVoiceAllocator();
 
-    size_t GetRequiredMemSize(s32 voiceCount);
+    size_t GetRequiredMemSize(int voiceCount);
 
-    void Initialize(s32 voiceCount, void* mem, size_t memSize);
+    void Initialize(int voiceCount, void* mem, size_t memSize);
     void Finalize();
 
     void UpdateAllVoiceState(OutputMode outputMode);
 
     LowLevelVoice* AllocVoice();
-    u64 GetVoiceArrayIndex(LowLevelVoice* pVoice);
     void FreeVoice(LowLevelVoice* pVoice);
 
-    s32* GetDroppedVoiceCount() const;
+    int GetDroppedVoiceCount() const;
+
+    ptrdiff_t GetVoiceArrayIndex(LowLevelVoice* pVoice);
 
 private:
     void* m_pVoiceArray{};
     LowLevelVoice** m_ppVoiceTable{};
-    s32 m_UsingCount{0};
-    s32* m_pAssignedTableIndex{};
-    s32 m_VoiceCount{};
-    std::atomic<s32> m_DroppedVoiceCount{0};
+    int m_UsingCount{0};
+    int* m_pAssignedTableIndex{};
+    int m_VoiceCount{};
+    std::atomic_int m_DroppedVoiceCount{0};
 };
 static_assert(sizeof(LowLevelVoiceAllocator) == 0x28);
 
