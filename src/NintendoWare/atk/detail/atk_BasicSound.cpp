@@ -42,6 +42,7 @@ void BasicSound::Pause(bool flag, int fadeFrames) {
 
 void BasicSound::Pause(bool flag, int fadeFrames, PauseMode pauseMode) {
     int frames;
+
     if (flag) {
         switch (m_PauseState) {
         case PauseState_Normal:
@@ -75,6 +76,40 @@ void BasicSound::Pause(bool flag, int fadeFrames, PauseMode pauseMode) {
     }
 
     m_PauseMode = pauseMode;
+}
+
+void BasicSound::Mute(bool flag, int fadeFrames) {
+    int frames;
+
+    if (flag) {
+        switch (m_MuteState) {
+        case MuteState_Normal:
+        case MuteState_Muting:
+        case MuteState_Unmuting:
+            frames = static_cast<int>(fadeFrames * m_MuteFadeVolume.GetValue());
+            frames = frames > 0 ? frames : 1;
+            m_MuteFadeVolume.SetTarget(0.0f, frames);
+            m_MuteState = MuteState_Muting;
+            break;
+        case MuteState_Muted:
+        default:
+            return;
+        }
+    } else {
+        switch (m_MuteState - 1) {
+        case MuteState_Normal:
+        case MuteState_Muting:
+        case MuteState_Muted:
+            frames = static_cast<int>(fadeFrames * (1.0f - m_MuteFadeVolume.GetValue()));
+            frames = frames > 0 ? frames : 1;
+            m_MuteFadeVolume.SetTarget(1.0f, frames);
+            m_MuteState = MuteState_Unmuting;
+            break;
+        case MuteState_Unmuting:
+        default:
+            return;
+        }
+    }
 }
 
 void BasicSound::SetPlayerPriority(int priority) {
