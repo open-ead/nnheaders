@@ -480,13 +480,7 @@ enum VoiceState {
     VoiceState_Pause,
 };
 
-class VoiceParam {
-public:
-    VoiceParam() = default;
-
-    void Initialize();
-
-private:
+struct VoiceParam {
     float m_Volume{0};
     float m_Pitch{0};
     OutputMix m_TvMix{};
@@ -495,6 +489,10 @@ private:
     BiquadFilterCoefficients m_BiquadFilterCoefficients{};
     u16 m_MonoFilterCutoff{0};
     u8 m_InterpolationType{0};
+
+    VoiceParam() = default;
+
+    void Initialize();
 };
 static_assert(sizeof(VoiceParam) == 0x78);
 

@@ -163,8 +163,7 @@ void LowLevelVoice::UpdateVoiceInfo(VoiceInfo* voiceInfo) const {
     if (m_WaveBufferListBegin != nullptr) {
         voiceInfo->waveBufferStatus = pListBegin->status;
         voiceInfo->waveBufferTag = pListBegin->userParam;
-    }
-    else {
+    } else {
         voiceInfo->waveBufferStatus = WaveBuffer::Status_Free;
     }
 
@@ -218,6 +217,11 @@ void LowLevelVoice::UpdateWaveBuffer(bool isRun, OutputMode outputMode) {
     } else {
         UpdateWaveBufferOnStopState(outputMode);
     }
+}
+
+void LowLevelVoice::UpdateVolume(const VoiceParam& voiceParam) {
+    float volume{GetClampedVoiceVolume(voiceParam.m_Volume)};
+    audio::SetVoiceVolume(&m_Voice, volume);
 }
 
 float LowLevelVoice::GetClampedVoiceVolume(float volume) {
