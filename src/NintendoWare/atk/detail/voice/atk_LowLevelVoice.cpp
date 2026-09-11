@@ -21,6 +21,16 @@ void LowLevelVoice::Initialize() {
 #endif
 }
 
+void LowLevelVoice::FreeAllWaveBuffer() {
+    for (WaveBuffer* waveBuffer{m_WaveBufferListBegin}; waveBuffer != nullptr;
+         waveBuffer = waveBuffer->next)
+        waveBuffer->status = WaveBuffer::Status_Done;
+
+    m_WaveBufferListBegin = nullptr;
+    m_WaveBufferListEnd = nullptr;
+    m_LastAppendBuffer = nullptr;
+}
+
 void LowLevelVoice::AppendWaveBuffer(WaveBuffer* waveBuffer) {
     waveBuffer->next = nullptr;
     waveBuffer->status = WaveBuffer::Status_Wait;
