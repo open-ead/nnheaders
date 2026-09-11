@@ -219,6 +219,19 @@ void LowLevelVoice::UpdateWaveBuffer(bool isRun, OutputMode outputMode) {
     }
 }
 
+// Non-matching on versions over 4.0.0
+void LowLevelVoice::UpdateMixVolume(const OutputMix& outputMix, OutputMode outputMode) {
+#if NN_WARE_VER < NN_MAKE_VER(4, 0, 0)
+    if (driver::HardwareManager::GetInstance().IsPresetSubMixEnabled()) {
+        UpdateMixVolumeOnSubMix(outputMix, outputMode);
+    } else {
+        UpdateMixVolumeOnFinalMix(outputMix, outputMode);
+    }
+#else
+
+#endif
+}
+
 void LowLevelVoice::UpdateVolume(const VoiceParam& voiceParam) {
     float volume{GetClampedVoiceVolume(voiceParam.m_Volume)};
     audio::SetVoiceVolume(&m_Voice, volume);
