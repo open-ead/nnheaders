@@ -25,16 +25,6 @@ void LowLevelVoice::Initialize() {
 #endif
 }
 
-void LowLevelVoice::FreeAllWaveBuffer() {
-    for (WaveBuffer* waveBuffer{m_WaveBufferListBegin}; waveBuffer != nullptr;
-         waveBuffer = waveBuffer->next)
-        waveBuffer->status = WaveBuffer::Status_Done;
-
-    m_WaveBufferListBegin = nullptr;
-    m_WaveBufferListEnd = nullptr;
-    m_LastAppendBuffer = nullptr;
-}
-
 void LowLevelVoice::Finalize() {
     FreeAllWaveBuffer();
 
@@ -49,6 +39,10 @@ void LowLevelVoice::Finalize() {
     m_State = VoiceState_Stop;
 }
 
+bool LowLevelVoice::IsAvailable() const {
+    return m_IsAvailable;
+}
+
 void LowLevelVoice::AppendWaveBuffer(WaveBuffer* waveBuffer) {
     waveBuffer->next = nullptr;
     waveBuffer->status = WaveBuffer::Status_Wait;
@@ -58,6 +52,16 @@ void LowLevelVoice::AppendWaveBuffer(WaveBuffer* waveBuffer) {
         m_WaveBufferListEnd->next = waveBuffer;
 
     m_WaveBufferListEnd = waveBuffer;
+}
+
+void LowLevelVoice::FreeAllWaveBuffer() {
+    for (WaveBuffer* waveBuffer{m_WaveBufferListBegin}; waveBuffer != nullptr;
+         waveBuffer = waveBuffer->next)
+        waveBuffer->status = WaveBuffer::Status_Done;
+
+    m_WaveBufferListBegin = nullptr;
+    m_WaveBufferListEnd = nullptr;
+    m_LastAppendBuffer = nullptr;
 }
 
 }  // namespace nn::atk::detail
