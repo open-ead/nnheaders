@@ -224,6 +224,11 @@ void LowLevelVoice::UpdateVolume(const VoiceParam& voiceParam) {
     audio::SetVoiceVolume(&m_Voice, volume);
 }
 
+void LowLevelVoice::UpdatePitch(const VoiceParam& voiceParam) {
+    float pitch{fnd::Clamp(voiceParam.m_Pitch, 0.0625f, 16.0f)};
+    audio::SetVoicePitch(&m_Voice, pitch);
+}
+
 float LowLevelVoice::GetClampedVoiceVolume(float volume) {
     return fnd::FloatClamp(volume, 0.0f, 128.0f);
 }
