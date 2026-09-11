@@ -290,7 +290,7 @@ public:
 
     void push_front(reference);
     void pop_back();
-    void pop_front();
+    void pop_front() { m_Implementation.pop_front(); }
     
     reference front() { return ToReference(m_Implementation.front()); }
     const_reference front() const { return ToReference(m_Implementation.front()); }
