@@ -78,6 +78,7 @@ private:
     void SetVoiceMixVolume(float mixVolume, int destinationIndex);
 
     float GetClampedVoiceVolume(float volume);
+
     AdpcmParam m_AdpcmParam{};
     audio::VoiceType m_Voice;
     bool m_IsAvailable{false};
@@ -99,7 +100,7 @@ private:
     Voice* m_pVoice{};
     audio::NodeId m_NodeId{0};
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    bool _ec{true};  // 0xec
+    bool m_IsRun{true};
 #endif
 };
 static_assert(sizeof(LowLevelVoice) == 0x100);

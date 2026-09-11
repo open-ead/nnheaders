@@ -3,6 +3,7 @@
 #include <nn/audio.h>
 
 #include <nn/atk/atk_HardwareManager.h>
+#include <nn/atk/fnd/basis/atkfnd_Inlines.h>
 
 namespace {
 
@@ -45,7 +46,7 @@ void LowLevelVoice::Initialize() {
 #endif
     m_NodeId = 0;
 #if NN_WARE_VER < NN_MAKE_VER(4, 0, 0)
-    _ec = true;
+    m_IsRun = true;
 #endif
 }
 
@@ -217,6 +218,10 @@ void LowLevelVoice::UpdateWaveBuffer(bool isRun, OutputMode outputMode) {
     } else {
         UpdateWaveBufferOnStopState(outputMode);
     }
+}
+
+float LowLevelVoice::GetClampedVoiceVolume(float volume) {
+    return fnd::FloatClamp(volume, 0.0f, 128.0f);
 }
 
 }  // namespace nn::atk::detail
