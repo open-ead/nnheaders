@@ -9,6 +9,7 @@
 #include <nn/atk/atk_OutputAdditionalParam.h>
 #include <nn/atk/atk_ChannelMixVolume.h>
 #include <nn/atk/atk_OutputReceiver.h>
+#include <nn/atk/fnd/basis/atkfnd_RuntimeTypeInfo.h>
 
 namespace nn::atk {
 class SoundActor;
@@ -253,7 +254,7 @@ static_assert(sizeof(SoundActorParam) == 0x1c);
 #endif
 
 class BasicSound {
-// TODO: implement rtti in atk::fnd
+    NN_ATK_RTTI_BASE(BasicSound);
 public:
     enum PlayerState {
         PlayerState_Init,
@@ -265,7 +266,7 @@ public:
     struct AmbientArgUpdateCallback{};
     struct AmbientArgAllocatorCallback{};
 
-    struct AmbientInfo {
+    struct AmbientInfo { // 703
         AmbientParamUpdateCallback* paramUpdateCallback;
         AmbientArgUpdateCallback* argUpdateCallback;
         AmbientArgAllocatorCallback* argAllocatorCallback;
@@ -277,7 +278,7 @@ public:
     BasicSound();
     virtual ~BasicSound();
 
-    void Update();
+    void Update(); // 725
     void StartPrepared();
 
     void Stop(int fadeFrames);
@@ -300,7 +301,7 @@ public:
     virtual bool IsPrepared() const = 0;
     bool IsPause() const;
     bool IsMute() const;
-    bool IsStarted() const;
+    bool IsStarted() const { return m_StartedFlag; }
 
     void SetPriority(int priority, int ambientPriority);
     void GetPriority(int* priority, int* ambientPriority) const;
@@ -480,7 +481,7 @@ private:
         State_Destructed,
     };
 
-    PlayerHeap* m_pPlayerHeap;
+    PlayerHeap* m_pPlayerHeap; // 934
     SoundHandle* m_pGeneralHandle;                            
     SoundHandle* m_pTempGeneralHandle;
     SoundPlayer* m_pSoundPlayer;
@@ -519,23 +520,38 @@ private:
     f32 m_BiquadFilterValue;
     u32 m_OutputLineFlag;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-    OutputReceiver* m_pOutputReceiver;
+    OutputReceiver* m_pOutputReceiver; // 981
 #endif
 
-    struct CommonParam {
+    struct CommonParam { // 984
         MoveValue<float, int> volume;
         MixMode mixMode;
         float pan;
         float span;
-        float send[4];
+        float send[DefaultBusCount];
 
-        void Initialize();
-        void Update();
+        void Initialize() {
+            volume.InitValue(1.0f);
+            mixMode = MixMode_Pan;
+            pan = 0.0f;
+            span = 0.0f;
+            for (int i{0}; i < DefaultBusCount; ++i)
+                send[i] = 0.0f;
+        }
 
-        float GetVolume() const;
-        void SetVolume(float target, int frame);
+        void Update() {
+            volume.Update();
+        }
 
-        CommonParam();
+        float GetVolume() const {
+            return volume.GetValue();
+        }
+
+        void SetVolume(float target, int frame) {
+            volume.SetTarget(target, frame);
+        }
+
+        CommonParam() = default;
     };
     static_assert(sizeof(CommonParam) == 0x2c);
 
