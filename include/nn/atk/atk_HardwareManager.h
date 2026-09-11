@@ -193,6 +193,8 @@ public:
 
     bool IsResetReady() const;
 
+    audio::AudioRendererConfig& GetAudioRendererConfig() { return m_Config; }
+
     void AddSubMix(SubMix* pSubMix);
     void RemoveSubMix(SubMix* pSubMix);
 
