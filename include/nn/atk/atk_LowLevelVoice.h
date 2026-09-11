@@ -67,8 +67,10 @@ private:
     bool AppendWaveBufferToVoice(WaveBuffer* waveBuffer);
 
     void UpdateMixVolume(const OutputMix& outputMix, OutputMode outputMode);
+#if NN_WARE_VER < NN_MAKE_VER(4, 0, 0)
     void UpdateMixVolumeOnSubMix(const OutputMix& outputMix, OutputMode outputMode);
     void UpdateMixVolumeOnFinalMix(const OutputMix& outputMix, OutputMode outputMode);
+#endif
 
     void UpdateVolume(const VoiceParam& voiceParam);
     void UpdatePitch(const VoiceParam& voiceParam);

@@ -225,6 +225,9 @@ public:
 
     SampleRateConverterType GetSrcType() const { return m_SrcType; }
 
+    bool IsEffectInitialized() const { return m_IsInitializedEffect; }
+    bool IsPresetSubMixEnabled() const { return m_IsPresetSubMixEnabled; }
+
 private:
     bool m_IsInitialized;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
@@ -247,8 +250,12 @@ private:
     u8 m_OutputDeviceFlag[32];
     LowLevelVoiceAllocator m_LowLevelVoiceAllocator;
     FinalMix m_FinalMix;
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    SubMix m_SubMix;
+#else
     SubMix m_SubMix[SubMixCountMax];
     SubMix m_AdditionalSubMix;
+#endif
     SubMixList m_SubMixList;
     fnd::CriticalSection m_SubMixListLock;
     audio::AudioRendererParameter m_AudioRendererParameter;
