@@ -11,6 +11,24 @@ void BasicSound::StartPrepared() {
     m_StartFlag = true;
 }
 
+void BasicSound::Stop(int fadeFrames) {
+    if ((fadeFrames <= 0 || m_PauseState == PauseState_Paused) || (!m_StartFlag && !m_StartedFlag)) {
+        Finalize();
+        return;
+    }
+
+    int frames{static_cast<int>(fadeFrames * m_FadeVolume.GetValue())};
+    m_FadeVolume.SetTarget(0.0f, frames);
+    SetPlayerPriority(0);
+
+    m_AutoStopFlag = false;
+    m_PauseState = PauseState_Normal;
+    m_UnPauseFlag = false;
+    m_PauseMode = PauseMode_Default;
+    m_FadeOutFlag = true;
+    m_MuteState = MuteState_Normal;
+}
+
 void BasicSound::SetPlayerPriority(int priority) {
     m_Priority = priority;
     
