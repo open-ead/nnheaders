@@ -112,6 +112,11 @@ void BasicSound::Mute(bool flag, int fadeFrames) {
     }
 }
 
+void BasicSound::SetAutoStopCounter(int frames) {
+    m_AutoStopCounter = frames;
+    m_AutoStopFlag = frames > 0;
+} 
+
 void BasicSound::SetPlayerPriority(int priority) {
     m_Priority = priority;
 

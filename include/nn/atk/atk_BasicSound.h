@@ -52,9 +52,7 @@ class SoundAmbientParam {
 public:
     static const int OutputLineFlagInherit{-1};
 
-    SoundAmbientParam() {
-        m_TvParam.Initialize();
-    }
+    SoundAmbientParam() { m_TvParam.Initialize(); }
 
     float GetVolume() const { return m_Volume; }
     void SetVolume(float volume) { m_Volume = volume; }
@@ -98,9 +96,7 @@ static_assert(sizeof(SoundAmbientParam) == 0x38);
 
 class SoundParam {
 public:
-    SoundParam() {
-        Initialize();
-    }
+    SoundParam() { Initialize(); }
 
     void Initialize() {
         m_Volume = 1.0f;
@@ -264,9 +260,7 @@ struct SoundActorParam {
     float biquadFilterValue;
 #endif
 
-    SoundActorParam() {
-        Reset();
-    }
+    SoundActorParam() { Reset(); }
 
     void Reset() {
         volume = 1.0f;
@@ -320,10 +314,11 @@ public:
 
     void Pause(bool flag, int fadeFrames);
     void Pause(bool flag, int fadeFrames, PauseMode pauseMode);
-    
+
     void Mute(bool flag, int fadeFrames);
 
     void SetAutoStopCounter(int frames);
+
     void FadeIn(int frames);
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
