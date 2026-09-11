@@ -79,14 +79,14 @@ private:
 
     float GetClampedVoiceVolume(float volume);
     AdpcmParam m_AdpcmParam{};
-    audio::VoiceType m_Voice{};
+    audio::VoiceType m_Voice;
     bool m_IsAvailable{false};
     bool m_IsSetVoiceSlot{false};
     VoiceParam m_VoiceParam{};
-    int32_t m_Priority{0};
-    VoiceState m_State{VoiceState_Stop};
-    u32 m_SampleRate{32000};
-    SampleFormat m_SampleFormat{SampleFormat_PcmS16};
+    int32_t m_Priority;
+    VoiceState m_State;
+    u32 m_SampleRate;
+    SampleFormat m_SampleFormat;
     position_t m_PlayPosition{0};
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     u32 _c0{0};  // 0xc0
