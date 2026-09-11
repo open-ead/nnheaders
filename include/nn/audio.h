@@ -153,7 +153,7 @@ void SetVoiceMixVolume(nn::audio::VoiceType* voice, nn::audio::SubMixType* mix, 
                        int sourceIndex, int destinationIndex);
 nn::audio::VoiceType::PlayState GetVoicePlayState(nn::audio::VoiceType const* voice);
 s32 GetVoicePriority(nn::audio::VoiceType const* voice);
-u64 GetVoicePlayedSampleCount(nn::audio::VoiceType const* voice);
+s64 GetVoicePlayedSampleCount(nn::audio::VoiceType const* voice);
 u32 GetVoiceNodeId(nn::audio::VoiceType const* voice);
 bool AppendWaveBuffer(nn::audio::VoiceType* voice, nn::audio::WaveBuffer const* waveBuffer);
 nn::audio::WaveBuffer* GetReleasedWaveBuffer(nn::audio::VoiceType* voice);

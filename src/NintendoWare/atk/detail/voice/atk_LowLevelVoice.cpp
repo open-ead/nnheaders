@@ -75,9 +75,62 @@ void LowLevelVoice::FreeAllWaveBuffer() {
     m_LastAppendBuffer = nullptr;
 }
 
+void LowLevelVoice::UpdateState(OutputMode outputMode) {
+    if (!audio::IsVoiceValid(&m_Voice))
+        return;
+
+    bool isRun = audio::GetVoicePlayState(&m_Voice) == audio::VoiceType::PlayState_Play;
+
+    switch (m_State) {
+    case VoiceState_Play:
+        UpdateStatePlay(isRun, outputMode);
+        break;
+    case VoiceState_Stop:
+        UpdateStateStop(isRun);
+        break;
+    case VoiceState_Pause:
+        UpdateStatePause(isRun, outputMode);
+        break;
+    }
+}
+
+void LowLevelVoice::UpdateStatePlay(bool isRun, OutputMode outputMode) {
+    UpdateWaveBuffer(isRun, outputMode);
+    UpdateVoiceParam(m_VoiceParam, outputMode);
+}
+
 void LowLevelVoice::UpdateStateStop(bool isRun) {
     if (isRun)
         audio::SetVoicePlayState(&m_Voice, audio::VoiceType::PlayState_Stop);
+}
+
+void LowLevelVoice::UpdatePlayPosition() {
+    if (m_IsSetVoiceSlot) {
+        s64 playedSampleCount{audio::GetVoicePlayedSampleCount(&m_Voice)};
+        s64 startOffset{0};
+
+        WaveBuffer* currentWaveBuffer{m_WaveBufferListBegin};
+
+        if (currentWaveBuffer != nullptr) {
+            startOffset = currentWaveBuffer->sampleOffset;
+            s64 loopSampleLength{currentWaveBuffer->sampleLength - startOffset};
+
+            if (currentWaveBuffer->loopFlag && playedSampleCount > loopSampleLength)
+                playedSampleCount =
+                    playedSampleCount - (playedSampleCount / loopSampleLength) * loopSampleLength;
+        }
+
+        m_PlayPosition = playedSampleCount + startOffset;
+    }
+}
+
+void LowLevelVoice::UpdateWaveBuffer(bool isRun, OutputMode outputMode) {
+    if (isRun) {
+        UpdateWaveBufferOnPlayState();
+        UpdatePlayPosition();
+    }
+
+    UpdateWaveBufferOnStopState(outputMode);
 }
 
 }  // namespace nn::atk::detail
