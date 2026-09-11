@@ -20,16 +20,17 @@ int ConvertAtkPriorityToAudioPriority(s32 atkPriority) {
     return 255 - atkPriority;
 }
 
-int GetOutputReceiverMixBufferIndex(const nn::atk::OutputReceiver* pOutputReceiver, int channel, int bus) {
-
-}
+int GetOutputReceiverMixBufferIndex(const nn::atk::OutputReceiver* pOutputReceiver, int channel,
+                                    int bus) {}
 
 }  // anonymous namespace
 
 namespace nn::atk::detail {
 
-LowLevelVoice::LowLevelVoice() 
-    : m_State{LowLevelVoiceInitialVoiceState} {};
+LowLevelVoice::LowLevelVoice()
+    : m_Priority{LowLevelVoiceInitialPriority}, m_State{LowLevelVoiceInitialVoiceState},
+      m_SampleRate{LowLevelVoiceInitialSampleRate},
+      m_SampleFormat{LowLevelVoiceInitialSampleFormat} {}
 
 void LowLevelVoice::Initialize() {
     m_Priority = LowLevelVoiceInitialPriority;
@@ -108,9 +109,11 @@ void LowLevelVoice::UpdateState(OutputMode outputMode) {
     case VoiceState_Play:
         UpdateStatePlay(isRun, outputMode);
         break;
+
     case VoiceState_Stop:
         UpdateStateStop(isRun);
         break;
+
     case VoiceState_Pause:
         UpdateStatePause(isRun, outputMode);
         break;
@@ -124,6 +127,30 @@ void LowLevelVoice::SetPriority(s32 priority) {
         return;
 
     audio::SetVoicePriority(&m_Voice, ConvertAtkPriorityToAudioPriority(m_Priority));
+}
+
+void LowLevelVoice::SetState(VoiceState state) {
+    m_State = state;
+
+    switch (state) {
+    case VoiceState_Play:
+        if (!m_IsSetVoiceSlot) {
+            AllocVoice();
+            m_IsSetVoiceSlot = true;
+        }
+        break;
+
+    case VoiceState_Stop:
+        if (m_IsSetVoiceSlot) {
+            audio::ReleaseVoiceSlot(
+                &driver::HardwareManager::GetInstance().GetAudioRendererConfig(), &m_Voice);
+            m_IsSetVoiceSlot = false;
+        }
+        break;
+
+    case VoiceState_Pause:
+        break;
+    }
 }
 
 void LowLevelVoice::UpdateStatePlay(bool isRun, OutputMode outputMode) {
