@@ -1,5 +1,9 @@
 #include <nn/atk/atk_LowLevelVoice.h>
 
+#include <nn/audio.h>
+
+#include <nn/atk/atk_HardwareManager.h>
+
 namespace nn::atk::detail {
 
 LowLevelVoice::LowLevelVoice() = default;
@@ -29,6 +33,20 @@ void LowLevelVoice::FreeAllWaveBuffer() {
     m_WaveBufferListBegin = nullptr;
     m_WaveBufferListEnd = nullptr;
     m_LastAppendBuffer = nullptr;
+}
+
+void LowLevelVoice::Finalize() {
+    FreeAllWaveBuffer();
+
+    if (m_IsSetVoiceSlot) {
+        audio::ReleaseVoiceSlot(&driver::HardwareManager::GetInstance().GetAudioRendererConfig(),
+                                &m_Voice);
+        m_IsSetVoiceSlot = false;
+    }
+
+    m_pVoice = nullptr;
+    m_IsAvailable = false;
+    m_State = VoiceState_Stop;
 }
 
 void LowLevelVoice::AppendWaveBuffer(WaveBuffer* waveBuffer) {
