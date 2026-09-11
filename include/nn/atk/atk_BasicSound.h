@@ -3,50 +3,58 @@
 #include <nn/os.h>
 #include <nn/util/util_IntrusiveList.h>
 
-#include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/atk_BasicSoundPlayer.h>
-#include <nn/atk/atk_MoveValue.h>
-#include <nn/atk/atk_OutputAdditionalParam.h>
 #include <nn/atk/atk_ChannelMixVolume.h>
-#include <nn/atk/atk_OutputReceiver.h>
+#include <nn/atk/atk_MoveValue.h>
+#include <nn/atk/fnd/basis/atkfnd_Inlines.h>
 #include <nn/atk/fnd/basis/atkfnd_RuntimeTypeInfo.h>
 
 namespace nn::atk {
+
 class SoundActor;
 class SoundPlayer;
 class SoundHandle;
 
 class OutputAmbientParam {
 public:
-    OutputAmbientParam();
+    OutputAmbientParam() = default;
 
-    void Initialize();
+    void Initialize() {
+        m_Volume = 1.0f;
+        m_Pan = 0.0f;
+        m_SurroundPan = 0.0f;
 
-    float GetVolume() const;
-    void SetVolume(float volume);
+        for (int i{0}; i < AuxBus_Count; ++i)
+            m_FxSend[i] = 0.0f;
+    }
 
-    float GetPan() const;
-    void SetPan(float pan);
+    float GetVolume() const { return m_Volume; }
+    void SetVolume(float volume) { m_Volume = volume; }
 
-    float GetSurroundPan() const;
-    void SetSurroundPan(float surroundPan);
+    float GetPan() const { return m_Pan; }
+    void SetPan(float pan) { m_Pan = pan; }
 
-    float GetEffectSend(int) const;
-    void SetEffectSend(int, float) const;
+    float GetSurroundPan() const { return m_SurroundPan; }
+    void SetSurroundPan(float surroundPan) { m_SurroundPan = surroundPan; }
+
+    float GetEffectSend(int auxBusIndex) const { return m_FxSend[auxBusIndex]; }
+    void SetEffectSend(int auxBusIndex, float send) { m_FxSend[auxBusIndex] = send; }
 
 private:
     f32 m_Volume;
     f32 m_Pan;
     f32 m_SurroundPan;
-    f32 m_FxSend[3];
+    f32 m_FxSend[AuxBus_Count];
 };
 static_assert(sizeof(OutputAmbientParam) == 0x18);
 
 class SoundAmbientParam {
 public:
-    static const int OutputLineFlagInherit = -1;
-    
-    SoundAmbientParam();
+    static const int OutputLineFlagInherit{-1};
+
+    SoundAmbientParam() {
+        m_TvParam.Initialize();
+    }
 
     float GetVolume() const { return m_Volume; }
     void SetVolume(float volume) { m_Volume = volume; }
@@ -76,12 +84,12 @@ public:
     void SetTvParam(const OutputAmbientParam& tvParam) { m_TvParam = tvParam; }
 
 private:
-    float m_Volume;
-    float m_Pitch;
-    float m_Lpf;
-    float m_BiquadFilterValue;
-    int m_BiquadFilterType;
-    int m_Priority;
+    float m_Volume{1.0f};
+    float m_Pitch{1.0f};
+    float m_Lpf{0.0f};
+    float m_BiquadFilterValue{0.0f};
+    int m_BiquadFilterType{BiquadFilterType_Inherit};
+    int m_Priority{0};
     u32 m_UserData;
     int m_OutputLineFlag;
     OutputAmbientParam m_TvParam;
@@ -90,9 +98,21 @@ static_assert(sizeof(SoundAmbientParam) == 0x38);
 
 class SoundParam {
 public:
-    SoundParam();
+    SoundParam() {
+        Initialize();
+    }
 
-    void Initialize();
+    void Initialize() {
+        m_Volume = 1.0f;
+        m_Pitch = 1.0f;
+        m_Lpf = 0.0f;
+        m_BiquadFilterType = BiquadFilterType_Inherit;
+        m_BiquadFilterValue = 0.0f;
+        m_Priority = 0;
+        m_OutputLineFlag = SoundAmbientParam::OutputLineFlagInherit;
+        m_UserData = 0;
+        m_TvParam.Initialize();
+    }
 
     float GetVolume() const { return m_Volume; }
     void SetVolume(float volume) { m_Volume = volume; }
@@ -137,7 +157,7 @@ static_assert(sizeof(SoundParam) == 0x38);
 
 struct SoundParamCalculationValues {
     struct SoundArchiveParam {
-        f32 volume;
+        float volume;
     };
     static_assert(sizeof(SoundArchiveParam) == 0x4);
 
@@ -148,10 +168,10 @@ struct SoundParamCalculationValues {
         float bqfValue;
         float outputVolume[1];
         float outputMainSend[1];
-        float outputEffectSend[1][3];
+        float outputEffectSend[1][AuxBus_Count];
     };
     static_assert(sizeof(SoundPlayerParam) == 0x24);
-    
+
     struct Sound3DParam {
         float volume;
         float pitch;
@@ -162,7 +182,7 @@ struct SoundParamCalculationValues {
         float outputVolume[1];
         float outputPan[1];
         float outputSurroundPan[1];
-        float outputEffectSend[1][3];
+        float outputEffectSend[1][AuxBus_Count];
         int playerPriority;
     };
     static_assert(sizeof(Sound3DParam) == 0x34);
@@ -187,13 +207,13 @@ struct SoundParamCalculationValues {
         float outputPan[1];
         float outputSurroundPan[1];
         float outputMainSend[1];
-        float outputEffectSend[1][3];
+        float outputEffectSend[1][AuxBus_Count];
         MixParameter outputMixParameter[1][2];
         MixMode mixMode;
         float pan;
         float surroundPan;
         float mainSend;
-        float effectSend[3];
+        float effectSend[AuxBus_Count];
         int playerPriority;
     };
     static_assert(sizeof(SoundHandleParam) == 0x84);
@@ -229,6 +249,7 @@ struct SoundParamCalculationValues {
 static_assert(sizeof(SoundParamCalculationValues) == 0x170);
 
 namespace detail {
+
 class PlayerHeap;
 class ExternalSoundPlayer;
 
@@ -243,9 +264,21 @@ struct SoundActorParam {
     float biquadFilterValue;
 #endif
 
-    SoundActorParam();
+    SoundActorParam() {
+        Reset();
+    }
 
-    void Reset();
+    void Reset() {
+        volume = 1.0f;
+        pitch = 1.0f;
+        tvVolume = 1.0f;
+        tvPan = 0.0f;
+        lpf = 0.0f;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+        biquadFilterType = BiquadFilterType_Min;
+        biquadFilterValue = 0.0f;
+#endif
+    }
 };
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(SoundActorParam) == 0x14);
@@ -255,18 +288,13 @@ static_assert(sizeof(SoundActorParam) == 0x1c);
 
 class BasicSound {
     NN_ATK_RTTI_BASE(BasicSound);
+
 public:
-    enum PlayerState {
-        PlayerState_Init,
-        PlayerState_Play,
-        PlayerState_Stop,
-    };
+    struct AmbientParamUpdateCallback {};
+    struct AmbientArgUpdateCallback {};
+    struct AmbientArgAllocatorCallback {};
 
-    struct AmbientParamUpdateCallback{};
-    struct AmbientArgUpdateCallback{};
-    struct AmbientArgAllocatorCallback{};
-
-    struct AmbientInfo { // 703
+    struct AmbientInfo {
         AmbientParamUpdateCallback* paramUpdateCallback;
         AmbientArgUpdateCallback* argUpdateCallback;
         AmbientArgAllocatorCallback* argAllocatorCallback;
@@ -275,10 +303,16 @@ public:
     };
     static_assert(sizeof(AmbientInfo) == 0x28);
 
+    enum PlayerState {
+        PlayerState_Init,
+        PlayerState_Play,
+        PlayerState_Stop,
+    };
+
     BasicSound();
     virtual ~BasicSound();
 
-    void Update(); // 725
+    void Update();
     void StartPrepared();
 
     void Stop(int fadeFrames);
@@ -354,7 +388,7 @@ public:
     void SetPanMode(PanMode mode);
     void SetPanCurve(PanCurve curve);
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-    void SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditionalParam* addr, 
+    void SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditionalParam* addr,
                                       OutputAdditionalParam* addrForPlayer);
 #endif
     void SetOutputVolume(OutputDevice device, float volume);
@@ -365,7 +399,8 @@ public:
     void SetOutputFxSend(OutputDevice device, float send);
     void SetOutputAdditionalSend(OutputDevice device, int bus, float send);
     void SetOutputBusMixVolumeEnabled(OutputDevice device, int subMixBus, bool isEnabled);
-    void SetOutputBusMixVolume(OutputDevice device, int srcChNo, int subMixBus, ChannelMixVolume param);
+    void SetOutputBusMixVolume(OutputDevice device, int srcChNo, int subMixBus,
+                               ChannelMixVolume param);
     void SetOutputChannelMixParameter(OutputDevice device, u32 srcChNo, MixParameter param);
     void SetOutputVolumeThroughMode(OutputDevice device, int bus, u8 modeBitFlag);
 
@@ -383,26 +418,30 @@ public:
     int GetRemainingFadeFrames() const;
     int GetRemainingPauseFadeFrames() const;
     int GetRemainingMuteFadeFrames() const;
-    int GetPlayerPriority() const;
+    int GetPlayerPriority() const;  // inlined?
 
     void CalculateSoundParamCalculationValues(SoundParamCalculationValues* pOutValue) const;
 
     void SetId(u32 id);
-    u32 GetId() const;
+    u32 GetId() const { return m_Id; }
     u32 GetInstanceId() const;
-    u32 GetPlayFrameCount() const;
+    u32 GetPlayFrameCount() const { return m_PlayingCounter; }
 
     void SetSetupTick(const os::Tick& tick);
-    os::Tick GetSetupTick() const;
+    os::Tick GetSetupTick() const { return m_SetupTick; }
 
-    int CalcCurrentPlayerPriority() const;
+    int CalcCurrentPlayerPriority() const {
+        return fnd::Clamp(m_AmbientParam.GetPriority(), 0, 127);
+    }
 
-    SoundPlayer* GetSoundPlayer();
-    const SoundPlayer* GetSoundPlayer() const;
+    SoundPlayer* GetSoundPlayer() { return m_pSoundPlayer; }
+    const SoundPlayer* GetSoundPlayer() const { return m_pSoundPlayer; }
+
     void AttachSoundPlayer(SoundPlayer* player);
     void DetachSoundPlayer(SoundPlayer* player);
 
-    const SoundActor* GetSoundActor() const;
+    const SoundActor* GetSoundActor() const { return m_pSoundActor; }
+
     void AttachSoundActor(SoundActor* actor);
     void DetachSoundActor(SoundActor* actor);
 
@@ -411,13 +450,17 @@ public:
 
     void AttachPlayerHeap(PlayerHeap* pHeap);
     void DetachPlayerHeap(PlayerHeap* pHeap);
-    PlayerHeap* GetPlayerHeap();
+
+    PlayerHeap* GetPlayerHeap() { return m_pPlayerHeap; }
 
     void SetAmbientInfo(const AmbientInfo& ambientArgInfo);
+
     void ClearAmbientArgUpdateCallback();
     void ClearAmbientParamUpdateCallback();
     void ClearAmbientArgAllocatorCallback();
-    const SoundParam& GetAmbientParam() const;
+
+    const SoundParam& GetAmbientParam() const { return m_AmbientParam; }
+
     static int GetAmbientPriority(const AmbientInfo& ambientInfo, u32 soundId);
 
     bool IsAttachedGeneralHandle();
@@ -428,12 +471,17 @@ public:
     void DetachTempGeneralHandle();
     virtual void DetachTempSpecialHandle() = 0;
 
-    void SetUserParamBuffer(void* buffer, size_t size);
-    void* GetUserParam();
+    void SetUserParamBuffer(void* buffer, size_t size) {
+        m_pUserParam = buffer;
+        m_UserParamSize = size;
+    }
 
-    void SetSoundStopCallback(const SoundStopCallback callback);
+    void* GetUserParam() { return m_pUserParam; }
+
+    void SetSoundStopCallback(const SoundStopCallback callback) { m_SoundStopCallback = callback; }
+
     void SetSoundArchive(const SoundArchive* soundArchive);
-    const SoundArchive* GetSoundArchive() const;
+    const SoundArchive* GetSoundArchive() const { return m_pSoundArchive; }
 
     enum PauseState {
         PauseState_Normal,
@@ -441,7 +489,7 @@ public:
         PauseState_Paused,
         PauseState_Unpausing,
     };
-    PauseState GetPauseState() const;
+    PauseState GetPauseState() const { return static_cast<PauseState>(m_PauseState); }
 
     enum MuteState {
         MuteState_Normal,
@@ -449,15 +497,15 @@ public:
         MuteState_Muted,
         MuteState_Unmuting,
     };
-    MuteState GetMuteState() const;
+    MuteState GetMuteState() const { return static_cast<MuteState>(m_MuteState); }
 
 protected:
     virtual driver::BasicSoundPlayer* GetBasicSoundPlayerHandle() = 0;
-    virtual void OnUpdatePlayerPriority();
+    virtual void OnUpdatePlayerPriority() {}
     virtual void UpdateMoveValue();
-    virtual void OnUpdateParam();
+    virtual void OnUpdateParam() {}
 
-    bool IsPlayerAvailable() const;
+    bool IsPlayerAvailable() const { return m_PlayerAvailableFlag; }
 
 private:
     void UpdateParam();
@@ -471,7 +519,7 @@ private:
     u32 CalculateOutLineFlag() const;
     void CalculateOutputParam(OutputParam* pOutParam, OutputDevice device) const;
     void CalculateOutputBusMixVolume(OutputBusMixVolume* pOutParam, OutputDevice device) const;
-    
+
     void ApplyCommonParam(OutputParam& param) const;
 
     enum State {
@@ -481,8 +529,8 @@ private:
         State_Destructed,
     };
 
-    PlayerHeap* m_pPlayerHeap; // 934
-    SoundHandle* m_pGeneralHandle;                            
+    PlayerHeap* m_pPlayerHeap;
+    SoundHandle* m_pGeneralHandle;
     SoundHandle* m_pTempGeneralHandle;
     SoundPlayer* m_pSoundPlayer;
     SoundActor* m_pSoundActor;
@@ -503,7 +551,7 @@ private:
     PauseMode m_PauseMode;
     u8 m_Priority;
     s8 m_BiquadFilterType;
-    State m_State;
+    State m_State{State_Constructed};
     u8 m_PlayerState;
     u8 m_PauseState;
     u8 m_MuteState;
@@ -513,17 +561,17 @@ private:
     u32 m_PlayingCounter;
     u32 m_Id;
     u32 m_InstanceId;
-    os::Tick m_SetupTick;
+    os::Tick m_SetupTick{0};
     f32 m_InitVolume;
     f32 m_Pitch;
     f32 m_LpfFreq;
     f32 m_BiquadFilterValue;
     u32 m_OutputLineFlag;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-    OutputReceiver* m_pOutputReceiver; // 981
+    OutputReceiver* m_pOutputReceiver;
 #endif
 
-    struct CommonParam { // 984
+    struct CommonParam {
         MoveValue<float, int> volume;
         MixMode mixMode;
         float pan;
@@ -539,17 +587,11 @@ private:
                 send[i] = 0.0f;
         }
 
-        void Update() {
-            volume.Update();
-        }
+        void Update() { volume.Update(); }
 
-        float GetVolume() const {
-            return volume.GetValue();
-        }
+        float GetVolume() const { return volume.GetValue(); }
 
-        void SetVolume(float target, int frame) {
-            volume.SetTarget(target, frame);
-        }
+        void SetVolume(float target, int frame) { volume.SetTarget(target, frame); }
 
         CommonParam() = default;
     };
@@ -559,11 +601,11 @@ private:
 
     OutputParam m_OutputParam[1];
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-    OutputAdditionalParam* m_pOutputAdditionalParam[1];
+    OutputAdditionalParam* m_pOutputAdditionalParam[1]{};
 #endif
-    void* m_pUserParam;
-    size_t m_UserParamSize;
-    SoundStopCallback m_SoundStopCallback;
+    void* m_pUserParam{};
+    size_t m_UserParamSize{0};
+    SoundStopCallback m_SoundStopCallback{};
 
     static u32 g_LastInstanceId;
 
@@ -571,12 +613,12 @@ public:
     util::IntrusiveListNode m_SoundPlayerPlayLink;
     util::IntrusiveListNode m_SoundPlayerPriorityLink;
     util::IntrusiveListNode m_ExtSoundPlayerPlayLink;
-
 };
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 static_assert(sizeof(BasicSound) == 0x1f0);
 #else
 static_assert(sizeof(BasicSound) == 0x210);
 #endif
+
 }  // namespace detail
 }  // namespace nn::atk
