@@ -128,9 +128,9 @@ void LowLevelVoice::UpdateWaveBuffer(bool isRun, OutputMode outputMode) {
     if (isRun) {
         UpdateWaveBufferOnPlayState();
         UpdatePlayPosition();
+    } else {
+        UpdateWaveBufferOnStopState(outputMode);
     }
-
-    UpdateWaveBufferOnStopState(outputMode);
 }
 
 }  // namespace nn::atk::detail
