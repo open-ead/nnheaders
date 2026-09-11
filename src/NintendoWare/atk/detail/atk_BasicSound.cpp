@@ -29,6 +29,12 @@ void BasicSound::Stop(int fadeFrames) {
     m_MuteState = MuteState_Normal;
 }
 
+void BasicSound::ForceStop() {
+    m_FadeOutFlag = true;
+
+    Finalize();
+}
+
 void BasicSound::SetPlayerPriority(int priority) {
     m_Priority = priority;
     
