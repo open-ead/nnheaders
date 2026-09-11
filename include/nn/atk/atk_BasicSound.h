@@ -320,6 +320,7 @@ public:
 
     void Pause(bool flag, int fadeFrames);
     void Pause(bool flag, int fadeFrames, PauseMode pauseMode);
+    
     void Mute(bool flag, int fadeFrames);
 
     void SetAutoStopCounter(int frames);
