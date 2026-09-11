@@ -47,6 +47,13 @@ void LowLevelVoice::SetAvailable(bool isAvailable) {
     m_IsAvailable = isAvailable;
 }
 
+bool LowLevelVoice::IsVoiceDroppedFlagOn() const {
+    if (audio::IsVoiceValid(&m_Voice))
+        return audio::IsVoiceDroppedFlagOn(&m_Voice);
+
+    return false;
+}
+
 void LowLevelVoice::AppendWaveBuffer(WaveBuffer* waveBuffer) {
     waveBuffer->next = nullptr;
     waveBuffer->status = WaveBuffer::Status_Wait;
