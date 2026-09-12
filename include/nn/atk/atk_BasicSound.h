@@ -563,10 +563,10 @@ private:
     u32 m_Id;
     u32 m_InstanceId;
     os::Tick m_SetupTick{0};
-    f32 m_InitVolume;
-    f32 m_Pitch;
-    f32 m_LpfFreq;
-    f32 m_BiquadFilterValue;
+    float m_InitVolume;
+    float m_Pitch;
+    float m_LpfFreq;
+    float m_BiquadFilterValue;
     u32 m_OutputLineFlag;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     OutputReceiver* m_pOutputReceiver;
