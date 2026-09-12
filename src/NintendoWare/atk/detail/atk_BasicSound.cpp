@@ -240,4 +240,8 @@ bool BasicSound::IsAttachedGeneralHandle() {
     return m_pGeneralHandle != nullptr;
 }
 
+bool BasicSound::IsAttachedTempGeneralHandle() {
+    return m_pTempGeneralHandle != nullptr;
+}
+
 }  // namespace nn::atk::detail
