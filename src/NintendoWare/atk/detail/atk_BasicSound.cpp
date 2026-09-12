@@ -314,6 +314,18 @@ bool BasicSound::IsPause() const {
     }
 }
 
+bool BasicSound::IsMute() const {
+    switch (m_MuteState - 1) {
+    case MuteState_Normal:
+    case MuteState_Muting:
+        return true;
+    case MuteState_Muted:
+    case MuteState_Unmuting:
+    default:
+        return false;
+    }
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
