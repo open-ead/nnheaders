@@ -1,0 +1,90 @@
+#pragma once
+
+#include <nn/types.h>
+#include <nn/util/util_IntrusiveList.h>
+
+namespace nn::atk::detail::fnd {
+class HeapBase : public util::IntrusiveListBaseNode<HeapBase> {
+public:
+    using HeapList = util::IntrusiveList<HeapBase, util::IntrusiveListBaseNodeTraits<HeapBase>>;
+
+    enum HeapType {
+        HeapType_Exp,
+        HeapType_Frame,
+        HeapType_Unit,
+        HeapType_Unknown,
+    };
+
+    enum FillType {
+        FillType_NoUse,
+        FillType_Alloc,
+        FillType_Free,
+        FillType_Max,
+    };
+
+    static const int DefaultAlignment = 4;
+
+    static const u32 ExpHeapSignature   = 0x45585048; // HPXE
+    static const u32 FrameHeapSignature = 0x46524D48; // HMRF
+    static const u32 UnitHeapSignature  = 0x554E5448; // HTNU
+
+    static const int OptionZeroClear  = 1 << 0;
+    static const int OptionDebugFill  = 1 << 1;
+    static const int OptionThreadSafe = 1 << 2;
+
+    static const int ErrorPrint = 1;
+
+    static const int MIN_ALIGNMENT = DefaultAlignment;
+
+    static HeapBase* FindContainHeap(const void* memBlock);
+    static HeapBase* FindParentHeap(const HeapBase* pChild);
+    
+    void* GetHeapStartAddress();
+    void* GetHeapEndAddress();
+
+    size_t GetTotalSize();
+    size_t GetTotalUsableSize();
+
+    u32 SetFillValue(FillType type, u32 val);
+    u32 GetFillValue(FillType type);
+
+    HeapType GetHeapType();
+
+protected:
+    void Initialize(u32 signature, void* heapStart, void* heapEnd, u16 optFlag);
+    void Finalize();
+    
+    u32 GetSignature() const {
+        return m_Signature;
+    }
+
+    void* GetHeapStart() const {
+        return mHeapStart;
+    }
+
+    void* GetHeapEnd() const {
+        return mHeapEnd;
+    }
+    
+    void LockHeap();
+    void UnlockHeap();
+
+    void FillFreeMemory(void* address, size_t size);
+    void FillNoUseMemory(void* address, size_t size);
+    void FillAllocMemory(void* address, size_t size);
+
+private:
+    static HeapBase* FindContainHeap(HeapList* pList, const void* memBlock);
+    static HeapList* FindListContainHeap(HeapBase* pHeapBase);
+
+    u16 GetOptionFlag();
+    void SetOptionFlag(u16 optFlag);
+
+    void* mHeapStart;
+    void* mHeapEnd;
+    u32 m_Signature;
+    HeapList m_ChildList;
+    u32 m_Attribute;
+};
+static_assert(sizeof(HeapBase) == 0x40);
+} // namespace nn::atk::detail::fnd

@@ -79,8 +79,18 @@ public:
         reference operator*() const { return *m_Node; }
 
         pointer operator->() const;
-        const_iterator& operator++();
-        const_iterator operator++(int);
+
+        const_iterator& operator++() {
+            m_Node = m_Node->GetNext();
+            return *this;
+        }
+
+        const_iterator operator++(int) {
+            const_iterator temporary(*this);
+            ++(*this);
+            return temporary;
+        }
+
         const_iterator& operator--();
         const_iterator operator--(int);
         bool operator==(const const_iterator&) const;
@@ -135,10 +145,10 @@ public:
 
     void pop_front() { m_Root.GetNext()->Unlink(); }
 
-    reference back();
-    reference back() const;
-    reference front();
-    reference front() const;
+    reference back() { return *m_Root.GetPrev(); }
+    const_reference back() const { return *m_Root.GetPrev(); }
+    reference front() { return *m_Root.GetNext(); }
+    const_reference front() const { return *m_Root.GetNext(); }
 
     iterator begin() { return m_Root.GetNext(); }
     const_iterator begin() const { return m_Root.GetNext(); }
@@ -149,7 +159,7 @@ public:
     iterator iterator_to(reference value) { return iterator(&value); }
     const_iterator iterator_to(reference value) const { return iterator(&value); }
 
-    size_type size() const;
+    size_type size() const { return std::distance(begin(), end()); }
 
     bool empty() const { return !m_Root.IsLinked(); }
 
@@ -280,11 +290,12 @@ public:
 
     void push_front(reference);
     void pop_back();
-    void pop_front();
-    reference front();
-    reference front() const;
-    reference back();
-    reference back() const;
+    void pop_front() { m_Implementation.pop_front(); }
+    
+    reference front() { return ToReference(m_Implementation.front()); }
+    const_reference front() const { return ToReference(m_Implementation.front()); }
+    reference back() { return ToReference(m_Implementation.back()); }
+    const_reference back() const { return ToReference(m_Implementation.back()); }
 
     iterator begin() { return m_Implementation.begin(); }
     const_iterator begin() const { return m_Implementation.begin(); }
@@ -307,8 +318,9 @@ public:
         return m_Implementation.iterator_to(ToNode(value));
     }
 
-    size_type size() const;
-    bool empty() const;
+    size_type size() const { return m_Implementation.size(); }
+
+    bool empty() const { return m_Implementation.empty(); }
 
     iterator erase(const_iterator position) {
         detail::IntrusiveListImplementation::iterator result =
@@ -330,10 +342,9 @@ public:
 
 private:
     IntrusiveListNode& ToNode(reference ref) const { return NodeTraits::GetNode(ref); }
-
-    const IntrusiveListNode& ToNode(const_reference) const;
-    reference ToReference(IntrusiveListNode&) const;
-    const_reference ToReference(const IntrusiveListNode&) const;
+    const IntrusiveListNode& ToNode(const_reference ref) const { return NodeTraits::GetNode(ref); }
+    reference ToReference(IntrusiveListNode& node) const { return NodeTraits::GetItem(node); }
+    const_reference ToReference(const IntrusiveListNode& node) const { return NodeTraits::GetItem(node); }
 
     detail::IntrusiveListImplementation m_Implementation;
 };
@@ -378,5 +389,4 @@ class IntrusiveListMemberNodeTraits {
         return reinterpret_cast<uintptr_t>(&(reinterpret_cast<T*>(0)->*Member));
     }
 };
-
 }  // namespace nn::util

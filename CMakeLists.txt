@@ -179,6 +179,7 @@ add_library(NintendoSDK OBJECT
   include/nn/util/util_BytePtr.h
   include/nn/util/util_IntrusiveList.h
   include/nn/util/util_BitUtil.h
+  include/nn/util/util_IntrusiveList.h
   include/nn/util/util_ResDic.h
   include/nn/util/util_StringUtil.h
   include/nn/util/util_StringView.h
@@ -206,16 +207,6 @@ add_library(NintendoSDK OBJECT
   include/nn/nn.h
   include/nn/settings.h
   include/nn/hid.h
-  include/nn/atk/detail/StreamSoundRuntime.h
-  include/nn/atk/detail/BasicSound.h
-  include/nn/atk/detail/WaveSoundRuntime.h
-  include/nn/atk/detail/SequenceSoundRuntime.h
-  include/nn/atk/detail/SoundArchiveManager.h
-  include/nn/atk/detail/AdvancedWaveSoundRuntime.h
-  include/nn/atk/AuxBus.h
-  include/nn/atk/SoundArchivePlayer.h
-  include/nn/atk/SoundPlayer.h
-  include/nn/atk/SoundDataManager.h
   include/nn/nfp.h
   include/nn/nfp/nfp.h
   include/nn/nfp/nfp_types.h
@@ -236,6 +227,20 @@ add_library(NintendoSDK OBJECT
   include/nn/audio.h
   include/nn/friends.h
   include/nn/mem.h
+
+  include/nn/audio/audio_Adpcm.h
+  include/nn/audio/audio_AudioRendererTypes.h
+  include/nn/audio/audio_Common.h
+  include/nn/audio/audio_EffectTypes.h
+  include/nn/audio/audio_FinalMixTypes.h
+  include/nn/audio/audio_MemoryPoolTypes.h
+  include/nn/audio/audio_PerformanceMetrics.h
+  include/nn/audio/audio_PerformanceMetricsTypes.h
+  include/nn/audio/audio_SampleFormat.h
+  include/nn/audio/audio_SinkTypes.h
+  include/nn/audio/audio_SubMixTypes.h
+  include/nn/audio/audio_VoiceTypes.h
+  include/nn/audio/audio_WaveBuffer.h
 
   include/nvn/nvn_Cpp.h
   include/nvn/nvn_CppFuncPtrBase.h
@@ -283,6 +288,273 @@ add_library(NintendoSDK OBJECT
   src/NintendoSDK/nvn/nvn_CppFuncPtrImpl.h
   src/NintendoSDK/nvn/nvn_FuncPtrImpl.h
   src/NintendoSDK/nvn/nvn_Impl.cpp
+)
+
+# Atk Sources
+target_sources(NintendoSDK
+PUBLIC
+  include/nn/atk/atk_Adpcm.h
+  include/nn/atk/atk_AudioRendererPerformanceReader.h
+  include/nn/atk/atk_Bank.h
+  include/nn/atk/atk_BankFile.h
+  include/nn/atk/atk_BankFileReader.h
+  include/nn/atk/atk_BasicSound.h
+  include/nn/atk/atk_BasicSoundPlayer.h
+  include/nn/atk/atk_BinaryFileFormat.h
+  include/nn/atk/atk_BiquadFilterCallback.h
+  include/nn/atk/atk_BiquadFilterPresets.h
+  include/nn/atk/atk_BusMixVolumePacket.h
+  include/nn/atk/atk_Channel.h
+  include/nn/atk/atk_ChannelManager.h
+  include/nn/atk/atk_ChannelMixVolume.h
+  include/nn/atk/atk_Command.h
+  include/nn/atk/atk_CommandManager.h
+  include/nn/atk/atk_Config.h
+  include/nn/atk/atk_CurveAdshr.h
+  include/nn/atk/atk_CurveLfo.h
+  include/nn/atk/atk_Debug.h
+  include/nn/atk/atk_DeviceOutRecorder.h
+  include/nn/atk/atk_DisposeCallback.h
+  include/nn/atk/atk_DisposeCallbackManager.h
+  include/nn/atk/atk_DriverCommand.h
+  include/nn/atk/atk_DspadpcmReader.h
+  include/nn/atk/atk_EffectAux.h
+  include/nn/atk/atk_EffectBase.h
+  include/nn/atk/atk_ElementType.h
+  include/nn/atk/atk_ExternalSoundPlayer.h
+  include/nn/atk/atk_FinalMix.h
+  include/nn/atk/atk_FrameHeap.h
+  include/nn/atk/atk_FsSoundArchive.h
+  include/nn/atk/atk_Global.h
+  include/nn/atk/atk_GroupFile.h
+  include/nn/atk/atk_GroupFileReader.h
+  include/nn/atk/atk_HardwareManager.h
+  include/nn/atk/atk_InstancePool.h
+  include/nn/atk/atk_ItemType.h
+  include/nn/atk/atk_LoaderManager.h
+  include/nn/atk/atk_LowLevelVoice.h
+  include/nn/atk/atk_MmlCommand.h
+  include/nn/atk/atk_MmlParser.h
+  include/nn/atk/atk_MmlSequenceTrack.h
+  include/nn/atk/atk_MmlSequenceTrackAllocator.h
+  include/nn/atk/atk_MoveValue.h
+  include/nn/atk/atk_MultiVoice.h
+  include/nn/atk/atk_MultiVoiceManager.h
+  include/nn/atk/atk_NoteOnCallback.h
+  include/nn/atk/atk_OutputAdditionalParam.h
+  include/nn/atk/atk_OutputMixer.h
+  include/nn/atk/atk_OutputReceiver.h
+  include/nn/atk/atk_PlayerHeap.h
+  include/nn/atk/atk_PlayerHeapDataManager.h
+  include/nn/atk/atk_ProfileReader.h
+  include/nn/atk/atk_SequenceSound.h
+  include/nn/atk/atk_SequenceSoundFile.h
+  include/nn/atk/atk_SequenceSoundFileReader.h
+  include/nn/atk/atk_SequenceSoundHandle.h
+  include/nn/atk/atk_SequenceSoundPlayer.h
+  include/nn/atk/atk_SequenceSoundRuntime.h
+  include/nn/atk/atk_SequenceTrack.h
+  include/nn/atk/atk_SequenceTrackAllocator.h
+  include/nn/atk/atk_SoundActor.h
+  include/nn/atk/atk_SoundArchive.h
+  include/nn/atk/atk_SoundArchiveFile.h
+  include/nn/atk/atk_SoundArchiveFileReader.h
+  include/nn/atk/atk_SoundArchiveFilesHook.h
+  include/nn/atk/atk_SoundArchiveLoader.h
+  include/nn/atk/atk_SoundArchiveParametersHook.h
+  include/nn/atk/atk_SoundArchivePlayer.h
+  include/nn/atk/atk_SoundDataManager.h
+  include/nn/atk/atk_SoundHandle.h
+  include/nn/atk/atk_SoundHeap.h
+  include/nn/atk/atk_SoundInstanceManager.h
+  include/nn/atk/atk_SoundMemoryAllocatable.h
+  include/nn/atk/atk_SoundPlayer.h
+  include/nn/atk/atk_SoundRuntimeUtility.h
+  include/nn/atk/atk_SoundStartable.h
+  include/nn/atk/atk_SoundSystem.h
+  include/nn/atk/atk_SoundThread.h
+  include/nn/atk/atk_StartInfoReader.h
+  include/nn/atk/atk_StreamBufferPool.h
+  include/nn/atk/atk_StreamSound.h
+  include/nn/atk/atk_StreamSoundFile.h
+  include/nn/atk/atk_StreamSoundFileLoader.h
+  include/nn/atk/atk_StreamSoundFileReader.h
+  include/nn/atk/atk_StreamSoundHandle.h
+  include/nn/atk/atk_StreamSoundLoader.h
+  include/nn/atk/atk_StreamSoundPlayer.h
+  include/nn/atk/atk_StreamSoundPrefetchFile.h
+  include/nn/atk/atk_StreamSoundPrefetchFileReader.h
+  include/nn/atk/atk_StreamSoundRuntime.h
+  include/nn/atk/atk_StreamTrack.h
+  include/nn/atk/atk_SubMix.h
+  include/nn/atk/atk_Task.h
+  include/nn/atk/atk_TaskManager.h
+  include/nn/atk/atk_TaskProfileReader.h
+  include/nn/atk/atk_TaskThread.h
+  include/nn/atk/atk_ThreadInfoReader.h
+  include/nn/atk/atk_Util.h
+  include/nn/atk/atk_ValueArray.h
+  include/nn/atk/atk_Voice.h
+  include/nn/atk/atk_VoiceCommand.h
+  include/nn/atk/atk_VolumeThroughModePacket.h
+  include/nn/atk/atk_WavBinary.h
+  include/nn/atk/atk_WavOutFileStream.h
+  include/nn/atk/atk_WaveArchiveFile.h
+  include/nn/atk/atk_WaveArchiveFileReader.h
+  include/nn/atk/atk_WaveFile.h
+  include/nn/atk/atk_WaveFileReader.h
+  include/nn/atk/atk_WaveSound.h
+  include/nn/atk/atk_WaveSoundFile.h
+  include/nn/atk/atk_WaveSoundFileReader.h
+  include/nn/atk/atk_WaveSoundHandle.h
+  include/nn/atk/atk_WaveSoundLoader.h
+  include/nn/atk/atk_WaveSoundPlayer.h
+  include/nn/atk/atk_WaveSoundRuntime.h
+  include/nn/atk/detail/atk_AddonSoundArchiveContainer.h
+  include/nn/atk/detail/atk_AdvancedWaveSound.h
+  include/nn/atk/detail/atk_AdvancedWaveSoundFile.h
+  include/nn/atk/detail/atk_AdvancedWaveSoundFileReader.h
+  include/nn/atk/detail/atk_AdvancedWaveSoundPlayer.h
+  include/nn/atk/detail/atk_AdvancedWaveSoundRuntime.h
+  include/nn/atk/detail/atk_BinaryTypes.h
+  include/nn/atk/detail/atk_IRegionInfoReadable.h
+  include/nn/atk/detail/atk_IStreamDataDecoder.h
+  include/nn/atk/detail/atk_IntrusiveList.h
+  include/nn/atk/detail/atk_MemoryFileStream.h
+  include/nn/atk/detail/atk_RegionManager.h
+  include/nn/atk/detail/atk_SoundArchiveManager.h
+  include/nn/atk/fnd/basis/atkfnd_Config.h
+  include/nn/atk/fnd/basis/atkfnd_FrameHeapImpl.h
+  include/nn/atk/fnd/basis/atkfnd_HeapBase.h
+  include/nn/atk/fnd/basis/atkfnd_Inlines.h
+  include/nn/atk/fnd/basis/atkfnd_Result.h
+  include/nn/atk/fnd/basis/atkfnd_RuntimeTypeInfo.h
+  include/nn/atk/fnd/basis/atkfnd_Time.h
+  include/nn/atk/fnd/basis/atkfnd_WorkBufferAllocator.h
+  include/nn/atk/fnd/binary/atkfnd_PrimitiveTypes.h
+  include/nn/atk/fnd/io/atkfnd_FileStream.h
+  include/nn/atk/fnd/io/atkfnd_FileStreamImpl.h
+  include/nn/atk/fnd/io/atkfnd_FileStreamProxy.h
+  include/nn/atk/fnd/io/atkfnd_Stream.h
+  include/nn/atk/fnd/io/atkfnd_StreamCache.h
+  include/nn/atk/fnd/os/atkfnd_CriticalSection.h
+  include/nn/atk/fnd/os/atkfnd_ScopedLock.h
+  include/nn/atk/fnd/os/atkfnd_Thread.h
+  include/nn/atk/fnd/string/atkfnd_String.h
+
+PRIVATE
+  src/NintendoWare/atk/atk_FsSoundArchive.cpp
+  src/NintendoWare/atk/atk_SequenceSoundHandle.cpp
+  src/NintendoWare/atk/atk_SoundArchive.cpp
+  src/NintendoWare/atk/atk_SoundArchivePlayer.cpp
+  src/NintendoWare/atk/atk_SoundDataManager.cpp
+  src/NintendoWare/atk/atk_SoundHandle.cpp
+  src/NintendoWare/atk/atk_SoundHeap.cpp
+  src/NintendoWare/atk/atk_SoundPlayer.cpp
+  src/NintendoWare/atk/atk_SoundStartable.cpp
+  src/NintendoWare/atk/atk_SoundSystem.cpp
+  src/NintendoWare/atk/atk_StreamSoundHandle.cpp
+  src/NintendoWare/atk/detail/atk_AddonSoundArchiveContainer.cpp
+  src/NintendoWare/atk/detail/atk_AdvancedWaveSound.cpp
+  src/NintendoWare/atk/detail/atk_AdvancedWaveSoundFile.cpp
+  src/NintendoWare/atk/detail/atk_AdvancedWaveSoundFileReader.cpp
+  src/NintendoWare/atk/detail/atk_AdvancedWaveSoundPlayer.cpp
+  src/NintendoWare/atk/detail/atk_AdvancedWaveSoundRuntime.cpp
+  src/NintendoWare/atk/detail/atk_BasicSound.cpp
+  src/NintendoWare/atk/detail/atk_BasicSoundPlayer.cpp
+  src/NintendoWare/atk/detail/atk_BusMixVolumePacket.cpp
+  src/NintendoWare/atk/detail/atk_DisposeCallbackManager.cpp
+  src/NintendoWare/atk/detail/atk_ExternalSoundPlayer.cpp
+  src/NintendoWare/atk/detail/atk_GroupFile.cpp
+  src/NintendoWare/atk/detail/atk_GroupFileReader.cpp
+  src/NintendoWare/atk/detail/atk_OutputAdditionalParam.cpp
+  src/NintendoWare/atk/detail/atk_PlayerHeap.cpp
+  src/NintendoWare/atk/detail/atk_PlayerHeapDataManager.cpp
+  src/NintendoWare/atk/detail/atk_RegionManager.cpp
+  src/NintendoWare/atk/detail/atk_SoundArchiveFile.cpp
+  src/NintendoWare/atk/detail/atk_SoundArchiveFileReader.cpp
+  src/NintendoWare/atk/detail/atk_SoundArchiveLoader.cpp
+  src/NintendoWare/atk/detail/atk_SoundArchiveManager.cpp
+  src/NintendoWare/atk/detail/atk_StartInfoReader.cpp
+  src/NintendoWare/atk/detail/atk_VolumeThroughModePacket.cpp
+  src/NintendoWare/atk/detail/atk_WaveArchiveFile.cpp
+  src/NintendoWare/atk/detail/atk_WaveArchiveFileReader.cpp
+  src/NintendoWare/atk/detail/atk_WaveFile.cpp
+  src/NintendoWare/atk/detail/atk_WaveFileReader.cpp
+  src/NintendoWare/atk/detail/debug/atk_Debug.cpp
+  src/NintendoWare/atk/detail/dsp/atk_BiquadFilterPresets.cpp
+  src/NintendoWare/atk/detail/dsp/atk_DecodeAdpcm.cpp
+  src/NintendoWare/atk/detail/dsp/atk_DspadpcmReader.cpp
+  src/NintendoWare/atk/detail/dsp/atk_HardwareManager.cpp
+  src/NintendoWare/atk/detail/seq/atk_Bank.cpp
+  src/NintendoWare/atk/detail/seq/atk_BankFile.cpp
+  src/NintendoWare/atk/detail/seq/atk_BankFileReader.cpp
+  src/NintendoWare/atk/detail/seq/atk_MmlParser.cpp
+  src/NintendoWare/atk/detail/seq/atk_MmlSequenceTrack.cpp
+  src/NintendoWare/atk/detail/seq/atk_MmlSequenceTrackAllocator.cpp
+  src/NintendoWare/atk/detail/seq/atk_SequenceSound.cpp
+  src/NintendoWare/atk/detail/seq/atk_SequenceSoundFile.cpp
+  src/NintendoWare/atk/detail/seq/atk_SequenceSoundFileReader.cpp
+  src/NintendoWare/atk/detail/seq/atk_SequenceSoundPlayer.cpp
+  src/NintendoWare/atk/detail/seq/atk_SequenceSoundRuntime.cpp
+  src/NintendoWare/atk/detail/seq/atk_SequenceTrack.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamBufferPool.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamSound.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamSoundFile.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamSoundFileLoader.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamSoundFileReader.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamSoundLoader.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamSoundPlayer.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamSoundPrefetchFile.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamSoundPrefetchFileReader.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamSoundRuntime.cpp
+  src/NintendoWare/atk/detail/strm/atk_StreamTrack.cpp
+  src/NintendoWare/atk/detail/thread/atk_CommandManager.cpp
+  src/NintendoWare/atk/detail/thread/atk_DriverCommand.cpp
+  src/NintendoWare/atk/detail/thread/atk_SoundThread.cpp
+  src/NintendoWare/atk/detail/thread/atk_Task.cpp
+  src/NintendoWare/atk/detail/thread/atk_TaskManager.cpp
+  src/NintendoWare/atk/detail/thread/atk_TaskThread.cpp
+  src/NintendoWare/atk/detail/util/atk_CurveAdshr.cpp
+  src/NintendoWare/atk/detail/util/atk_CurveLfo.cpp
+  src/NintendoWare/atk/detail/util/atk_FrameHeap.cpp
+  src/NintendoWare/atk/detail/util/atk_InstancePool.cpp
+  src/NintendoWare/atk/detail/util/atk_MemoryFileStream.cpp
+  src/NintendoWare/atk/detail/util/atk_Util.cpp
+  src/NintendoWare/atk/detail/util/atk_WavOutFileStream.cpp
+  src/NintendoWare/atk/detail/voice/atk_Channel.cpp
+  src/NintendoWare/atk/detail/voice/atk_ChannelManager.cpp
+  src/NintendoWare/atk/detail/voice/atk_LowLevelVoice.cpp
+  src/NintendoWare/atk/detail/voice/atk_MultiVoice.cpp
+  src/NintendoWare/atk/detail/voice/atk_MultiVoiceManager.cpp
+  src/NintendoWare/atk/detail/voice/atk_Voice.cpp
+  src/NintendoWare/atk/detail/voice/atk_VoiceCommand.cpp
+  src/NintendoWare/atk/detail/wsd/atk_WaveSound.cpp
+  src/NintendoWare/atk/detail/wsd/atk_WaveSoundFile.cpp
+  src/NintendoWare/atk/detail/wsd/atk_WaveSoundFileReader.cpp
+  src/NintendoWare/atk/detail/wsd/atk_WaveSoundLoader.cpp
+  src/NintendoWare/atk/detail/wsd/atk_WaveSoundPlayer.cpp
+  src/NintendoWare/atk/detail/wsd/atk_WaveSoundRuntime.cpp
+  src/NintendoWare/atk/effect/atk_EffectAux.cpp
+  src/NintendoWare/atk/effect/atk_EffectBase.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_FrameHeapImpl.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_HeapBase.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_Time.win32.cpp
+  src/NintendoWare/atk/fnd/basis/atkfnd_WorkBufferAllocator.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamImpl.win32.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_FileStreamProxy.cpp
+  src/NintendoWare/atk/fnd/io/atkfnd_StreamCache.cpp
+  src/NintendoWare/atk/fnd/os/atkfnd_Thread.cpp
+  src/NintendoWare/atk/fnd/os/atkfnd_Thread.win32.cpp
+  src/NintendoWare/atk/submix/atk_ChannelMixVolume.cpp
+  src/NintendoWare/atk/submix/atk_FinalMix.cpp
+  src/NintendoWare/atk/submix/atk_OutputMixer.cpp
+  src/NintendoWare/atk/submix/atk_SubMix.cpp
+  src/NintendoWare/atk/util/atk_AudioRendererPerformanceReader.cpp
+  src/NintendoWare/atk/util/atk_DeviceOutRecorder.cpp
+  src/NintendoWare/atk/util/atk_ProfileReader.cpp
+  src/NintendoWare/atk/util/atk_TaskProfileReader.cpp
 )
 
 target_include_directories(NintendoSDK PUBLIC include/)

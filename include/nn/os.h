@@ -11,17 +11,17 @@
 #include <nn/types.h>
 
 #include <nn/os/detail/os_InternalCriticalSection.h>
+#include <nn/os/os_Event.h>
 #include <nn/os/os_MessageQueueTypes.h>
 #include <nn/os/os_Mutex.h>
-#include <nn/os/os_MutexTypes.h>
 #include <nn/os/os_ThreadTypes.h>
+#include <nn/os/os_TickTypes.h>
 
 namespace nn {
 namespace os {
 
 namespace detail {
 
-class MultiWaitObjectList;
 struct InterProcessEventType {
     enum State {
         State_NotInitialized = 0,
@@ -39,31 +39,10 @@ struct InterProcessEventType {
 };
 }  // namespace detail
 
-struct Tick {
-    Tick(u64 val) : value(val) {}
-
-    u64 value;
-};
-
 struct LightEventType {
     std::aligned_storage_t<0xc, 4> storage;
 };
 
-struct EventType {
-    util::TypedStorage<detail::MultiWaitObjectList, 16, 8> _multiWaitObjectList;
-    bool _signalState;
-    bool _initiallySignaled;
-    uint8_t _clearMode;
-    uint8_t _state;
-    uint32_t _broadcastCounterLower;
-    uint32_t _broadcastCounterUpper;
-    detail::InternalCriticalSectionStorage _csEvent;
-    detail::InternalConditionVariableStorage _cvSignaled;
-};
-static_assert(std::is_trivial<EventType>::value, "EventType non trivial");
-typedef EventType Event;
-
-enum EventClearMode { EventClearMode_ManualClear, EventClearMode_AutoClear };
 
 struct ConditionVariableType {};
 
@@ -154,15 +133,6 @@ void SleepThread(nn::TimeSpan);
 void WaitThread(nn::os::ThreadType*);
 void SetThreadCoreMask(nn::os::ThreadType*, int, u64 mask);
 
-// EVENTS
-void InitializeEvent(EventType*, bool initiallySignaled, EventClearMode eventClearMode);
-void FinalizeEvent(EventType*);
-void SignalEvent(EventType*);
-void WaitEvent(EventType*);
-bool TryWaitEvent(EventType*);
-bool TimedWaitEvent(EventType*, nn::TimeSpan);
-void ClearEvent(EventType*);
-
 // LIGHT EVENTS
 void InitializeLightEvent(LightEventType*, bool initiallySignaled, EventClearMode eventClearMode);
 void FinalizeLightEvent(LightEventType*);
@@ -170,8 +140,6 @@ void SignalLightEvent(LightEventType*);
 void WaitLightEvent(LightEventType*);
 bool TimedWaitLightEvent(LightEventType*, nn::TimeSpan);
 void ClearLightEvent(LightEventType*);
-
-TimeSpan ConvertToTimeSpan(Tick ticks);
 
 // SEMAPHORES
 void InitializeSemaphore(SemaphoreType* semaphore, s32 initial_count, s32 max_count);
@@ -219,8 +187,6 @@ void SetUserExceptionHandler(void (*)(UserExceptionInfo*), void*, ulong, UserExc
 
 // OTHER
 void GenerateRandomBytes(void*, u64);
-nn::os::Tick GetSystemTick();
-nn::os::Tick GetSystemTickFrequency();
 u64 GetThreadAvailableCoreMask();
 void SetMemoryHeapSize(u64 size);
 
