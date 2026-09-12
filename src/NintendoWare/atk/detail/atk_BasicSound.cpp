@@ -1,7 +1,5 @@
 #include <nn/atk/atk_BasicSound.h>
 
-#include <cstring>
-
 #include <nn/atk/atk_DriverCommand.h>
 #include <nn/atk/atk_ExternalSoundPlayer.h>
 #include <nn/atk/atk_SoundHandle.h>
@@ -329,6 +327,18 @@ bool BasicSound::IsMute() const {
 void BasicSound::SetPriority(int priority, int ambientPriority) {
     m_Priority = priority;
     m_AmbientParam.SetPriority(ambientPriority);
+}
+
+void BasicSound::GetPriority(int* priority, int* ambientPriority) const {
+    if (priority != nullptr)
+        *priority = m_Priority;
+
+    if (ambientPriority != nullptr)
+        *ambientPriority = m_AmbientParam.GetPriority();
+}
+
+void BasicSound::SetInitialVolume(float volume) {
+    m_InitVolume = volume < 0.0f ? 0.0f : volume;
 }
 
 void BasicSound::SetId(u32 id) {
