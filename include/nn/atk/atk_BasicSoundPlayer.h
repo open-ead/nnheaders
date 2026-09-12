@@ -39,6 +39,8 @@ public:
     BasicSoundPlayer();
     void SetBiquadFilter(s32 type, f32 value);
 
+    void InitializeEvent() { m_Event.Clear(); }
+
 private:
     os::Event m_Event;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)

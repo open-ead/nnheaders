@@ -6,18 +6,18 @@
 #include <nn/atk/atk_Command.h>
 
 namespace nn::atk::detail {
+
 class CommandBuffer {
 public:
     CommandBuffer();
     ~CommandBuffer();
 
+    void Initialize(void* commandBuffer, size_t commandBufferSize);
     void Finalize();
-
-    void Initialize(void* buffer, size_t bufferSize);
 
     void* AllocMemory(size_t size);
 
-    void FreeMemory(Command* command);
+    void FreeMemory(Command* lastCommand);
 
     size_t GetCommandBufferSize() const;
     size_t GetAllocatableCommandSize() const;
@@ -26,63 +26,79 @@ public:
 private:
     u32* m_CommandMemoryArea;
     size_t m_CommandMemoryAreaSize;
-    std::uintptr_t m_CommandMemoryAreaBegin;
-    std::uintptr_t m_CommandMemoryAreaEnd;
+    uintptr_t m_CommandMemoryAreaBegin;
+    uintptr_t m_CommandMemoryAreaEnd;
     bool m_CommandMemoryAreaZeroFlag;
 };
 static_assert(sizeof(CommandBuffer) == 0x28);
 
 class CommandManager {
 public:
-    using ProcessCommandListFunc = void(*)(Command*);
-    using RequestProcessCommandFunc = void(*)();
-
-    constexpr static s32 SendCommandQueueCount = 32;
-    constexpr static s32 RecvCommandQueueCount = 33;
-    constexpr static s32 InvalidCommand = -1;
+    using ProcessCommandListFunc = void (*)(Command*);
+    using RequestProcessCommandFunc = void (*)();
 
     CommandManager();
     ~CommandManager();
 
-    void Finalize();
+    bool IsAvailable() const { return m_Available; }
+
     void Initialize(void* commandBuffer, size_t commandBufferSize, ProcessCommandListFunc func);
+    void Finalize();
 
-    void* AllocMemory(size_t size, bool forceProcessCommandFlag);
+    void SetRequestProcessCommandFunc(RequestProcessCommandFunc func) {
+        m_pRequestProcessCommandFunc = func;
+    }
 
-    bool TryAllocMemory(size_t size);
+    template <typename CommandType>
+    CommandType* AllocCommand() {
+        return static_cast<CommandType*>(AllocMemory(sizeof(CommandType), true));
+    }
+
+    template <typename CommandType>
+    CommandType* AllocCommand(bool forceProcessCommandFlag) {
+        return static_cast<CommandType*>(AllocMemory(sizeof(CommandType), forceProcessCommandFlag));
+    }
+
+    u32 PushCommand(Command* command);
+
+    u32 FlushCommand(bool forceFlag);
+    u32 FlushCommand(bool forceFlag, bool forceProcessCommandFlag);
 
     void RecvCommandReply();
-
-    u32 FlushCommand(bool forceFlag, bool forceProcessCommandFlag);
+    void RecvCommandReplySync();
 
     void WaitCommandReply(u32 tag);
 
-    void RecvCommandReplySync();
-
-    u32 PushCommand(Command* command);
-    u32 FlushCommand(bool forceFlag);
-
-    void FinalizeCommandList(Command* command);
-
-    bool IsFinishCommand(u32) const;
+    bool IsFinishCommand(u32 tag) const;
 
     size_t GetCommandBufferSize() const;
     size_t GetAllocatableCommandSize() const;
     size_t GetAllocatedCommandBufferSize() const;
 
-    s32 GetAllocatedCommandCount() const;
+    int GetAllocatedCommandCount() const;
+
+    u32 GetCommandListCount() const { return m_CommandListCount; }
 
     bool ProcessCommand();
 
 private:
+    void* AllocMemory(size_t size, bool forceProcessCommandFlag);
+    bool TryAllocMemory(size_t size);
+
+    void FinalizeCommandList(Command* command);
+
+    static const int SendCommandQueueCount{32};
+    static const int RecvCommandQueueCount{SendCommandQueueCount + 1};
+    static const u32 InvalidCommand{0xffffffff};
+
     bool m_Available;
     ProcessCommandListFunc m_pProcessCommandListFunc;
     RequestProcessCommandFunc m_pRequestProcessCommandFunc;
     os::MessageQueueType m_SendCommandQueue;
-    std::uintptr_t m_SendCommandQueueBuffer[SendCommandQueueCount];
+    uintptr_t m_SendCommandQueueBuffer[SendCommandQueueCount];
     bool m_IsInitializedSendMessageQueue;
     os::MessageQueueType m_RecvCommandQueue;
-    std::uintptr_t m_RecvCommandQueueBuffer[RecvCommandQueueCount];
+    uintptr_t m_RecvCommandQueueBuffer[RecvCommandQueueCount];
     bool m_IsInitializedRecvMessageQueue;
     Command* m_CommandListBegin;
     Command* m_CommandListEnd;
@@ -90,7 +106,8 @@ private:
     u32 m_CommandTag;
     u32 m_FinishCommandTag;
     CommandBuffer m_CommandBuffer;
-    s32 m_AllocatedCommandCount;
+    int m_AllocatedCommandCount;
 };
 static_assert(sizeof(CommandManager) == 0x310);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

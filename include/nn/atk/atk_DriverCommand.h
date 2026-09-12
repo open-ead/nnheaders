@@ -515,8 +515,10 @@ struct DriverCommandVoiceAdpcmParam : DriverCommandVoice {
 };
 static_assert(sizeof(DriverCommandVoiceAdpcmParam) == 0x30);
 
-class DriverCommand : CommandManager {
+class DriverCommand : public CommandManager {
 public:
+    static DriverCommand* GetInstance();
+    
     static void ProcessCommandList(Command* commandList);
 
     DriverCommand();
@@ -524,6 +526,7 @@ public:
     void Initialize(void* commandBuffer, size_t commandBufferSize);
 
     void RequestProcessCommand();
+
 };
 static_assert(sizeof(DriverCommand) == 0x310);
 } // namespace nn::atk::detail
