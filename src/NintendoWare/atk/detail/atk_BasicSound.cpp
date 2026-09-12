@@ -237,6 +237,10 @@ void BasicSound::SetPlayerPriority(int priority) {
     OnUpdatePlayerPriority();
 }
 
+void BasicSound::SetId(u32 id) {
+    m_Id = id;
+}
+
 bool BasicSound::IsAttachedGeneralHandle() {
     return m_pGeneralHandle != nullptr;
 }
