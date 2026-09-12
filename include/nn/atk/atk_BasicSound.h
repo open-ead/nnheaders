@@ -286,7 +286,12 @@ class BasicSound {
 public:
     struct AmbientParamUpdateCallback {};
     struct AmbientArgUpdateCallback {};
-    struct AmbientArgAllocatorCallback {};
+    struct AmbientArgAllocatorCallback {
+        virtual void Impl1();
+        virtual void Impl2();
+        virtual void Impl3();
+        virtual void RemoveSoundImpl(void* arg, BasicSound* sound);
+    };
 
     struct AmbientInfo {
         AmbientParamUpdateCallback* paramUpdateCallback;
