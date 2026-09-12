@@ -4,6 +4,7 @@
 
 #include <nn/atk/atk_DriverCommand.h>
 #include <nn/atk/atk_SoundPlayer.h>
+#include <nn/atk/atk_SoundHandle.h>
 
 namespace nn::atk::detail {
 
@@ -242,6 +243,10 @@ bool BasicSound::IsAttachedGeneralHandle() {
 
 bool BasicSound::IsAttachedTempGeneralHandle() {
     return m_pTempGeneralHandle != nullptr;
+}
+
+void BasicSound::DetachGeneralHandle() {
+    m_pGeneralHandle->DetachSound();
 }
 
 }  // namespace nn::atk::detail
