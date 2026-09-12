@@ -302,6 +302,18 @@ void BasicSound::SetPlayerPriority(int priority) {
     OnUpdatePlayerPriority();
 }
 
+bool BasicSound::IsPause() const {
+    switch (m_PauseState - 1) {
+    case PauseState_Normal:
+    case PauseState_Pausing:
+        return true;
+    case PauseState_Paused:
+    case PauseState_Unpausing:
+    default:
+        return false;
+    }
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
