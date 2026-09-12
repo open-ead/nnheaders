@@ -249,4 +249,8 @@ void BasicSound::DetachGeneralHandle() {
     m_pGeneralHandle->DetachSound();
 }
 
+void BasicSound::DetachTempGeneralHandle() {
+    m_pTempGeneralHandle->DetachSound();
+}
+
 }  // namespace nn::atk::detail
