@@ -1,11 +1,113 @@
 #include <nn/atk/atk_BasicSound.h>
 
+#include <cstring>
+
+#include <nn/atk/atk_DriverCommand.h>
 #include <nn/atk/atk_SoundPlayer.h>
 
 namespace nn::atk::detail {
 
 // NON_MATCHING on versions lower than 4.0.0
 BasicSound::BasicSound() = default;
+
+// NON_MATCHING: bad order of instructions
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+bool BasicSound::Initialize()
+#else
+bool BasicSound::Initialize(OutputReceiver* pOutputReceiver)
+#endif
+{
+    m_InstanceId = g_LastInstanceId++;
+    // ++g_LastInstanceId;
+
+    m_pPlayerHeap = nullptr;
+    m_pExtSoundPlayer = nullptr;
+    m_pSoundArchive = nullptr;
+
+    m_PlayerState = PlayerState_Init;
+    m_PauseState = PauseState_Normal;
+
+    m_pSoundPlayer = nullptr;
+    m_pSoundActor = nullptr;
+    m_MuteState = MuteState_Normal;
+
+    m_pGeneralHandle = nullptr;
+    m_pTempGeneralHandle = nullptr;
+
+    m_PauseMode = PauseMode_Default;
+
+    m_BiquadFilterType = BiquadFilterType_Inherit;
+
+    m_AutoStopCounter = 0;
+    m_UpdateCounter = 0;
+    m_PlayingCounter = 0;
+    m_Id = 0xffffffff;
+
+    m_AmbientInfo.paramUpdateCallback = nullptr;
+    m_AmbientInfo.argUpdateCallback = nullptr;
+    m_AmbientInfo.argAllocatorCallback = nullptr;
+    m_AmbientInfo.arg = nullptr;
+    m_AmbientInfo.argSize = 0;
+
+    m_StartFlag = false;
+    m_StartedFlag = false;
+    m_AutoStopFlag = false;
+    m_FadeOutFlag = false;
+    m_PlayerAvailableFlag = false;
+    m_UnPauseFlag = false;
+
+    m_FadeVolume.InitValue(1.0f);
+    m_PauseFadeVolume.InitValue(1.0f);
+    m_MuteFadeVolume.InitValue(1.0f);
+
+    m_InitVolume = 1.0f;
+    m_Pitch = 1.0f;
+    m_LpfFreq = 0.0f;
+    m_BiquadFilterValue = 0.0f;
+    m_OutputLineFlag = OutputLine_Main;
+    // m_Priority = 0;
+
+    m_CommonParam.Initialize();
+
+    for (int i{0}; i < 1; ++i) {
+        m_OutputParam[i].Initialize();
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+        if (m_pOutputAdditionalParam[i] != nullptr)
+            m_pOutputAdditionalParam[i]->Reset();
+#endif
+    }
+
+    m_AmbientParam.Initialize();
+    m_ActorParam.Reset();
+
+    if (m_UserParamSize != 0)
+        std::memset(m_pUserParam, 0, m_UserParamSize);
+
+    {
+        driver::BasicSoundPlayer* basicPlayer{GetBasicSoundPlayerHandle()};
+
+        DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+
+        auto* command{cmdmgr.AllocCommand<DriverCommandPlayerInit>()};
+        command->id = DriverCommandId_PlayerInit;
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+        command->pOutputReceiver = pOutputReceiver;
+#endif
+        command->availableFlagPtr = &m_PlayerAvailableFlag;
+        command->player = basicPlayer;
+
+        cmdmgr.PushCommand(command);
+
+        basicPlayer->InitializeEvent();
+    }
+
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+    pOutputReceiver->AddReferenceCount(1);
+    m_pOutputReceiver = pOutputReceiver;
+#endif
+    m_State = State_Initialized;
+    return true;
+}
 
 void BasicSound::StartPrepared() {
     m_StartFlag = true;
