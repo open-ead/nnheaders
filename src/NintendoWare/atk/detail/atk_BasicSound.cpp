@@ -3,8 +3,9 @@
 #include <cstring>
 
 #include <nn/atk/atk_DriverCommand.h>
-#include <nn/atk/atk_SoundPlayer.h>
+#include <nn/atk/atk_ExternalSoundPlayer.h>
 #include <nn/atk/atk_SoundHandle.h>
+#include <nn/atk/atk_SoundPlayer.h>
 
 namespace nn::atk::detail {
 
@@ -108,6 +109,70 @@ bool BasicSound::Initialize(OutputReceiver* pOutputReceiver)
 #endif
     m_State = State_Initialized;
     return true;
+}
+
+void BasicSound::Finalize() {
+    if (m_State != State_Initialized)
+        return;
+
+    SetId(0xffffffff);
+
+    if (IsAttachedGeneralHandle())
+        DetachGeneralHandle();
+
+    if (IsAttachedTempGeneralHandle())
+        DetachTempGeneralHandle();
+
+    if (IsAttachedTempSpecialHandle())
+        DetachTempSpecialHandle();
+
+    if (m_pSoundPlayer != nullptr)
+        m_pSoundPlayer->detail_RemoveSound(this);
+
+    if (m_pExtSoundPlayer != nullptr)
+        m_pExtSoundPlayer->RemoveSound(this);
+
+    if (m_AmbientInfo.argAllocatorCallback != nullptr) {
+        m_AmbientInfo.argAllocatorCallback->RemoveSoundImpl(m_AmbientInfo.arg, this);
+        m_AmbientInfo.arg = nullptr;
+    }
+
+    {
+        if (m_StartedFlag) {
+            DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+
+            auto* command{cmdmgr.AllocCommand<DriverCommandPlayer>()};
+            command->id = DriverCommandId_PlayerStop;
+            command->player = GetBasicSoundPlayerHandle();
+            command->flag = m_FadeOutFlag;
+
+            cmdmgr.PushCommand(command);
+
+            m_StartedFlag = false;
+        }
+
+        m_PlayerAvailableFlag = false;
+        m_PlayerState = PlayerState_Stop;
+
+        DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+
+        auto* command{cmdmgr.AllocCommand<DriverCommandPlayer>()};
+        command->id = DriverCommandId_PlayerFinalize;
+        command->player = GetBasicSoundPlayerHandle();
+
+        cmdmgr.PushCommand(command);
+    }
+
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+    m_pOutputReceiver = nullptr;
+#endif
+
+    if (m_SoundStopCallback != nullptr) {
+        m_SoundStopCallback();
+        m_SoundStopCallback = nullptr;
+    }
+    m_FadeOutFlag = false;
+    m_State = State_Finalized;
 }
 
 void BasicSound::StartPrepared() {
