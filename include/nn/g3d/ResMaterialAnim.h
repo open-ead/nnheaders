@@ -9,13 +9,15 @@
 
 namespace nn {
 namespace g3d {
-typedef void* TextureRef;
+struct TextureRef;
 
 class ResMaterialAnim {
 public:
     void ReleaseTexture();
     s32 BindTexture(nn::g3d::TextureRef (*)(char const*, void*), void*);
     void Reset();
+
+    u8 _0[0x78];
 };
 }  // namespace g3d
 }  // namespace nn

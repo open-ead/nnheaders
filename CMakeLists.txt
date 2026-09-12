@@ -192,6 +192,7 @@ add_library(NintendoSDK OBJECT
   include/nn/ui2d/Parts.h
   include/nn/ui2d/Types.h
   include/nn/ui2d/Util.h
+  include/nn/g3d/detail/g3d_CommonHelper.h
   include/nn/g3d/BindFuncTable.h
   include/nn/g3d/ModelObj.h
   include/nn/g3d/ResMaterialAnim.h
@@ -286,6 +287,8 @@ add_library(NintendoSDK OBJECT
   src/NintendoSDK/nvn/nvn_CppFuncPtrImpl.h
   src/NintendoSDK/nvn/nvn_FuncPtrImpl.h
   src/NintendoSDK/nvn/nvn_Impl.cpp
+
+  src/NintendoWare/g3d/g3d_ResFile.cpp
 )
 
 target_include_directories(NintendoSDK PUBLIC include/)

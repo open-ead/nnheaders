@@ -2,6 +2,7 @@
 
 #include <nn/gfx/detail/gfx_MemoryPool-api.nvn.8.h>
 #include <nn/gfx/gfx_Common.h>
+#include <nn/gfx/gfx_Device.h>
 
 namespace nn::gfx {
 
@@ -12,13 +13,22 @@ class TMemoryPool : public detail::MemoryPoolImpl<TTarget> {
 public:
     typedef MemoryPoolInfo InfoType;
 
+    using detail::MemoryPoolImpl<TTarget>::MemoryPoolImpl;
+
     static size_t GetPoolMemoryAlignment(TDevice<TTarget>*, const InfoType&);
     static size_t GetPoolMemorySizeGranularity(TDevice<TTarget>*, const InfoType&);
 
-    TMemoryPool();
+    void Initialize(TDevice<TTarget>* device, const InfoType& info, const char* debugLabel) {
+        new (this) TMemoryPool<TTarget>();
+        detail::MemoryPoolImpl<TTarget>::Initialize(device, info);
+        util::SetMemoryPoolDebugLabel(this, debugLabel);
+    }
 
-    void Initialize(TDevice<TTarget>*, const InfoType&);
-    void Finalize(TDevice<TTarget>*);
+    void Finalize(TDevice<TTarget>* device) {
+        detail::MemoryPoolImpl<TTarget>::Finalize(device);
+        this->~TMemoryPool<TTarget>();
+    }
+
     void* Map() const;
     void Unmap() const;
     void FlushMappedRange(ptrdiff_t, size_t) const;
