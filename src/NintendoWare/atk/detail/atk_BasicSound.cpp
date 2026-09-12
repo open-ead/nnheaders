@@ -236,4 +236,8 @@ void BasicSound::SetPlayerPriority(int priority) {
     OnUpdatePlayerPriority();
 }
 
+bool BasicSound::IsAttachedGeneralHandle() {
+    return m_pGeneralHandle != nullptr;
+}
+
 }  // namespace nn::atk::detail
