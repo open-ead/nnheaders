@@ -326,6 +326,11 @@ bool BasicSound::IsMute() const {
     }
 }
 
+void BasicSound::SetPriority(int priority, int ambientPriority) {
+    m_Priority = priority;
+    m_AmbientParam.SetPriority(ambientPriority);
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
