@@ -13,6 +13,10 @@ void DisposeCallbackManager::RegisterDisposeCallback(DisposeCallback* callback) 
     m_CallbackList.push_back(*callback);
 }
 
+void DisposeCallbackManager::UnregisterDisposeCallback(DisposeCallback* callback) {
+    m_CallbackList.erase(m_CallbackList.iterator_to(*callback));
+}
+
 // NON_MATCHING
 void DisposeCallbackManager::Dispose(const void* mem, size_t size) {
     const void* start{mem};
