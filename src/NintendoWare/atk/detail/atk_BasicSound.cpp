@@ -789,4 +789,8 @@ void BasicSound::DetachSoundActor([[maybe_unused]] SoundActor* actor) {
     m_pSoundActor = nullptr;
 }
 
+void BasicSound::AttachExternalSoundPlayer(ExternalSoundPlayer* extPlayer) {
+    m_pExtSoundPlayer = extPlayer;
+}
+
 }  // namespace nn::atk::detail

@@ -140,7 +140,7 @@ public:
 
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetTvAdditionalParamAddr(OutputAdditionalParam* param) { m_pTvAdditionalParam = param; }
-    const OutputAdditionalParam* const GetTvAdditionalParamAddr() const {
+    const OutputAdditionalParam* GetTvAdditionalParamAddr() const {
         return m_pTvAdditionalParam;
     }
     OutputAdditionalParam* GetTvAdditionalParamAddr() { return m_pTvAdditionalParam; }
