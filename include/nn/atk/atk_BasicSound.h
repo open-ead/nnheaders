@@ -289,7 +289,7 @@ public:
     struct AmbientArgAllocatorCallback {
         virtual void Impl1();
         virtual void Impl2();
-        virtual void Impl3();
+        virtual void* AllocateArgImpl(u64 argSize);
         virtual void RemoveSoundImpl(void* arg, BasicSound* sound);
     };
 
@@ -440,7 +440,7 @@ public:
     void CalculateSoundParamCalculationValues(SoundParamCalculationValues* pOutValue) const;
 
     void SetId(u32 id);
-    
+
     u32 GetId() const { return m_Id; }
     u32 GetInstanceId() const { return m_InstanceId; }
     u32 GetPlayFrameCount() const { return m_PlayingCounter; }

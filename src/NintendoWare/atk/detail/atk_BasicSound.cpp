@@ -805,4 +805,14 @@ void BasicSound::DetachPlayerHeap([[maybe_unused]] PlayerHeap* pHeap) {
     m_pPlayerHeap = nullptr;
 }
 
+void BasicSound::SetAmbientInfo(const AmbientInfo& ambientArgInfo) {
+    void* ambientArg{ambientArgInfo.argAllocatorCallback->AllocateArgImpl(ambientArgInfo.argSize)};
+
+    if (ambientArg != nullptr) {
+        std::memcpy(ambientArg, ambientArgInfo.arg, ambientArgInfo.argSize);
+        m_AmbientInfo = ambientArgInfo;
+        m_AmbientInfo.arg = ambientArg;
+    }
+}
+
 }  // namespace nn::atk::detail
