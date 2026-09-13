@@ -777,4 +777,8 @@ void BasicSound::AttachSoundPlayer(SoundPlayer* player) {
     m_pSoundPlayer = player;
 }
 
+void BasicSound::DetachSoundPlayer([[maybe_unused]] SoundPlayer* player) {
+    m_pSoundPlayer = nullptr;
+}
+
 }  // namespace nn::atk::detail
