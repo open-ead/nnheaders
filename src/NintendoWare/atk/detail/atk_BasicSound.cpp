@@ -502,6 +502,10 @@ float BasicSound::GetOutputPan(OutputDevice device) const {
     return m_OutputParam[device].pan;
 }
 
+float BasicSound::GetOutputSurroundPan(OutputDevice device) const {
+    return m_OutputParam[device].span;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
