@@ -32,6 +32,15 @@ void ExternalSoundPlayer::PauseAllSound(bool flag, int fadeFrames, PauseMode pau
     }
 }
 
+void ExternalSoundPlayer::SetPlayableSoundCount(int count) {
+    m_PlayableCount = count;
+
+    while (GetPlayingSoundCount() > GetPlayableSoundCount()) {
+        BasicSound* dropSound{GetLowestPrioritySound()};
+        dropSound->Finalize();
+    }
+}
+
 BasicSound* ExternalSoundPlayer::GetLowestPrioritySound() {
     if (m_SoundList.empty())
         return nullptr;
