@@ -563,7 +563,7 @@ private:
     SoundPlayer* m_pSoundPlayer;
     SoundActor* m_pSoundActor;
     ExternalSoundPlayer* m_pExtSoundPlayer;
-    SoundArchive* m_pSoundArchive;
+    const SoundArchive* m_pSoundArchive;
     AmbientInfo m_AmbientInfo;
     SoundParam m_AmbientParam;
     SoundActorParam m_ActorParam;

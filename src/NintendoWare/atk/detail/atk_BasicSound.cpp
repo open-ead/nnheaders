@@ -518,6 +518,38 @@ void BasicSound::ApplyCommonParam(OutputParam& param) const {
         param.send[i] += m_CommonParam.send[i];
 }
 
+void BasicSound::AttachPlayerHeap(PlayerHeap* pHeap) {
+    m_pPlayerHeap = pHeap;
+}
+
+void BasicSound::DetachPlayerHeap([[maybe_unused]] PlayerHeap* pHeap) {
+    m_pPlayerHeap = nullptr;
+}
+
+void BasicSound::AttachSoundPlayer(SoundPlayer* player) {
+    m_pSoundPlayer = player;
+}
+
+void BasicSound::DetachSoundPlayer([[maybe_unused]] SoundPlayer* player) {
+    m_pSoundPlayer = nullptr;
+}
+
+void BasicSound::AttachSoundActor(SoundActor* actor) {
+    m_pSoundActor = actor;
+}
+
+void BasicSound::DetachSoundActor([[maybe_unused]] SoundActor* actor) {
+    m_pSoundActor = nullptr;
+}
+
+void BasicSound::AttachExternalSoundPlayer(ExternalSoundPlayer* extPlayer) {
+    m_pExtSoundPlayer = extPlayer;
+}
+
+void BasicSound::DetachExternalSoundPlayer([[maybe_unused]] ExternalSoundPlayer* extPlayer) {
+    m_pExtSoundPlayer = nullptr;
+}
+
 int BasicSound::GetRemainingFadeFrames() const {
     return m_FadeVolume.GetRemainingCount();
 }
@@ -769,42 +801,6 @@ void BasicSound::SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditio
 }
 #endif
 
-void BasicSound::SetSetupTick(const os::Tick& tick) {
-    m_SetupTick = tick;
-}
-
-void BasicSound::AttachSoundPlayer(SoundPlayer* player) {
-    m_pSoundPlayer = player;
-}
-
-void BasicSound::DetachSoundPlayer([[maybe_unused]] SoundPlayer* player) {
-    m_pSoundPlayer = nullptr;
-}
-
-void BasicSound::AttachSoundActor(SoundActor* actor) {
-    m_pSoundActor = actor;
-}
-
-void BasicSound::DetachSoundActor([[maybe_unused]] SoundActor* actor) {
-    m_pSoundActor = nullptr;
-}
-
-void BasicSound::AttachExternalSoundPlayer(ExternalSoundPlayer* extPlayer) {
-    m_pExtSoundPlayer = extPlayer;
-}
-
-void BasicSound::DetachExternalSoundPlayer([[maybe_unused]] ExternalSoundPlayer* extPlayer) {
-    m_pExtSoundPlayer = nullptr;
-}
-
-void BasicSound::AttachPlayerHeap(PlayerHeap* pHeap) {
-    m_pPlayerHeap = pHeap;
-}
-
-void BasicSound::DetachPlayerHeap([[maybe_unused]] PlayerHeap* pHeap) {
-    m_pPlayerHeap = nullptr;
-}
-
 void BasicSound::SetAmbientInfo(const AmbientInfo& ambientArgInfo) {
     void* ambientArg{ambientArgInfo.argAllocatorCallback->AllocateArgImpl(ambientArgInfo.argSize)};
 
@@ -822,6 +818,14 @@ int BasicSound::GetAmbientPriority(const AmbientInfo& ambientInfo, u32 soundId) 
         priority = ambientInfo.paramUpdateCallback->GetPriority(ambientInfo.arg, soundId);
 
     return priority;
+}
+
+void BasicSound::SetSetupTick(const os::Tick& tick) {
+    m_SetupTick = tick;
+}
+
+void BasicSound::SetSoundArchive(const SoundArchive* soundArchive) {
+    m_pSoundArchive = soundArchive;
 }
 
 }  // namespace nn::atk::detail
