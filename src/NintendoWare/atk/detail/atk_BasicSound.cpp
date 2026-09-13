@@ -436,14 +436,6 @@ bool BasicSound::IsMute() const {
     }
 }
 
-void BasicSound::Update() {
-    // TODO
-}
-
-void BasicSound::UpdateParam() {
-    // TODO
-}
-
 void BasicSound::UpdateMoveValue() {
     m_FadeVolume.Update();
     m_MuteFadeVolume.Update();

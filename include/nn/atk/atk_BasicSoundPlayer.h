@@ -23,6 +23,14 @@ struct PlayerParamSet {
     }
 
     void Initialize() {
+        volume = 1.0f;
+        pitch = 1.0f;
+        lpfFreq = 0.0f;
+        biquadValue = 0.0f;
+        biquadType = BiquadFilterType_Inherit;
+        panMode = PanMode_Dual;
+        panCurve = PanCurve_Sqrt;
+        outputLineFlag = 1;
         tvParam.Initialize();
     }
 };
@@ -128,16 +136,16 @@ protected:
 private:
     os::Event m_Event;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-    OutputReceiver* m_pOutputReceiver;
+    OutputReceiver* m_pOutputReceiver{};
 #endif
-    bool m_ActiveFlag;
-    bool m_StartedFlag;
-    bool m_PauseFlag;
-    bool m_FinishFlag;
-    bool m_IsFinalizedForCannotAllocateResource;
+    bool m_ActiveFlag{false};
+    bool m_StartedFlag{false};
+    bool m_PauseFlag{false};
+    bool m_FinishFlag{false};
+    bool m_IsFinalizedForCannotAllocateResource{false};
     PlayerParamSet m_PlayerParamSet;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-    OutputAdditionalParam* m_pTvAdditionalParam;
+    OutputAdditionalParam* m_pTvAdditionalParam{};
 #endif
     const PlayerHeapDataManager* m_pPlayerHeapDataManager;
 };
