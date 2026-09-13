@@ -460,6 +460,14 @@ void BasicSound::SetPanCurve(PanCurve curve) {
     }
 }
 
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+void BasicSound::SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditionalParam* addr,
+                                              OutputAdditionalParam* addrForPlayer) {
+    m_pOutputAdditionalParam[device] = addr;
+    GetBasicSoundPlayerHandle()->SetTvAdditionalParamAddr(addrForPlayer);
+}
+#endif
+
 void BasicSound::SetOutputVolume(OutputDevice device, float volume) {
     m_OutputParam[device].volume = volume;
 }

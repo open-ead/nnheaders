@@ -394,7 +394,7 @@ public:
 
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditionalParam* addr,
-                                      OutputAdditionalParam* addrForPlayer);
+                                      OutputAdditionalParam* addrForPlayer = nullptr);
 #endif
     void SetOutputVolume(OutputDevice device, float volume);
     void SetOutputPan(OutputDevice device, float pan);

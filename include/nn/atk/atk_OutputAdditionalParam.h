@@ -2,11 +2,12 @@
 
 #include <nn/types.h>
 
-#include <nn/atk/atk_ValueArray.h>
 #include <nn/atk/atk_BusMixVolumePacket.h>
+#include <nn/atk/atk_ValueArray.h>
 #include <nn/atk/atk_VolumeThroughModePacket.h>
 
 namespace nn::atk::detail {
+
 using SendArray = ValueArray<f32>;
 
 class OutputAdditionalParam {
@@ -55,7 +56,7 @@ public:
     u8 TryGetVolumeThroughMode(s32 bus) const;
     void TrySetVolumeThroughMode(s32 bus, u8 volumeThroughMode);
     bool IsVolumeThroughModeEnabled() const;
-    
+
     bool IsVolumeThroughModeUsed();
     void SetVolumeThroughModeUsed(bool isUsed);
 
@@ -67,4 +68,5 @@ private:
     VolumeThroughModePacket* VolumeThroughModePacket;
 };
 static_assert(sizeof(OutputAdditionalParam) == 0x18);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail
