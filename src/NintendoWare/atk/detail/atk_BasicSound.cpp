@@ -785,4 +785,8 @@ void BasicSound::AttachSoundActor(SoundActor* actor) {
     m_pSoundActor = actor;
 }
 
+void BasicSound::DetachSoundActor([[maybe_unused]] SoundActor* actor) {
+    m_pSoundActor = nullptr;
+}
+
 }  // namespace nn::atk::detail
