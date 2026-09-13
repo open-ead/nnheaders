@@ -12,7 +12,9 @@ public:
         DisposeCallback,
         util::IntrusiveListMemberNodeTraits<DisposeCallback, &DisposeCallback::m_DisposeLink>>;
 
-    static DisposeCallbackManager& GetInstance();
+    // TODO: Maybe there's a better way to prevent inlining. Needed to match
+    // DisposeCallbackManager::Dispose
+    __attribute__((noinline)) static DisposeCallbackManager& GetInstance();
 
     void Dispose(const void* mem, size_t size);
 
