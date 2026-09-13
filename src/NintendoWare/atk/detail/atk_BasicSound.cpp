@@ -172,6 +172,19 @@ bool BasicSound::Initialize(OutputReceiver* pOutputReceiver)
     return true;
 }
 
+void BasicSound::SetPriority(int priority, int ambientPriority) {
+    m_Priority = priority;
+    m_AmbientParam.SetPriority(ambientPriority);
+}
+
+void BasicSound::GetPriority(int* priority, int* ambientPriority) const {
+    if (priority != nullptr)
+        *priority = m_Priority;
+
+    if (ambientPriority != nullptr)
+        *ambientPriority = m_AmbientParam.GetPriority();
+}
+
 void BasicSound::Finalize() {
     if (m_State != State_Initialized)
         return;
@@ -236,6 +249,26 @@ void BasicSound::Finalize() {
     m_State = State_Finalized;
 }
 
+void BasicSound::SetId(u32 id) {
+    m_Id = id;
+}
+
+bool BasicSound::IsAttachedGeneralHandle() {
+    return m_pGeneralHandle != nullptr;
+}
+
+void BasicSound::DetachGeneralHandle() {
+    m_pGeneralHandle->DetachSound();
+}
+
+bool BasicSound::IsAttachedTempGeneralHandle() {
+    return m_pTempGeneralHandle != nullptr;
+}
+
+void BasicSound::DetachTempGeneralHandle() {
+    m_pTempGeneralHandle->DetachSound();
+}
+
 void BasicSound::StartPrepared() {
     m_StartFlag = true;
 }
@@ -257,6 +290,15 @@ void BasicSound::Stop(int fadeFrames) {
     m_PauseMode = PauseMode_Default;
     m_FadeOutFlag = true;
     m_MuteState = MuteState_Normal;
+}
+
+void BasicSound::SetPlayerPriority(int priority) {
+    m_Priority = priority;
+
+    if (m_pSoundPlayer != nullptr)
+        m_pSoundPlayer->detail_SortPriorityList(this);
+
+    OnUpdatePlayerPriority();
 }
 
 void BasicSound::ForceStop() {
@@ -378,17 +420,172 @@ bool BasicSound::IsMute() const {
     }
 }
 
-void BasicSound::SetPriority(int priority, int ambientPriority) {
-    m_Priority = priority;
-    m_AmbientParam.SetPriority(ambientPriority);
+float BasicSound::CalculateVolume() const {
+    float volume{1.0f};
+
+    if (m_MuteState == MuteState_Muted)
+        return 0.0f;
+
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+    if (!IsVolumeThroughModeUsed())
+#endif
+        volume = m_InitVolume;
+
+    volume *= m_pSoundPlayer->GetVolume();
+    volume *= m_CommonParam.GetVolume();
+    volume *= m_FadeVolume.GetValue();
+    volume *= m_PauseFadeVolume.GetValue();
+    volume *= m_MuteFadeVolume.GetValue();
+    volume *= m_AmbientParam.GetVolume();
+    volume *= m_ActorParam.volume;
+
+    return volume;
 }
 
-void BasicSound::GetPriority(int* priority, int* ambientPriority) const {
-    if (priority != nullptr)
-        *priority = m_Priority;
+float BasicSound::CalculatePitch() const {
+    return m_Pitch * m_AmbientParam.GetPitch() * m_ActorParam.pitch;
+}
 
-    if (ambientPriority != nullptr)
-        *ambientPriority = m_AmbientParam.GetPriority();
+float BasicSound::CalculateLpfFrequency() const {
+    return m_LpfFreq + m_AmbientParam.GetLpf() + GetSoundPlayer()->GetLowPassFilterFrequency() +
+           m_ActorParam.lpf;
+}
+
+u32 BasicSound::CalculateOutLineFlag() const {
+    u32 outputLineFlag{m_OutputLineFlag};
+
+    if (m_AmbientParam.GetOutputLineFlag() != SoundAmbientParam::OutputLineFlagInherit)
+        outputLineFlag = m_AmbientParam.GetOutputLineFlag();
+
+    return outputLineFlag;
+}
+
+void BasicSound::CalculateBiquadFilter(int* pOutBiquadType, float* pOutBiquadValue) const {
+    int biquadFilterType{m_BiquadFilterType};
+    float biquadFilterValue{m_BiquadFilterValue};
+
+    if (biquadFilterType == BiquadFilterType_Inherit) {
+        biquadFilterType = GetSoundPlayer()->GetBiquadFilterType();
+        if (biquadFilterType == BiquadFilterType_Inherit) {
+            biquadFilterType = m_AmbientParam.GetBiquadFilterType();
+            biquadFilterValue = m_AmbientParam.GetBiquadFilterValue();
+        } else {
+            biquadFilterValue = GetSoundPlayer()->GetBiquadFilterValue();
+        }
+    }
+
+    *pOutBiquadType = biquadFilterType;
+    *pOutBiquadValue = biquadFilterValue;
+}
+
+void BasicSound::CalculateOutputParam(OutputParam* pOutParam, OutputDevice device) const {
+    if (device != OutputDevice_Main) {
+        NN_UNEXPECTED_DEFAULT;
+        return;
+    }
+
+    const OutputAmbientParam* pAmbientParam{&m_AmbientParam.GetTvParam()};
+    float actorVolume{m_ActorParam.tvVolume};
+    float actorPan{m_ActorParam.tvPan};
+
+    *pOutParam = m_OutputParam[device];
+
+    ApplyCommonParam(*pOutParam);
+
+    const SoundPlayer* pSoundPlayer{m_pSoundPlayer};
+
+    pOutParam->volume *=
+        pSoundPlayer->GetOutputVolume(device) * pAmbientParam->GetVolume() * actorVolume;
+    pOutParam->pan += actorPan + pAmbientParam->GetPan();
+    pOutParam->span += pAmbientParam->GetSurroundPan();
+
+    for (int i{0}; i < DefaultBusCount; ++i) {
+        if (i == OutputDeviceIndex_Main)
+            pOutParam->send[i] += pSoundPlayer->GetOutputMainSend(device);
+        else
+            pOutParam->send[i] +=
+                pSoundPlayer->GetOutputFxSend(device, static_cast<AuxBus>(i - 1)) +
+                pAmbientParam->GetEffectSend(i - 1);
+    }
+}
+
+void BasicSound::ApplyCommonParam(OutputParam& param) const {
+    param.mixMode = m_CommonParam.mixMode;
+    param.pan += m_CommonParam.pan;
+    param.span += m_CommonParam.span;
+
+    for (int i{0}; i < DefaultBusCount; ++i)
+        param.send[i] += m_CommonParam.send[i];
+}
+
+int BasicSound::GetRemainingFadeFrames() const {
+    return m_FadeVolume.GetRemainingCount();
+}
+
+int BasicSound::GetRemainingPauseFadeFrames() const {
+    return m_PauseFadeVolume.GetRemainingCount();
+}
+
+int BasicSound::GetRemainingMuteFadeFrames() const {
+    return m_MuteFadeVolume.GetRemainingCount();
+}
+
+void BasicSound::CalculateSoundParamCalculationValues(
+    SoundParamCalculationValues* pOutValue) const {
+    pOutValue->soundArchiveParam.volume = m_InitVolume;
+
+    SetSoundPlayerCalculationValues(pOutValue->soundPlayerParam, *m_pSoundPlayer);
+    SetSound3DCalculationValues(pOutValue->sound3DParam, m_AmbientParam);
+    SetSoundActorCalculationValues(pOutValue->soundActorParam, m_ActorParam);
+
+    pOutValue->soundHandleParam.volume = m_CommonParam.GetVolume();
+    pOutValue->soundHandleParam.pitch = m_Pitch;
+    pOutValue->soundHandleParam.lpf = m_LpfFreq;
+    pOutValue->soundHandleParam.bqfType = static_cast<int>(m_BiquadFilterType);
+    pOutValue->soundHandleParam.bqfValue = m_BiquadFilterValue;
+    pOutValue->soundHandleParam.outputLineFlag = m_OutputLineFlag;
+    pOutValue->soundHandleParam.mixMode = m_CommonParam.mixMode;
+    pOutValue->soundHandleParam.pan = m_CommonParam.pan;
+    pOutValue->soundHandleParam.surroundPan = m_CommonParam.span;
+    pOutValue->soundHandleParam.mainSend = m_CommonParam.send[OutputDeviceIndex_Main];
+    pOutValue->soundHandleParam.playerPriority = m_Priority;
+
+    for (int i{0}; i < AuxBus_Count; ++i)
+        pOutValue->soundHandleParam.effectSend[i] = m_CommonParam.send[1L + i];
+
+    for (int i{0}; i < OutputDevice_Count; ++i) {
+        const OutputDevice device{static_cast<OutputDevice>(i)};
+
+        pOutValue->soundHandleParam.outputVolume[device] = m_OutputParam[device].volume;
+        pOutValue->soundHandleParam.outputPan[device] = m_OutputParam[device].pan;
+        pOutValue->soundHandleParam.outputSurroundPan[device] = m_OutputParam[device].span;
+        pOutValue->soundHandleParam.outputMainSend[device] =
+            m_OutputParam[device].send[OutputDeviceIndex_Main];
+
+        for (int k{0}; k < AuxBus_Count; ++k)
+            pOutValue->soundHandleParam.outputEffectSend[device][k] =
+                m_OutputParam[device].send[1 + k];
+
+        pOutValue->soundHandleParam.outputMixParameter[device][0] =
+            m_OutputParam[device].mixParameter[0];
+        pOutValue->soundHandleParam.outputMixParameter[device][1] =
+            m_OutputParam[device].mixParameter[1];
+    }
+
+    pOutValue->resultParam.volume = CalculateVolume();
+    pOutValue->resultParam.pitch = CalculatePitch();
+    pOutValue->resultParam.lpf = CalculateLpfFrequency();
+    pOutValue->resultParam.outputLineFlag = CalculateOutLineFlag();
+    pOutValue->resultParam.playerPriority = CalcCurrentPlayerPriority();
+    CalculateBiquadFilter(&pOutValue->resultParam.bqfType, &pOutValue->resultParam.bqfValue);
+    for (int i{0}; i < OutputDevice_Count; ++i)
+        CalculateOutputParam(&pOutValue->resultParam.outputParamResult[i],
+                             static_cast<OutputDevice>(i));
+
+    pOutValue->fadeVolumeParam.stopFadeVolume = m_FadeVolume.GetValue();
+    pOutValue->fadeVolumeParam.pauseFadeVolume = m_PauseFadeVolume.GetValue();
+    pOutValue->fadeVolumeParam.muteFadeVolume = m_MuteFadeVolume.GetValue();
+    pOutValue->fadeVolumeParam.isMuted = m_MuteState == MuteState_Muted;
 }
 
 void BasicSound::SetInitialVolume(float volume) {
@@ -448,15 +645,6 @@ void BasicSound::ResetOutputLine() {
     m_OutputLineFlag = m_pSoundPlayer->GetDefaultOutputLine();
 }
 
-void BasicSound::SetPlayerPriority(int priority) {
-    m_Priority = priority;
-
-    if (m_pSoundPlayer != nullptr)
-        m_pSoundPlayer->detail_SortPriorityList(this);
-
-    OnUpdatePlayerPriority();
-}
-
 void BasicSound::SetMixMode(MixMode mixMode) {
     m_CommonParam.mixMode = mixMode;
 }
@@ -497,6 +685,56 @@ float BasicSound::GetFxSend(AuxBus bus) const {
     return m_CommonParam.send[1L + bus];
 }
 
+void BasicSound::SetOutputVolume(OutputDevice device, float volume) {
+    m_OutputParam[device].volume = volume;
+}
+
+void BasicSound::SetOutputChannelMixParameter(OutputDevice device, u32 srcChNo,
+                                              MixParameter param) {
+    for (int i{0}; i < ChannelIndex_Count; ++i)
+        m_OutputParam[device].mixParameter[srcChNo].ch[i] = param.ch[i];
+}
+
+void BasicSound::SetOutputPan(OutputDevice device, float pan) {
+    m_OutputParam[device].pan = pan;
+}
+
+void BasicSound::SetOutputSurroundPan(OutputDevice device, float span) {
+    m_OutputParam[device].span = span;
+}
+
+void BasicSound::SetOutputMainSend(OutputDevice device, float send) {
+    m_OutputParam[device].send[OutputDeviceIndex_Main] = send;
+}
+
+void BasicSound::SetOutputFxSend(OutputDevice device, AuxBus bus, float send) {
+    m_OutputParam[device].send[1L + bus] = send;
+}
+
+float BasicSound::GetOutputVolume(OutputDevice device) const {
+    return m_OutputParam[device].volume;
+}
+
+MixParameter BasicSound::GetOutputChannelMixParameter(OutputDevice device, u32 srcChNo) const {
+    return m_OutputParam[device].mixParameter[srcChNo];
+}
+
+float BasicSound::GetOutputPan(OutputDevice device) const {
+    return m_OutputParam[device].pan;
+}
+
+float BasicSound::GetOutputSurroundPan(OutputDevice device) const {
+    return m_OutputParam[device].span;
+}
+
+float BasicSound::GetOutputMainSend(OutputDevice device) const {
+    return m_OutputParam[device].send[OutputDeviceIndex_Main];
+}
+
+float BasicSound::GetOutputFxSend(OutputDevice device, AuxBus bus) const {
+    return m_OutputParam[device].send[1L + bus];
+}
+
 void BasicSound::SetPanMode(PanMode mode) {
     {
         DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
@@ -530,240 +768,5 @@ void BasicSound::SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditio
     GetBasicSoundPlayerHandle()->SetTvAdditionalParamAddr(addrForPlayer);
 }
 #endif
-
-void BasicSound::SetOutputVolume(OutputDevice device, float volume) {
-    m_OutputParam[device].volume = volume;
-}
-
-void BasicSound::SetOutputPan(OutputDevice device, float pan) {
-    m_OutputParam[device].pan = pan;
-}
-
-void BasicSound::SetOutputSurroundPan(OutputDevice device, float span) {
-    m_OutputParam[device].span = span;
-}
-
-void BasicSound::SetOutputMainSend(OutputDevice device, float send) {
-    m_OutputParam[device].send[OutputDeviceIndex_Main] = send;
-}
-
-void BasicSound::SetOutputFxSend(OutputDevice device, AuxBus bus, float send) {
-    m_OutputParam[device].send[1L + bus] = send;
-}
-
-void BasicSound::SetOutputChannelMixParameter(OutputDevice device, u32 srcChNo,
-                                              MixParameter param) {
-    for (int i{0}; i < ChannelIndex_Count; ++i)
-        m_OutputParam[device].mixParameter[srcChNo].ch[i] = param.ch[i];
-}
-
-float BasicSound::GetOutputVolume(OutputDevice device) const {
-    return m_OutputParam[device].volume;
-}
-
-float BasicSound::GetOutputPan(OutputDevice device) const {
-    return m_OutputParam[device].pan;
-}
-
-float BasicSound::GetOutputSurroundPan(OutputDevice device) const {
-    return m_OutputParam[device].span;
-}
-
-float BasicSound::GetOutputMainSend(OutputDevice device) const {
-    return m_OutputParam[device].send[OutputDeviceIndex_Main];
-}
-
-float BasicSound::GetOutputFxSend(OutputDevice device, AuxBus bus) const {
-    return m_OutputParam[device].send[1L + bus];
-}
-
-MixParameter BasicSound::GetOutputChannelMixParameter(OutputDevice device, u32 srcChNo) const {
-    return m_OutputParam[device].mixParameter[srcChNo];
-}
-
-int BasicSound::GetRemainingFadeFrames() const {
-    return m_FadeVolume.GetRemainingCount();
-}
-
-int BasicSound::GetRemainingPauseFadeFrames() const {
-    return m_PauseFadeVolume.GetRemainingCount();
-}
-
-int BasicSound::GetRemainingMuteFadeFrames() const {
-    return m_MuteFadeVolume.GetRemainingCount();
-}
-
-void BasicSound::CalculateSoundParamCalculationValues(
-    SoundParamCalculationValues* pOutValue) const {
-    pOutValue->soundArchiveParam.volume = m_InitVolume;
-
-    SetSoundPlayerCalculationValues(pOutValue->soundPlayerParam, *m_pSoundPlayer);
-    SetSound3DCalculationValues(pOutValue->sound3DParam, m_AmbientParam);
-    SetSoundActorCalculationValues(pOutValue->soundActorParam, m_ActorParam);
-
-    pOutValue->soundHandleParam.volume = m_CommonParam.GetVolume();
-    pOutValue->soundHandleParam.pitch = m_Pitch;
-    pOutValue->soundHandleParam.lpf = m_LpfFreq;
-    pOutValue->soundHandleParam.bqfType = static_cast<int>(m_BiquadFilterType);
-    pOutValue->soundHandleParam.bqfValue = m_BiquadFilterValue;
-    pOutValue->soundHandleParam.outputLineFlag = m_OutputLineFlag;
-    pOutValue->soundHandleParam.mixMode = m_CommonParam.mixMode;
-    pOutValue->soundHandleParam.pan = m_CommonParam.pan;
-    pOutValue->soundHandleParam.surroundPan = m_CommonParam.span;
-    pOutValue->soundHandleParam.mainSend = m_CommonParam.send[OutputDeviceIndex_Main];
-    pOutValue->soundHandleParam.playerPriority = m_Priority;
-
-    for (int i{0}; i < AuxBus_Count; ++i)
-        pOutValue->soundHandleParam.effectSend[i] = m_CommonParam.send[1L + i];
-
-    for (int i{0}; i < OutputDevice_Count; ++i) {
-        const OutputDevice device{static_cast<OutputDevice>(i)};
-
-        pOutValue->soundHandleParam.outputVolume[device] = m_OutputParam[device].volume;
-        pOutValue->soundHandleParam.outputPan[device] = m_OutputParam[device].pan;
-        pOutValue->soundHandleParam.outputSurroundPan[device] = m_OutputParam[device].span;
-        pOutValue->soundHandleParam.outputMainSend[device] =
-            m_OutputParam[device].send[OutputDeviceIndex_Main];
-
-        for (int k{0}; k < AuxBus_Count; ++k)
-            pOutValue->soundHandleParam.outputEffectSend[device][1L + k] =
-                m_OutputParam[device].send[1L + k];
-
-        pOutValue->soundHandleParam.outputMixParameter[device][0] =
-            m_OutputParam[device].mixParameter[0];
-        pOutValue->soundHandleParam.outputMixParameter[device][1] =
-            m_OutputParam[device].mixParameter[1];
-    }
-
-    pOutValue->resultParam.volume = CalculateVolume();
-    pOutValue->resultParam.pitch = CalculatePitch();
-    pOutValue->resultParam.lpf = CalculateLpfFrequency();
-    pOutValue->resultParam.outputLineFlag = CalculateOutLineFlag();
-    pOutValue->resultParam.playerPriority = fnd::Clamp(GetPlayerPriority(), 0, 127);
-    CalculateBiquadFilter(&pOutValue->resultParam.bqfType, &pOutValue->resultParam.bqfValue);
-    CalculateOutputParam(pOutValue->resultParam.outputParamResult, OutputDevice_Main);
-
-    pOutValue->fadeVolumeParam.stopFadeVolume = m_FadeVolume.GetValue();
-    pOutValue->fadeVolumeParam.pauseFadeVolume = m_PauseFadeVolume.GetValue();
-    pOutValue->fadeVolumeParam.muteFadeVolume = m_MuteFadeVolume.GetValue();
-}
-
-void BasicSound::SetId(u32 id) {
-    m_Id = id;
-}
-
-bool BasicSound::IsAttachedGeneralHandle() {
-    return m_pGeneralHandle != nullptr;
-}
-
-bool BasicSound::IsAttachedTempGeneralHandle() {
-    return m_pTempGeneralHandle != nullptr;
-}
-
-void BasicSound::DetachGeneralHandle() {
-    m_pGeneralHandle->DetachSound();
-}
-
-void BasicSound::DetachTempGeneralHandle() {
-    m_pTempGeneralHandle->DetachSound();
-}
-
-float BasicSound::CalculateVolume() const {
-    float volume{1.0f};
-
-    if (m_MuteState == MuteState_Muted)
-        return 0.0f;
-
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-    if (!IsVolumeThroughModeUsed())
-#endif
-        volume = m_InitVolume;
-
-    volume *= m_pSoundPlayer->GetVolume();
-    volume *= m_CommonParam.GetVolume();
-    volume *= m_FadeVolume.GetValue();
-    volume *= m_PauseFadeVolume.GetValue();
-    volume *= m_MuteFadeVolume.GetValue();
-    volume *= m_AmbientParam.GetVolume();
-    volume *= m_ActorParam.volume;
-
-    return volume;
-}
-
-float BasicSound::CalculatePitch() const {
-    return m_Pitch * m_AmbientParam.GetPitch() * m_ActorParam.pitch;
-}
-
-float BasicSound::CalculateLpfFrequency() const {
-    return m_LpfFreq + m_AmbientParam.GetLpf() + GetSoundPlayer()->GetLowPassFilterFrequency() +
-           m_ActorParam.lpf;
-}
-
-void BasicSound::CalculateBiquadFilter(int* pOutBiquadType, float* pOutBiquadValue) const {
-    int biquadFilterType{m_BiquadFilterType};
-    float biquadFilterValue{m_BiquadFilterValue};
-
-    if (biquadFilterType == BiquadFilterType_Inherit) {
-        biquadFilterType = GetSoundPlayer()->GetBiquadFilterType();
-        if (biquadFilterType == BiquadFilterType_Inherit) {
-            biquadFilterType = m_AmbientParam.GetBiquadFilterType();
-            biquadFilterValue = m_AmbientParam.GetBiquadFilterValue();
-        } else {
-            biquadFilterValue = GetSoundPlayer()->GetBiquadFilterValue();
-        }
-    }
-
-    *pOutBiquadType = biquadFilterType;
-    *pOutBiquadValue = biquadFilterValue;
-}
-
-u32 BasicSound::CalculateOutLineFlag() const {
-    u32 outputLineFlag{m_OutputLineFlag};
-
-    if (m_AmbientParam.GetOutputLineFlag() != SoundAmbientParam::OutputLineFlagInherit)
-        outputLineFlag = m_AmbientParam.GetOutputLineFlag();
-
-    return outputLineFlag;
-}
-
-void BasicSound::CalculateOutputParam(OutputParam* pOutParam, OutputDevice device) const {
-    if (device != OutputDevice_Main) {
-        NN_UNEXPECTED_DEFAULT;
-        return;
-    }
-
-    const OutputAmbientParam* pAmbientParam{&m_AmbientParam.GetTvParam()};
-    float actorVolume{m_ActorParam.tvVolume};
-    float actorPan{m_ActorParam.tvPan};
-
-    *pOutParam = m_OutputParam[device];
-
-    ApplyCommonParam(*pOutParam);
-
-    const SoundPlayer* pSoundPlayer{m_pSoundPlayer};
-
-    pOutParam->volume *=
-        pSoundPlayer->GetOutputVolume(device) * pAmbientParam->GetVolume() * actorVolume;
-    pOutParam->pan += actorPan + pAmbientParam->GetPan();
-    pOutParam->span += pAmbientParam->GetSurroundPan();
-
-    for (int i{0}; i < DefaultBusCount; ++i) {
-        if (i == OutputDeviceIndex_Main)
-            pOutParam->send[i] += pSoundPlayer->GetOutputMainSend(device);
-        else
-            pOutParam->send[i] +=
-                pSoundPlayer->GetOutputFxSend(device, static_cast<AuxBus>(i - 1)) +
-                pAmbientParam->GetEffectSend(i - 1);
-    }
-}
-
-void BasicSound::ApplyCommonParam(OutputParam& param) const {
-    param.mixMode = m_CommonParam.mixMode;
-    param.pan += m_CommonParam.pan;
-    param.span += m_CommonParam.span;
-
-    for (int i{0}; i < DefaultBusCount; ++i)
-        param.send[i] += m_CommonParam.send[i];
-}
 
 }  // namespace nn::atk::detail

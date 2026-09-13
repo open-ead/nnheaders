@@ -447,9 +447,7 @@ public:
     void SetSetupTick(const os::Tick& tick);
     os::Tick GetSetupTick() const { return m_SetupTick; }
 
-    int CalcCurrentPlayerPriority() const {
-        return fnd::Clamp(m_AmbientParam.GetPriority(), 0, 127);
-    }
+    int CalcCurrentPlayerPriority() const { return fnd::Clamp(GetPlayerPriority(), 0, 127); }
 
     SoundPlayer* GetSoundPlayer() { return m_pSoundPlayer; }
     const SoundPlayer* GetSoundPlayer() const { return m_pSoundPlayer; }
