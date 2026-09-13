@@ -38,7 +38,10 @@ public:
     BasicSoundPlayer();
 
     void SetBiquadFilter(s32 type, f32 value);
+
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetTvAdditionalParamAddr(OutputAdditionalParam* pParam) { m_pTvAdditionalParam = pParam; }
+#endif
 
     void InitializeEvent() { m_Event.Clear(); }
 

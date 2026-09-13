@@ -472,6 +472,10 @@ void BasicSound::SetOutputVolume(OutputDevice device, float volume) {
     m_OutputParam[device].volume = volume;
 }
 
+void BasicSound::SetOutputPan(OutputDevice device, float pan) {
+    m_OutputParam[device].pan = pan;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
