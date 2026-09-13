@@ -480,6 +480,10 @@ void BasicSound::SetOutputSurroundPan(OutputDevice device, float span) {
     m_OutputParam[device].span = span;
 }
 
+void BasicSound::SetOutputMainSend(OutputDevice device, float send) {
+    m_OutputParam[device].send[OutputDevice_Main] = send;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
