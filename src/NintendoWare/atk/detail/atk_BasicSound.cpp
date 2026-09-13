@@ -73,6 +73,10 @@ void SetSoundActorCalculationValues(SoundParamCalculationValues::SoundActorParam
 // NON_MATCHING on versions lower than 4.0.0
 BasicSound::BasicSound() = default;
 
+BasicSound::~BasicSound() {
+    m_State = State_Destructed;
+}
+
 // NON_MATCHING: bad order of instructions
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 bool BasicSound::Initialize()
