@@ -14,7 +14,6 @@ public:
 
     static DisposeCallbackManager& GetInstance();
 
-    DisposeCallbackManager();
 
     void Dispose(const void* mem, size_t size);
 
@@ -22,6 +21,8 @@ public:
     void UnregisterDisposeCallback(DisposeCallback* callback);
 
     u64 GetCallbackCount() const;
+    
+    DisposeCallbackManager();
 
 private:
     CallbackList m_CallbackList;
