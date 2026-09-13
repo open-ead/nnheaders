@@ -18,4 +18,18 @@ void ExternalSoundPlayer::StopAllSound(int fadeFrames) {
     }
 }
 
+void ExternalSoundPlayer::PauseAllSound(bool flag, int fadeFrames) {
+    for (auto itr{m_SoundList.begin()}; itr != m_SoundList.end();) {
+        auto curItr{itr++};
+        curItr->Pause(flag, fadeFrames);
+    }
+}
+
+void ExternalSoundPlayer::PauseAllSound(bool flag, int fadeFrames, PauseMode pauseMode) {
+    for (auto itr{m_SoundList.begin()}; itr != m_SoundList.end();) {
+        auto curItr{itr++};
+        curItr->Pause(flag, fadeFrames, pauseMode);
+    }
+}
+
 }  // namespace nn::atk::detail
