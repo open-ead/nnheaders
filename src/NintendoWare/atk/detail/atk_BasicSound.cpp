@@ -390,6 +390,10 @@ u32 BasicSound::GetOutputLine() const {
     return m_OutputLineFlag;
 }
 
+void BasicSound::ResetOutputLine() {
+    m_OutputLineFlag = m_pSoundPlayer->GetDefaultOutputLine();
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }

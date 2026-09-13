@@ -46,6 +46,8 @@ public:
     void SetVolume(f32 volume);
     void SetLowPassFilterFrequency(f32 lpfFreq);
     void SetBiquadFilter(s32 biquadFilterType, f32 biquadFilterValue);
+
+    u32 GetDefaultOutputLine() const { return m_OutputLineFlag; }
     void SetDefaultOutputLine(u32 line);
 
     void SetMainSend(f32 send);
