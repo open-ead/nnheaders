@@ -2,13 +2,12 @@
 
 #include <nn/os.h>
 
-#include <nn/atk/atk_OutputReceiver.h>
 #include <nn/atk/atk_OutputAdditionalParam.h>
 #include <nn/atk/atk_PlayerHeapDataManager.h>
 
 namespace nn::atk::detail::driver {
+
 struct PlayerParamSet {
-    
     void Initialize();
 
     f32 volume;
@@ -37,7 +36,9 @@ public:
     virtual void Pause(bool isPauseEnabled) = 0;
 
     BasicSoundPlayer();
+
     void SetBiquadFilter(s32 type, f32 value);
+    void SetTvAdditionalParamAddr(OutputAdditionalParam* pParam) { m_pTvAdditionalParam = pParam; }
 
     void InitializeEvent() { m_Event.Clear(); }
 
@@ -62,4 +63,5 @@ static_assert(sizeof(BasicSoundPlayer) == 0xb0);
 #else
 static_assert(sizeof(BasicSoundPlayer) == 0xc0);
 #endif
-} //namespace nn::atk::detail::driver
+
+}  // namespace nn::atk::detail::driver
