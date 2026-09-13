@@ -514,6 +514,10 @@ float BasicSound::GetOutputFxSend(OutputDevice device, AuxBus bus) const {
     return m_OutputParam[device].send[1L + bus];
 }
 
+MixParameter BasicSound::GetOutputChannelMixParameter(OutputDevice device, u32 srcChNo) const {
+    return m_OutputParam[device].mixParameter[srcChNo];
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
