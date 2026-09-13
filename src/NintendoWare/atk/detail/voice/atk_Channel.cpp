@@ -100,11 +100,11 @@ void Channel::VoiceCallbackFunc(MultiVoice* voice, MultiVoice::VoiceCallbackStat
 
 Channel::Channel() {
     m_Disposer.Initialize(this);
-    DisposeCallbackManager::GetInstance()->RegisterDisposeCallback(&m_Disposer);
+    DisposeCallbackManager::GetInstance().RegisterDisposeCallback(&m_Disposer);
 }
 
 Channel::~Channel() {
-    DisposeCallbackManager::GetInstance()->UnregisterDisposeCallback(&m_Disposer);
+    DisposeCallbackManager::GetInstance().UnregisterDisposeCallback(&m_Disposer);
 }
 
 void Channel::CallChannelCallback(ChannelCallbackStatus status) {

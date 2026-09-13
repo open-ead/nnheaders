@@ -12,16 +12,16 @@ public:
         DisposeCallback,
         util::IntrusiveListMemberNodeTraits<DisposeCallback, &DisposeCallback::m_DisposeLink>>;
 
+    static DisposeCallbackManager& GetInstance();
+
     DisposeCallbackManager();
+
+    void Dispose(const void* mem, size_t size);
 
     void RegisterDisposeCallback(DisposeCallback* callback);
     void UnregisterDisposeCallback(DisposeCallback* callback);
 
     u64 GetCallbackCount() const;
-
-    void Dispose(const void* mem, size_t size);
-
-    static DisposeCallbackManager* GetInstance();
 
 private:
     CallbackList m_CallbackList;
