@@ -1,5 +1,7 @@
 #include <nn/atk/atk_BasicSoundPlayer.h>
 
+#include <nn/atk/atk_OutputReceiver.h>
+
 namespace nn::atk::detail::driver {
 
 BasicSoundPlayer::BasicSoundPlayer() : m_Event(os::EventClearMode_ManualClear) {
@@ -23,6 +25,17 @@ void BasicSoundPlayer::Initialize(OutputReceiver* pOutputReceiver)
 
     m_PlayerParamSet.Initialize();
     m_pPlayerHeapDataManager = nullptr;
+}
+
+void BasicSoundPlayer::Finalize() {
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+    if (m_pOutputReceiver != nullptr) {
+        m_pOutputReceiver->AddReferenceCount(-1);
+        m_pOutputReceiver = nullptr;
+    }
+#endif
+    
+    m_Event.Signal();
 }
 
 }  // namespace nn::atk::detail::driver
