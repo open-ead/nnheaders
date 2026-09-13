@@ -401,13 +401,19 @@ public:
     void SetOutputSurroundPan(OutputDevice device, float span);
     void SetOutputMainSend(OutputDevice device, float send);
     void SetOutputFxSend(OutputDevice device, AuxBus bus, float send);
-    void SetOutputFxSend(OutputDevice device, float send);
+
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetOutputAdditionalSend(OutputDevice device, int bus, float send);
     void SetOutputBusMixVolumeEnabled(OutputDevice device, int subMixBus, bool isEnabled);
     void SetOutputBusMixVolume(OutputDevice device, int srcChNo, int subMixBus,
                                ChannelMixVolume param);
+#endif
+
     void SetOutputChannelMixParameter(OutputDevice device, u32 srcChNo, MixParameter param);
+
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetOutputVolumeThroughMode(OutputDevice device, int bus, u8 modeBitFlag);
+#endif
 
     float GetOutputVolume(OutputDevice device) const;
     float GetOutputPan(OutputDevice device) const;
