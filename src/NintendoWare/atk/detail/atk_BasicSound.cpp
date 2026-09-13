@@ -801,4 +801,8 @@ void BasicSound::AttachPlayerHeap(PlayerHeap* pHeap) {
     m_pPlayerHeap = pHeap;
 }
 
+void BasicSound::DetachPlayerHeap([[maybe_unused]] PlayerHeap* pHeap) {
+    m_pPlayerHeap = nullptr;
+}
+
 }  // namespace nn::atk::detail
