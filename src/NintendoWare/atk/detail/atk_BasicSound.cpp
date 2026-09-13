@@ -402,6 +402,10 @@ MixMode BasicSound::GetMixMode() {
     return m_CommonParam.mixMode;
 }
 
+void BasicSound::SetPan(float pan) {
+    m_CommonParam.pan = pan;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
