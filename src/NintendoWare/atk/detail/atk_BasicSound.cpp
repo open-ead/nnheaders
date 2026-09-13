@@ -422,6 +422,10 @@ void BasicSound::SetMainSend(float send) {
     m_CommonParam.send[0] = send;
 }
 
+float BasicSound::GetMainSend() const {
+    return m_CommonParam.send[0];
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
