@@ -386,6 +386,10 @@ void BasicSound::SetOutputLine(u32 lineFlag) {
     m_OutputLineFlag = lineFlag;
 }
 
+u32 BasicSound::GetOutputLine() const {
+    return m_OutputLineFlag;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
