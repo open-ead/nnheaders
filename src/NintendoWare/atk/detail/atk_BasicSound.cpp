@@ -382,6 +382,10 @@ void BasicSound::GetBiquadFilter(int* type, float* value) const {
         *value = m_BiquadFilterValue;
 }
 
+void BasicSound::SetOutputLine(u32 lineFlag) {
+    m_OutputLineFlag = lineFlag;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
