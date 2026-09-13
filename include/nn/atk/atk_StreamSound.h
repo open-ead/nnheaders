@@ -9,7 +9,9 @@ namespace nn::atk::detail {
 class StreamSound;
 using StreamSoundInstanceManager = SoundInstanceManager<StreamSound>;
 
-class StreamSound : BasicSound {
+class StreamSound : public BasicSound {
+    NN_ATK_RTTI_OVERRIDE(StreamSound, BasicSound);
+
 public:
     explicit StreamSound(const StreamSoundInstanceManager& manager);
 
