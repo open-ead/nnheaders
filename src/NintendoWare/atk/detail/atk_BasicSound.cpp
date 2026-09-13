@@ -427,11 +427,11 @@ float BasicSound::GetMainSend() const {
 }
 
 void BasicSound::SetFxSend(AuxBus bus, float send) {
-    m_CommonParam.send[bus + 1L] = send;
+    m_CommonParam.send[1L + bus] = send;
 }
 
 float BasicSound::GetFxSend(AuxBus bus) const {
-    return m_CommonParam.send[bus + 1L];
+    return m_CommonParam.send[1L + bus];
 }
 
 void BasicSound::SetPanMode(PanMode mode) {
@@ -482,6 +482,10 @@ void BasicSound::SetOutputSurroundPan(OutputDevice device, float span) {
 
 void BasicSound::SetOutputMainSend(OutputDevice device, float send) {
     m_OutputParam[device].send[OutputDevice_Main] = send;
+}
+
+void BasicSound::SetOutputFxSend(OutputDevice device, AuxBus bus, float send) {
+    m_OutputParam[device].send[1L + bus] = send;
 }
 
 void BasicSound::SetId(u32 id) {
