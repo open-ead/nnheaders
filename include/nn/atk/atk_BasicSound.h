@@ -361,6 +361,7 @@ public:
     void ResetOutputLine();
 
     void SetPlayerPriority(int priority);
+    
     void SetMixMode(MixMode mixMode);
     MixMode GetMixMode();
 

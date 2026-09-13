@@ -291,15 +291,6 @@ void BasicSound::FadeIn(int frames) {
     m_FadeVolume.SetTarget(1.0f, frames);
 }
 
-void BasicSound::SetPlayerPriority(int priority) {
-    m_Priority = priority;
-
-    if (m_pSoundPlayer != nullptr)
-        m_pSoundPlayer->detail_SortPriorityList(this);
-
-    OnUpdatePlayerPriority();
-}
-
 bool BasicSound::IsPause() const {
     switch (m_PauseState - 1) {
     case PauseState_Normal:
@@ -392,6 +383,19 @@ u32 BasicSound::GetOutputLine() const {
 
 void BasicSound::ResetOutputLine() {
     m_OutputLineFlag = m_pSoundPlayer->GetDefaultOutputLine();
+}
+
+void BasicSound::SetPlayerPriority(int priority) {
+    m_Priority = priority;
+
+    if (m_pSoundPlayer != nullptr)
+        m_pSoundPlayer->detail_SortPriorityList(this);
+
+    OnUpdatePlayerPriority();
+}
+
+void BasicSound::SetMixMode(MixMode mixMode) {
+    m_CommonParam.mixMode = mixMode;
 }
 
 void BasicSound::SetId(u32 id) {
