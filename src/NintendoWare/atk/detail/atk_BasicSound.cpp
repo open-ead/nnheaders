@@ -481,7 +481,7 @@ void BasicSound::SetOutputSurroundPan(OutputDevice device, float span) {
 }
 
 void BasicSound::SetOutputMainSend(OutputDevice device, float send) {
-    m_OutputParam[device].send[OutputDevice_Main] = send;
+    m_OutputParam[device].send[OutputDeviceIndex_Main] = send;
 }
 
 void BasicSound::SetOutputFxSend(OutputDevice device, AuxBus bus, float send) {
@@ -504,6 +504,10 @@ float BasicSound::GetOutputPan(OutputDevice device) const {
 
 float BasicSound::GetOutputSurroundPan(OutputDevice device) const {
     return m_OutputParam[device].span;
+}
+
+float BasicSound::GetOutputMainSend(OutputDevice device) const {
+    return m_OutputParam[device].send[OutputDeviceIndex_Main];
 }
 
 void BasicSound::SetId(u32 id) {
