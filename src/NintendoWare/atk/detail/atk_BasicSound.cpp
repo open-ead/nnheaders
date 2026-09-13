@@ -522,6 +522,10 @@ int BasicSound::GetRemainingFadeFrames() const {
     return m_FadeVolume.GetRemainingCount();
 }
 
+int BasicSound::GetRemainingPauseFadeFrames() const {
+    return m_PauseFadeVolume.GetRemainingCount();
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
