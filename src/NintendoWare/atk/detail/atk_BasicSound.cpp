@@ -510,6 +510,10 @@ float BasicSound::GetOutputMainSend(OutputDevice device) const {
     return m_OutputParam[device].send[OutputDeviceIndex_Main];
 }
 
+float BasicSound::GetOutputFxSend(OutputDevice device, AuxBus bus) const {
+    return m_OutputParam[device].send[1L + bus];
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
