@@ -430,6 +430,10 @@ void BasicSound::SetFxSend(AuxBus bus, float send) {
     m_CommonParam.send[bus + 1L] = send;
 }
 
+float BasicSound::GetFxSend(AuxBus bus) const {
+    return m_CommonParam.send[bus + 1L];
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }

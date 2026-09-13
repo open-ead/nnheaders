@@ -64,6 +64,7 @@ public:
 
     void Free(Instance* instance) {
         // TODO
+        m_FreeList.push_back(*instance);
     }
 
     void UpdateFreeReqList() {
