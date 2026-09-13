@@ -773,4 +773,8 @@ void BasicSound::SetSetupTick(const os::Tick& tick) {
     m_SetupTick = tick;
 }
 
+void BasicSound::AttachSoundPlayer(SoundPlayer* player) {
+    m_pSoundPlayer = player;
+}
+
 }  // namespace nn::atk::detail
