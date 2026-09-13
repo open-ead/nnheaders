@@ -4,7 +4,6 @@
 #include <nn/atk/atk_ExternalSoundPlayer.h>
 #include <nn/atk/atk_SoundHandle.h>
 #include <nn/atk/atk_SoundPlayer.h>
-#include "nn/atk/atk_Global.h"
 
 namespace nn::atk::detail {
 
@@ -725,6 +724,15 @@ u32 BasicSound::CalculateOutLineFlag() const {
         outputLineFlag = m_AmbientParam.GetOutputLineFlag();
 
     return outputLineFlag;
+}
+
+void BasicSound::ApplyCommonParam(OutputParam& param) const {
+    param.mixMode = m_CommonParam.mixMode;
+    param.pan += m_CommonParam.pan;
+    param.span += m_CommonParam.span;
+
+    for (int i{0}; i < DefaultBusCount; ++i)
+        param.send[i] += m_CommonParam.send[i];
 }
 
 }  // namespace nn::atk::detail
