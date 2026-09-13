@@ -336,6 +336,7 @@ public:
     virtual bool IsPrepared() const = 0;
     bool IsPause() const;
     bool IsMute() const;
+    
     bool IsStarted() const { return m_StartedFlag; }
 
     void SetPriority(int priority, int ambientPriority);
@@ -433,6 +434,7 @@ public:
     int GetRemainingFadeFrames() const;
     int GetRemainingPauseFadeFrames() const;
     int GetRemainingMuteFadeFrames() const;
+
     int GetPlayerPriority() const { return m_Priority; }
 
     void CalculateSoundParamCalculationValues(SoundParamCalculationValues* pOutValue) const;
