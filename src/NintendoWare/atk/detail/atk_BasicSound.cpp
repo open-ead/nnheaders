@@ -361,6 +361,10 @@ float BasicSound::GetPitch() const {
     return m_Pitch;
 }
 
+void BasicSound::SetLpfFreq(float lpfFreq) {
+    m_LpfFreq = lpfFreq;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
