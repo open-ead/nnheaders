@@ -4,4 +4,11 @@ namespace nn::atk::detail {
 
 ExternalSoundPlayer::ExternalSoundPlayer() = default;
 
+ExternalSoundPlayer::~ExternalSoundPlayer() {
+    for (auto itr{m_SoundList.begin()}; itr != m_SoundList.end();) {
+        auto curItr{itr++};
+        curItr->DetachExternalSoundPlayer(this);
+    }
+}
+
 }  // namespace nn::atk::detail
