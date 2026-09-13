@@ -39,7 +39,7 @@ static_assert(sizeof(PlayerParamSet) == 0x70);
 class BasicSoundPlayer {
 public:
     BasicSoundPlayer();
-    virtual ~BasicSoundPlayer();
+    virtual ~BasicSoundPlayer() = default;
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     virtual void Initialize();
