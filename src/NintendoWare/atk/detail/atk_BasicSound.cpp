@@ -656,4 +656,26 @@ void BasicSound::DetachTempGeneralHandle() {
     m_pTempGeneralHandle->DetachSound();
 }
 
+float BasicSound::CalculateVolume() const {
+    float volume{1.0f};
+
+    if (m_MuteState == MuteState_Muted)
+        return 0.0f;
+
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
+    if (!IsVolumeThroughModeUsed())
+#endif
+        volume = m_InitVolume;
+
+    volume *= m_pSoundPlayer->GetVolume();
+    volume *= m_CommonParam.GetVolume();
+    volume *= m_FadeVolume.GetValue();
+    volume *= m_PauseFadeVolume.GetValue();
+    volume *= m_MuteFadeVolume.GetValue();
+    volume *= m_AmbientParam.GetVolume();
+    volume *= m_ActorParam.volume;
+
+    return volume;
+}
+
 }  // namespace nn::atk::detail
