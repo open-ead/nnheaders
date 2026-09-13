@@ -420,7 +420,6 @@ public:
     float GetOutputSurroundPan(OutputDevice device) const;
     float GetOutputMainSend(OutputDevice device) const;
     float GetOutputFxSend(OutputDevice device, AuxBus bus) const;
-    float GetOutputFxSend(OutputDevice device) const;
     bool IsOutputBusMixVolumeEnabled(OutputDevice device, int subMixBus) const;
     ChannelMixVolume GetOutputBusMixVolume(OutputDevice device, int srcChNo, int subMixBus) const;
     float GetOutputAdditionalSend(OutputDevice device, int bus) const;
