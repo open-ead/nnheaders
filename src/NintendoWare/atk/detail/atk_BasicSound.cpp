@@ -345,6 +345,10 @@ float BasicSound::GetInitialVolume() const {
     return m_InitVolume;
 }
 
+void BasicSound::SetVolume(float volume, int frames) {
+    m_CommonParam.SetVolume(volume < 0.0f ? 0.0f : volume, frames);
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
