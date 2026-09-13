@@ -361,7 +361,7 @@ public:
     void ResetOutputLine();
 
     void SetPlayerPriority(int priority);
-    
+
     void SetMixMode(MixMode mixMode);
     MixMode GetMixMode();
 
@@ -377,6 +377,7 @@ public:
     void SetFxSend(AuxBus bus, float send);
     float GetFxSend(AuxBus bus) const;
 
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetSend(int bus, float send);
     float GetSend(int bus) const;
 
@@ -386,9 +387,11 @@ public:
 
     int GetSendBusCount();
     int GetSendChannelCount();
+#endif
 
     void SetPanMode(PanMode mode);
     void SetPanCurve(PanCurve curve);
+
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditionalParam* addr,
                                       OutputAdditionalParam* addrForPlayer);
