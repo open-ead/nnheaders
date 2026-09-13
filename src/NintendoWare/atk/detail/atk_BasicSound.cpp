@@ -353,6 +353,10 @@ float BasicSound::GetVolume() const {
     return m_CommonParam.GetVolume();
 }
 
+void BasicSound::SetPitch(float pitch) {
+    m_Pitch = pitch;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
