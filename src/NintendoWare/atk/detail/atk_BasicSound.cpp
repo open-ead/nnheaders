@@ -414,6 +414,10 @@ void BasicSound::SetSurroundPan(float span) {
     m_CommonParam.span = span;
 }
 
+float BasicSound::GetSurroundPan() const {
+    return m_CommonParam.span;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
