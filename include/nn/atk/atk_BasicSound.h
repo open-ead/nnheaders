@@ -604,9 +604,9 @@ private:
 
     CommonParam m_CommonParam;
 
-    OutputParam m_OutputParam[1];
+    OutputParam m_OutputParam[OutputDevice_Count];
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-    OutputAdditionalParam* m_pOutputAdditionalParam[1]{};
+    OutputAdditionalParam* m_pOutputAdditionalParam[OutputDevice_Count]{};
 #endif
     void* m_pUserParam{};
     size_t m_UserParamSize{0};

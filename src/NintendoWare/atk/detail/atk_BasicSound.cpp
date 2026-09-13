@@ -69,7 +69,7 @@ bool BasicSound::Initialize(OutputReceiver* pOutputReceiver)
 
     m_CommonParam.Initialize();
 
-    for (int i{0}; i < 1; ++i) {
+    for (int i{0}; i < OutputDevice_Count; ++i) {
         m_OutputParam[i].Initialize();
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
         if (m_pOutputAdditionalParam[i] != nullptr)
@@ -458,6 +458,10 @@ void BasicSound::SetPanCurve(PanCurve curve) {
 
         cmdmgr.PushCommand(command);
     }
+}
+
+void BasicSound::SetOutputVolume(OutputDevice device, float volume) {
+    m_OutputParam[device].volume = volume;
 }
 
 void BasicSound::SetId(u32 id) {
