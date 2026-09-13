@@ -22,6 +22,7 @@ enum DriverCommandId {
     DriverCommandId_PlayerStop,
     DriverCommandId_PlayerPause,
     DriverCommandId_PlayerParam,
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     DriverCommandId_PlayerAdditionalSend,
     DriverCommandId_PlayerBusMixVolumeUsed,
     DriverCommandId_PlayerBusMixVolume,
@@ -29,6 +30,7 @@ enum DriverCommandId {
     DriverCommandId_PlayerBinaryVolume,
     DriverCommandId_PlayerVolumeThroughModeUsed,
     DriverCommandId_PlayerVolumeThroughMode,
+#endif
     DriverCommandId_PlayerClearResourceFlag,
     DriverCommandId_SeqSetup,
     DriverCommandId_SeqLoad,

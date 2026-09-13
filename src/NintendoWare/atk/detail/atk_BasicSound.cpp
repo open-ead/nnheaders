@@ -189,6 +189,18 @@ void BasicSound::GetPriority(int* priority, int* ambientPriority) const {
         *ambientPriority = m_AmbientParam.GetPriority();
 }
 
+void BasicSound::ClearIsFinalizedForCannotAllocatedResourceFlag() {
+    DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+
+    auto* command{cmdmgr.AllocCommand<DriverCommandPlayerClearResourceFlag>()};
+    if (command == nullptr)
+        return;
+
+    command->id = DriverCommandId_PlayerClearResourceFlag;
+    command->player = GetBasicSoundPlayerHandle();
+    cmdmgr.PushCommand(command);
+}
+
 void BasicSound::Finalize() {
     if (m_State != State_Initialized)
         return;
@@ -422,6 +434,14 @@ bool BasicSound::IsMute() const {
     default:
         return false;
     }
+}
+
+void BasicSound::Update() {
+    // TODO
+}
+
+void BasicSound::UpdateParam() {
+    // TODO
 }
 
 void BasicSound::UpdateMoveValue() {
