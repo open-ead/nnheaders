@@ -17,6 +17,10 @@ void DisposeCallbackManager::UnregisterDisposeCallback(DisposeCallback* callback
     m_CallbackList.erase(m_CallbackList.iterator_to(*callback));
 }
 
+u64 DisposeCallbackManager::GetCallbackCount() const {
+    return m_CallbackList.size();
+}
+
 // NON_MATCHING
 void DisposeCallbackManager::Dispose(const void* mem, size_t size) {
     const void* start{mem};

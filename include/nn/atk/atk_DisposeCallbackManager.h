@@ -14,14 +14,13 @@ public:
 
     static DisposeCallbackManager& GetInstance();
 
-
     void Dispose(const void* mem, size_t size);
 
     void RegisterDisposeCallback(DisposeCallback* callback);
     void UnregisterDisposeCallback(DisposeCallback* callback);
 
     u64 GetCallbackCount() const;
-    
+
     DisposeCallbackManager();
 
 private:
