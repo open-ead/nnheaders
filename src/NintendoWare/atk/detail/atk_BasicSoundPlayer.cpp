@@ -7,6 +7,7 @@ namespace nn::atk::detail::driver {
 BasicSoundPlayer::BasicSoundPlayer() : m_Event(os::EventClearMode_ManualClear) {
     m_Event.Signal();
 }
+
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
 void BasicSoundPlayer::Initialize()
 #else
@@ -36,6 +37,11 @@ void BasicSoundPlayer::Finalize() {
 #endif
     
     m_Event.Signal();
+}
+
+void BasicSoundPlayer::SetBiquadFilter(int type, float value) {
+    m_PlayerParamSet.biquadType = type;
+    m_PlayerParamSet.biquadValue = value;
 }
 
 }  // namespace nn::atk::detail::driver

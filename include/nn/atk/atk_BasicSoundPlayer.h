@@ -95,6 +95,7 @@ public:
     void SetTvBinaryVolume(float volume);
     void SetTvVolumeThroughModeUsed(bool isVolumeThroughModeEnabled);
     void SetTvVolumeThroughMode(int bus, u8 volumeThroughMode);
+
     void SetTvAdditionalParam(const OutputAdditionalParam& param) {
         *m_pTvAdditionalParam = param;
     };
