@@ -494,6 +494,10 @@ void BasicSound::SetOutputChannelMixParameter(OutputDevice device, u32 srcChNo,
         m_OutputParam[device].mixParameter[srcChNo].ch[i] = param.ch[i];
 }
 
+float BasicSound::GetOutputVolume(OutputDevice device) const {
+    return m_OutputParam[device].volume;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
