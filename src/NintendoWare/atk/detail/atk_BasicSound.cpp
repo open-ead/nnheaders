@@ -420,6 +420,12 @@ bool BasicSound::IsMute() const {
     }
 }
 
+void BasicSound::UpdateMoveValue() {
+    m_FadeVolume.Update();
+    m_MuteFadeVolume.Update();
+    m_CommonParam.Update();
+}
+
 float BasicSound::CalculateVolume() const {
     float volume{1.0f};
 
