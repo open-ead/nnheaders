@@ -518,6 +518,10 @@ MixParameter BasicSound::GetOutputChannelMixParameter(OutputDevice device, u32 s
     return m_OutputParam[device].mixParameter[srcChNo];
 }
 
+int BasicSound::GetRemainingFadeFrames() const {
+    return m_FadeVolume.GetRemainingCount();
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
