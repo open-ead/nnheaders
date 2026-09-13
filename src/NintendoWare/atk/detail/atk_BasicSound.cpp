@@ -357,6 +357,10 @@ void BasicSound::SetPitch(float pitch) {
     m_Pitch = pitch;
 }
 
+float BasicSound::GetPitch() const {
+    return m_Pitch;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
