@@ -42,9 +42,9 @@ public:
     virtual ~BasicSoundPlayer();
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    virtual bool Initialize();
+    virtual void Initialize();
 #else
-    virtual bool Initialize(OutputReceiver* pOutputReceiver);
+    virtual void Initialize(OutputReceiver* pOutputReceiver);
 #endif
     virtual void Finalize();
 

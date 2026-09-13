@@ -65,9 +65,9 @@ public:
     ~WaveSoundPlayer() override;
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    bool Initialize() override;
+    void Initialize() override;
 #else
-    bool Initialize(OutputReceiver* pOutputReceiver) override;
+    void Initialize(OutputReceiver* pOutputReceiver) override;
 #endif
     void Finalize() override;
 
