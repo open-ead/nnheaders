@@ -726,6 +726,37 @@ u32 BasicSound::CalculateOutLineFlag() const {
     return outputLineFlag;
 }
 
+void BasicSound::CalculateOutputParam(OutputParam* pOutParam, OutputDevice device) const {
+    if (device != OutputDevice_Main) {
+        NN_UNEXPECTED_DEFAULT;
+        return;
+    }
+
+    const OutputAmbientParam* pAmbientParam{&m_AmbientParam.GetTvParam()};
+    float actorVolume{m_ActorParam.tvVolume};
+    float actorPan{m_ActorParam.tvPan};
+
+    *pOutParam = m_OutputParam[device];
+
+    ApplyCommonParam(*pOutParam);
+
+    const SoundPlayer* pSoundPlayer{m_pSoundPlayer};
+
+    pOutParam->volume *=
+        pSoundPlayer->GetOutputVolume(device) * pAmbientParam->GetVolume() * actorVolume;
+    pOutParam->pan += actorPan + pAmbientParam->GetPan();
+    pOutParam->span += pAmbientParam->GetSurroundPan();
+
+    for (int i{0}; i < DefaultBusCount; ++i) {
+        if (i == OutputDeviceIndex_Main)
+            pOutParam->send[i] += pSoundPlayer->GetOutputMainSend(device);
+        else
+            pOutParam->send[i] +=
+                pSoundPlayer->GetOutputFxSend(device, static_cast<AuxBus>(i - 1)) +
+                pAmbientParam->GetEffectSend(i - 1);
+    }
+}
+
 void BasicSound::ApplyCommonParam(OutputParam& param) const {
     param.mixMode = m_CommonParam.mixMode;
     param.pan += m_CommonParam.pan;
