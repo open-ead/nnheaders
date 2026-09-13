@@ -398,6 +398,10 @@ void BasicSound::SetMixMode(MixMode mixMode) {
     m_CommonParam.mixMode = mixMode;
 }
 
+MixMode BasicSound::GetMixMode() {
+    return m_CommonParam.mixMode;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
