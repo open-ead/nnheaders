@@ -32,4 +32,21 @@ void ExternalSoundPlayer::PauseAllSound(bool flag, int fadeFrames, PauseMode pau
     }
 }
 
+BasicSound* ExternalSoundPlayer::GetLowestPrioritySound() {
+    if (m_SoundList.empty())
+        return nullptr;
+
+    int priority{PlayerPriorityMax + 1};
+    BasicSound* sound{};
+
+    for (auto itr{m_SoundList.begin()}; itr != m_SoundList.end(); ++itr) {
+        int itrPriority{itr->CalcCurrentPlayerPriority()};
+
+        sound = priority > itrPriority ? &*itr : sound;
+        priority = priority > itrPriority ? itrPriority : priority;
+    }
+
+    return sound;
+}
+
 }  // namespace nn::atk::detail
