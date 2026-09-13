@@ -797,4 +797,8 @@ void BasicSound::DetachExternalSoundPlayer([[maybe_unused]] ExternalSoundPlayer*
     m_pExtSoundPlayer = nullptr;
 }
 
+void BasicSound::AttachPlayerHeap(PlayerHeap* pHeap) {
+    m_pPlayerHeap = pHeap;
+}
+
 }  // namespace nn::atk::detail
