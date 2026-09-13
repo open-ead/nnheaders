@@ -769,4 +769,8 @@ void BasicSound::SetOutputAdditionalParamAddr(OutputDevice device, OutputAdditio
 }
 #endif
 
+void BasicSound::SetSetupTick(const os::Tick& tick) {
+    m_SetupTick = tick;
+}
+
 }  // namespace nn::atk::detail

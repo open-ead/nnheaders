@@ -440,8 +440,9 @@ public:
     void CalculateSoundParamCalculationValues(SoundParamCalculationValues* pOutValue) const;
 
     void SetId(u32 id);
+    
     u32 GetId() const { return m_Id; }
-    u32 GetInstanceId() const;
+    u32 GetInstanceId() const { return m_InstanceId; }
     u32 GetPlayFrameCount() const { return m_PlayingCounter; }
 
     void SetSetupTick(const os::Tick& tick);
