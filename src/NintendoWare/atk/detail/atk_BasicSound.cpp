@@ -447,6 +447,19 @@ void BasicSound::SetPanMode(PanMode mode) {
     }
 }
 
+void BasicSound::SetPanCurve(PanCurve curve) {
+    {
+        DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+        auto* command{cmdmgr.AllocCommand<DriverCommandPlayerPanParam>()};
+
+        command->id = DriverCommandId_PlayerPancurve;
+        command->player = GetBasicSoundPlayerHandle();
+        command->panCurve = curve;
+
+        cmdmgr.PushCommand(command);
+    }
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
