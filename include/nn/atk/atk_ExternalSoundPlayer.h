@@ -12,29 +12,32 @@ public:
         BasicSound,
         util::IntrusiveListMemberNodeTraits<BasicSound, &BasicSound::m_ExtSoundPlayerPlayLink>>;
 
-    virtual ~ExternalSoundPlayer();
-    virtual bool CanPlaySound(s32);
-
     ExternalSoundPlayer();
+    virtual ~ExternalSoundPlayer();
 
-    void StopAllSound(s32 fadeFrames);
-    void PauseAllSound(bool, s32);
-    void PauseAllSound(bool, s32, PauseMode);
+    void StopAllSound(int fadeFrames);
+
+    void PauseAllSound(bool flag, int fadeFrames);
+    void PauseAllSound(bool flag, int fadeFrames, PauseMode pauseMode);
+
+    int GetPlayingSoundCount() const { return m_SoundList.size(); }
+
+    void SetPlayableSoundCount(int count);
+    int GetPlayableSoundCount() const { return m_PlayableCount; }
+
+    virtual bool CanPlaySound(int startPriority);
+
+    bool AppendSound(BasicSound* sound);
+    void RemoveSound(BasicSound* sound);
 
     void Finalize(SoundActor* actor);
 
-    void RemoveSound(BasicSound* sound);
-    bool AppendSound(BasicSound* sound);
-
+protected:
     BasicSound* GetLowestPrioritySound();
-
-    void SetPlayableSoundCount(s32 count);
-
-    bool CanPlaySound();
 
 private:
     SoundList m_SoundList;
-    s32 m_PlayableCount;
+    int m_PlayableCount{1};
 };
 static_assert(sizeof(ExternalSoundPlayer) == 0x20);
 
