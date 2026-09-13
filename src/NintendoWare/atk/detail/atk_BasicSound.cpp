@@ -718,4 +718,13 @@ void BasicSound::CalculateBiquadFilter(int* pOutBiquadType, float* pOutBiquadVal
     *pOutBiquadValue = biquadFilterValue;
 }
 
+u32 BasicSound::CalculateOutLineFlag() const {
+    u32 outputLineFlag{m_OutputLineFlag};
+
+    if (m_AmbientParam.GetOutputLineFlag() != SoundAmbientParam::OutputLineFlagInherit)
+        outputLineFlag = m_AmbientParam.GetOutputLineFlag();
+
+    return outputLineFlag;
+}
+
 }  // namespace nn::atk::detail
