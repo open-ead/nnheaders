@@ -434,6 +434,19 @@ float BasicSound::GetFxSend(AuxBus bus) const {
     return m_CommonParam.send[bus + 1L];
 }
 
+void BasicSound::SetPanMode(PanMode mode) {
+    {
+        DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+        auto* command{cmdmgr.AllocCommand<DriverCommandPlayerPanParam>()};
+
+        command->id = DriverCommandId_PlayerPanmode;
+        command->player = GetBasicSoundPlayerHandle();
+        command->panMode = mode;
+
+        cmdmgr.PushCommand(command);
+    }
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
