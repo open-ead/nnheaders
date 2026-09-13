@@ -374,6 +374,14 @@ void BasicSound::SetBiquadFilter(int type, float value) {
     m_BiquadFilterValue = value;
 }
 
+void BasicSound::GetBiquadFilter(int* type, float* value) const {
+    if (type != nullptr)
+        *type = static_cast<int>(m_BiquadFilterType);
+
+    if (value != nullptr)
+        *value = m_BiquadFilterValue;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
