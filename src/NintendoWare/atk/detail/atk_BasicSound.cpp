@@ -406,6 +406,10 @@ void BasicSound::SetPan(float pan) {
     m_CommonParam.pan = pan;
 }
 
+float BasicSound::GetPan() const {
+    return m_CommonParam.pan;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
