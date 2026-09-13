@@ -488,6 +488,12 @@ void BasicSound::SetOutputFxSend(OutputDevice device, AuxBus bus, float send) {
     m_OutputParam[device].send[1L + bus] = send;
 }
 
+void BasicSound::SetOutputChannelMixParameter(OutputDevice device, u32 srcChNo,
+                                              MixParameter param) {
+    for (int i{0}; i < ChannelIndex_Count; ++i)
+        m_OutputParam[device].mixParameter[srcChNo].ch[i] = param.ch[i];
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
