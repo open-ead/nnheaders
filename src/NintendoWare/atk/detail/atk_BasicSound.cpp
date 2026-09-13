@@ -341,6 +341,10 @@ void BasicSound::SetInitialVolume(float volume) {
     m_InitVolume = volume < 0.0f ? 0.0f : volume;
 }
 
+float BasicSound::GetInitialVolume() const {
+    return m_InitVolume;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
