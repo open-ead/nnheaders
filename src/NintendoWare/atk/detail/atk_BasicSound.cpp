@@ -694,4 +694,9 @@ float BasicSound::CalculatePitch() const {
     return m_Pitch * m_AmbientParam.GetPitch() * m_ActorParam.pitch;
 }
 
+float BasicSound::CalculateLpfFrequency() const {
+    return m_LpfFreq + m_AmbientParam.GetLpf() + GetSoundPlayer()->GetLowPassFilterFrequency() +
+           m_ActorParam.lpf;
+}
+
 }  // namespace nn::atk::detail
