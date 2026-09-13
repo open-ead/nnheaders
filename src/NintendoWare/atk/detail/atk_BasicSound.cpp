@@ -4,6 +4,7 @@
 #include <nn/atk/atk_ExternalSoundPlayer.h>
 #include <nn/atk/atk_SoundHandle.h>
 #include <nn/atk/atk_SoundPlayer.h>
+#include "nn/atk/atk_Global.h"
 
 namespace nn::atk::detail {
 
@@ -697,6 +698,24 @@ float BasicSound::CalculatePitch() const {
 float BasicSound::CalculateLpfFrequency() const {
     return m_LpfFreq + m_AmbientParam.GetLpf() + GetSoundPlayer()->GetLowPassFilterFrequency() +
            m_ActorParam.lpf;
+}
+
+void BasicSound::CalculateBiquadFilter(int* pOutBiquadType, float* pOutBiquadValue) const {
+    int biquadFilterType{m_BiquadFilterType};
+    float biquadFilterValue{m_BiquadFilterValue};
+
+    if (biquadFilterType == BiquadFilterType_Inherit) {
+        biquadFilterType = GetSoundPlayer()->GetBiquadFilterType();
+        if (biquadFilterType == BiquadFilterType_Inherit) {
+            biquadFilterType = m_AmbientParam.GetBiquadFilterType();
+            biquadFilterValue = m_AmbientParam.GetBiquadFilterValue();
+        } else {
+            biquadFilterValue = GetSoundPlayer()->GetBiquadFilterValue();
+        }
+    }
+
+    *pOutBiquadType = biquadFilterType;
+    *pOutBiquadValue = biquadFilterValue;
 }
 
 }  // namespace nn::atk::detail
