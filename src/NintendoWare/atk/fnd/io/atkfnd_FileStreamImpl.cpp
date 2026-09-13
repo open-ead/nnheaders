@@ -5,6 +5,7 @@
 #include <nn/atk/fnd/basis/atkfnd_Inlines.h>
 
 namespace nn::atk::detail::fnd {
+
 size_t FileStreamImpl::Read(void* buf, size_t length, FndResult* result) {
     if (IsCacheEnabled())
         return m_StreamCache.Read(buf, length, result, m_pAccessLog, this);
@@ -42,13 +43,10 @@ void FileStreamImpl::EnableCache(void* buffer, size_t length) {
     if (m_StreamCache.IsInitialized())
         m_StreamCache.Finalize();
 
-    void* alignedBuffer {util::BytePtr(buffer).AlignUp(GetIoBufferAlignment()).Get()};
+    void* alignedBuffer{util::BytePtr(buffer).AlignUp(GetIoBufferAlignment()).Get()};
 
-    m_StreamCache.Initialize(
-        &m_DirectStream, 
-        alignedBuffer, 
-        length + GetOffsetFromPtr(alignedBuffer, buffer)
-    );
+    m_StreamCache.Initialize(&m_DirectStream, alignedBuffer,
+                             length + GetOffsetFromPtr(alignedBuffer, buffer));
 }
 
 void FileStreamImpl::DisableCache() {
@@ -58,4 +56,5 @@ void FileStreamImpl::DisableCache() {
 void FileStreamImpl::ValidateAlignment([[maybe_unused]] const void* buf) const {
     GetIoBufferAlignment();
 }
-} // namespace nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd

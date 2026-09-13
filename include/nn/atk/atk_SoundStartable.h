@@ -1,12 +1,13 @@
 #pragma once
 
+#include <nn/atk/atk_OutputReceiver.h>
 #include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/atk_SoundHandle.h>
-#include <nn/atk/detail/atk_RegionManager.h>
 #include <nn/atk/atk_StreamBufferPool.h>
-#include <nn/atk/atk_OutputReceiver.h>
+#include <nn/atk/detail/atk_RegionManager.h>
 
 namespace nn::atk {
+
 class SoundStartable {
 public:
     struct StartInfo {
@@ -17,23 +18,23 @@ public:
         };
 
         enum EnableFlagBit {
-            EnableFlagBit_StartOffset           = 1 <<  0,
-            EnableFlagBit_PlayerId              = 1 <<  1,
-            EnableFlagBit_PlayerPriority        = 1 <<  2,
-            EnableFlagBit_ActorPlayerId         = 1 <<  3,
-            EnableFlagBit_SequenceSoundInfo     = 1 <<  4,
-            EnableFlagBit_StreamSoundInfo       = 1 <<  5,
-            EnableFlagBit_WaveSoundInfo         = 1 <<  6,
-            EnableFlagBit_VoiceRendererType     = 1 <<  7,
-            EnableFlagBit_FadeFrame             = 1 <<  8,
-            EnableFlagBit_SoundStopCallback     = 1 <<  9,
-            EnableFlagBit_StreamSoundMetaInfo   = 1 << 10,
-            EnableFlagBit_StreamSoundMetaInfo2  = 1 << 11,
-            EnableFlagBit_DelayTime             = 1 << 12,
-            EnableFlagBit_DelayCount            = 1 << 13,
-            EnableFlagBit_UpdateType            = 1 << 14,
-            EnableFlagBit_SubMixIndex           = 1 << 15,
-            EnableFlagBit_OutputReceiver        = 1 << 16,
+            EnableFlagBit_StartOffset = 1 << 0,
+            EnableFlagBit_PlayerId = 1 << 1,
+            EnableFlagBit_PlayerPriority = 1 << 2,
+            EnableFlagBit_ActorPlayerId = 1 << 3,
+            EnableFlagBit_SequenceSoundInfo = 1 << 4,
+            EnableFlagBit_StreamSoundInfo = 1 << 5,
+            EnableFlagBit_WaveSoundInfo = 1 << 6,
+            EnableFlagBit_VoiceRendererType = 1 << 7,
+            EnableFlagBit_FadeFrame = 1 << 8,
+            EnableFlagBit_SoundStopCallback = 1 << 9,
+            EnableFlagBit_StreamSoundMetaInfo = 1 << 10,
+            EnableFlagBit_StreamSoundMetaInfo2 = 1 << 11,
+            EnableFlagBit_DelayTime = 1 << 12,
+            EnableFlagBit_DelayCount = 1 << 13,
+            EnableFlagBit_UpdateType = 1 << 14,
+            EnableFlagBit_SubMixIndex = 1 << 15,
+            EnableFlagBit_OutputReceiver = 1 << 16,
         };
 
         struct SequenceSoundInfo {
@@ -89,7 +90,7 @@ public:
         UpdateType updateType;
         s32 subMixIndex;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-        OutputReceiver* pOutputReceiver; 
+        OutputReceiver* pOutputReceiver;
 #endif
     };
 
@@ -128,18 +129,18 @@ public:
 
     virtual ~SoundStartable() = 0;
 
-    virtual StartResult detail_SetupSound(SoundHandle* handle, u32 soundId, 
-                                          bool holdFlag, const char* soundArchiveName,
+    virtual StartResult detail_SetupSound(SoundHandle* handle, u32 soundId, bool holdFlag,
+                                          const char* soundArchiveName,
                                           const StartInfo* startInfo) = 0;
-                                          
+
     virtual SoundArchive::ItemId detail_GetItemId(char* pString) = 0;
     virtual SoundArchive::ItemId detail_GetItemId(char* pString, const char* soundArchiveName) = 0;
 
-    StartResult StartSound(SoundHandle* handle, u32 soundId, 
-                           const char* soundArchiveName, const StartInfo* startInfo);
+    StartResult StartSound(SoundHandle* handle, u32 soundId, const char* soundArchiveName,
+                           const StartInfo* startInfo);
     StartResult StartSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo);
-    StartResult StartSound(SoundHandle* handle, const char* pString, 
-                           const char* soundArchiveName, const StartInfo* startInfo);
+    StartResult StartSound(SoundHandle* handle, const char* pString, const char* soundArchiveName,
+                           const StartInfo* startInfo);
     StartResult StartSound(SoundHandle* handle, const char* soundArchiveName,
                            const StartInfo* startInfo);
 
@@ -147,16 +148,17 @@ public:
                           const StartInfo* startInfo);
     StartResult HoldSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo);
     StartResult HoldSound(SoundHandle* handle, const char* pString, const StartInfo* startInfo);
-    StartResult HoldSound(SoundHandle* handle, const char* pString, const char* soundArchiveName, 
+    StartResult HoldSound(SoundHandle* handle, const char* pString, const char* soundArchiveName,
                           const StartInfo* startInfo);
 
     StartResult PrepareSound(SoundHandle* handle, u32 soundId, const char* soundArchiveName,
                              const StartInfo* startInfo);
     StartResult PrepareSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo);
-    StartResult PrepareSound(SoundHandle* handle, const char* pString, 
-                             const char* soundArchiveName, const StartInfo* startInfo);
+    StartResult PrepareSound(SoundHandle* handle, const char* pString, const char* soundArchiveName,
+                             const StartInfo* startInfo);
     StartResult PrepareSound(SoundHandle* handle, const char* soundArchiveName,
                              const StartInfo* startInfo);
 };
 static_assert(sizeof(SoundStartable) == 0x8);
-} // namespace nn::atk
+
+}  // namespace nn::atk

@@ -1,6 +1,7 @@
 #pragma once
 
 namespace nn::audio {
+
 enum SampleFormat {
     SampleFormat_Invalid,
     SampleFormat_PcmInt8,
@@ -10,4 +11,5 @@ enum SampleFormat {
     SampleFormat_PcmFloat,
     SampleFormat_Adpcm,
 };
-} // namespace nn::audio
+
+}  // namespace nn::audio

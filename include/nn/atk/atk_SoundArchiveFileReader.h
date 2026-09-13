@@ -4,9 +4,10 @@
 #include <nn/atk/atk_SoundArchiveFile.h>
 
 namespace nn::atk::detail {
+
 class SoundArchiveFileReader {
 public:
-    constexpr static s32 SignatureFile = 0x52415346; // FSAR
+    constexpr static s32 SignatureFile = 0x52415346;  // FSAR
     constexpr static s32 InvalidOffset = -1;
     constexpr static s32 InvalidSize = -1;
 
@@ -44,17 +45,23 @@ public:
     bool ReadSoundInfo(SoundArchive::ItemId soundId, SoundArchive::SoundInfo* info) const;
     bool ReadBankInfo(SoundArchive::ItemId bankId, SoundArchive::BankInfo* info) const;
     bool ReadPlayerInfo(SoundArchive::ItemId playerId, SoundArchive::PlayerInfo* info) const;
-    bool ReadSoundGroupInfo(SoundArchive::ItemId soundGroupId, SoundArchive::SoundGroupInfo* info) const;
+    bool ReadSoundGroupInfo(SoundArchive::ItemId soundGroupId,
+                            SoundArchive::SoundGroupInfo* info) const;
     bool ReadGroupInfo(SoundArchive::ItemId groupId, SoundArchive::GroupInfo* info) const;
     bool ReadFileInfo(SoundArchive::FileId id, SoundArchive::FileInfo* info, s32 index) const;
-    bool ReadWaveArchiveInfo(SoundArchive::ItemId warcId, SoundArchive::WaveArchiveInfo* info) const;
+    bool ReadWaveArchiveInfo(SoundArchive::ItemId warcId,
+                             SoundArchive::WaveArchiveInfo* info) const;
     bool ReadSoundArchivePlayerInfo(SoundArchive::SoundArchivePlayerInfo* info) const;
     bool ReadSound3DInfo(SoundArchive::ItemId soundId, SoundArchive::Sound3DInfo* info) const;
-    bool ReadSequenceSoundInfo(SoundArchive::ItemId soundId, SoundArchive::SequenceSoundInfo* info) const;
-    bool ReadStreamSoundInfo(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo* info) const;
-    bool ReadStreamSoundInfo2(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo2* info) const;
+    bool ReadSequenceSoundInfo(SoundArchive::ItemId soundId,
+                               SoundArchive::SequenceSoundInfo* info) const;
+    bool ReadStreamSoundInfo(SoundArchive::ItemId soundId,
+                             SoundArchive::StreamSoundInfo* info) const;
+    bool ReadStreamSoundInfo2(SoundArchive::ItemId soundId,
+                              SoundArchive::StreamSoundInfo2* info) const;
     bool ReadWaveSoundInfo(SoundArchive::ItemId soundId, SoundArchive::WaveSoundInfo* info) const;
-    bool ReadAdvancedWaveSoundInfo(SoundArchive::ItemId soundId, SoundArchive::AdvancedWaveSoundInfo* info) const;
+    bool ReadAdvancedWaveSoundInfo(SoundArchive::ItemId soundId,
+                                   SoundArchive::AdvancedWaveSoundInfo* info) const;
 
     Util::Table<u32>* GetWaveArchiveIdTable(SoundArchive::ItemId id) const;
     SoundArchive::SoundType GetSoundType(SoundArchive::ItemId soundId) const;
@@ -81,4 +88,5 @@ private:
     SoundArchiveFile::FileBlock* m_pFileBlock;
 #endif
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

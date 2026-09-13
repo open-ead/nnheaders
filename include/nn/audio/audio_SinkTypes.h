@@ -1,6 +1,7 @@
 #pragma once
 
 namespace nn::audio {
+
 struct SinkInfo {};
 
 struct DeviceSinkType {
@@ -17,4 +18,5 @@ struct CircularBufferSinkType {
     SinkInfo* _handle;
 };
 static_assert(sizeof(CircularBufferSinkType) == 0x8);
-} // namespace nn::audio
+
+}  // namespace nn::audio

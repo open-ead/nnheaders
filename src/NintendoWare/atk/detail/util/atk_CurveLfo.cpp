@@ -53,7 +53,7 @@ void CurveLfo::InitializeCurveTable() {
 
 CurveLfo::CurveFunc CurveLfo::RegisterUserCurve(CurveFunc func, u32 index) {
     s32 tableIndex = {static_cast<s32>(index + CurveLfoParam::CurveType_UserMin)};
-    
+
     CurveFunc tmp{g_CurveFuncTable[tableIndex]};
     g_CurveFuncTable[tableIndex] = func;
 
@@ -62,7 +62,7 @@ CurveLfo::CurveFunc CurveLfo::RegisterUserCurve(CurveFunc func, u32 index) {
 
 CurveLfo::CurveFunc CurveLfo::UnregisterUserCurve(u32 index) {
     s32 tableIndex = {static_cast<s32>(index + CurveLfoParam::CurveType_UserMin)};
-    
+
     CurveFunc tmp{g_CurveFuncTable[tableIndex]};
     g_CurveFuncTable[tableIndex] = nullptr;
 

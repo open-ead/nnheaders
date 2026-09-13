@@ -6,6 +6,7 @@
 #include <nn/atk/detail/atk_IntrusiveList.h>
 
 namespace nn::atk::detail {
+
 class SoundArchiveManager {
 public:
     using ContainerList = IntrusiveList<AddonSoundArchiveContainer>;
@@ -40,7 +41,7 @@ public:
 
     void SetParametersHook(SoundArchiveParametersHook*);
     SoundArchiveParametersHook* GetParametersHook() const;
-    
+
 private:
     SoundArchive* m_pMainSoundArchive;
     SoundDataManager* m_pMainSoundDataManager;
@@ -50,4 +51,5 @@ private:
     SoundArchiveParametersHook* m_pParametersHook;
 };
 static_assert(sizeof(SoundArchiveManager) == 0x38);
+
 }  // namespace nn::atk::detail

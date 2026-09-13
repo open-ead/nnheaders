@@ -3,6 +3,7 @@
 #include <nn/types.h>
 
 namespace nn::atk {
+
 class OutputReceiver {
 public:
     enum ReceiverType {
@@ -17,4 +18,5 @@ public:
     virtual bool IsSoundSendClampEnabled(s32 bus) const = 0;
 };
 static_assert(sizeof(OutputReceiver) == 0x8);
-} // namespace nn::atk
+
+}  // namespace nn::atk

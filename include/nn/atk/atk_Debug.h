@@ -3,6 +3,7 @@
 #include <nn/types.h>
 
 namespace nn::atk {
+
 enum DebugWarningFlag {
     DebugWarningFlag_NotEnoughInstance,
     DebugWarningFlag_NotEnoughSeqsound,
@@ -15,6 +16,7 @@ enum DebugWarningFlag {
 void Debug_SetWarningFlag(DebugWarningFlag warning, bool enable);
 
 namespace detail {
+
 enum DebugSoundType {
     DebugSoundType_Seqsound,
     DebugSoundType_Strmsound,
@@ -25,6 +27,7 @@ bool Debug_GetWarningFlag(DebugWarningFlag warning);
 DebugWarningFlag Debug_GetDebugWarningFlagFromSoundType(DebugSoundType type);
 const char* Debug_GetSoundTypeString(DebugSoundType type);
 
-using DebugLogFunc = void(*)(char*);
-} // namespace nn::atk::detail
-} // namespace nn::atk
+using DebugLogFunc = void (*)(char*);
+
+}  // namespace detail
+}  // namespace nn::atk

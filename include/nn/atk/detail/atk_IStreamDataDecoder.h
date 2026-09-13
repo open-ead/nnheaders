@@ -6,17 +6,14 @@
 
 namespace nn::atk::detail {
 namespace driver {
+
 class StreamSoundPlayer;
-} // namespace nn::atk::detail::driver
+
+}  // namespace driver
 
 class IStreamDataDecoder {
 public:
-    enum DecodeType {
-        DecodeType_Normal,
-        DecodeType_Loop,
-        DecodeType_Idling,
-        DecodeType_Count
-    };
+    enum DecodeType { DecodeType_Normal, DecodeType_Loop, DecodeType_Idling, DecodeType_Count };
 
     struct DataInfo {
         s32 channelCount;
@@ -38,10 +35,11 @@ public:
         position_t cacheStartPosition;
         size_t cachedLength;
         position_t cacheCurrentPosition;
-        driver::StreamSoundPlayer* player; 
+        driver::StreamSoundPlayer* player;
     };
     static_assert(sizeof(CacheProfile) == 0x20);
 
     virtual ~IStreamDataDecoder();
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

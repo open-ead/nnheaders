@@ -20,7 +20,7 @@ struct ChunkHeader {
 static_assert(sizeof(ChunkHeader) == 0x8);
 
 struct RiffChunk {
-    static const u32 ValidId {0x46464952}; // "RIFF"
+    static const u32 ValidId{0x46464952};  // "RIFF"
 
     RiffChunk() = default;
 
@@ -32,7 +32,7 @@ struct RiffChunk {
 static_assert(sizeof(RiffChunk) == 0xc);
 
 struct FmtChunk {
-    static const u32 ValidId{0x20746d66}; // "fmt "
+    static const u32 ValidId{0x20746d66};  // "fmt "
     static const u16 FormatPcm{SampleFormat_PcmS16};
 
     FmtChunk() = default;
@@ -52,8 +52,8 @@ struct FmtChunk {
 static_assert(sizeof(FmtChunk) == 0x18);
 
 struct DataChunk {
-    static const u32 ValidId {0x61746164}; // "data"
-    
+    static const u32 ValidId{0x61746164};  // "data"
+
     DataChunk() = default;
 
     bool IsValid();
@@ -64,11 +64,11 @@ static_assert(sizeof(DataChunk) == 0x8);
 
 struct WaveBinaryHeader {
     WaveBinaryHeader() = default;
-    
+
     RiffChunk riffChunk;
     FmtChunk fmtChunk;
     DataChunk dataChunk;
 };
 static_assert(sizeof(WaveBinaryHeader) == 0x2c);
 
-} // namespace nn::atk::detail
+}  // namespace nn::atk::detail

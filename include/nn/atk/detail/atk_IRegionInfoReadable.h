@@ -3,12 +3,13 @@
 #include <nn/atk/atk_StreamSoundFile.h>
 
 namespace nn::atk::detail {
+
 class IRegionInfoReadable {
 public:
     virtual ~IRegionInfoReadable() = default;
-    
-    virtual bool ReadRegionInfo(StreamSoundFile::RegionInfo* pInfo, 
-                                u32 regionIndex) const = 0;
+
+    virtual bool ReadRegionInfo(StreamSoundFile::RegionInfo* pInfo, u32 regionIndex) const = 0;
 };
 static_assert(sizeof(IRegionInfoReadable) == 0x8);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

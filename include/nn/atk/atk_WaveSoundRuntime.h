@@ -4,6 +4,7 @@
 #include <nn/atk/atk_WaveSound.h>
 
 namespace nn::atk::detail {
+
 class WaveSoundRuntime {
 public:
     WaveSoundRuntime();
@@ -12,8 +13,9 @@ public:
     bool Initialize(s32 soundCount, void** pOutAllocatedAddr, const void* endAddr);
     void Finalize();
 
-    static size_t GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo, 
-                                        s32 alignment);
+    static size_t
+    GetRequiredMemorySize(const SoundArchive::SoundArchivePlayerInfo& soundArchivePlayerInfo,
+                          s32 alignment);
 
     s32 GetActiveCount() const;
     s32 GetFreeWaveSoundCount() const;
@@ -21,20 +23,19 @@ public:
     void SetupUserParam(void** startAddr, size_t adjustSize);
 
     void Update();
-    
+
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    WaveSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, s32 ambientPriority, 
+    WaveSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, s32 ambientPriority,
                           BasicSound::AmbientInfo* ambientArgInfo);
 #else
-    WaveSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, s32 ambientPriority, 
+    WaveSound* AllocSound(SoundArchive::ItemId soundId, s32 priority, s32 ambientPriority,
                           BasicSound::AmbientInfo* ambientArgInfo, OutputReceiver* pOutputReceiver);
 #endif
 
-    SoundStartable::StartResult PrepareImpl(const SoundArchive* pSoundArchive, 
-                                            const SoundDataManager* pSoundDataManager, 
-                                            SoundArchive::ItemId soundId, 
-                                            WaveSound* sound, 
-                                            const SoundArchive::SoundInfo* commonInfo, 
+    SoundStartable::StartResult PrepareImpl(const SoundArchive* pSoundArchive,
+                                            const SoundDataManager* pSoundDataManager,
+                                            SoundArchive::ItemId soundId, WaveSound* sound,
+                                            const SoundArchive::SoundInfo* commonInfo,
                                             const StartInfoReader& startInfoReader);
 
     void DumpMemory(const SoundArchive*) const;
@@ -49,4 +50,5 @@ static_assert(sizeof(WaveSoundRuntime) == 0x80);
 #else
 static_assert(sizeof(WaveSoundRuntime) == 0x88);
 #endif
+
 }  // namespace nn::atk::detail

@@ -6,8 +6,10 @@
 
 namespace nn::atk {
 namespace detail {
+
 class SequenceSound;
-} // namespace nn::atk::detail
+
+}  // namespace detail
 
 class SequenceSoundHandle {
 public:
@@ -33,4 +35,5 @@ public:
 private:
     detail::SequenceSound* m_pSound;
 };
-} // namespace nn::atk
+
+}  // namespace nn::atk

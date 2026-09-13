@@ -1,17 +1,18 @@
 #pragma once
 
 #include <nn/atk/atk_Adpcm.h>
-#include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/atk_Config.h>
-#include <nn/atk/detail/atk_IStreamDataDecoder.h>
+#include <nn/atk/atk_InstancePool.h>
 #include <nn/atk/atk_LoaderManager.h>
-#include <nn/atk/detail/atk_RegionManager.h>
+#include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/atk_StreamSoundFileLoader.h>
 #include <nn/atk/atk_StreamSoundFileReader.h>
 #include <nn/atk/atk_Task.h>
-#include <nn/atk/atk_InstancePool.h>
+#include <nn/atk/detail/atk_IStreamDataDecoder.h>
+#include <nn/atk/detail/atk_RegionManager.h>
 
 namespace nn::atk::detail {
+
 struct IStreamDataDecoderManager;
 struct DriverCommandStreamSoundLoadHeader;
 struct DriverCommandStreamSoundLoadData;
@@ -81,6 +82,7 @@ struct FileStreamHookParam {
 static_assert(sizeof(FileStreamHookParam) == 0x10);
 
 namespace driver {
+
 class StreamSoundPlayer;
 
 class StreamSoundLoader;
@@ -139,9 +141,9 @@ public:
     };
     static_assert(sizeof(StreamDataLoadTask) == 0xf8);
 
-    using StreamDataLoadTaskList = util::IntrusiveList<StreamDataLoadTask, 
-                                    util::IntrusiveListMemberNodeTraits<StreamDataLoadTask, 
-                                        &StreamDataLoadTask::m_Link>>;
+    using StreamDataLoadTaskList = util::IntrusiveList<
+        StreamDataLoadTask,
+        util::IntrusiveListMemberNodeTraits<StreamDataLoadTask, &StreamDataLoadTask::m_Link>>;
 
     struct AdpcmInfo {
         AdpcmParam param;
@@ -157,7 +159,6 @@ public:
         size_t startOffsetSamplesAlign;
         size_t startOffsetByte;
         size_t copyByte;
-
     };
     static_assert(sizeof(BlockInfo) == 0x30);
 
@@ -185,7 +186,7 @@ public:
     void RequestLoadHeader();
     void RequestLoadData(void** bufferAddress, u32 bufferBlockIndex, position_t startOffsetSamples,
                          position_t prefetchOffsetSamples, s32 priority);
-    
+
     void Update();
     void ForceFinish();
 
@@ -197,9 +198,9 @@ public:
 
     void LoadHeader();
     bool LoadHeader1(DriverCommandStreamSoundLoadHeader* command);
-    bool LoadHeaderForOpus(DriverCommandStreamSoundLoadHeader* command, 
-                           StreamFileType type, DecodeMode decodeMode);
-    
+    bool LoadHeaderForOpus(DriverCommandStreamSoundLoadHeader* command, StreamFileType type,
+                           DecodeMode decodeMode);
+
     bool ReadTrackInfoFromStreamSoundFile(StreamSoundFileReader& reader);
 
     bool SetAdpcmInfo(StreamSoundFileReader& reader, s32 channelCount, AdpcmParam** adpcmParam);
@@ -210,27 +211,26 @@ public:
 
     void SetStreamSoundInfoForOpus(const IStreamDataDecoder::DataInfo& dataInfo);
 
-    void LoadData(void** bufferAddress, u32 bufferBlockIndex, size_t startOffsetSamples, 
+    void LoadData(void** bufferAddress, u32 bufferBlockIndex, size_t startOffsetSamples,
                   size_t prefetchOffsetSamples, TaskProfileLogger& logger);
-    bool LoadData1(DriverCommandStreamSoundLoadData* command, void** bufferAddress, 
-                   u32 bufferBlockIndex, size_t startOffsetSamples, 
-                   size_t prefetchOffsetSamples, TaskProfileLogger& logger);
-    bool LoadDataForOpus(DriverCommandStreamSoundLoadData* command, void** bufferAddress, 
-                         u32 bufferBlockIndex, size_t startOffsetSamples, 
+    bool LoadData1(DriverCommandStreamSoundLoadData* command, void** bufferAddress,
+                   u32 bufferBlockIndex, size_t startOffsetSamples, size_t prefetchOffsetSamples,
+                   TaskProfileLogger& logger);
+    bool LoadDataForOpus(DriverCommandStreamSoundLoadData* command, void** bufferAddress,
+                         u32 bufferBlockIndex, size_t startOffsetSamples,
                          size_t prefetchOffsetSamples, TaskProfileLogger& logger);
 
     bool ApplyStartOffset(s64, s32*);
-    
+
     void CalculateBlockInfo(BlockInfo&);
 
     bool LoadAdpcmContextForStartOffset();
 
-    bool LoadOneBlockDataViaCache(void** bufferAddress, const BlockInfo& blockInfo, 
-                                  position_t destAddressOffset, bool firstBlock, 
+    bool LoadOneBlockDataViaCache(void** bufferAddress, const BlockInfo& blockInfo,
+                                  position_t destAddressOffset, bool firstBlock,
                                   bool updateAdpcmContext);
-    bool LoadOneBlockData(void** bufferAddress, const BlockInfo& blockInfo, 
-                          position_t destAddressOffset, bool firstBlock, 
-                          bool updateAdpcmContext);
+    bool LoadOneBlockData(void** bufferAddress, const BlockInfo& blockInfo,
+                          position_t destAddressOffset, bool firstBlock, bool updateAdpcmContext);
 
     bool MoveNextRegion(s32*);
 
@@ -251,7 +251,7 @@ public:
 
 private:
     friend StreamSoundLoaderManager;
-    
+
     StreamSoundFileLoader m_FileLoader;
     StreamSoundPlayer* m_PlayerHandle;
     fnd::FileStream* m_pFileStream;
@@ -287,7 +287,7 @@ private:
     SampleFormat m_SampleFormat;
     AdpcmInfo m_AdpcmInfo[16];
     u32 m_FileStreamBuffer[128];
-    IStreamDataDecoder* m_pStreamDataDecoder; 
+    IStreamDataDecoder* m_pStreamDataDecoder;
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     static IStreamDataDecoderManager* g_pStreamDataDecoderManager;
 #else
@@ -302,5 +302,6 @@ static_assert(sizeof(StreamSoundLoader) == 0x35c0);
 #else
 static_assert(sizeof(StreamSoundLoader) == 0x3640);
 #endif
-} // namespace nn::atk::detail::driver
-} // namespace nn::atk::detail
+
+}  // namespace driver
+}  // namespace nn::atk::detail

@@ -3,6 +3,7 @@
 #include <nn/atk/atk_SoundStartable.h>
 
 namespace nn::atk::detail {
+
 class StartInfoReader {
 public:
     explicit StartInfoReader(const SoundArchive::SoundInfo& soundInfo);
@@ -33,4 +34,5 @@ static_assert(sizeof(StartInfoReader) == 0x50);
 #else
 static_assert(sizeof(StartInfoReader) == 0x58);
 #endif
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

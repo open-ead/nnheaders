@@ -45,7 +45,6 @@ public:
     void* Alloc() { return AllocImpl(); }
 
     void Free(void* ptr) { FreeImpl(ptr); }
-
 };
 
 template <typename T>
@@ -76,4 +75,4 @@ public:
     void Free(T* obj) { FreeImpl(obj); }
 };
 
-} // namespace nn::atk::detail
+}  // namespace nn::atk::detail

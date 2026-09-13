@@ -3,13 +3,14 @@
 #include <nn/atk/atk_Util.h>
 
 namespace nn::atk::detail {
+
 struct StreamSoundFile {
     struct InfoBlock;
 
     struct FileHeader : BinaryFileHeader {
     private:
         static const int BlockCount = 4;
-    
+
     public:
         Util::ReferenceWithSize toBlocks[BlockCount];
 
@@ -99,10 +100,8 @@ struct StreamSoundFile {
 
         Util::Reference toGlobalChannelIndexTable;
 
-        u32 GetTrackChannelCount() const {
-            return GetGlobalChannelIndexTable().GetCount();
-        }
-        
+        u32 GetTrackChannelCount() const { return GetGlobalChannelIndexTable().GetCount(); }
+
         u8 GetGlobalChannelIndex(u32 index) const {
             return GetGlobalChannelIndexTable().GetGlobalIndex(index);
         }
@@ -110,8 +109,8 @@ struct StreamSoundFile {
     private:
         const GlobalChannelIndexTable& GetGlobalChannelIndexTable() const {
             return *util::ConstBytePtr(this)
-                    .Advance(toGlobalChannelIndexTable.offset)
-                    .Get<GlobalChannelIndexTable>();
+                        .Advance(toGlobalChannelIndexTable.offset)
+                        .Get<GlobalChannelIndexTable>();
         }
     };
     static_assert(sizeof(TrackInfo) == 0xc);
@@ -126,7 +125,7 @@ struct StreamSoundFile {
     struct ChannelInfo;
     struct ChannelInfoTable {
         Util::ReferenceTable table;
-        
+
         u32 GetChannelCount() const;
         const ChannelInfo* GetChannelInfo(u32 index) const;
     };
@@ -134,7 +133,7 @@ struct StreamSoundFile {
     struct DspAdpcmChannelInfo;
     struct ChannelInfo {
         Util::Reference toDetailChannelInfo;
-        
+
         const DspAdpcmChannelInfo* GetDspAdpcmChannelInfo() const;
     };
     static_assert(sizeof(ChannelInfo) == 0x8);
@@ -161,4 +160,5 @@ struct StreamSoundFile {
     };
     static_assert(sizeof(RegionBlock) == 0x108);
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

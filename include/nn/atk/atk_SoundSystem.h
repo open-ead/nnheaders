@@ -1,25 +1,26 @@
 #pragma once
 
+#include <nn/audio/audio_MemoryPoolTypes.h>
 #include <nn/time.h>
 #include <nn/types.h>
-#include <nn/audio/audio_MemoryPoolTypes.h>
 #include <vapours/results/results_common.hpp>
 
-#include <nn/atk/atk_Global.h>
-#include <nn/atk/atk_HardwareManager.h>
-#include <nn/atk/atk_ThreadInfoReader.h>
+#include <nn/atk/atk_AudioRendererPerformanceReader.h>
 #include <nn/atk/atk_EffectAux.h>
 #include <nn/atk/atk_EffectBase.h>
-#include <nn/atk/atk_AudioRendererPerformanceReader.h>
+#include <nn/atk/atk_Global.h>
+#include <nn/atk/atk_HardwareManager.h>
 #include <nn/atk/atk_ProfileReader.h>
+#include <nn/atk/atk_ThreadInfoReader.h>
 
 namespace nn::atk {
+
 struct SoundSystem {
     static bool g_IsInitialized;
     static bool g_IsStreamLoadWait;
     static bool g_IsEnterSleep;
     static bool g_IsInitializedDriverCommandManager;
-    
+
     static uintptr_t g_LoadThreadStackPtr;
     static size_t g_LoadThreadStackSize;
 
@@ -147,34 +148,40 @@ struct SoundSystem {
     static size_t GetRequiredMemSize(const SoundSystemParam& param);
     static size_t GetRequiredMemSizeForCircularBufferSink(const SoundSystemParam& param);
     static size_t GetRequiredMemSizeForMemoryPool(const SoundSystemParam& param);
-    
-    static void SetupHardwareManagerParameter(detail::driver::HardwareManager::HardwareManagerParameter* pOutValue, 
-                                              SoundSystemParam* parameter);
 
-    static bool detail_InitializeSoundSystem(Result* pOutResult, const SoundSystemParam& param, const InitializeBufferSet& bufferSet);
-    static void detail_InitializeDriverCommandManager(const SoundSystemParam& param, u64, u64, u64, u64);
-    
+    static void SetupHardwareManagerParameter(
+        detail::driver::HardwareManager::HardwareManagerParameter* pOutValue,
+        SoundSystemParam* parameter);
+
+    static bool detail_InitializeSoundSystem(Result* pOutResult, const SoundSystemParam& param,
+                                             const InitializeBufferSet& bufferSet);
+    static void detail_InitializeDriverCommandManager(const SoundSystemParam& param, u64, u64, u64,
+                                                      u64);
+
     static bool Initialize(SoundSystemParam* param, uintptr_t workMem, size_t workMemSize);
-    static bool Initialize(Result* pOutResult, const SoundSystemParam& param, 
-                           uintptr_t workMem, size_t workMemSize);
-        
-    static void SetupInitializeBufferSet(InitializeBufferSet* pOutValue, 
-                                         SoundSystemParam* param, InitializeBufferSet* bufferSet);
+    static bool Initialize(Result* pOutResult, const SoundSystemParam& param, uintptr_t workMem,
+                           size_t workMemSize);
 
-    static bool Initialize(SoundSystemParam* param, uintptr_t workMem, size_t workMemSize, 
+    static void SetupInitializeBufferSet(InitializeBufferSet* pOutValue, SoundSystemParam* param,
+                                         InitializeBufferSet* bufferSet);
+
+    static bool Initialize(SoundSystemParam* param, uintptr_t workMem, size_t workMemSize,
                            uintptr_t memoryPoolMem, size_t memoryPoolMemSize);
-    static bool Initialize(Result* pOutResult, const SoundSystemParam& param, uintptr_t workMem, 
+    static bool Initialize(Result* pOutResult, const SoundSystemParam& param, uintptr_t workMem,
                            size_t workMemSize, uintptr_t memoryPoolMem, size_t memoryPoolMemSize);
 
     static bool Initialize(const SoundSystemParam& param, const InitializeBufferSet& bufferSet);
-    static bool Initialize(Result* pOutResult, const SoundSystemParam& param, const InitializeBufferSet& bufferSet);
+    static bool Initialize(Result* pOutResult, const SoundSystemParam& param,
+                           const InitializeBufferSet& bufferSet);
 
     static void Finalize();
 
-    static void SetSoundThreadBeginUserCallback(void(*threadBeginUserCallback)(u64), uintptr_t threadBeginUserCallbackArg);
+    static void SetSoundThreadBeginUserCallback(void (*threadBeginUserCallback)(u64),
+                                                uintptr_t threadBeginUserCallbackArg);
     static void ClearSoundThreadBeginUserCallback();
 
-    static void SetSoundThreadEndUserCallback(void(*threadEndUserCallback)(u64), uintptr_t threadEndUserCallbackArg);
+    static void SetSoundThreadEndUserCallback(void (*threadEndUserCallback)(u64),
+                                              uintptr_t threadEndUserCallbackArg);
     static void ClearSoundThreadEndUserCallback();
 
     static bool IsInitialized();
@@ -188,10 +195,11 @@ struct SoundSystem {
     static void DetachMemoryPool(audio::MemoryPoolType* pMemoryPool);
 
     static void DumpMemory();
-    
+
     static size_t GetAudioRendererBufferSize();
 
-    static void SetupHardwareManagerParameterFromCurrentSetting(detail::driver::HardwareManager::HardwareManagerParameter* pHardwareManagerParameter);
+    static void SetupHardwareManagerParameterFromCurrentSetting(
+        detail::driver::HardwareManager::HardwareManagerParameter* pHardwareManagerParameter);
 
     static size_t GetRecorderBufferSize();
     static size_t GetUserCircularBufferSinkBufferSize();
@@ -203,35 +211,36 @@ struct SoundSystem {
     static size_t GetAllocatedDriverCommandBufferSize();
     static size_t GetAllocatedDriverCommandCount();
 
-    static void RegisterAudioRendererPerformanceReader(AudioRendererPerformanceReader& audioRendererPerformanceReader);
+    static void RegisterAudioRendererPerformanceReader(
+        AudioRendererPerformanceReader& audioRendererPerformanceReader);
 
-    static bool AppendEffect(AuxBus auxBus, EffectBase* pEffectBase, 
-                             void* buffer, size_t bufferSize);
-    static bool AppendEffect(AuxBus auxBus, EffectBase* pEffectBase, 
-                             void* buffer, size_t bufferSize, OutputDevice device);
-    static bool AppendEffect(AuxBus auxBus, EffectBase* pEffectBase, 
-                             void* buffer, size_t bufferSize, OutputDevice device, s32 subMixNumber);
+    static bool AppendEffect(AuxBus auxBus, EffectBase* pEffectBase, void* buffer,
+                             size_t bufferSize);
+    static bool AppendEffect(AuxBus auxBus, EffectBase* pEffectBase, void* buffer,
+                             size_t bufferSize, OutputDevice device);
+    static bool AppendEffect(AuxBus auxBus, EffectBase* pEffectBase, void* buffer,
+                             size_t bufferSize, OutputDevice device, s32 subMixNumber);
 
-    static bool AppendEffect(AuxBus auxBus, EffectAux* pEffectAux, 
-                             void* buffer, size_t bufferSize);
-    static bool AppendEffect(AuxBus auxBus, EffectAux* pEffectAux, 
-                             void* buffer, size_t bufferSize, OutputDevice device);
-    static bool AppendEffect(AuxBus auxBus, EffectAux* pEffectAux, 
-                             void* buffer, size_t bufferSize, OutputDevice device, s32 subMixNumber);
+    static bool AppendEffect(AuxBus auxBus, EffectAux* pEffectAux, void* buffer, size_t bufferSize);
+    static bool AppendEffect(AuxBus auxBus, EffectAux* pEffectAux, void* buffer, size_t bufferSize,
+                             OutputDevice device);
+    static bool AppendEffect(AuxBus auxBus, EffectAux* pEffectAux, void* buffer, size_t bufferSize,
+                             OutputDevice device, s32 subMixNumber);
 
     static bool AppendEffectToFinalMix(EffectAux* pEffectAux, void* buffer, size_t bufferSize);
-    static bool AppendEffectToAdditionalSubMix(EffectAux* pEffectAux, void* buffer, size_t bufferSize);
+    static bool AppendEffectToAdditionalSubMix(EffectAux* pEffectAux, void* buffer,
+                                               size_t bufferSize);
 
     static size_t GetRequiredEffectAuxBufferSize(const EffectAux* pEffectAux);
 
     static void RemoveEffect(AuxBus auxBus, EffectBase* pEffectBase);
     static void RemoveEffect(AuxBus auxBus, EffectBase* pEffectBase, OutputDevice outputDevice);
-    static void RemoveEffect(AuxBus auxBus, EffectBase* pEffectBase, OutputDevice outputDevice, 
+    static void RemoveEffect(AuxBus auxBus, EffectBase* pEffectBase, OutputDevice outputDevice,
                              s32 subMixNumber);
 
     static void RemoveEffect(AuxBus auxBus, EffectAux* pEffectAux);
     static void RemoveEffect(AuxBus auxBus, EffectAux* pEffectAux, OutputDevice outputDevice);
-    static void RemoveEffect(AuxBus auxBus, EffectAux* pEffectAux, OutputDevice outputDevice, 
+    static void RemoveEffect(AuxBus auxBus, EffectAux* pEffectAux, OutputDevice outputDevice,
                              s32 subMixNumber);
 
     static void RemoveEffectFromFinalMix(EffectAux* pEffectAux);
@@ -240,7 +249,7 @@ struct SoundSystem {
     static void ClearEffect(AuxBus auxBus);
     static void ClearEffect(AuxBus auxBus, OutputDevice outputDevice);
     static void ClearEffect(AuxBus auxBus, OutputDevice outputDevice, s32 subMixNumber);
-    
+
     static void ClearEffectFromFinalMix();
     static void ClearEffectFromAdditionalSubMix();
 
@@ -257,26 +266,32 @@ struct SoundSystem {
     static f32 GetAuxBusVolume(AuxBus auxBus);
     static f32 GetAuxBusVolume(AuxBus auxBus, s32 subMixIndex);
 
-    static void SetMainBusChannelVolumeForAdditionalEffect(f32 volume, s32 srcChannel, s32 dstChannel);
+    static void SetMainBusChannelVolumeForAdditionalEffect(f32 volume, s32 srcChannel,
+                                                           s32 dstChannel);
     static f32 GetMainBusChannelVolumeForAdditionalEffect(s32 srcChannel, s32 dstChannel);
 
-    static void SetAuxBusChannelVolumeForAdditionalEffect(AuxBus auxBus, f32 volume, s32 srcChannel, s32 dstChannel);
-    static f32 GetAuxBusChannelVolumeForAdditionalEffect(AuxBus auxBus, s32 srcChannel, s32 dstChannel);
+    static void SetAuxBusChannelVolumeForAdditionalEffect(AuxBus auxBus, f32 volume, s32 srcChannel,
+                                                          s32 dstChannel);
+    static f32 GetAuxBusChannelVolumeForAdditionalEffect(AuxBus auxBus, s32 srcChannel,
+                                                         s32 dstChannel);
 
-    static void SetAllAuxBusChannelVolumeForAdditionalEffect(f32 volume, s32 srcChannel, s32 dstChannel);
-    static void SetAllBusChannelVolumeForAdditionalEffect(f32 volume, s32 srcChannel, s32 dstChannel);
+    static void SetAllAuxBusChannelVolumeForAdditionalEffect(f32 volume, s32 srcChannel,
+                                                             s32 dstChannel);
+    static void SetAllBusChannelVolumeForAdditionalEffect(f32 volume, s32 srcChannel,
+                                                          s32 dstChannel);
 
     static void VoiceCommandProcess(UpdateType updateType, u32);
     static void VoiceCommandProcess(u32);
-    
+
     static void VoiceCommandUpdate();
 
     static size_t GetPerformanceFrameBufferSize();
 
     static s32 GetDroppedLowLevelVoiceCount();
-    
+
     static void RegisterSoundThreadUpdateProfileReader(AtkProfileReader<SoundThreadUpdateProfile>&);
-    static void UnregisterSoundThreadUpdateProfileReader(AtkProfileReader<SoundThreadUpdateProfile>&);
+    static void
+    UnregisterSoundThreadUpdateProfileReader(AtkProfileReader<SoundThreadUpdateProfile>&);
 
     static void RegisterSoundThreadInfoRecorder(detail::ThreadInfoRecorder&);
     static void UnregisterSoundThreadInfoRecorder(detail::ThreadInfoRecorder&);
@@ -294,4 +309,5 @@ struct SoundSystem {
     static CircularBufferSinkState GetCircularBufferSinkState();
     static detail::SoundInstanceConfig GetSoundInstanceConfig();
 };
-} // namespace nn::atk
+
+}  // namespace nn::atk

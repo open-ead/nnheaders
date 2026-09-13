@@ -3,6 +3,7 @@
 #include <nn/types.h>
 
 namespace nn::atk::detail::fnd {
+
 class WorkBufferAllocator {
 public:
     WorkBufferAllocator(void* buffer, size_t size);
@@ -16,4 +17,5 @@ private:
     size_t m_Size;
 };
 static_assert(sizeof(WorkBufferAllocator) == 0x18);
-} // namespace nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd

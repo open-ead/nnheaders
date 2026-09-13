@@ -1,11 +1,12 @@
 #pragma once
 
-#include <nn/atk/atk_WaveSoundHandle.h>
 #include <nn/atk/atk_BasicSound.h>
 #include <nn/atk/atk_SoundInstanceManager.h>
+#include <nn/atk/atk_WaveSoundHandle.h>
 #include <nn/atk/atk_WaveSoundPlayer.h>
 
-namespace nn::atk::detail { 
+namespace nn::atk::detail {
+
 class WaveSound;
 using WaveSoundInstanceManager = SoundInstanceManager<WaveSound>;
 
@@ -21,10 +22,10 @@ public:
 #endif
     void Finalize() override;
 
-    void Prepare(const void* wsdFile, const void* waveFile, 
+    void Prepare(const void* wsdFile, const void* waveFile,
                  const driver::WaveSoundPlayer::StartInfo& startInfo, s8 waveType);
 
-    void RegisterDataLoadTask(const driver::WaveSoundLoader::LoadInfo& loadInfo, 
+    void RegisterDataLoadTask(const driver::WaveSoundLoader::LoadInfo& loadInfo,
                               const driver::WaveSoundPlayer::StartInfo& startInfo);
 
     void SetChannelPriority(s32 priority);
@@ -32,7 +33,7 @@ public:
     void InitializeChannelParam(s32 priority, bool isReleasePriorityFix);
 
     void OnUpdatePlayerPriority() override;
-    
+
     bool IsAttachedTempSpecialHandle() override;
     void DetachTempSpecialHandle() override;
 
@@ -65,4 +66,5 @@ static_assert(sizeof(WaveSound) == 0x3b0);
 #else
 static_assert(sizeof(WaveSound) == 0x3e0);
 #endif
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

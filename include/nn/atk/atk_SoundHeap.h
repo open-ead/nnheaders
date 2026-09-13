@@ -3,11 +3,12 @@
 #include <nn/audio/audio_MemoryPoolTypes.h>
 #include <nn/util/util_IntrusiveList.h>
 
-#include <nn/atk/atk_SoundMemoryAllocatable.h>
 #include <nn/atk/atk_FrameHeap.h>
+#include <nn/atk/atk_SoundMemoryAllocatable.h>
 #include <nn/atk/fnd/os/atkfnd_CriticalSection.h>
 
-namespace nn::atk::detail {
+namespace nn::atk {
+
 class SoundHeap : SoundMemoryAllocatable {
 public:
     SoundHeap();
@@ -24,8 +25,7 @@ public:
 
     static void DisposeCallbackFunc(void* mem, size_t size, void* arg);
 
-    void* Allocate(size_t size, 
-                   SoundMemoryAllocatable::DisposeCallback heapCallback, 
+    void* Allocate(size_t size, SoundMemoryAllocatable::DisposeCallback heapCallback,
                    void* heapCallbackArg) override;
 
     size_t GetAllocateSize(size_t size, bool needMemoryPool) override;
@@ -34,10 +34,11 @@ public:
     void LoadState(s32 state);
 
 private:
-    fnd::CriticalSection m_CriticalSection;
-    FrameHeap m_FrameHeap;
+    detail::fnd::CriticalSection m_CriticalSection;
+    detail::FrameHeap m_FrameHeap;
     audio::MemoryPoolType m_MemoryPool;
     bool m_IsAutoMemoryPoolManagementEnabled;
 };
 static_assert(sizeof(SoundHeap) == 0x50);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

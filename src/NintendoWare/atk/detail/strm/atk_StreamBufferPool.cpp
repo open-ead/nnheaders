@@ -4,6 +4,7 @@
 #include "nn/types.h"
 
 namespace nn::atk::detail::driver {
+
 void StreamBufferPool::Initialize(void* buffer, size_t size, int blockCount) {
     if (blockCount == 0)
         return;
@@ -15,7 +16,7 @@ void StreamBufferPool::Initialize(void* buffer, size_t size, int blockCount) {
     m_BlockCount = blockCount;
     m_BlockSize = util::align_down(size / blockCount, 64);
     m_AllocCount = 0;
-    for (int i {0}; i < BlockMax / BitPerByte; ++i)
+    for (int i{0}; i < BlockMax / BitPerByte; ++i)
         m_AllocFlags[i] = 0;
 }
 
@@ -31,17 +32,18 @@ void* StreamBufferPool::Alloc() {
     if (m_AllocCount >= m_BlockCount)
         return nullptr;
 
-    const int availableByte {util::align_up(m_BlockCount, BitPerByte)};
+    const int availableByte{util::align_up(m_BlockCount, BitPerByte)};
 
-    for (int byteIndex {0}; byteIndex < availableByte / BitPerByte; ++byteIndex) {
+    for (int byteIndex{0}; byteIndex < availableByte / BitPerByte; ++byteIndex) {
         if (m_AllocFlags[byteIndex] != 0xff) {
-            const u8 byte {m_AllocFlags[byteIndex]};
+            const u8 byte{m_AllocFlags[byteIndex]};
 
-            u8 mask {1 << 0};
-            for (int bitIndex {0}; bitIndex < BitPerByte; ++bitIndex) {
+            u8 mask{1 << 0};
+            for (int bitIndex{0}; bitIndex < BitPerByte; ++bitIndex) {
                 if ((byte & mask) == 0) {
-                    const int totalIndex {bitIndex};
-                    void* buffer {util::BytePtr(m_Buffer).Advance(m_BlockSize * (totalIndex | byte)).Get()};
+                    const int totalIndex{bitIndex};
+                    void* buffer{
+                        util::BytePtr(m_Buffer).Advance(m_BlockSize * (totalIndex | byte)).Get()};
                     return buffer;
                 }
             }
@@ -52,15 +54,16 @@ void* StreamBufferPool::Alloc() {
 }
 
 void StreamBufferPool::Free(void* pPtr) {
-    ptrdiff_t offset {util::BytePtr(m_Buffer).Distance(pPtr)};
+    ptrdiff_t offset{util::BytePtr(m_Buffer).Distance(pPtr)};
 
-    const u64 totalIndex {offset / m_BlockSize};
+    const u64 totalIndex{offset / m_BlockSize};
 
-    const int mask {1 << (totalIndex & 0b111)};
-    const u64 byteIndex {totalIndex};
-    const u64 bitIndex {byteIndex / BitPerByte};
+    const int mask{1 << (totalIndex & 0b111)};
+    const u64 byteIndex{totalIndex};
+    const u64 bitIndex{byteIndex / BitPerByte};
 
     m_AllocFlags[bitIndex] &= ~mask;
     --m_AllocCount;
 }
-} // namespace nn::atk::detail::driver
+
+}  // namespace nn::atk::detail::driver

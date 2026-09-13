@@ -11,9 +11,10 @@
 #include <nn/atk/fnd/os/atkfnd_Thread.h>
 
 namespace nn::atk {
+
 class DeviceOutRecorder : public detail::fnd::Thread::Handler {
     NN_NO_COPY(DeviceOutRecorder);
-    
+
 public:
     static const u32 RecordingBufferSize = 0x5a000;
     static const u32 DefaultWriteBlockPerSamples = 0x10000;
@@ -84,7 +85,7 @@ public:
 
         void Initialize(s16* sampleBuffer, u32 maxSamples);
         void Finalize();
-        
+
         u32 Push(const s16* sampleBuffer, u32 samples);
         u32 Pop(u32 samples);
         s16* Peek();
@@ -96,7 +97,7 @@ public:
         u32 GetWritableCount() const;
         u32 GetContiguousReadableCount() const;
         const char* GetDeviceName() const;
-        
+
         void UpdateMaxSamples();
 
     private:
@@ -104,13 +105,13 @@ public:
         void Write(const s16* sampleBuffer, u32 samples);
         u32 IncrementPosition(u32 position, u32 length) const;
 
-        s16* m_SampleBuffer {nullptr};
-        u32 m_MaxBufferSamples {0};
-        u32 m_MaxSamples {0};
-        std::atomic_uint m_ValidSamples {0};
-        u32 m_ReadPosition {0};
-        u32 m_WritePosition {0};
-        u32 m_ReadBlockSamples {1};
+        s16* m_SampleBuffer{nullptr};
+        u32 m_MaxBufferSamples{0};
+        u32 m_MaxSamples{0};
+        std::atomic_uint m_ValidSamples{0};
+        u32 m_ReadPosition{0};
+        u32 m_WritePosition{0};
+        u32 m_ReadBlockSamples{1};
         WriteState m_WriteState;
         const char* m_DeviceName;
     };
@@ -122,10 +123,10 @@ protected:
 public:
     ~DeviceOutRecorder() override;
 
-    bool Initialize(void* recordingBuffer, size_t recordingBufferSize, 
-                    void* pThreadStack, size_t threadStackSize);
-    bool Initialize(void* recordingBuffer, size_t recordingBufferSize, 
-                    void* pThreadStack, size_t threadStackSize, const InitializationOptions& options);
+    bool Initialize(void* recordingBuffer, size_t recordingBufferSize, void* pThreadStack,
+                    size_t threadStackSize);
+    bool Initialize(void* recordingBuffer, size_t recordingBufferSize, void* pThreadStack,
+                    size_t threadStackSize, const InitializationOptions& options);
 
     void Finalize();
 
@@ -179,12 +180,12 @@ private:
     void OnExit();
     bool OnWriteSamples(bool isForceWriteMode);
 
-    volatile State m_State {State_NotInitialized};
-    u32 m_Channels {0};
-    OutputMode m_OutputMode {OutputMode_Stereo};
-    bool m_IsLeadSilenceTrimming {false};
-    u32 m_MaxSamples {0};
-    u32 m_WrittenSamples {0};
+    volatile State m_State{State_NotInitialized};
+    u32 m_Channels{0};
+    OutputMode m_OutputMode{OutputMode_Stereo};
+    bool m_IsLeadSilenceTrimming{false};
+    u32 m_MaxSamples{0};
+    u32 m_WrittenSamples{0};
     detail::fnd::Thread m_Thread;
     void* m_ThreadStack;
     os::MessageQueue m_MessageQueue;
@@ -198,4 +199,5 @@ private:
     u32 m_WriteBlockPerSamples;
 };
 static_assert(sizeof(DeviceOutRecorder) == 0x310);
-} // namespace nn::atk
+
+}  // namespace nn::atk

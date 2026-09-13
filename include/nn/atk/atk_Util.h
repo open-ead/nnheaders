@@ -14,6 +14,7 @@ class SoundArchivePlayer;
 class OutputReceiver;
 
 namespace detail {
+
 class PlayerHeapDataManager;
 class SoundArchiveLoader;
 struct LoadItemInfo;
@@ -261,10 +262,10 @@ public:
     struct WaveIdTable {
         Table<WaveId> table;
 
-        const WaveId* GetWaveId(u32 index) const { 
+        const WaveId* GetWaveId(u32 index) const {
             if (index >= table.count)
                 return nullptr;
-            
+
             return &table.item[index];
         }
 

@@ -3,6 +3,7 @@
 #include <nn/atk/atk_ExternalSoundPlayer.h>
 
 namespace nn::atk {
+
 class SoundActor {
 public:
     using ActorPlayer = detail::ExternalSoundPlayer;
@@ -14,4 +15,4 @@ private:
     ActorPlayer* m_ActorPlayerList;
 };
 
-} // namespace nn::atk
+}  // namespace nn::atk

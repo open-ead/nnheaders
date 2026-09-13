@@ -1,10 +1,11 @@
 #pragma once
 
-#include <nn/atk/atk_SequenceTrackAllocator.h>
-#include <nn/atk/atk_MmlParser.h>
 #include <nn/atk/atk_InstancePool.h>
+#include <nn/atk/atk_MmlParser.h>
+#include <nn/atk/atk_SequenceTrackAllocator.h>
 
 namespace nn::atk::detail::driver {
+
 class MmlSequenceTrackAllocator : SequenceTrackAllocator {
 public:
     using MmlSequenceTrackPool = InstancePool<MmlSequenceTrack>;
@@ -24,4 +25,5 @@ private:
     MmlSequenceTrackPool m_TrackPool;
 };
 static_assert(sizeof(MmlSequenceTrackAllocator) == 0x28);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail::driver

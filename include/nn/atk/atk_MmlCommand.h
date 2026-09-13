@@ -1,6 +1,7 @@
 #pragma once
 
 namespace nn::atk::detail::driver {
+
 class MmlCommand {
 public:
     enum Mml {
@@ -63,12 +64,12 @@ public:
         Mml_Damper,
         Mml_ModDelay,
         Mml_Tempo,
-        
+
         Mml_SweepPitch = 0xe3,
         Mml_ModPeriod,
 
         Mml_ExCommand = 0xf0,
-        
+
         Mml_EnvReset = 0xfb,
         Mml_LoopEnd,
         Mml_Ret,
@@ -76,4 +77,5 @@ public:
         Mml_Fin,
     };
 };
-} // namespace nn::atk::detail::driver
+
+}  // namespace nn::atk::detail::driver

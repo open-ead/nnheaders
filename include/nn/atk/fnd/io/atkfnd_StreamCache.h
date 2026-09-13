@@ -3,6 +3,7 @@
 #include <nn/atk/fnd/io/atkfnd_Stream.h>
 
 namespace nn::atk::detail::fnd {
+
 struct FsAccessLog;
 
 class StreamCache {
@@ -20,9 +21,9 @@ public:
     void Finalize();
 
     size_t Read(void* buf, size_t length, FndResult* result, FsAccessLog* log, void* pFileStream);
-    
+
     void FlushWriteCache();
-    
+
     size_t GetReadCacheHitLength(size_t) const;
 
     FndResult SyncStreamCurrentPosition(position_t position);
@@ -48,4 +49,5 @@ private:
     u8 m_Padding[3];
 };
 static_assert(sizeof(StreamCache) == 0x40);
-} // namespace nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd

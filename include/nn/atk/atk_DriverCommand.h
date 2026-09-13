@@ -1,14 +1,15 @@
 #pragma once
 
-#include <nn/atk/detail/atk_AdvancedWaveSoundPlayer.h>
+#include <nn/atk/atk_CommandManager.h>
 #include <nn/atk/atk_EffectAux.h>
 #include <nn/atk/atk_EffectBase.h>
 #include <nn/atk/atk_SequenceSoundPlayer.h>
 #include <nn/atk/atk_StreamSoundPlayer.h>
-#include <nn/atk/atk_CommandManager.h>
 #include <nn/atk/atk_WaveSoundPlayer.h>
+#include <nn/atk/detail/atk_AdvancedWaveSoundPlayer.h>
 
 namespace nn::atk::detail {
+
 enum DriverCommandId {
     DriverCommandId_Dummy,
     DriverCommandId_Debug,
@@ -387,7 +388,7 @@ struct DriverCommandStreamSoundLoadData : Command {
 static_assert(sizeof(DriverCommandStreamSoundLoadData) == 0xc0);
 
 struct DriverCommandStreamSoundForceFinish : Command {
-    driver::StreamSoundPlayer* player; 
+    driver::StreamSoundPlayer* player;
 };
 static_assert(sizeof(DriverCommandStreamSoundForceFinish) == 0x20);
 
@@ -518,7 +519,7 @@ static_assert(sizeof(DriverCommandVoiceAdpcmParam) == 0x30);
 class DriverCommand : public CommandManager {
 public:
     static DriverCommand* GetInstance();
-    
+
     static void ProcessCommandList(Command* commandList);
 
     DriverCommand();
@@ -526,7 +527,7 @@ public:
     void Initialize(void* commandBuffer, size_t commandBufferSize);
 
     void RequestProcessCommand();
-
 };
 static_assert(sizeof(DriverCommand) == 0x310);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

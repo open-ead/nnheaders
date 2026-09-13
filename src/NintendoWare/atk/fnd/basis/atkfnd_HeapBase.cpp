@@ -5,13 +5,15 @@
 
 namespace nn::atk::detail::fnd {
 namespace {
+
 HeapBase::HeapList sRootList;
-u32 sFillVals[HeapBase::FillType_Max] = { 0xC3C3C3C3, 0xF3F3F3F3, 0xD3D3D3D3 };
-} // anonymous namespace
+u32 sFillVals[HeapBase::FillType_Max] = {0xC3C3C3C3, 0xF3F3F3F3, 0xD3D3D3D3};
+
+}  // anonymous namespace
 
 HeapBase::HeapList* HeapBase::FindListContainHeap(HeapBase* pHeapBase) {
-    HeapList* pList {&sRootList};
-    HeapBase* pContainHeapBase {FindContainHeap(pList, pHeapBase)};
+    HeapList* pList{&sRootList};
+    HeapBase* pContainHeapBase{FindContainHeap(pList, pHeapBase)};
 
     if (pContainHeapBase != nullptr)
         pList = &pContainHeapBase->m_ChildList;
@@ -30,7 +32,8 @@ HeapBase::HeapList* HeapBase::FindListContainHeap(HeapBase* pHeapBase) {
 //         if (&pList->front() == &*curItr)
 //             return nullptr;
 
-//         if (reinterpret_cast<u64>(curItr->mHeapStart) <= memBlockAddress && memBlockAddress < reinterpret_cast<u64>(curItr->mHeapEnd)) {
+//         if (reinterpret_cast<u64>(curItr->mHeapStart) <= memBlockAddress && memBlockAddress <
+//         reinterpret_cast<u64>(curItr->mHeapEnd)) {
 //             HeapBase* pChildHeapBase {FindContainHeap(&curItr->m_ChildList, &*curItr)};
 
 //             if (pChildHeapBase != nullptr)
@@ -47,12 +50,13 @@ HeapBase* HeapBase::FindContainHeap(const void* memBlock) {
 }
 
 HeapBase* HeapBase::FindParentHeap(const HeapBase* pChild) {
-    u64 heapAddress {reinterpret_cast<u64>(pChild)};
+    u64 heapAddress{reinterpret_cast<u64>(pChild)};
 
-    for (auto itr {sRootList.begin()}; itr != sRootList.end();) {
-        auto curItr {itr++};
+    for (auto itr{sRootList.begin()}; itr != sRootList.end();) {
+        auto curItr{itr++};
 
-        if (reinterpret_cast<u64>(curItr->mHeapStart) <= heapAddress && reinterpret_cast<u64>(curItr->mHeapEnd) > heapAddress)
+        if (reinterpret_cast<u64>(curItr->mHeapStart) <= heapAddress &&
+            reinterpret_cast<u64>(curItr->mHeapEnd) > heapAddress)
             return FindContainHeap(&curItr->m_ChildList, &*curItr);
     }
 
@@ -60,7 +64,7 @@ HeapBase* HeapBase::FindParentHeap(const HeapBase* pChild) {
 }
 
 u32 HeapBase::SetFillValue(FillType type, u32 val) {
-    u32 oldVal {sFillVals[type]};
+    u32 oldVal{sFillVals[type]};
     sFillVals[type] = val;
 
     return oldVal;
@@ -95,15 +99,15 @@ void HeapBase::Initialize(u32 signature, void* heapStart, void* heapEnd, u16 opt
     u32 diff = GetOffsetFromPtr(heapStart, heapEnd);
     FillNoUseMemory(heapStart, diff);
 
-    HeapList* pList {FindListContainHeap(this)};
+    HeapList* pList{FindListContainHeap(this)};
 
     pList->push_back(*this);
 }
 
 // NON_MATCHING
 void HeapBase::Finalize() {
-    HeapList* pList {FindListContainHeap(this)};
-    
+    HeapList* pList{FindListContainHeap(this)};
+
     if (pList != nullptr)
         pList->erase(pList->begin());
 
@@ -134,7 +138,6 @@ void HeapBase::FillAllocMemory(void* address, size_t size) {
         memset(address, static_cast<int>(GetFillValue(FillType_Alloc)), size);
 }
 
-
 u16 HeapBase::GetOptionFlag() {
     return m_Attribute & 0xFF;
 }
@@ -142,9 +145,10 @@ u16 HeapBase::GetOptionFlag() {
 // NON_MATCHING: matches inlined, but not standalone
 void HeapBase::SetOptionFlag(u16 optFlag) {
     if (optFlag >= 0) {
-        u32 maskBits {0xff};
+        u32 maskBits{0xff};
         u32 newVal = optFlag & maskBits;
         m_Attribute = newVal;
     }
 }
-} // namespace nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd

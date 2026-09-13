@@ -3,6 +3,7 @@
 #include <nn/types.h>
 
 namespace nn::audio {
+
 using NodeId = uint32_t;
 const int BufferAlignSize = 64;
 
@@ -25,4 +26,5 @@ class PerformanceBufferManager {};
 class MemoryPoolManager {};
 class BehaviorManager {};
 class SplitterInfoManager {};
-} // namespace nn::audio
+
+}  // namespace nn::audio

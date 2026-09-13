@@ -6,8 +6,10 @@
 
 namespace nn::atk {
 namespace detail {
+
 class StreamSound;
-} // namespace nn::atk::detail
+
+}  // namespace detail
 
 class StreamSoundHandle {
 public:
@@ -21,4 +23,5 @@ public:
 private:
     detail::StreamSound* m_pSound;
 };
-} // namespace nn::atk
+
+}  // namespace nn::atk

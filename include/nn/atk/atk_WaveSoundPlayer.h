@@ -6,6 +6,7 @@
 #include <nn/atk/atk_WaveSoundLoader.h>
 
 namespace nn::atk::detail {
+
 struct WaveSoundDataInfo {
     bool loopFlag;
     s32 sampleRate;
@@ -17,7 +18,8 @@ struct WaveSoundDataInfo {
 };
 static_assert(sizeof(WaveSoundDataInfo) == 0x30);
 
-namespace driver { 
+namespace driver {
+
 class WaveSoundPlayer : BasicSoundPlayer, DisposeCallback, SoundThread::PlayerCallback {
 public:
     enum StartOffsetType {
@@ -32,8 +34,8 @@ public:
         ResState_Assigned,
     };
 
-    constexpr static s32 SignatureFile = 0x44535746; // FWSD
-    
+    constexpr static s32 SignatureFile = 0x44535746;  // FWSD
+
     constexpr static u32 PauseReleaseValue = 127;
     constexpr static u32 MuteReleaseValue = 127;
     constexpr static u32 DefaultPriority = 64;
@@ -99,8 +101,8 @@ public:
     bool StartChannel();
     void UpdateChannel();
 
-    static void ChannelCallbackFunc(Channel* dropChannel, 
-                                    Channel::ChannelCallbackStatus status, void* userData);
+    static void ChannelCallbackFunc(Channel* dropChannel, Channel::ChannelCallbackStatus status,
+                                    void* userData);
 
     void OnUpdateFrameSoundThread() override;
     void OnUpdateFrameSoundThreadWithAudioFrameFrequency() override;
@@ -143,5 +145,6 @@ static_assert(sizeof(WaveSoundPlayer) == 0x190);
 #else
 static_assert(sizeof(WaveSoundPlayer) == 0x1a0);
 #endif
-} // namespace nn::atk::detail::driver
-} // namespace nn::atk::detail
+
+}  // namespace driver
+}  // namespace nn::atk::detail

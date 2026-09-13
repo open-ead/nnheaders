@@ -5,9 +5,11 @@
 #include <nn/atk/atk_Task.h>
 
 namespace nn::atk::detail {
+
 class TaskManager {
 public:
-    using TaskList = util::IntrusiveList<Task, util::IntrusiveListMemberNodeTraits<Task, &Task::m_TaskLink>>;
+    using TaskList =
+        util::IntrusiveList<Task, util::IntrusiveListMemberNodeTraits<Task, &Task::m_TaskLink>>;
 
     enum Message {
         Message_Append,
@@ -44,7 +46,7 @@ public:
     void RemoveTaskById(u32 id);
 
     void CancelAllTask();
-    
+
     void WaitTask();
     void CancelWaitTask();
 
@@ -64,4 +66,5 @@ static_assert(sizeof(TaskManager) == 0x1e0);
 #else
 static_assert(sizeof(TaskManager) == 0x1d8);
 #endif
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

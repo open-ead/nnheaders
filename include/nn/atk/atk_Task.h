@@ -5,6 +5,7 @@
 #include <nn/atk/atk_TaskProfileReader.h>
 
 namespace nn::atk::detail {
+
 class TaskManager;
 
 class Task {
@@ -18,7 +19,7 @@ public:
     };
 
     Task();
-    
+
     virtual ~Task();
 
     void SetId(u32 id) { m_Id = id; }
@@ -43,4 +44,5 @@ private:
     u32 m_Id;
 };
 static_assert(sizeof(Task) == 0x48);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

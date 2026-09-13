@@ -7,8 +7,10 @@
 namespace nn::atk {
 
 namespace detail {
+
 class SoundFileManager;
-} // namespace nn::atk::detail
+
+}  // namespace detail
 
 class SoundDataManager : detail::driver::DisposeCallback, detail::SoundArchiveLoader {
 public:
@@ -26,9 +28,9 @@ public:
     size_t GetRequiredMemSize(const SoundArchive* arc) const;
 
     bool Initialize(const SoundArchive* pArchive, void* buffer, size_t size);
-    
+
     bool CreateTables(void**, const SoundArchive* pArchive, void*);
-    
+
     void Finalize();
 
     void InvalidateData(const void* start, const void* end) override;
@@ -53,4 +55,5 @@ private:
     detail::SoundFileManager* m_pFileManager;
 };
 static_assert(sizeof(SoundDataManager) == 0x240);
+
 }  // namespace nn::atk

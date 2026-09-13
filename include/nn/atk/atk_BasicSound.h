@@ -162,9 +162,9 @@ struct SoundParamCalculationValues {
         float lpf;
         int bqfType;
         float bqfValue;
-        float outputVolume[1];
-        float outputMainSend[1];
-        float outputEffectSend[1][AuxBus_Count];
+        float outputVolume[OutputDevice_Count];
+        float outputMainSend[OutputDevice_Count];
+        float outputEffectSend[OutputDevice_Count][AuxBus_Count];
     };
     static_assert(sizeof(SoundPlayerParam) == 0x24);
 
@@ -175,10 +175,10 @@ struct SoundParamCalculationValues {
         int bqfType;
         float bqfValue;
         u32 outputLineFlag;
-        float outputVolume[1];
-        float outputPan[1];
-        float outputSurroundPan[1];
-        float outputEffectSend[1][AuxBus_Count];
+        float outputVolume[OutputDevice_Count];
+        float outputPan[OutputDevice_Count];
+        float outputSurroundPan[OutputDevice_Count];
+        float outputEffectSend[OutputDevice_Count][AuxBus_Count];
         int playerPriority;
     };
     static_assert(sizeof(Sound3DParam) == 0x34);
@@ -187,8 +187,8 @@ struct SoundParamCalculationValues {
         float volume;
         float pitch;
         float lpf;
-        float outputVolume[1];
-        float outputPan[1];
+        float outputVolume[OutputDevice_Count];
+        float outputPan[OutputDevice_Count];
     };
     static_assert(sizeof(SoundActorParam) == 0x14);
 
@@ -197,14 +197,14 @@ struct SoundParamCalculationValues {
         float pitch;
         float lpf;
         int bqfType;
-        int bqfValue;
+        float bqfValue;
         u32 outputLineFlag;
-        float outputVolume[1];
-        float outputPan[1];
-        float outputSurroundPan[1];
-        float outputMainSend[1];
-        float outputEffectSend[1][AuxBus_Count];
-        MixParameter outputMixParameter[1][2];
+        float outputVolume[OutputDevice_Count];
+        float outputPan[OutputDevice_Count];
+        float outputSurroundPan[OutputDevice_Count];
+        float outputMainSend[OutputDevice_Count];
+        float outputEffectSend[OutputDevice_Count][AuxBus_Count];
+        MixParameter outputMixParameter[OutputDevice_Count][WaveChannelMax];
         MixMode mixMode;
         float pan;
         float surroundPan;
@@ -221,7 +221,7 @@ struct SoundParamCalculationValues {
         int bqfType;
         float bqfValue;
         u32 outputLineFlag;
-        detail::OutputParam outputParamResult[1];
+        detail::OutputParam outputParamResult[OutputDevice_Count];
         int playerPriority;
     };
     static_assert(sizeof(ResultParam) == 0x6c);
@@ -336,7 +336,7 @@ public:
     virtual bool IsPrepared() const = 0;
     bool IsPause() const;
     bool IsMute() const;
-    
+
     bool IsStarted() const { return m_StartedFlag; }
 
     void SetPriority(int priority, int ambientPriority);
@@ -435,7 +435,7 @@ public:
     int GetRemainingPauseFadeFrames() const;
     int GetRemainingMuteFadeFrames() const;
 
-    int GetPlayerPriority() const { return m_Priority; }
+    int GetPlayerPriority() const { return m_AmbientParam.GetPriority(); }
 
     void CalculateSoundParamCalculationValues(SoundParamCalculationValues* pOutValue) const;
 

@@ -4,15 +4,17 @@
 #include <nn/util/util_IntrusiveList.h>
 
 #include <nn/atk/atk_Config.h>
+#include <nn/atk/atk_ProfileReader.h>
 #include <nn/atk/detail/atk_IStreamDataDecoder.h>
 #include <nn/atk/fnd/os/atkfnd_CriticalSection.h>
-#include <nn/atk/atk_ProfileReader.h>
 
 namespace nn::atk {
 
 namespace detail::driver {
+
 class StreamSoundPlayer;
-} // namespace nn::atk::detail::driver 
+
+}  // namespace detail::driver
 
 struct TaskProfile {
     enum TaskProfileType {
@@ -36,7 +38,7 @@ struct TaskProfile {
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
         void SetTick(const os::Tick& beginTick, const os::Tick& endTick);
 #else
-        void SetData(const os::Tick& beginTick, const os::Tick& endTick, 
+        void SetData(const os::Tick& beginTick, const os::Tick& endTick,
                      const detail::IStreamDataDecoder::CacheProfile& cacheProfile);
 #endif
 
@@ -76,11 +78,11 @@ struct TaskProfile {
 #endif
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-        void SetData(const os::Tick& beginTick, const os::Tick& endTick, 
+        void SetData(const os::Tick& beginTick, const os::Tick& endTick,
                      detail::IStreamDataDecoder::DecodeProfile* decodeProfile);
 #else
-        void SetData(const os::Tick& beginTick, const os::Tick& endTick, 
-                     const detail::IStreamDataDecoder::DecodeProfile& decodeProfile, 
+        void SetData(const os::Tick& beginTick, const os::Tick& endTick,
+                     const detail::IStreamDataDecoder::DecodeProfile& decodeProfile,
                      const detail::IStreamDataDecoder::CacheProfile& cacheProfile);
 #endif
 
@@ -122,17 +124,17 @@ using TaskProfileReader = AtkProfileReader<TaskProfile>;
 
 class TaskProfileLogger {
 public:
-    using TaskProfileReaderList = util::IntrusiveList<TaskProfileReader, 
-                                    util::IntrusiveListMemberNodeTraits<TaskProfileReader, 
-                                        &TaskProfileReader::m_List>>;
-    
+    using TaskProfileReaderList = util::IntrusiveList<
+        TaskProfileReader,
+        util::IntrusiveListMemberNodeTraits<TaskProfileReader, &TaskProfileReader::m_List>>;
+
     TaskProfileLogger();
 
     void Record(const TaskProfile& profile);
 
     void RegisterReader(TaskProfileReader& profileReader);
     void UnregisterReader(const TaskProfileReader& profileReader);
-    
+
     void SetProfilingEnabled(bool isEnabledProfiling);
 
     void Finalize();
@@ -143,4 +145,5 @@ private:
     bool m_IsProfilingEnabled;
 };
 static_assert(sizeof(TaskProfileLogger) == 0x38);
-} // namespace nn::atk
+
+}  // namespace nn::atk

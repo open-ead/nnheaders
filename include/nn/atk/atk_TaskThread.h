@@ -5,6 +5,7 @@
 #include <nn/atk/fnd/os/atkfnd_Thread.h>
 
 namespace nn::atk::detail {
+
 class TaskThread : fnd::Thread::Handler {
 public:
     TaskThread();
@@ -12,9 +13,9 @@ public:
 
     void Destroy();
 
-    bool Create(s32 priority, void* stackBase, size_t stackSize, 
-                s32 idealCoreNumber, u32 affinityMask, FsPriority fsPriority);
-    
+    bool Create(s32 priority, void* stackBase, size_t stackSize, s32 idealCoreNumber,
+                u32 affinityMask, FsPriority fsPriority);
+
     u32 Run(void* param) override;
 
 private:
@@ -25,4 +26,5 @@ private:
     FsPriority m_FsPriority;
 };
 static_assert(sizeof(TaskThread) == 0x220);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

@@ -3,6 +3,7 @@
 #include <nn/atk/atk_Channel.h>
 
 namespace nn::atk::detail::driver {
+
 class SequenceSoundPlayer;
 
 struct NoteOnInfo {
@@ -28,8 +29,9 @@ static_assert(sizeof(NoteOnInfo) == 0x38);
 class NoteOnCallback {
 public:
     virtual ~NoteOnCallback();
-    virtual Channel* NoteOn(SequenceSoundPlayer* seqPlayer, u8 bankIndex, 
+    virtual Channel* NoteOn(SequenceSoundPlayer* seqPlayer, u8 bankIndex,
                             const NoteOnInfo& noteOnInfo) = 0;
 };
 static_assert(sizeof(NoteOnCallback) == 0x8);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail::driver

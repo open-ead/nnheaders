@@ -3,6 +3,7 @@
 #include <nn/atk/atk_SoundArchive.h>
 
 namespace nn::atk::detail {
+
 class SoundArchiveParametersHook {
 public:
     bool GetIsEnable() const { return m_IsEnable; }
@@ -50,7 +51,8 @@ public:
         return false;
     }
 
-    bool ReadSoundGroupInfo(SoundArchive::ItemId soundGroupId, SoundArchive::SoundGroupInfo* info) const {
+    bool ReadSoundGroupInfo(SoundArchive::ItemId soundGroupId,
+                            SoundArchive::SoundGroupInfo* info) const {
         if (m_IsEnable)
             return ReadSoundGroupInfoImpl(soundGroupId, info);
 
@@ -70,7 +72,7 @@ public:
 
         return false;
     }
-    
+
     bool ReadSoundArchivePlayerInfo(SoundArchive::SoundArchivePlayerInfo* info) const {
         if (m_IsEnable)
             return ReadSoundArchivePlayerInfoImpl(info);
@@ -85,28 +87,32 @@ public:
         return false;
     }
 
-    bool ReadWaveArchiveInfo(SoundArchive::ItemId warcId, SoundArchive::WaveArchiveInfo* info) const {
+    bool ReadWaveArchiveInfo(SoundArchive::ItemId warcId,
+                             SoundArchive::WaveArchiveInfo* info) const {
         if (m_IsEnable)
             return ReadWaveArchiveInfoImpl(warcId, info);
 
         return false;
     }
-    
-    bool ReadSequenceSoundInfo(SoundArchive::ItemId soundId, SoundArchive::SequenceSoundInfo* info) const {
+
+    bool ReadSequenceSoundInfo(SoundArchive::ItemId soundId,
+                               SoundArchive::SequenceSoundInfo* info) const {
         if (m_IsEnable)
             return ReadSequenceSoundInfoImpl(soundId, info);
 
         return false;
     }
 
-    bool ReadStreamSoundInfo(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo* info) const {
+    bool ReadStreamSoundInfo(SoundArchive::ItemId soundId,
+                             SoundArchive::StreamSoundInfo* info) const {
         if (m_IsEnable)
             return ReadStreamSoundInfoImpl(soundId, info);
 
         return false;
     }
 
-    bool ReadStreamSoundInfo2(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo2* info) const {
+    bool ReadStreamSoundInfo2(SoundArchive::ItemId soundId,
+                              SoundArchive::StreamSoundInfo2* info) const {
         if (m_IsEnable)
             return ReadStreamSoundInfo2Impl(soundId, info);
 
@@ -119,7 +125,7 @@ public:
 
         return false;
     }
-    
+
     bool ReadSoundUserParam(u32* pOutValue, SoundArchive::ItemId soundId, int index) const {
         if (m_IsEnable)
             return ReadSoundUserParamImpl(pOutValue, soundId, index);
@@ -138,23 +144,36 @@ protected:
     virtual const char* GetItemLabelImpl(SoundArchive::ItemId id) const;
     virtual SoundArchive::ItemId GetItemIdImpl(const char* itemLabel) const;
     virtual SoundArchive::SoundType GetSoundTypeImpl(const char* itemLabel) const;
-    virtual bool ReadSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::SoundInfo* info) const;
+    virtual bool ReadSoundInfoImpl(SoundArchive::ItemId soundId,
+                                   SoundArchive::SoundInfo* info) const;
     virtual bool ReadBankInfoImpl(SoundArchive::ItemId bankId, SoundArchive::BankInfo* info) const;
-    virtual bool ReadPlayerInfoImpl(SoundArchive::ItemId playerId, SoundArchive::PlayerInfo* info) const;
-    virtual bool ReadSoundGroupInfoImpl(SoundArchive::ItemId soundGroupId, SoundArchive::SoundGroupInfo* info) const;
-    virtual bool ReadGroupInfoImpl(SoundArchive::ItemId groupId, SoundArchive::GroupInfo* info) const;
-    virtual bool ReadWaveArchiveInfoImpl(SoundArchive::ItemId warcId, SoundArchive::WaveArchiveInfo* info) const;
-    virtual bool ReadFileInfoImpl(SoundArchive::FileId id, SoundArchive::FileInfo* info, int index) const;
+    virtual bool ReadPlayerInfoImpl(SoundArchive::ItemId playerId,
+                                    SoundArchive::PlayerInfo* info) const;
+    virtual bool ReadSoundGroupInfoImpl(SoundArchive::ItemId soundGroupId,
+                                        SoundArchive::SoundGroupInfo* info) const;
+    virtual bool ReadGroupInfoImpl(SoundArchive::ItemId groupId,
+                                   SoundArchive::GroupInfo* info) const;
+    virtual bool ReadWaveArchiveInfoImpl(SoundArchive::ItemId warcId,
+                                         SoundArchive::WaveArchiveInfo* info) const;
+    virtual bool ReadFileInfoImpl(SoundArchive::FileId id, SoundArchive::FileInfo* info,
+                                  int index) const;
     virtual bool ReadSoundArchivePlayerInfoImpl(SoundArchive::SoundArchivePlayerInfo* info) const;
-    virtual bool ReadSound3DInfoImpl(SoundArchive::ItemId soundId, SoundArchive::Sound3DInfo* info) const;
-    virtual bool ReadSequenceSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::SequenceSoundInfo* info) const;
-    virtual bool ReadStreamSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo* info) const;
-    virtual bool ReadStreamSoundInfo2Impl(SoundArchive::ItemId soundId, SoundArchive::StreamSoundInfo2* info) const;
-    virtual bool ReadWaveSoundInfoImpl(SoundArchive::ItemId soundId, SoundArchive::WaveSoundInfo* info) const;
-    virtual bool ReadSoundUserParamImpl(u32* pOutValue, SoundArchive::ItemId soundId, int index) const;
+    virtual bool ReadSound3DInfoImpl(SoundArchive::ItemId soundId,
+                                     SoundArchive::Sound3DInfo* info) const;
+    virtual bool ReadSequenceSoundInfoImpl(SoundArchive::ItemId soundId,
+                                           SoundArchive::SequenceSoundInfo* info) const;
+    virtual bool ReadStreamSoundInfoImpl(SoundArchive::ItemId soundId,
+                                         SoundArchive::StreamSoundInfo* info) const;
+    virtual bool ReadStreamSoundInfo2Impl(SoundArchive::ItemId soundId,
+                                          SoundArchive::StreamSoundInfo2* info) const;
+    virtual bool ReadWaveSoundInfoImpl(SoundArchive::ItemId soundId,
+                                       SoundArchive::WaveSoundInfo* info) const;
+    virtual bool ReadSoundUserParamImpl(u32* pOutValue, SoundArchive::ItemId soundId,
+                                        int index) const;
     virtual u32 GetSoundUserParamImpl(SoundArchive::ItemId soundId, u32 userParam) const;
 
 private:
     bool m_IsEnable;
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

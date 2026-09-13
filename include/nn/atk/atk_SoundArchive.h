@@ -7,12 +7,15 @@
 namespace nn::atk {
 
 namespace detail {
+
 class SoundArchiveFileReader;
 class SoundArchiveParametersHook;
 struct SoundArchiveFilesHook;
 
 namespace driver {
+
 class StreamSoundLoader;
+
 }
 
 }  // namespace detail

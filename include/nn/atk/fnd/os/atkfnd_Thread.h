@@ -1,9 +1,10 @@
 #pragma once
 
-#include <nn/types.h>
 #include <nn/os/os_ThreadTypes.h>
+#include <nn/types.h>
 
 namespace nn::atk::detail::fnd {
+
 class TimeSpan;
 
 class Thread {
@@ -11,16 +12,16 @@ public:
     enum AffinityMask {
         AffinityMask_CoreAll = -1,
         AffinityMask_CoreDefault,
-        AffinityMask_Core0  = 1 <<  0,
-        AffinityMask_Core1  = 1 <<  1,
-        AffinityMask_Core2  = 1 <<  2,
-        AffinityMask_Core3  = 1 <<  3,
-        AffinityMask_Core4  = 1 <<  4,
-        AffinityMask_Core5  = 1 <<  5,
-        AffinityMask_Core6  = 1 <<  6,
-        AffinityMask_Core7  = 1 <<  7,
-        AffinityMask_Core8  = 1 <<  8,
-        AffinityMask_Core9  = 1 <<  9,
+        AffinityMask_Core0 = 1 << 0,
+        AffinityMask_Core1 = 1 << 1,
+        AffinityMask_Core2 = 1 << 2,
+        AffinityMask_Core3 = 1 << 3,
+        AffinityMask_Core4 = 1 << 4,
+        AffinityMask_Core5 = 1 << 5,
+        AffinityMask_Core6 = 1 << 6,
+        AffinityMask_Core7 = 1 << 7,
+        AffinityMask_Core8 = 1 << 8,
+        AffinityMask_Core9 = 1 << 9,
         AffinityMask_Core10 = 1 << 10,
         AffinityMask_Core11 = 1 << 11,
         AffinityMask_Core12 = 1 << 12,
@@ -76,7 +77,6 @@ public:
     static_assert(sizeof(Handler) == 0x8);
 
     struct RunArgs {
-
         RunArgs();
 
         bool IsValid() const;
@@ -138,4 +138,5 @@ private:
     bool m_IsTerminated;
 };
 static_assert(sizeof(Thread) == 0x1f0);
-} // nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd

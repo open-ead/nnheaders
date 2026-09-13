@@ -3,6 +3,7 @@
 #include <nn/atk/atk_Util.h>
 
 namespace nn::atk::detail {
+
 struct SequenceSoundFile {
     struct DataBlock;
     struct LabelBlock;
@@ -25,13 +26,13 @@ struct SequenceSoundFile {
     struct LabelInfo;
     struct LabelBlockBody {
         Util::ReferenceTable labelInfoReferenceTable;
-        
+
         int GetLabelCount() const { return labelInfoReferenceTable.count; }
-        
+
         const LabelInfo* GetLabelInfo(int index) const;
         const char* GetLabel(int index) const;
         const char* GetLabelByOffset(u32 offset) const;
-        
+
         bool GetOffset(int index, u32* offsetPtr) const;
         bool GetOffsetByLabel(const char* label, u32* offsetPtr) const;
     };
@@ -48,4 +49,5 @@ struct SequenceSoundFile {
     };
     static_assert(sizeof(LabelInfo) == 0x10);
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

@@ -6,6 +6,7 @@
 #include <nn/atk/atk_Util.h>
 
 namespace nn::atk::detail {
+
 class Voice {
 public:
     constexpr static s32 PriorityMin = 0;
@@ -34,7 +35,7 @@ public:
     position_t GetPlayPosition() const;
 
     bool SetMonoFilter(bool enable, u16 cutoff);
-    void SetBiquadFilter(bool enable, const BiquadFilterCoefficients* coef);    
+    void SetBiquadFilter(bool enable, const BiquadFilterCoefficients* coef);
 
     void UpdateVoiceStatus();
 
@@ -67,7 +68,7 @@ static_assert(sizeof(Voice) == 0xe0);
 class VirtualVoiceManager : Util::Singleton<VirtualVoiceManager> {
 public:
     constexpr static s32 InvalidVoiceId = -1;
-    
+
     constexpr static u32 VirtualVoiceCount = 256;
     constexpr static u32 VirtualVoiceElementCount = 8;
 
@@ -75,9 +76,9 @@ public:
 
     bool AllocVirtualVoice();
     void FreeVirtualVoice(u32);
-    
+
     void UpdateVoiceInfo();
-    
+
     s32 GetAllocatedVirtualVoiceCount() const;
     s32 GetUnreleasedLowLevelVoiceCount() const;
 
@@ -89,4 +90,5 @@ private:
     util::BitFlagSet<VirtualVoiceCount, void> m_VoiceInfoDirtyTable[2];
 };
 static_assert(sizeof(VirtualVoiceManager) == 0x4868);
-} // namespace nn::atk::voice
+
+}  // namespace nn::atk::detail

@@ -5,11 +5,12 @@
 #include <nn/atk/atk_DisposeCallback.h>
 
 namespace nn::atk::detail::driver {
+
 class DisposeCallbackManager {
 public:
-    using CallbackList = util::IntrusiveList<DisposeCallback, 
-                            util::IntrusiveListMemberNodeTraits<DisposeCallback, 
-                                &DisposeCallback::m_DisposeLink>>;
+    using CallbackList = util::IntrusiveList<
+        DisposeCallback,
+        util::IntrusiveListMemberNodeTraits<DisposeCallback, &DisposeCallback::m_DisposeLink>>;
 
     DisposeCallbackManager();
 
@@ -26,4 +27,5 @@ private:
     CallbackList m_CallbackList;
 };
 static_assert(sizeof(DisposeCallbackManager) == 0x10);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail::driver

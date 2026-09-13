@@ -7,12 +7,13 @@
 #include <nn/atk/atk_OutputMixer.h>
 
 namespace nn::atk {
+
 class FinalMix : OutputMixer {
 public:
     static size_t GetRequiredMemorySize(bool isEffectEnabled);
 
-    bool Initialize(audio::AudioRendererConfig* pConfig, s32 channelCount, 
-                    bool isEffectEnabled, void* buffer, size_t bufferSize);
+    bool Initialize(audio::AudioRendererConfig* pConfig, s32 channelCount, bool isEffectEnabled,
+                    void* buffer, size_t bufferSize);
 
     void Finalize(audio::AudioRendererConfig* pConfig);
 
@@ -40,4 +41,5 @@ private:
     s32 m_ChannelCount;
 };
 static_assert(sizeof(FinalMix) == 0x50);
-} // namespace nn::atk
+
+}  // namespace nn::atk

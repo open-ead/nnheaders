@@ -3,6 +3,7 @@
 #include <nn/atk/atk_ValueArray.h>
 
 namespace nn::atk::detail {
+
 class VolumeThroughModePacket {
 public:
     using VolumeThroughModeArray = ValueArray<u8>;
@@ -25,4 +26,5 @@ private:
     float m_BinaryVolume;
 };
 static_assert(sizeof(VolumeThroughModePacket) == 0x18);
+
 }  // namespace nn::atk::detail

@@ -3,6 +3,7 @@
 #include <nn/types.h>
 
 namespace nn::audio {
+
 struct VoiceInfo;
 
 struct BiquadFilterParameter {
@@ -34,4 +35,5 @@ struct VoiceType {
     VoiceInfo* _pVoiceInfo{};
 };
 static_assert(sizeof(VoiceType) == 0x8);
-} // namespace nn::audio
+
+}  // namespace nn::audio

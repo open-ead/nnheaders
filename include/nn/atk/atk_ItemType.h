@@ -1,6 +1,7 @@
 #pragma once
 
 namespace nn::atk::detail {
+
 enum ItemType {
     ItemType_Sound = 1,
     ItemType_SoundGroup,
@@ -9,4 +10,5 @@ enum ItemType {
     ItemType_WaveArchive,
     ItemType_Group,
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

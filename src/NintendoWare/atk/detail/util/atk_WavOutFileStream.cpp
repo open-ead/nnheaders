@@ -32,11 +32,11 @@ void WavOutFileStream::SetCacheBuffer(char* buf, size_t length) {
 // NON_MATCHING: reordering of instructions
 bool WavOutFileStream::WriteHeader(int channels, size_t samplesPerSec) {
     char buffer[sizeof(WaveBinaryHeader) + FileIoBufferAlignment];
-    void* alignedBuffer {util::BytePtr(buffer).AlignUp(FileIoBufferAlignment).Get()};
+    void* alignedBuffer{util::BytePtr(buffer).AlignUp(FileIoBufferAlignment).Get()};
 
-    WaveBinaryHeader* header {new (alignedBuffer) WaveBinaryHeader};
+    WaveBinaryHeader* header{new (alignedBuffer) WaveBinaryHeader};
 
-    header->riffChunk.formatType = 0x45564157; // "WAVE"
+    header->riffChunk.formatType = 0x45564157;  // "WAVE"
     header->riffChunk.header.size = sizeof(WaveBinaryHeader) - sizeof(ChunkHeader);
     header->fmtChunk.bitsPerSample = 16;
     header->fmtChunk.blockAlign = channels * 2;
@@ -45,7 +45,7 @@ bool WavOutFileStream::WriteHeader(int channels, size_t samplesPerSec) {
     header->fmtChunk.channels = channels;
     header->fmtChunk.formatTag = FmtChunk::FormatPcm;
 
-    size_t result {Write(header, sizeof(WaveBinaryHeader))};
+    size_t result{Write(header, sizeof(WaveBinaryHeader))};
     return result == sizeof(WaveBinaryHeader);
 }
 

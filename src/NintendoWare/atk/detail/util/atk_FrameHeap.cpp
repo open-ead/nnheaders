@@ -71,7 +71,7 @@ int FrameHeap::SaveState() {
     if (m_pHeap->RecordState(m_SectionList.size())) {
         if (NewSection()) {
             int result;
-            
+
             result = m_SectionList.size() - 1;
             return result;
         }

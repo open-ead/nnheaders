@@ -2,12 +2,13 @@
 
 #include <nn/audio/audio_MemoryPoolTypes.h>
 
-#include <nn/atk/detail/atk_AdvancedWaveSoundRuntime.h>
 #include <nn/atk/atk_SequenceSoundRuntime.h>
 #include <nn/atk/atk_StreamSoundRuntime.h>
 #include <nn/atk/atk_WaveSoundRuntime.h>
+#include <nn/atk/detail/atk_AdvancedWaveSoundRuntime.h>
 
 namespace nn::atk {
+
 class SoundArchivePlayer : SoundStartable {
 public:
     constexpr static u32 BufferAlignSize = 4096;
@@ -43,8 +44,8 @@ public:
 
     bool IsAvailable() const;
 
-    bool Initialize(const SoundArchive* arc, const SoundDataManager* manager, void* buffer, 
-                    size_t size, void* strmBuffer, size_t strmBufferSize, 
+    bool Initialize(const SoundArchive* arc, const SoundDataManager* manager, void* buffer,
+                    size_t size, void* strmBuffer, size_t strmBufferSize,
                     size_t userParamSizePerSound);
     bool Initialize(const InitializeParam& param);
 
@@ -55,8 +56,8 @@ public:
     void DisposeInstances();
 
     static size_t GetRequiredMemSize(const SoundArchive* arc);
-    static size_t GetRequiredMemSize(const SoundArchive* arc, size_t userParamSizePerSound, 
-                                          s32 addonSoundArchiveCount);
+    static size_t GetRequiredMemSize(const SoundArchive* arc, size_t userParamSizePerSound,
+                                     s32 addonSoundArchiveCount);
     static size_t GetRequiredMemSize(const SoundArchive* arc, size_t userParamSizePerSound);
     static size_t GetRequiredMemSize(const InitializeParam& param);
 
@@ -64,25 +65,25 @@ public:
 
     size_t GetRequiredStreamBufferSize(const SoundArchive* arc) const;
     size_t GetRequiredStreamBufferTimes(const SoundArchive* arc) const;
-    
+
     static size_t GetRequiredStreamCacheSize(const SoundArchive* arc, size_t);
 
-
-    bool SetupMram(const SoundArchive* pArc, void* buffer, size_t size, 
-                   size_t userParamSizePerSound, s32 addonSoundArchiveCount, 
+    bool SetupMram(const SoundArchive* pArc, void* buffer, size_t size,
+                   size_t userParamSizePerSound, s32 addonSoundArchiveCount,
                    void* streamSoundInstanceBuffer, size_t streamSoundInstanceBufferSize);
 
     bool SetupSoundPlayer(const SoundArchive* pArc, void** pOutAllocatedAddr, const void* endAddr);
-    bool SetupAddonSoundArchiveContainer(s32 containerCount, void** pOutAllocatedAddr, const void* endAddr);
-    bool SetupUserParamForBasicSound(const SoundArchive::SoundArchivePlayerInfo& playerInfo, 
+    bool SetupAddonSoundArchiveContainer(s32 containerCount, void** pOutAllocatedAddr,
+                                         const void* endAddr);
+    bool SetupUserParamForBasicSound(const SoundArchive::SoundArchivePlayerInfo& playerInfo,
                                      void** pOutAllocatedAddr, const void* endAddr, size_t);
 
     detail::PlayerHeap* CreatePlayerHeap(void** pOutAllocatedAddr, const void* endAddr, size_t);
 
     void Update();
-                       
+
     SoundPlayer* GetSoundPlayer(u32);
-    
+
     SoundArchive* GetSoundArchive() const;
     AddonSoundArchive* GetAddonSoundArchive(const char*) const;
     AddonSoundArchive* GetAddonSoundArchive(s32) const;
@@ -104,11 +105,12 @@ public:
 #endif
 
     StartResult detail_SetupSound(SoundHandle* handle, u32 soundId, bool holdFlag,
-                                  const char* soundArchiveName, const StartInfo* startInfo) override;
-    StartResult detail_SetupSoundImpl(SoundHandle* handle, u32 soundId, 
+                                  const char* soundArchiveName,
+                                  const StartInfo* startInfo) override;
+    StartResult detail_SetupSoundImpl(SoundHandle* handle, u32 soundId,
                                       detail::BasicSound::AmbientInfo* ambientArgInfo,
-                                      SoundActor* actor, bool holdFlag, const char* soundArchiveName,
-                                      const StartInfo* startInfo);
+                                      SoundActor* actor, bool holdFlag,
+                                      const char* soundArchiveName, const StartInfo* startInfo);
 
     bool IsSoundArchiveFileHooksEnabled() const;
 
@@ -120,7 +122,7 @@ public:
 
     void EnableHook(const SoundArchive*, bool);
 
-    StartResult PreprocessSinglePlay(const SoundArchive::SoundInfo& info, u32 soundId, 
+    StartResult PreprocessSinglePlay(const SoundArchive::SoundInfo& info, u32 soundId,
                                      SoundPlayer& player);
 
     void SetCommonSoundParam(detail::BasicSound* pSound, const SoundArchive::SoundInfo* info);
@@ -133,7 +135,7 @@ public:
     static s32 GetSequenceSkipIntervalTick();
 
     Result ReadWaveSoundDataInfo(detail::WaveSoundDataInfo*, u32, const SoundArchive*,
-                              const SoundDataManager*) const;
+                                 const SoundDataManager*) const;
     Result ReadWaveSoundDataInfo(detail::WaveSoundDataInfo*, u32, const char*) const;
     Result ReadWaveSoundDataInfo(detail::WaveSoundDataInfo*, const char*, const char*) const;
     Result ReadWaveSoundDataInfo(detail::WaveSoundDataInfo*, u32) const;
@@ -147,29 +149,27 @@ public:
 
     static size_t GetRequiredWorkBufferSizeToReadStreamSoundHeader();
 
-    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, 
-                                         const char* const*, s32, const SoundArchive*, 
-                                         void*, size_t) const;
+    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32,
+                                         const char* const*, s32, const SoundArchive*, void*,
+                                         size_t) const;
     Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, const char*,
                                          void*, size_t) const;
-    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, 
-                                         const char* const*, s32, void*, size_t, 
-                                         const char*) const;
-    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*, 
+    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32,
+                                         const char* const*, s32, void*, size_t, const char*) const;
+    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*,
                                          const char*, void*, size_t) const;
-    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*, 
-                                         const char* const*, s32, void*, size_t,
-                                         const char*) const;
-    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, 
+    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*,
+                                         const char* const*, s32, void*, size_t, const char*) const;
+    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32,
                                          const char* const*, s32, void*, size_t) const;
-    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*, 
+    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*,
                                          const char* const*, s32, void*, size_t) const;
-    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*, 
-                                         const char*, void*, size_t, 
+    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, const char*,
+                                         const char*, void*, size_t,
                                          const char* soundArchiveName) const;
-    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, const char*, 
+    Result ReadStreamSoundRegionDataInfo(detail::StreamSoundRegionDataInfo*, u32, const char*,
                                          void*, size_t, const char* soundArchiveName) const;
-                                      
+
     void DumpMemory() const;
 
     bool ReadStreamSoundInstanceState(StreamSoundInstanceState*) const;
@@ -179,7 +179,7 @@ public:
     Result CheckStreamSoundFileExisting(char* streamSoundName) const;
     Result CheckStreamSoundFileExisting(const char*, const char*) const;
     Result CheckStreamSoundFileExisting(const SoundArchive*, u32) const;
-    
+
     SoundArchive::ItemId detail_GetItemId(char* pString) override;
     SoundArchive::ItemId detail_GetItemId(char* pString, const char* soundArchiveName) override;
 
@@ -213,4 +213,5 @@ static_assert(sizeof(SoundArchivePlayer) == 0x2e0);
 #else
 static_assert(sizeof(SoundArchivePlayer) == 0x310);
 #endif
+
 }  // namespace nn::atk

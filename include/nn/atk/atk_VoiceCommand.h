@@ -6,6 +6,7 @@
 #include <nn/atk/atk_LowLevelVoice.h>
 
 namespace nn::atk::detail {
+
 struct VoiceCommandPlay : Command {
     u32 voiceId;
     SampleFormat sampleFormat;
@@ -66,7 +67,6 @@ static_assert(sizeof(VoiceCommandAppendWaveBuffer) == 0x100);
 class VoiceReplyCommand : CommandManager {
 public:
     static void ProcessCommandList(Command* commandList);
-
 };
 static_assert(sizeof(VoiceReplyCommand) == 0x310);
 
@@ -93,4 +93,5 @@ private:
     s32 m_WaveBufferPacketCount;
 };
 static_assert(sizeof(LowLevelVoiceCommand) == 0x320);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

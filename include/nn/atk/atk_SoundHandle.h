@@ -3,6 +3,7 @@
 #include <nn/atk/atk_BasicSound.h>
 
 namespace nn::atk {
+
 class SoundHandle {
 public:
     enum MuteState {
@@ -36,4 +37,5 @@ private:
     detail::BasicSound* m_pSound;
 };
 static_assert(sizeof(SoundHandle) == 0x8);
-} // namespace nn::atk
+
+}  // namespace nn::atk

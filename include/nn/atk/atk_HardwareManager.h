@@ -8,17 +8,18 @@
 #include <nn/audio/audio_SinkTypes.h>
 
 #include <nn/atk/atk_BiquadFilterCallback.h>
-#include <nn/atk/atk_LowLevelVoice.h>
-#include <nn/atk/atk_FinalMix.h>
-#include <nn/atk/atk_SubMix.h>
 #include <nn/atk/atk_DeviceOutRecorder.h>
+#include <nn/atk/atk_FinalMix.h>
+#include <nn/atk/atk_LowLevelVoice.h>
+#include <nn/atk/atk_SubMix.h>
 #include <nn/atk/atk_Util.h>
 
 namespace nn::atk::detail::driver {
 
 class HardwareManager : public Util::Singleton<HardwareManager> {
 public:
-    using SubMixList = util::IntrusiveList<SubMix, util::IntrusiveListMemberNodeTraits<SubMix, &SubMix::m_Link>>;
+    using SubMixList =
+        util::IntrusiveList<SubMix, util::IntrusiveListMemberNodeTraits<SubMix, &SubMix::m_Link>>;
 
     constexpr static u32 SoundFrameIntervalMsec = 5;
     constexpr static u32 SoundFrameIntervalUsec = 5000;
@@ -90,9 +91,9 @@ public:
 
     class HardwareManagerParameter {
     public:
-        void SetSubMixParameter(bool isStereoModeEnabled, bool isEffectEnabled, 
+        void SetSubMixParameter(bool isStereoModeEnabled, bool isEffectEnabled,
                                 bool isSubMixEnabled, bool isAdditionalEffectBusEnabled,
-                                bool isAdditionalSubMixEnabled, bool isCustomSubMixEnabled, 
+                                bool isAdditionalSubMixEnabled, bool isCustomSubMixEnabled,
                                 s32 customSubMixCount, s32 customMixTotalChannelCount);
 
     private:
@@ -128,14 +129,18 @@ public:
 
     audio::MemoryPoolState GetMemoryPoolState(audio::MemoryPoolType* pPool);
 
-    void SetupAudioRendererParameter(audio::AudioRendererParameter* audioRendererParameter, 
-                                     const HardwareManagerParameter& hardwareManagerParameter) const;
+    void
+    SetupAudioRendererParameter(audio::AudioRendererParameter* audioRendererParameter,
+                                const HardwareManagerParameter& hardwareManagerParameter) const;
 
     size_t GetRequiredMemSize(const HardwareManagerParameter& hardwareManagerParameter) const;
     size_t GetRequiredMemSizeForMemoryPool(s32 voiceCount) const;
-    size_t GetRequiredRecorderWorkBufferSize(const HardwareManagerParameter& hardwareManagerParameter) const;
-    size_t GetRequiredCircularBufferSinkWithMemoryPoolBufferSize(const HardwareManagerParameter& hardwareManagerParameter) const;
-    size_t GetRequiredCircularBufferSinkBufferSize(const HardwareManagerParameter& hardwareManagerParameter) const;
+    size_t GetRequiredRecorderWorkBufferSize(
+        const HardwareManagerParameter& hardwareManagerParameter) const;
+    size_t GetRequiredCircularBufferSinkWithMemoryPoolBufferSize(
+        const HardwareManagerParameter& hardwareManagerParameter) const;
+    size_t GetRequiredCircularBufferSinkBufferSize(
+        const HardwareManagerParameter& hardwareManagerParameter) const;
 
     s32 GetChannelCountMax() const;
 
@@ -152,8 +157,8 @@ public:
     void StartUserCircularBufferSink(bool isForceStartMode);
     u64 ReadUserCircularBufferSink(void* buffer, size_t bufferSize);
 
-    void AttachMemoryPool(audio::MemoryPoolType* pPool, void* buffer, 
-                          size_t bufferSize, bool isSoundThreadEnabled);
+    void AttachMemoryPool(audio::MemoryPoolType* pPool, void* buffer, size_t bufferSize,
+                          bool isSoundThreadEnabled);
 
     Result RequestUpdateAudioRenderer();
 
@@ -165,14 +170,15 @@ public:
 
     s32* GetDroppedLowLevelVoiceCount() const;
 
-    size_t GetRequiredPerformanceFramesBufferSize(HardwareManagerParameter* hardwareManagerParameter);
+    size_t
+    GetRequiredPerformanceFramesBufferSize(HardwareManagerParameter* hardwareManagerParameter);
 
-    Result Initialize(void* buffer, size_t bufferSize, void* memoryPoolBuffer, size_t memoryPoolBufferSize,
-                      void* circularBufferSinkBuffer, size_t circularBufferSinkBufferSize, 
-                      HardwareManagerParameter* parameter);
+    Result Initialize(void* buffer, size_t bufferSize, void* memoryPoolBuffer,
+                      size_t memoryPoolBufferSize, void* circularBufferSinkBuffer,
+                      size_t circularBufferSinkBufferSize, HardwareManagerParameter* parameter);
 
     void SetBiquadFilterCallback(s32, const BiquadFilterCallback* callback);
-    void SetOutputMode(OutputMode mode,OutputDevice device);
+    void SetOutputMode(OutputMode mode, OutputDevice device);
 
     void UpdateEndUserOutputMode();
 
@@ -218,7 +224,8 @@ public:
     void SetMainBusChannelVolumeForAdditionalEffect(f32 volume, s32 srcChannel, s32 dstChannel);
     f32 GetMainBusChannelVolumeForAdditionalEffect(s32 srcChannel, s32 dstChannel) const;
 
-    void SetAuxBusChannelVolumeForAdditionalEffect(AuxBus bus, f32 volume, s32 srcChannel, s32 dstChannel);
+    void SetAuxBusChannelVolumeForAdditionalEffect(AuxBus bus, f32 volume, s32 srcChannel,
+                                                   s32 dstChannel);
     f32 GetAuxBusChannelVolumeForAdditionalEffect(AuxBus bus, s32 srcChannel, s32 dstChannel) const;
 
     static void FlushDataCache(void* address, size_t length);
@@ -293,4 +300,4 @@ private:
 };
 // static_assert(sizeof(HardwareManager) == 0xa58);
 
-} // namespace nn::atk::detail::driver
+}  // namespace nn::atk::detail::driver

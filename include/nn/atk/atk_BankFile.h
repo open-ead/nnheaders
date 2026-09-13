@@ -3,6 +3,7 @@
 #include <nn/atk/atk_Util.h>
 
 namespace nn::atk::detail {
+
 struct BankFile {
     struct InfoBlock;
     struct FileHeader : Util::SoundFileHeader {
@@ -17,17 +18,11 @@ struct BankFile {
         const Util::WaveIdTable& GetWaveIdTable() const;
         const Util::ReferenceTable& GetInstrumentReferenceTable() const;
 
-        u32 GetWaveIdCount() const { 
-            return GetWaveIdTable().table.count;
-        }
+        u32 GetWaveIdCount() const { return GetWaveIdTable().table.count; }
 
-        s32 GetInstrumentCount() const {
-            return GetInstrumentReferenceTable().count;
-        }
+        s32 GetInstrumentCount() const { return GetInstrumentReferenceTable().count; }
 
-        const Util::WaveId* GetWaveId(u32 index) const {
-            return GetWaveIdTable().GetWaveId(index);
-        }
+        const Util::WaveId* GetWaveId(u32 index) const { return GetWaveIdTable().GetWaveId(index); }
 
         const Instrument* GetInstrument(int programNo) const;
     };
@@ -63,7 +58,7 @@ struct BankFile {
         u8 GetOriginalKey() const;
         u8 GetVolume() const;
         u8 GetPan() const;
-        float GetPitch() const ;
+        float GetPitch() const;
         bool IsIgnoreNoteOff() const;
         u8 GetKeyGroup() const;
         u8 GetInterpolationType() const;
@@ -91,4 +86,5 @@ struct BankFile {
     };
     static_assert(sizeof(RegionParameter) == 0x28);
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

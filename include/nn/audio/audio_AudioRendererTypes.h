@@ -3,6 +3,7 @@
 #include <nn/audio/audio_Common.h>
 
 namespace nn::audio {
+
 enum AudioRendererRenderingDevice {
     AudioRendererRenderingDevice_AudioCoprocessor,
     AudioRendererRenderingDevice_Cpu,
@@ -62,4 +63,5 @@ struct AudioRendererConfig {
     size_t _configBufferSize;
 };
 static_assert(sizeof(AudioRendererConfig) == 0x70);
-} // namespace nn::audio
+
+}  // namespace nn::audio

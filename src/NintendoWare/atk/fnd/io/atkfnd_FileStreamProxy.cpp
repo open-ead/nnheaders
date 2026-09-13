@@ -4,6 +4,7 @@
 #include "nn/atk/fnd/basis/atkfnd_Config.h"
 
 namespace nn::atk::detail::fnd {
+
 FileStreamProxy::FileStreamProxy(FileStream* fileStream, position_t offset, size_t fileSize)
     : m_pFileStream{fileStream}, m_Offset{offset}, m_FileSize{fileSize} {}
 
@@ -66,7 +67,7 @@ FndResult FileStreamProxy::Seek(position_t offset, fnd::Stream::SeekOrigin origi
         break;
     case SeekOrigin_Current:
         offset = m_pFileStream->GetCurrentPosition() + offset;
-        break; 
+        break;
     default:
         return FndResult{FndResultType_Failed};
     }
@@ -112,4 +113,5 @@ position_t FileStreamProxy::GetCachePosition() {
 size_t FileStreamProxy::GetCachedLength() {
     return m_pFileStream->GetCachedLength();
 }
-} // namespace nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd

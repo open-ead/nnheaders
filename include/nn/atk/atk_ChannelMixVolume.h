@@ -3,6 +3,7 @@
 #include <nn/atk/atk_Global.h>
 
 namespace nn::atk {
+
 class ChannelMixVolume {
 public:
     static const int ChannelCountMax = 24;
@@ -10,7 +11,7 @@ public:
     ChannelMixVolume();
     explicit ChannelMixVolume(const MixVolume& mixVolume);
     ChannelMixVolume(const float* pVolume, int volumeCount);
-    
+
     bool SetChannelCount(int channelCount);
     int GetChannelCount() const;
 
@@ -26,4 +27,5 @@ private:
     float m_ChannelVolume[ChannelCountMax];
 };
 static_assert(sizeof(ChannelMixVolume) == 0x64);
-} // namespace nn::atk
+
+}  // namespace nn::atk

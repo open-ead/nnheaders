@@ -2,10 +2,11 @@
 
 #include <new>
 
-#include <nn/atk/fnd/os/atkfnd_ScopedLock.h>
 #include <nn/atk/fnd/io/atkfnd_FileStreamProxy.h>
+#include <nn/atk/fnd/os/atkfnd_ScopedLock.h>
 
 namespace nn::atk {
+
 FsSoundArchive::FsSoundArchive() = default;
 
 FsSoundArchive::~FsSoundArchive() {
@@ -24,13 +25,13 @@ void FsSoundArchive::Close() {
 }
 
 bool FsSoundArchive::LoadHeader(void* buffer, size_t size) {
-    const s32 infoChunkOffset {m_ArchiveReader.GetInfoBlockOffset()};
-    const u32 infoChunkSize {m_ArchiveReader.GetInfoBlockSize()};
+    const s32 infoChunkOffset{m_ArchiveReader.GetInfoBlockOffset()};
+    const u32 infoChunkSize{m_ArchiveReader.GetInfoBlockSize()};
 
     if (size >= infoChunkSize) {
         FileAccessBegin();
         m_FileStream.Seek(infoChunkOffset, detail::fnd::Stream::SeekOrigin_Begin);
-        size_t readSize {m_FileStream.Read(buffer, infoChunkSize, nullptr)};
+        size_t readSize{m_FileStream.Read(buffer, infoChunkSize, nullptr)};
 
         if (readSize == infoChunkSize) {
             FileAccessEnd();
@@ -43,13 +44,13 @@ bool FsSoundArchive::LoadHeader(void* buffer, size_t size) {
 }
 
 bool FsSoundArchive::LoadLabelStringData(void* buffer, size_t size) {
-    const s32 stringBlockOffset {m_ArchiveReader.GetStringBlockOffset()};
-    const u32 stringBlockSize {m_ArchiveReader.GetStringBlockSize()};
+    const s32 stringBlockOffset{m_ArchiveReader.GetStringBlockOffset()};
+    const u32 stringBlockSize{m_ArchiveReader.GetStringBlockSize()};
 
     if (stringBlockOffset != detail::Util::Reference::InvalidOffset && size >= stringBlockSize) {
         FileAccessBegin();
         m_FileStream.Seek(stringBlockOffset, detail::fnd::Stream::SeekOrigin_Begin);
-        size_t readSize {m_FileStream.Read(buffer, stringBlockSize, nullptr)};
+        size_t readSize{m_FileStream.Read(buffer, stringBlockSize, nullptr)};
 
         if (readSize == stringBlockSize) {
             FileAccessEnd();
@@ -67,14 +68,14 @@ size_t FsSoundArchive::detail_GetRequiredStreamBufferSize() const {
 
 const void* FsSoundArchive::detail_GetFileAddress([[maybe_unused]] ItemId itemId) const {
     return nullptr;
-} 
+}
 
 void FsSoundArchive::FileAccessBegin() const {
     if (m_FileAccessMode == FileAccessMode_InFunction) {
         detail::fnd::ScopedLock<detail::fnd::CriticalSection> lock{m_FileOpenCloseLock};
         if (m_FileAccessCount == 0)
             m_FileStream.Open(m_SoundArchiveFullPath, detail::fnd::FileStream::AccessMode_Read);
-    
+
         ++m_FileAccessCount;
     }
 }
@@ -84,16 +85,16 @@ void FsSoundArchive::FileAccessEnd() const {
         detail::fnd::ScopedLock<detail::fnd::CriticalSection> lock{m_FileOpenCloseLock};
         if (m_FileAccessCount == 1)
             m_FileStream.Close();
-        
+
         if (m_FileAccessCount != 0)
             --m_FileAccessCount;
     }
 }
 
 // NON_MATCHING
-detail::fnd::FileStream* FsSoundArchive::OpenStream(void* buffer, size_t size, 
-                                                    position_t begin, size_t length) const {
-    detail::fnd::FileStream* stream {};
+detail::fnd::FileStream* FsSoundArchive::OpenStream(void* buffer, size_t size, position_t begin,
+                                                    size_t length) const {
+    detail::fnd::FileStream* stream{};
     if (sizeof(detail::fnd::FileStreamProxy) <= size && m_IsOpened) {
         stream = new (buffer) detail::fnd::FileStreamProxy(&m_FileStream, begin, length);
     }
@@ -102,9 +103,10 @@ detail::fnd::FileStream* FsSoundArchive::OpenStream(void* buffer, size_t size,
 }
 
 // NON_MATCHING
-detail::fnd::FileStream* FsSoundArchive::OpenExtStream(void* buffer, size_t size, const char* extFilePath,
-                                                       void* cacheBuffer, size_t cacheSize) const {
-    detail::fnd::FileStream* fileStream {};
+detail::fnd::FileStream* FsSoundArchive::OpenExtStream(void* buffer, size_t size,
+                                                       const char* extFilePath, void* cacheBuffer,
+                                                       size_t cacheSize) const {
+    detail::fnd::FileStream* fileStream{};
     if (size >= sizeof(detail::fnd::FileStreamImpl) && m_IsOpened) {
         fileStream = new (buffer) detail::fnd::FileStreamImpl();
 
@@ -112,8 +114,7 @@ detail::fnd::FileStream* FsSoundArchive::OpenExtStream(void* buffer, size_t size
 
         if (!fileStream->IsOpened()) {
             fileStream = nullptr;
-        }
-        else {
+        } else {
             if (cacheBuffer != nullptr && cacheSize != 0)
                 fileStream->EnableCache(cacheBuffer, cacheSize);
         }
@@ -127,16 +128,16 @@ bool FsSoundArchive::LoadFileHeader() {
     const size_t headerAlignSize = 256;
 
     char headerArea[sizeof(detail::SoundArchiveFile::FileHeader) + headerAlignSize + Align];
-    void* file {util::BytePtr(headerArea).AlignUp(Align).Get()};
-    
-    size_t readSize {m_FileStream.Read(file, headerAlignSize, nullptr)};
+    void* file{util::BytePtr(headerArea).AlignUp(Align).Get()};
 
-    if (readSize != headerAlignSize) 
+    size_t readSize{m_FileStream.Read(file, headerAlignSize, nullptr)};
+
+    if (readSize != headerAlignSize)
         return false;
-    
+
     m_ArchiveReader.Initialize(file);
     Initialize(&m_ArchiveReader);
     return true;
 }
-} // namespace nn::atk
 
+}  // namespace nn::atk

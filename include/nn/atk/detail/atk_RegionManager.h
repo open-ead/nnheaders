@@ -7,6 +7,7 @@
 #include <nn/atk/detail/atk_IRegionInfoReadable.h>
 
 namespace nn::atk {
+
 enum StreamRegionCallbackResult {
     StreamRegionCallbackResult_Finish,
     StreamRegionCallbackResult_Continue,
@@ -21,9 +22,10 @@ struct StreamRegionCallbackParam {
 };
 static_assert(sizeof(StreamRegionCallbackParam) == 0x58);
 
-using StreamRegionCallback = StreamRegionCallbackResult(*)(StreamRegionCallbackParam*,void*);
+using StreamRegionCallback = StreamRegionCallbackResult (*)(StreamRegionCallbackParam*, void*);
 
 namespace detail {
+
 struct StreamDataInfoDetail;
 
 class RegionManager {
@@ -38,18 +40,18 @@ public:
     };
 
     void Initialize();
-    bool InitializeRegion(IRegionInfoReadable* pRegionReader, 
+    bool InitializeRegion(IRegionInfoReadable* pRegionReader,
                           StreamDataInfoDetail* pStreamDataInfo);
 
     bool IsPreparedForRegionJump() const;
-    
-    bool ChangeRegion(s32 currentRegionNo, IRegionInfoReadable* pRegionReader, 
+
+    bool ChangeRegion(s32 currentRegionNo, IRegionInfoReadable* pRegionReader,
                       StreamDataInfoDetail* pStreamDataInfo);
 
-    bool SetRegionInfo(const StreamSoundFile::RegionInfo* pRegionInfo, 
+    bool SetRegionInfo(const StreamSoundFile::RegionInfo* pRegionInfo,
                        const StreamDataInfoDetail* pStreamDataInfo);
 
-    bool TryMoveNextRegion(IRegionInfoReadable* pRegionReader, 
+    bool TryMoveNextRegion(IRegionInfoReadable* pRegionReader,
                            StreamDataInfoDetail* pStreamDataInfo);
 
     void SetPosition(position_t position);
@@ -80,5 +82,6 @@ static_assert(sizeof(RegionManager) == 0x440);
 #else
 static_assert(sizeof(RegionManager) == 0x4c0);
 #endif
-} // namespace nn::atk::detail
-} // namespace nn::atk
+
+}  // namespace detail
+}  // namespace nn::atk

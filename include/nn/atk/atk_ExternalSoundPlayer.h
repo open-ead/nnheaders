@@ -5,11 +5,12 @@
 #include <nn/atk/atk_BasicSound.h>
 
 namespace nn::atk::detail {
+
 class ExternalSoundPlayer {
 public:
     using SoundList = util::IntrusiveList<
-                        BasicSound, util::IntrusiveListMemberNodeTraits<
-                            BasicSound, &BasicSound::m_ExtSoundPlayerPlayLink>>;
+        BasicSound,
+        util::IntrusiveListMemberNodeTraits<BasicSound, &BasicSound::m_ExtSoundPlayerPlayLink>>;
 
     virtual ~ExternalSoundPlayer();
     virtual bool CanPlaySound(s32);
@@ -36,4 +37,5 @@ private:
     s32 m_PlayableCount;
 };
 static_assert(sizeof(ExternalSoundPlayer) == 0x20);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

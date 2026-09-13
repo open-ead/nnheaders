@@ -3,6 +3,7 @@
 #include <nn/types.h>
 
 namespace nn::audio {
+
 struct WaveBuffer {
     const void* buffer;
     size_t size;
@@ -14,4 +15,5 @@ struct WaveBuffer {
     size_t contextSize;
 };
 static_assert(sizeof(WaveBuffer) == 0x30);
-} // namespace nn::audio
+
+}  // namespace nn::audio

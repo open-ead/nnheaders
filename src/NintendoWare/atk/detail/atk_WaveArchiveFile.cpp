@@ -3,11 +3,12 @@
 #include <nn/atk/atk_ElementType.h>
 
 namespace nn::atk::detail {
-const WaveArchiveFile::InfoBlock* WaveArchiveFile::FileHeader::GetInfoBlock() const { // 28
+
+const WaveArchiveFile::InfoBlock* WaveArchiveFile::FileHeader::GetInfoBlock() const {  // 28
     return util::ConstBytePtr(this, GetInfoBlockOffset()).Get<InfoBlock>();
 }
 
-const WaveArchiveFile::FileBlock* WaveArchiveFile::FileHeader::GetFileBlock() const { // 34
+const WaveArchiveFile::FileBlock* WaveArchiveFile::FileHeader::GetFileBlock() const {  // 34
     return util::ConstBytePtr(this, GetFileBlockOffset()).Get<FileBlock>();
 }
 
@@ -28,7 +29,7 @@ u32 WaveArchiveFile::FileHeader::GetFileBlockOffset() const {
 }
 
 const Util::ReferenceWithSize* WaveArchiveFile::FileHeader::GetReferenceBy(u16 typeId) const {
-    for (int i {0}; i < BlockCount; ++i) {
+    for (int i{0}; i < BlockCount; ++i) {
         if (toBlocks[i].IsValidTypeId(typeId)) {
             return &toBlocks[i];
         }
@@ -36,4 +37,5 @@ const Util::ReferenceWithSize* WaveArchiveFile::FileHeader::GetReferenceBy(u16 t
 
     return nullptr;
 }
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

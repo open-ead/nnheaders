@@ -6,6 +6,7 @@
 #include <nn/atk/atk_ProfileReader.h>
 
 namespace nn::atk::detail::driver {
+
 struct StreamChannel {
     void AppendWaveBuffer(WaveBuffer* pBuffer, bool lastFlag);
     os::Tick GetProcessTick(const SoundProfile& profile);
@@ -22,7 +23,7 @@ class StreamTrack {
 public:
     StreamTrack() = default;
     ~StreamTrack();
-    
+
 private:
     bool m_ActiveFlag;
     StreamChannel* m_pChannels[2];
@@ -41,4 +42,5 @@ private:
     OutputParam m_TvParam;
 };
 static_assert(sizeof(StreamTrack) == 0x80);
-} // namespace nn::atk::detail::driver
+
+}  // namespace nn::atk::detail::driver

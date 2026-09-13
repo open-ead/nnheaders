@@ -4,15 +4,16 @@
 #include <nn/atk/fnd/io/atkfnd_StreamCache.h>
 
 namespace nn::atk::detail::fnd {
+
 class FileStream : public Stream {
 public:
     enum AccessMode {
-        AccessMode_None                 = 0,
-        AccessMode_Read                 = 1 << 0,
-        AccessMode_Write                = 1 << 1,
-        AccessMode_AllowAppend          = 1 << 2,
-        AccessMode_ReadAndWrite         = AccessMode_Read | AccessMode_Write,
-        AccessMode_AllowAppendAndWrite  = AccessMode_AllowAppend | AccessMode_Write,
+        AccessMode_None = 0,
+        AccessMode_Read = 1 << 0,
+        AccessMode_Write = 1 << 1,
+        AccessMode_AllowAppend = 1 << 2,
+        AccessMode_ReadAndWrite = AccessMode_Read | AccessMode_Write,
+        AccessMode_AllowAppendAndWrite = AccessMode_AllowAppend | AccessMode_Write,
     };
 
     ~FileStream() override = default;
@@ -20,7 +21,7 @@ public:
     virtual FndResult Open(const char* filePath, AccessMode openMode) = 0;
     void Close() override = 0;
     virtual void Flush() = 0;
-    
+
     bool IsOpened() const override = 0;
 
     bool CanRead() const override = 0;
@@ -48,4 +49,5 @@ public:
     virtual size_t GetCachedLength() = 0;
 };
 static_assert(sizeof(FileStream) == 0x8);
-} // namespace nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd

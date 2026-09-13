@@ -1,15 +1,16 @@
 #pragma once
 
 #include <nn/atk/atk_ElementType.h>
-#include <nn/atk/atk_StreamSoundFile.h>
 #include <nn/atk/atk_SoundArchive.h>
+#include <nn/atk/atk_StreamSoundFile.h>
 
 namespace nn::atk::detail {
+
 class SoundArchiveParametersHook;
 
 class SoundArchiveFile {
 public:
-    static const int BlockCount {3};
+    static const int BlockCount{3};
 
     struct FileHeader : BinaryFileHeader {
         Util::ReferenceWithSize toBlocks[BlockCount];
@@ -39,20 +40,16 @@ public:
         Util::Reference toSection[1];
 
         const char* GetString(SoundArchive::StringId stringId) const;
-        
-        u32 GetStringCount() const {
-            return GetStringTable()->GetCount();
-        }
 
-        u32 GetItemId(const char* str) const {
-            return GetItemIdImpl(Sections_PatriciaTree, str);
-        }
+        u32 GetStringCount() const { return GetStringTable()->GetCount(); }
+
+        u32 GetItemId(const char* str) const { return GetItemIdImpl(Sections_PatriciaTree, str); }
 
         void DumpTree() const;
-    
+
     private:
         const void* GetSection(Sections section) const;
-        
+
         const StringTable* GetStringTable() const {
             return util::ConstBytePtr(GetSection(Sections_StringTable)).Get<StringTable>();
         }
@@ -75,7 +72,7 @@ public:
         static_assert(sizeof(NodeData) == 0x8);
 
         struct Node {
-            static const u16 FlagLeaf {1 << 0};
+            static const u16 FlagLeaf{1 << 0};
 
             u16 flags;
             u16 bit;
@@ -109,7 +106,7 @@ public:
             // TODO
             return nullptr;
         }
-        
+
         u32 GetDataCount() const;
         u32 GetCount() const;
     };
@@ -126,9 +123,7 @@ public:
             return util::ConstBytePtr(this, table.item[stringId].offset).Get<char>();
         }
 
-        u32 GetCount() const {
-            return table.count;
-        }
+        u32 GetCount() const { return table.count; }
     };
 
     struct SoundInfo;
@@ -164,7 +159,7 @@ public:
         const GroupInfo* GetGroupInfo(SoundArchive::ItemId itemId) const;
         const WaveArchiveInfo* GetWaveArchiveInfo(SoundArchive::ItemId itemId) const;
         const FileInfo* GetFileInfo(SoundArchive::FileId itemId) const;
-        
+
         const SoundArchivePlayerInfo* GetSoundArchivePlayerInfo() const;
 
         SoundArchive::FileId GetItemFileId(SoundArchive::ItemId id) const;
@@ -229,13 +224,12 @@ public:
         Util::ReferenceTable table;
 
         const StreamTrackInfo* GetTrackInfo(u32 index) {
-            return util::ConstBytePtr(table.GetReferedItem(ElementType_SoundArchiveFile_StreamSoundTrackInfo, index))
-                    .Get<StreamTrackInfo>();
+            return util::ConstBytePtr(table.GetReferedItem(
+                                          ElementType_SoundArchiveFile_StreamSoundTrackInfo, index))
+                .Get<StreamTrackInfo>();
         }
-        
-        u32 GetTrackCount() const {
-            return table.count;
-        }
+
+        u32 GetTrackCount() const { return table.count; }
     };
 
     struct SendValue {
@@ -256,22 +250,19 @@ public:
         u8 biquadValue;
         u8 padding[1];
 
-        u32 GetTrackChannelCount() const {
-            return GetGlobalChannelIndexTable().GetCount();
-        }
+        u32 GetTrackChannelCount() const { return GetGlobalChannelIndexTable().GetCount(); }
 
         u8 GetGlobalChannelIndex(u32 index) const {
             return GetGlobalChannelIndexTable().GetGlobalIndex(index);
         }
 
         const SendValue& GetSendValue() const {
-            return *util::ConstBytePtr(this, toSendValue.offset)
-                    .Get<SendValue>();
+            return *util::ConstBytePtr(this, toSendValue.offset).Get<SendValue>();
         }
 
         const StreamSoundFile::GlobalChannelIndexTable& GetGlobalChannelIndexTable() const {
             return *util::ConstBytePtr(this, toGlobalChannelIndexTable.offset)
-                    .Get<StreamSoundFile::GlobalChannelIndexTable>();
+                        .Get<StreamSoundFile::GlobalChannelIndexTable>();
         }
     };
     static_assert(sizeof(StreamTrackInfo) == 0x18);
@@ -292,9 +283,7 @@ public:
             }
         }
 
-        bool IsLoop() const {
-            return Util::DivideBy8bit(streamTypeInfo, 1) != 0;
-        }
+        bool IsLoop() const { return Util::DivideBy8bit(streamTypeInfo, 1) != 0; }
 
         SoundArchive::DecodeMode GetDecodeMode() const {
             switch (Util::DivideBy8bit(streamTypeInfo, 2)) {
@@ -374,7 +363,7 @@ public:
 
         const Util::Table<SoundArchive::ItemId>* GetWaveArchiveItemIdTable() const {
             return util::ConstBytePtr(this, toWaveArchiveItemIdTable.offset)
-                    .Get<Util::Table<SoundArchive::ItemId>>();
+                .Get<Util::Table<SoundArchive::ItemId>>();
         }
     };
     static_assert(sizeof(BankInfo) == 0x10);
@@ -400,12 +389,12 @@ public:
 
         const Util::Table<SoundArchive::FileId>* GetFileIdTable() const {
             return util::ConstBytePtr(this, toFileIdTable.offset)
-                    .Get<Util::Table<SoundArchive::FileId>>();
+                .Get<Util::Table<SoundArchive::FileId>>();
         }
 
         const WaveSoundGroupInfo* GetWaveSoundGroupInfo() const {
             return util::ConstBytePtr(this, toDetailSoundGroupInfo.offset)
-                    .Get<WaveSoundGroupInfo>();
+                .Get<WaveSoundGroupInfo>();
         }
     };
     static_assert(sizeof(SoundGroupInfo) == 0x1c);
@@ -416,7 +405,7 @@ public:
 
         const Util::Table<SoundArchive::ItemId>* GetWaveArchiveItemIdTable() const {
             return util::ConstBytePtr(this, toWaveArchiveItemIdTable.offset)
-                    .Get<Util::Table<SoundArchive::ItemId>>();
+                .Get<Util::Table<SoundArchive::ItemId>>();
         }
     };
     static_assert(sizeof(WaveSoundGroupInfo) == 0xc);
@@ -459,23 +448,18 @@ public:
     static_assert(sizeof(FileInfo) == 0xc);
 
     struct InternalFileInfo {
-        static const u32 InvalidOffset {0xffffffff};
-        static const u32 InvalidSize   {0xffffffff};
+        static const u32 InvalidOffset{0xffffffff};
+        static const u32 InvalidSize{0xffffffff};
 
         Util::ReferenceWithSize toFileImageFromFileBlockBody;
         Util::Reference toAttachedGroupIdTable;
 
-        u32 GetFileSize() const {
-            return toFileImageFromFileBlockBody.size;
-        }
+        u32 GetFileSize() const { return toFileImageFromFileBlockBody.size; }
 
-        u32 GetOffsetFromFileBlockHead() const {
-            return toFileImageFromFileBlockBody.offset;
-        }
+        u32 GetOffsetFromFileBlockHead() const { return toFileImageFromFileBlockBody.offset; }
 
         const Util::Table<u32>* GetAttachedGroupTable() const {
-            return util::ConstBytePtr(this, toAttachedGroupIdTable.offset)
-                    .Get<Util::Table<u32>>();
+            return util::ConstBytePtr(this, toAttachedGroupIdTable.offset).Get<Util::Table<u32>>();
         }
     };
     static_assert(sizeof(InternalFileInfo) == 0x14);
@@ -500,4 +484,5 @@ public:
 
     struct FileBlock {};
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

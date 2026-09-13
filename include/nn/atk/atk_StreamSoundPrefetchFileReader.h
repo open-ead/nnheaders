@@ -1,9 +1,10 @@
 #pragma once
 
-#include <nn/atk/detail/atk_IRegionInfoReadable.h>
 #include <nn/atk/atk_StreamSoundPrefetchFile.h>
+#include <nn/atk/detail/atk_IRegionInfoReadable.h>
 
 namespace nn::atk::detail {
+
 class StreamSoundPrefetchFileReader : public IRegionInfoReadable {
 public:
     struct PrefetchDataInfo {
@@ -24,9 +25,7 @@ public:
         m_RegionInfoBytes = 0;
     }
 
-    bool IsAvailable() const {
-        return m_pHeader != nullptr;
-    }
+    bool IsAvailable() const { return m_pHeader != nullptr; }
 
     bool IsIncludeRegionInfo() const;
     bool IsCrc32CheckAvailable() const;
@@ -38,18 +37,18 @@ public:
     bool ReadDspAdpcmChannelInfo(DspAdpcmParam* pParam, DspAdpcmLoopParam* pLoopParam,
                                  int channelIndex) const;
     bool ReadPrefetchDataInfo(PrefetchDataInfo* pDataInfo, int prefetchIndex) const;
-    
+
     bool ReadRegionInfo(StreamSoundFile::RegionInfo* pInfo, u32 regionIndex) const override;
 
     u32 GetChannelCount() const;
     u32 GetPrefetchDataCount() const;
 
     u32 GetRegionDataOffset() const {
-        u32 result {0};
+        u32 result{0};
 
         if (IsAvailable() && m_pHeader->HasRegionBlock()) {
-            result = m_pHeader->GetRegionBlockOffset() + sizeof(BinaryBlockHeader)
-                     + m_pInfoBlockBody->GetStreamSoundInfo()->regionDataOffset.offset;
+            result = m_pHeader->GetRegionBlockOffset() + sizeof(BinaryBlockHeader) +
+                     m_pInfoBlockBody->GetStreamSoundInfo()->regionDataOffset.offset;
         }
 
         return result;
@@ -60,11 +59,12 @@ public:
     }
 
 private:
-    const StreamSoundPrefetchFile::FileHeader* m_pHeader {};
-    const StreamSoundFile::InfoBlockBody* m_pInfoBlockBody {};
-    const StreamSoundPrefetchFile::PrefetchDataBlockBody* m_pPrefetchDataBlockBody {};
-    u32 m_RegionDataOffset {0};
-    u16 m_RegionInfoBytes {0};
+    const StreamSoundPrefetchFile::FileHeader* m_pHeader{};
+    const StreamSoundFile::InfoBlockBody* m_pInfoBlockBody{};
+    const StreamSoundPrefetchFile::PrefetchDataBlockBody* m_pPrefetchDataBlockBody{};
+    u32 m_RegionDataOffset{0};
+    u16 m_RegionInfoBytes{0};
 };
 static_assert(sizeof(StreamSoundPrefetchFileReader) == 0x28);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

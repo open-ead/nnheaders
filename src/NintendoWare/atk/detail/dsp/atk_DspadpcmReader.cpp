@@ -6,6 +6,7 @@
 
 namespace nn::atk::detail {
 namespace {
+
 struct InternalDSPADPCMInfo {
     u32 sampleCount;
     u32 adpcmNibbleCount;
@@ -26,12 +27,14 @@ struct InternalDSPADPCMInfo {
     u16 pad[11];
 };
 static_assert(sizeof(InternalDSPADPCMInfo) == 0x60);
-} // anonymous namespace
+
+}  // anonymous namespace
 
 DspadpcmReader::DspadpcmReader() = default;
 
 bool DspadpcmReader::ReadWaveInfo(WaveInfo* info) const {
-    const InternalDSPADPCMInfo& data {*util::ConstBytePtr(m_pDspadpcmData).Get<InternalDSPADPCMInfo>()};
+    const InternalDSPADPCMInfo& data{
+        *util::ConstBytePtr(m_pDspadpcmData).Get<InternalDSPADPCMInfo>()};
 
     info->sampleFormat = SampleFormat_DspAdpcm;
     info->loopFlag = false;
@@ -39,8 +42,9 @@ bool DspadpcmReader::ReadWaveInfo(WaveInfo* info) const {
     info->sampleRate = data.sampleRate;
     info->loopStartFrame = 0;
     info->loopEndFrame = data.sampleCount;
-    
-    info->channelParam[0].dataAddress = util::ConstBytePtr(m_pDspadpcmData, sizeof(InternalDSPADPCMInfo)).Get();
+
+    info->channelParam[0].dataAddress =
+        util::ConstBytePtr(m_pDspadpcmData, sizeof(InternalDSPADPCMInfo)).Get();
     std::memcpy(info->channelParam[0].adpcmParam.coef, data.coef, sizeof(data.coef));
     int yn1 = data.yn1;
     info->channelParam[0].adpcmParam.predScale = data.ps;
@@ -48,4 +52,5 @@ bool DspadpcmReader::ReadWaveInfo(WaveInfo* info) const {
     info->channelParam[0].adpcmParam.yn2 = data.yn2;
     return true;
 }
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

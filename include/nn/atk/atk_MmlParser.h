@@ -3,6 +3,7 @@
 #include <nn/atk/atk_MmlSequenceTrack.h>
 
 namespace nn::atk::detail::driver {
+
 class MmlParser {
 public:
     enum SeqArgType {
@@ -25,9 +26,9 @@ public:
 
     SequenceTrack::ParseResult Parse(MmlSequenceTrack* track, bool doNoteOn) const;
 
-    s32 ReadArg(const u8** ptr, SequenceSoundPlayer* player, SequenceTrack* track, 
+    s32 ReadArg(const u8** ptr, SequenceSoundPlayer* player, SequenceTrack* track,
                 SeqArgType argType) const;
-    
+
     s32 Read24(const u8** ptr) const;
     s16 Read16(const u8** ptr) const;
 
@@ -35,7 +36,8 @@ public:
 
     s16* GetVariablePtr(SequenceSoundPlayer* player, SequenceTrack* track, s32 varNo) const;
 
-    void NoteOnCommandProc(MmlSequenceTrack* track, s32 key, s32 velocity, s32 length, bool tieFlag) const;
+    void NoteOnCommandProc(MmlSequenceTrack* track, s32 key, s32 velocity, s32 length,
+                           bool tieFlag) const;
 
     s16 ReadVar(const u8** ptr) const;
 
@@ -45,4 +47,5 @@ private:
     static bool* mPrintVarEnabledFlag;
 };
 static_assert(sizeof(MmlParser) == 0x8);
-} // namespace nn::atk::detail::driver
+
+}  // namespace nn::atk::detail::driver

@@ -1,9 +1,10 @@
 #pragma once
 
-#include <nn/types.h>
 #include <nn/atk/fnd/io/atkfnd_FileStream.h>
+#include <nn/types.h>
 
 namespace nn::atk::detail {
+
 class SoundArchiveFilesHook {
 public:
     constexpr static const char ItemTypeWaveSound[] = "wsd";
@@ -25,11 +26,15 @@ public:
     void Lock();
     void Unlock();
 
-    fnd::FileStream* OpenFile(void* buffer, size_t bufferLength, void* cacheBuffer, size_t cacheBufferLength, const char* itemLabel, const char* fileType);
+    fnd::FileStream* OpenFile(void* buffer, size_t bufferLength, void* cacheBuffer,
+                              size_t cacheBufferLength, const char* itemLabel,
+                              const char* fileType);
 
-    const void* GetFileAddress(const char* itemLabel, const char* itemType, const char* fileType, u32 fileIndex);
+    const void* GetFileAddress(const char* itemLabel, const char* itemType, const char* fileType,
+                               u32 fileIndex);
 
 private:
     bool m_IsEnable;
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

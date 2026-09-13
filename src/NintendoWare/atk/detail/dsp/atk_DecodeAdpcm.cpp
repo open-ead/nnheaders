@@ -1,21 +1,17 @@
 #include <nn/atk/atk_Adpcm.h>
 
 namespace nn::atk::detail {
-void DecodeDspAdpcm(position_t playPosition, 
-                    AdpcmContext& context,
-                    const AdpcmParam& param, 
-                    const void* adpcmData, 
-                    size_t decodeSamples, 
-                    s16* dest) 
-{
+
+void DecodeDspAdpcm(position_t playPosition, AdpcmContext& context, const AdpcmParam& param,
+                    const void* adpcmData, size_t decodeSamples, s16* dest) {
     position_t frame = playPosition / 14;
     position_t frameFrac = playPosition - frame * 14;
     const u8* frameBegin = reinterpret_cast<const u8*>(adpcmData) + (frame * 8);
 
-    s32 pred  = context.audioAdpcmContext.predScale >> 4;
+    s32 pred = context.audioAdpcmContext.predScale >> 4;
     s32 scale = context.audioAdpcmContext.predScale & 0xF;
 
-    for (u32 i {0}; i < decodeSamples; ++i) {
+    for (u32 i{0}; i < decodeSamples; ++i) {
         if (frameFrac == 0) {
             const u8 pred_scale = *frameBegin;
             context.audioAdpcmContext.predScale = pred_scale;
@@ -38,10 +34,10 @@ void DecodeDspAdpcm(position_t playPosition,
         s16 gain = static_cast<s16>(1 << scale);
 
         s32 val = a1 * context.audioAdpcmContext.history[0];
-        val  += a2 * context.audioAdpcmContext.history[1];
-        val  += gain * nibble;
+        val += a2 * context.audioAdpcmContext.history[1];
+        val += gain * nibble;
         val >>= 10;
-        val  += 1;
+        val += 1;
         val >>= 1;
 
         if (val > SHRT_MAX)
@@ -64,4 +60,5 @@ void DecodeDspAdpcm(position_t playPosition,
         }
     }
 }
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

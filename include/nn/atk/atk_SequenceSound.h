@@ -1,10 +1,11 @@
 #pragma once
 
 #include <nn/atk/atk_SequenceSoundHandle.h>
-#include <nn/atk/atk_SoundInstanceManager.h>
 #include <nn/atk/atk_SequenceSoundPlayer.h>
+#include <nn/atk/atk_SoundInstanceManager.h>
 
 namespace nn::atk::detail {
+
 class SequenceSound;
 using SequenceSoundInstanceManager = SoundInstanceManager<SequenceSound>;
 
@@ -37,8 +38,8 @@ public:
 #endif
     void Finalize() override;
 
-    void Setup(driver::SequenceTrackAllocator* trackAllocator, u32 allocTracks, 
-               driver::NoteOnCallback* noteOnCallback, s32 channelPriority, 
+    void Setup(driver::SequenceTrackAllocator* trackAllocator, u32 allocTracks,
+               driver::NoteOnCallback* noteOnCallback, s32 channelPriority,
                bool isReleasePriorityFix, SequenceUserProcCallback userproc, void* userprocArg);
 
     void Prepare(const Resource& res, const driver::SequenceSoundPlayer::StartInfo& startInfo);
@@ -46,7 +47,7 @@ public:
     void Skip(driver::SequenceSoundPlayer::StartOffsetType, s32);
 
     void SetTempoRatio(f32 tempoRatio);
-    
+
     void SetChannelPriority(s32 priority);
     void OnUpdatePlayerPriority() override;
 
@@ -83,7 +84,7 @@ public:
     bool IsAttachedTempSpecialHandle() override;
     void DetachTempSpecialHandle() override;
 
-    void RegisterDataLoadTask(const driver::SequenceSoundLoader::LoadInfo& loadInfo, 
+    void RegisterDataLoadTask(const driver::SequenceSoundLoader::LoadInfo& loadInfo,
                               const driver::SequenceSoundPlayer::StartInfo& startInfo);
 
     bool IsPrepared() const override;
@@ -91,7 +92,6 @@ public:
     driver::BasicSoundPlayer* GetBasicSoundPlayerHandle() override;
 
     void OnUpdateParam() override;
-
 
 private:
     friend SequenceSoundInstanceManager;
@@ -110,4 +110,5 @@ static_assert(sizeof(SequenceSound) == 0x570);
 #else
 static_assert(sizeof(SequenceSound) == 0x5a0);
 #endif
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

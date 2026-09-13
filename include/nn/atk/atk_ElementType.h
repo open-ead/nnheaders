@@ -1,6 +1,7 @@
 #pragma once
 
 namespace nn::atk::detail {
+
 enum ElementType {
     ElementType_Category_Tables = 0x100,
     ElementType_Category_Parameters = 0x200,
@@ -57,7 +58,8 @@ enum ElementType {
     ElementType_SoundArchiveFile_InfoBlock,
     ElementType_SoundArchiveFile_FileBlock,
 
-    ElementType_SoundArchiveFile_SoundInfoSection = ElementType_Category_SoundArchiveFile_InfoSections,
+    ElementType_SoundArchiveFile_SoundInfoSection =
+        ElementType_Category_SoundArchiveFile_InfoSections,
     ElementType_SoundArchiveFile_BankInfoSection,
     ElementType_SoundArchiveFile_PlayerInfoSection,
     ElementType_SoundArchiveFile_WaveArchiveInfoSection,
@@ -82,7 +84,7 @@ enum ElementType {
     ElementType_SoundArchiveFile_StreamSoundTrackInfo,
     ElementType_SoundArchiveFile_SendInfo,
     ElementType_SoundArchiveFile_StreamSoundExtensionInfo,
-    
+
     ElementType_SoundArchiveFile_StringTable = ElementType_Category_SoundArchiveFile_General,
     ElementType_SoundArchiveFile_PatriciaTree,
 
@@ -139,4 +141,5 @@ enum ElementType {
 
     ElementType_AnimSoundFile_EventInfo = ElementType_Category_AnimSoundFile_Items
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

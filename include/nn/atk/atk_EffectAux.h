@@ -3,15 +3,17 @@
 #include <atomic>
 
 #include <nn/util.h>
+#include <nn/util/util_IntrusiveList.h>
+
 #include <nn/audio/audio_AudioRendererTypes.h>
 #include <nn/audio/audio_EffectTypes.h>
 #include <nn/audio/audio_FinalMixTypes.h>
 #include <nn/audio/audio_SubMixTypes.h>
-#include <nn/util/util_IntrusiveList.h>
 
 #include <nn/atk/atk_Global.h>
 
 namespace nn::atk {
+
 class OutputMixer;
 
 class EffectAux {
@@ -47,20 +49,17 @@ public:
     size_t GetRequiredMemSize(const audio::AudioRendererParameter& parameter) const;
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    bool AddEffect(audio::AudioRendererConfig* pConfig, 
-                   const audio::AudioRendererParameter& parameter, 
+    bool AddEffect(audio::AudioRendererConfig* pConfig,
+                   const audio::AudioRendererParameter& parameter,
                    audio::FinalMixType* pFinalMixType);
-    bool AddEffect(audio::AudioRendererConfig* pConfig, 
-                   const audio::AudioRendererParameter& parameter, 
-                   audio::SubMixType* pSubMixType);
+    bool AddEffect(audio::AudioRendererConfig* pConfig,
+                   const audio::AudioRendererParameter& parameter, audio::SubMixType* pSubMixType);
 #else
-    bool AddEffect(audio::AudioRendererConfig* pConfig, 
-                   const audio::AudioRendererParameter& parameter, 
-                   OutputMixer* pOutputMixer);
+    bool AddEffect(audio::AudioRendererConfig* pConfig,
+                   const audio::AudioRendererParameter& parameter, OutputMixer* pOutputMixer);
 #endif
 
-    void SplitEffectBuffer(BufferSet* pBufferSet, void* effectBuffer, 
-                           size_t effectBufferSize);
+    void SplitEffectBuffer(BufferSet* pBufferSet, void* effectBuffer, size_t effectBufferSize);
 
     void SetEffectInputOutput(const s8* input, const s8* output, s32 inputCount, s32 outputCount);
 
@@ -105,4 +104,5 @@ private:
     ChannelIndex m_ChannelSetting[ChannelCountMax];
 };
 static_assert(sizeof(EffectAux) == 0x50 + sizeof(ChannelIndex) * EffectAux::ChannelCountMax);
-} // namespace nn::atk
+
+}  // namespace nn::atk

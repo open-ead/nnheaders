@@ -28,7 +28,7 @@ static_assert(sizeof(RuntimeTypeInfo) == 0x8);
 public:                                                                                            \
     static const nn::atk::detail::fnd::RuntimeTypeInfo* GetRuntimeTypeInfoStatic() {               \
         static const nn::atk::detail::fnd::RuntimeTypeInfo s_TypeInfo{nullptr};                    \
-        return &s_TypeInfo;                                                                         \
+        return &s_TypeInfo;                                                                        \
     }                                                                                              \
                                                                                                    \
     virtual const nn::atk::detail::fnd::RuntimeTypeInfo* GetRuntimeTypeInfo() const {              \
@@ -40,7 +40,7 @@ public:                                                                         
     static const nn::atk::detail::fnd::RuntimeTypeInfo* GetRuntimeTypeInfoStatic() {               \
         static const nn::atk::detail::fnd::RuntimeTypeInfo s_TypeInfo{                             \
             BASE::GetRuntimeTypeInfoStatic()};                                                     \
-        return &s_TypeInfo;                                                                         \
+        return &s_TypeInfo;                                                                        \
     }                                                                                              \
                                                                                                    \
     const nn::atk::detail::fnd::RuntimeTypeInfo* GetRuntimeTypeInfo() const override {             \

@@ -5,6 +5,7 @@
 #include <nn/atk/atk_Config.h>
 
 namespace nn::atk {
+
 using AdpcmParam = audio::AdpcmParameter;
 
 struct alignas(64) AdpcmContext {
@@ -18,8 +19,9 @@ struct AdpcmContextNotAligned {
 static_assert(sizeof(AdpcmContextNotAligned) == 0x6);
 
 namespace detail {
-void DecodeDspAdpcm(position_t playPosition, AdpcmContext& context, 
-                    const AdpcmParam& param, const void* adpcmData, 
-                    size_t decodeSamples, s16* dest);
+
+void DecodeDspAdpcm(position_t playPosition, AdpcmContext& context, const AdpcmParam& param,
+                    const void* adpcmData, size_t decodeSamples, s16* dest);
+
 }
-} // namespace nn::atk
+}  // namespace nn::atk

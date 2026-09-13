@@ -7,11 +7,12 @@
 #include <nn/atk/atk_OutputReceiver.h>
 
 namespace nn::atk::detail {
+
 template <typename T>
 class SoundInstanceManager {
 public:
-    using PriorityList = util::IntrusiveList<T, 
-                            util::IntrusiveListMemberNodeTraits<T, &T::m_PriorityLink>>;
+    using PriorityList =
+        util::IntrusiveList<T, util::IntrusiveListMemberNodeTraits<T, &T::m_PriorityLink>>;
     using Iterator = typename PriorityList::iterator;
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
@@ -32,4 +33,5 @@ private:
     PriorityList m_PriorityList;
     PriorityList m_FreeList;
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

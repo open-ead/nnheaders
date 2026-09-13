@@ -4,6 +4,7 @@
 #include <nn/util.h>
 
 namespace nn::atk::detail {
+
 struct BinaryTypes {
     NN_NO_COPY(BinaryTypes);
     NN_NO_MOVE(BinaryTypes);
@@ -22,4 +23,4 @@ struct BinaryTypes {
     struct ReferenceTable : Table<Reference> {};
 };
 
-};
+};  // namespace nn::atk::detail

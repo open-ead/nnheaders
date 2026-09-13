@@ -3,6 +3,7 @@
 #include <nn/atk/fnd/io/atkfnd_FileStream.h>
 
 namespace nn::atk::detail::fnd {
+
 class FileStreamProxy : public FileStream {
 public:
     FileStreamProxy(FileStream* fileStream, position_t offset, size_t fileSize);
@@ -11,7 +12,7 @@ public:
     FndResult Open(const char* filePath, AccessMode openMode) override;
     void Close() override;
     void Flush() override;
-    
+
     bool IsOpened() const override;
 
     bool CanRead() const override;
@@ -45,4 +46,5 @@ private:
     size_t m_FileSize;
 };
 static_assert(sizeof(FileStreamProxy) == 0x20);
-} // namespace nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd

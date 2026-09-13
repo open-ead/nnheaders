@@ -5,10 +5,10 @@
 #include <nn/atk/detail/atk_BinaryTypes.h>
 
 namespace nn::atk::detail {
-struct AdvancedWaveSoundFile {    
+
+struct AdvancedWaveSoundFile {
     struct WaveSoundTrack;
     struct InfoBlockBody {
-
         BinaryTypes::ReferenceTable* GetTrackReferenceTable() const;
         WaveSoundTrack* GetWaveSoundTrack(s32 index) const;
 
@@ -25,7 +25,6 @@ struct AdvancedWaveSoundFile {
 
     struct WaveSoundClip;
     struct WaveSoundTrack {
-
         BinaryTypes::ReferenceTable* GetClipReferenceTable() const;
         WaveSoundClip* GetWaveSoundClip(s32 index) const;
 
@@ -47,9 +46,9 @@ struct AdvancedWaveSoundFile {
     static_assert(sizeof(WaveSoundClip) == 0x18);
 
     InfoBlock* GetBlock() const;
-    
+
     util::BinaryFileHeader fileHeader;
 };
 static_assert(sizeof(AdvancedWaveSoundFile) == 0x20);
 
-} // namespace nn::atk::detail
+}  // namespace nn::atk::detail

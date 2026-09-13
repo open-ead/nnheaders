@@ -3,6 +3,7 @@
 #include <nn/types.h>
 
 namespace nn::atk::detail {
+
 struct BinaryFileHeader {
     s32 signature;
     u16 byteOrder;
@@ -12,7 +13,7 @@ struct BinaryFileHeader {
     u16 dataBlocks;
     u16 reserved;
 
-    static const u16 ValidByteOrderMark {0xFEFF};
+    static const u16 ValidByteOrderMark{0xFEFF};
 };
 static_assert(sizeof(BinaryFileHeader) == 0x14);
 
@@ -23,4 +24,4 @@ struct BinaryBlockHeader {
 };
 static_assert(sizeof(BinaryBlockHeader) == 0x8);
 
-} // namespace nn::atk::detail
+}  // namespace nn::atk::detail

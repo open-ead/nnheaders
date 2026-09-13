@@ -7,6 +7,7 @@
 #include <nn/atk/atk_StreamTrack.h>
 
 namespace nn::atk::detail {
+
 struct StreamDataInfo {
     bool loopFlag;
     s32 sampleRate;
@@ -38,6 +39,7 @@ struct StreamSoundRegionDataInfo {
 static_assert(sizeof(StreamSoundRegionDataInfo) == 0x4c);
 
 namespace driver {
+
 class StreamSoundPlayer : BasicSoundPlayer, SoundThread::PlayerCallback {
 public:
     enum StartOffsetType {
@@ -64,7 +66,7 @@ public:
         f32 span;
         f32 mainSend;
         f32 fxSend[3];
-      
+
         void Set(const StreamTrack* pStreamTrack);
     };
     static_assert(sizeof(TrackData) == 0x28);
@@ -82,7 +84,7 @@ public:
         s32 delayTime;
         s32 delayCount;
         UpdateType updateType;
-#if NN_SDK_VER < NN_MAKE_VER(4, 4 ,1)
+#if NN_SDK_VER < NN_MAKE_VER(4, 4, 1)
         u32 subMixIndex;
 #endif
         StreamRegionCallback regionCallback;
@@ -119,18 +121,17 @@ public:
         f32 pitch;
         u8 mainSend;
         u8 fxSend[3];
-#if NN_SDK_VER >= NN_MAKE_VER(4, 4 ,1)
+#if NN_SDK_VER >= NN_MAKE_VER(4, 4, 1)
         DecodeMode decodeMode;
 #endif
     };
-#if NN_SDK_VER < NN_MAKE_VER(4, 4 ,1)
+#if NN_SDK_VER < NN_MAKE_VER(4, 4, 1)
     static_assert(sizeof(SetupArg) == 0x98);
 #else
     static_assert(sizeof(SetupArg) == 0xa0);
 #endif
 
     struct PrefetchIndexInfo {
-        
         void Initialize(const StreamDataInfoDetail& streamDataInfo);
 
         u32 lastBlockIndex;
@@ -148,7 +149,6 @@ public:
 
     StreamSoundPlayer();
     ~StreamSoundPlayer() override;
-
 
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
     bool Initialize() override;
@@ -170,13 +170,13 @@ public:
     void SetupTrack(const SetupArg& arg);
 
     void Prepare(const PrepareArg& arg);
-    
+
     void SetPrepareBaseArg(const PrepareBaseArg& arg);
 
     void RequestLoadHeader(const PrepareArg& arg);
 
     void PreparePrefetch(const PreparePrefetchArg& arg);
-    
+
     bool ReadPrefetchFile(StreamSoundPrefetchFileReader& reader);
 
     bool ApplyStreamDataInfo(const StreamDataInfoDetail& streamDataInfo);
@@ -216,14 +216,14 @@ public:
     void UpdateLoadingBlockIndex();
 
     bool LoadStreamData(bool result, const LoadDataParam& loadDataParam, u16 assignNumber);
-    bool LoadStreamData(bool result, const LoadDataParam& loadDataParam, u16 assignNumber, 
-                        bool usePrefetchFlag, u32 currentPrefetchBlockIndex, 
+    bool LoadStreamData(bool result, const LoadDataParam& loadDataParam, u16 assignNumber,
+                        bool usePrefetchFlag, u32 currentPrefetchBlockIndex,
                         size_t currentPrefetchBlockBytes);
 
     bool IsStoppedByLoadingDelay() const;
 
-    static void VoiceCallbackFunc(MultiVoice* voice, 
-                                  MultiVoice::VoiceCallbackStatus status, void* arg);
+    static void VoiceCallbackFunc(MultiVoice* voice, MultiVoice::VoiceCallbackStatus status,
+                                  void* arg);
 
     void Update();
     void UpdateBuffer();
@@ -232,21 +232,21 @@ public:
     bool CheckDiskDriveError();
 
     void SetOutputParam(const OutputParam*, const OutputParam&, const TrackData&);
-    
+
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    void ApplyTvOutputParamForMultiChannel(OutputParam* outputParam, 
-                                           MultiVoice* MultiVoice, s32 channelIndex, 
-                                           MixMode mixMode);
+    void ApplyTvOutputParamForMultiChannel(OutputParam* outputParam, MultiVoice* MultiVoice,
+                                           s32 channelIndex, MixMode mixMode);
 #else
-    void ApplyTvOutputParamForMultiChannel(OutputParam* outputParam, 
-                                           OutputAdditionalParam* pOutputAdditionalParam, 
-                                           MultiVoice* MultiVoice, s32 channelIndex, 
+    void ApplyTvOutputParamForMultiChannel(OutputParam* outputParam,
+                                           OutputAdditionalParam* pOutputAdditionalParam,
+                                           MultiVoice* MultiVoice, s32 channelIndex,
                                            MixMode mixMode);
 #endif
-    
+
     void MixSettingForOutputParam(OutputParam* outputParam, s32 channelIndex, MixMode mixMode);
-    
-    position_t GetOriginalPlaySamplePosition(position_t, const StreamDataInfoDetail& streamDataInfo) const;
+
+    position_t GetOriginalPlaySamplePosition(position_t,
+                                             const StreamDataInfoDetail& streamDataInfo) const;
 
     bool IsValidStartOffset(const StreamDataInfoDetail& streamDataInfo);
 
@@ -258,13 +258,13 @@ public:
     void PreparePrefetchOnLoopStartBlock(PrefetchLoadDataParam*, const PrefetchIndexInfo&,
                                          StreamSoundPrefetchFileReader& reader);
     void PreparePrefetchOnLoopBlock(PrefetchLoadDataParam*, const PrefetchIndexInfo&, u32);
-    bool PreparePrefetchOnNormalBlock(PrefetchLoadDataParam*, u32, 
+    bool PreparePrefetchOnNormalBlock(PrefetchLoadDataParam*, u32,
                                       StreamSoundPrefetchFileReader* reader);
 
-    bool SetAdpcmLoopInfo(StreamSoundPrefetchFileReader& reader, 
+    bool SetAdpcmLoopInfo(StreamSoundPrefetchFileReader& reader,
                           const StreamDataInfoDetail& streamDataInfo, AdpcmParam* adpcmParam,
                           AdpcmContextNotAligned* adpcmContext);
-    bool SetAdpcmInfo(StreamSoundPrefetchFileReader& reader, 
+    bool SetAdpcmInfo(StreamSoundPrefetchFileReader& reader,
                       const StreamDataInfoDetail& streamDataInfo, AdpcmParam* adpcmParam,
                       AdpcmContextNotAligned* adpcmContext);
 
@@ -318,7 +318,7 @@ private:
     s32 m_DelayCount;
     u16 m_AssignNumber;
     u8 m_FileType;
-#if NN_SDK_VER >= NN_MAKE_VER(4, 4 ,1)
+#if NN_SDK_VER >= NN_MAKE_VER(4, 4, 1)
     DecodeMode m_DecodeMode;
 #endif
     bool m_LoopFlag;
@@ -338,7 +338,7 @@ private:
     StreamChannel m_Channels[16];
     StreamTrack m_Tracks[8];
     UpdateType m_UpdateType;
-#if NN_SDK_VER < NN_MAKE_VER(4, 4 ,1)
+#if NN_SDK_VER < NN_MAKE_VER(4, 4, 1)
     u32 m_SubMixIndex;
 #endif
     WaveBufferInfo m_WaveBufferInfo[32];
@@ -352,5 +352,6 @@ private:
     static u16 g_AssignNumberCount;
 };
 static_assert(sizeof(StreamSoundPlayer) == 0x11740);
-} // namespace nn::atk::detail::driver
-} // namespace nn::atk::detail
+
+}  // namespace driver
+}  // namespace nn::atk::detail

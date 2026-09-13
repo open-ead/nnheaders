@@ -3,18 +3,21 @@
 #include <nn/atk/atk_ElementType.h>
 
 namespace nn::atk::detail {
+
 const StreamSoundFile::InfoBlock* StreamSoundPrefetchFile::FileHeader::GetInfoBlock() const {
     return util::ConstBytePtr(GetBlock(ElementType_StreamSoundFile_InfoBlock))
-            .Get<StreamSoundFile::InfoBlock>();
+        .Get<StreamSoundFile::InfoBlock>();
 }
 
 const StreamSoundFile::RegionBlock* StreamSoundPrefetchFile::FileHeader::GetRegionBlock() const {
     return util::ConstBytePtr(GetBlock(ElementType_StreamSoundFile_RegionBlock))
-            .Get<StreamSoundFile::RegionBlock>();
+        .Get<StreamSoundFile::RegionBlock>();
 }
 
-const StreamSoundPrefetchFile::PrefetchDataBlock* StreamSoundPrefetchFile::FileHeader::GetPrefetchDataBlock() const {
-    return util::ConstBytePtr(GetBlock(ElementType_StreamSoundFile_PrefetchDataBlock)).Get<PrefetchDataBlock>();
+const StreamSoundPrefetchFile::PrefetchDataBlock*
+StreamSoundPrefetchFile::FileHeader::GetPrefetchDataBlock() const {
+    return util::ConstBytePtr(GetBlock(ElementType_StreamSoundFile_PrefetchDataBlock))
+        .Get<PrefetchDataBlock>();
 }
 
 u32 StreamSoundPrefetchFile::FileHeader::GetPrefetchDataBlockSize() const {
@@ -33,11 +36,13 @@ u32 StreamSoundPrefetchFile::FileHeader::GetRegionBlockOffset() const {
     return GetBlockOffset(ElementType_StreamSoundFile_RegionBlock);
 }
 
-const StreamSoundPrefetchFile::PrefetchSample* StreamSoundPrefetchFile::PrefetchData::GetPrefetchSample() const {
+const StreamSoundPrefetchFile::PrefetchSample*
+StreamSoundPrefetchFile::PrefetchData::GetPrefetchSample() const {
     return util::ConstBytePtr(this).Advance(toPrefetchSample.offset).Get<PrefetchSample>();
 }
 
 const void* StreamSoundPrefetchFile::PrefetchSample::GetSampleAddress() const {
     return util::ConstBytePtr(data).Get();
 }
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

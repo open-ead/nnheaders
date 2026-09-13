@@ -3,6 +3,7 @@
 #include <nn/audio/audio_Common.h>
 
 namespace nn::audio {
+
 enum PerformanceEntryType {
     PerformanceEntryType_Unknown,
     PerformanceEntryType_Voice,
@@ -37,4 +38,5 @@ static_assert(sizeof(PerformanceEntry) == 0x10);
 
 struct PerformanceFrameHeader {};
 struct PerformanceDetail {};
-} // namespace nn::audio
+
+}  // namespace nn::audio

@@ -3,6 +3,7 @@
 #include <nn/atk/atk_WaveSoundFile.h>
 
 namespace nn::atk::detail {
+
 struct WaveSoundInfo {
     float pitch;
     AdshrCurve adshr;
@@ -26,14 +27,13 @@ struct WaveSoundNoteInfo {
     u8 volume;
     float pitch;
 
-    WaveSoundNoteInfo()
-        : adshr(0, 0, 0, 0, 0) {};
+    WaveSoundNoteInfo() : adshr(0, 0, 0, 0, 0) {};
 };
 static_assert(sizeof(WaveSoundNoteInfo) == 0x18);
 
 class WaveSoundFileReader {
 public:
-    static const u32 SignatureFile{0x44535746}; // FWSD
+    static const u32 SignatureFile{0x44535746};  // FWSD
 
     explicit WaveSoundFileReader(const void* waveSoundFile);
 
@@ -46,7 +46,7 @@ public:
     bool ReadWaveSoundInfo(WaveSoundInfo* dst, u32 index) const;
 
     bool ReadNoteInfo(WaveSoundNoteInfo* dst, u32 index, u32 noteIndex) const;
-    
+
     bool IsFilterSupportedVersion() const;
 
 private:
@@ -54,4 +54,5 @@ private:
     const WaveSoundFile::InfoBlockBody* m_pInfoBlockBody{};
 };
 static_assert(sizeof(WaveSoundFileReader) == 0x10);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

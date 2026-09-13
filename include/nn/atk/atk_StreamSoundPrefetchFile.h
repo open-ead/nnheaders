@@ -4,6 +4,7 @@
 #include <nn/atk/atk_Util.h>
 
 namespace nn::atk::detail {
+
 class StreamSoundPrefetchFile {
 public:
     struct PrefetchDataBlock;
@@ -13,7 +14,7 @@ public:
         const PrefetchDataBlock* GetPrefetchDataBlock() const;
 
         u32 GetPrefetchDataBlockSize() const;
-        
+
         bool HasRegionBlock() const;
         u32 GetRegionBlockSize() const;
         u32 GetRegionBlockOffset() const;
@@ -34,7 +35,9 @@ public:
         Util::Table<PrefetchData> prefetchDataTable;
 
         u32 GetPrefetchDataCount() const { return prefetchDataTable.count; }
-        const PrefetchData* GetPrefetchData(u32 index) const { return &prefetchDataTable.item[index]; }
+        const PrefetchData* GetPrefetchData(u32 index) const {
+            return &prefetchDataTable.item[index];
+        }
     };
 
     struct PrefetchDataBlock {
@@ -48,4 +51,5 @@ public:
         const void* GetSampleAddress() const;
     };
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

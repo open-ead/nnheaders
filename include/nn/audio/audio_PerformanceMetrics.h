@@ -5,6 +5,7 @@
 #include <nn/audio/audio_PerformanceMetricsTypes.h>
 
 namespace nn::audio {
+
 class PerformanceInfo {
 public:
     PerformanceInfo& operator=(const PerformanceInfo&);
@@ -30,4 +31,5 @@ private:
     PerformanceDetail* m_Details;
 };
 static_assert(sizeof(PerformanceInfo) == 0x28);
-} // namespace nn::audio
+
+}  // namespace nn::audio

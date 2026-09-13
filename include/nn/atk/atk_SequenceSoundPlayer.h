@@ -1,16 +1,17 @@
 #pragma once
 
-#include <nn/atk/atk_SoundDataManager.h>
+#include <nn/atk/atk_BankFileReader.h>
 #include <nn/atk/atk_BasicSoundPlayer.h>
 #include <nn/atk/atk_LoaderManager.h>
 #include <nn/atk/atk_NoteOnCallback.h>
 #include <nn/atk/atk_PlayerHeap.h>
-#include <nn/atk/atk_WaveArchiveFileReader.h>
-#include <nn/atk/atk_BankFileReader.h>
 #include <nn/atk/atk_SequenceTrackAllocator.h>
+#include <nn/atk/atk_SoundDataManager.h>
 #include <nn/atk/atk_Task.h>
+#include <nn/atk/atk_WaveArchiveFileReader.h>
 
 namespace nn::atk {
+
 struct SequenceUserProcCallbackParam {
     s16* localVariable;
     s16* globalVariable;
@@ -19,17 +20,18 @@ struct SequenceUserProcCallbackParam {
 };
 static_assert(sizeof(SequenceUserProcCallbackParam) == 0x20);
 
-using SequenceUserProcCallback = void(*)(u16,SequenceUserProcCallbackParam*,void*);
+using SequenceUserProcCallback = void (*)(u16, SequenceUserProcCallbackParam*, void*);
 
 namespace detail::driver {
+
 class SequenceSoundLoader;
 using SequenceSoundLoaderManager = LoaderManager<SequenceSoundLoader>;
 
 class SequenceSoundLoader {
 public:
     struct LoadInfo {
-        LoadInfo(const SoundArchive* arc, const SoundDataManager* mgr, 
-                 LoadItemInfo* seq, LoadItemInfo* banks, SoundPlayer* player);
+        LoadInfo(const SoundArchive* arc, const SoundDataManager* mgr, LoadItemInfo* seq,
+                 LoadItemInfo* banks, SoundPlayer* player);
 
         SoundArchive* soundArchive;
         SoundDataManager* soundDataManager;
@@ -129,11 +131,11 @@ public:
     constexpr static s32 PlayerVariableCount = 16;
     constexpr static s32 GlobalVariableCount = 16;
     constexpr static s32 TrackCountPerPlayer = 16;
-    
+
     constexpr static u32 AllTrackBitFlag = 0x0000FFFF;
 
     constexpr static s32 VariableDefaultValue = -1;
-    
+
     constexpr static s32 DefaultTimebase = 48;
     constexpr static s32 DefaultTempo = 120;
     constexpr static u32 DefaultSkipIntervalTick = 16 * DefaultTimebase;
@@ -156,7 +158,7 @@ public:
         UpdateType updateType;
     };
     static_assert(sizeof(StartInfo) == 0x18);
-    
+
     struct PrepareArg {
         void* seqFile;
         void* bankFiles[4];
@@ -210,14 +212,14 @@ public:
     void SetChannelPriority(s32 priority);
     void SetReleasePriorityFix(bool fix);
     void SetSequenceUserprocCallback(SequenceUserProcCallback callback, void* arg);
-    
+
     void CallSequenceUserprocCallback(u16 procId, SequenceTrack* track);
 
     s16* GetVariablePtr(s32 varNo);
 
     void GetLocalVariable(s32 varNo) const;
     static s16 GetGlobalVariable(s32 varNo);
-    
+
     void SetLocalVariable(s32 varNo, s16 var);
     static void SetGlobalVariable(s32 varNo, s16 var);
 
@@ -230,7 +232,7 @@ public:
     bool SetTrackBankIndex(u32 trackBitFlag, s32 bankIndex);
     void SetTrackTranspose(u32 trackBitFlag, s8 transpose);
     void SetTrackVelocityRange(u32 trackBitFlag, u8 range);
-    
+
     void SetTrackOutputLine(u32 trackBitFlag, u32 outputLine);
     void ResetTrackOutputLine(u32 trackBitFlag);
 
@@ -273,7 +275,7 @@ public:
     static s32 GetSkipIntervalTick();
 
     void ChannelCallback(Channel* channel);
-    
+
     void OnUpdateFrameSoundThread() override;
     void OnUpdateFrameSoundThreadWithAudioFrameFrequency() override;
     void OnShutdownSoundThread() override;
@@ -314,5 +316,6 @@ static_assert(sizeof(SequenceSoundPlayer) == 0x358);
 #else
 static_assert(sizeof(SequenceSoundPlayer) == 0x368);
 #endif
-} // namespace nn::atk::detail::driver
-} // namespace nn::atk
+
+}  // namespace detail::driver
+}  // namespace nn::atk

@@ -9,6 +9,7 @@
 namespace nn::atk::detail::fnd {
 
 namespace {
+
 fs::OpenMode ConvertAccessMode(FileStream::AccessMode accessMode) {}
 
 position_t GetSeekPosition(FileStreamImpl& target, position_t offset, Stream::SeekOrigin origin) {
@@ -40,6 +41,7 @@ position_t GetSeekPosition(FileStreamImpl& target, position_t offset, Stream::Se
 
     return result;
 }
+
 }  // anonymous namespace
 
 FileStreamImpl::FileStreamImpl() {

@@ -3,6 +3,7 @@
 #include <nn/types.h>
 
 namespace nn::audio {
+
 enum MemoryPoolState {
     MemoryPoolState_Invalid,
     MemoryPoolState_New,
@@ -23,10 +24,11 @@ struct MemoryPoolType {
         State_Detached,
     };
 
-    static const size_t AddressAlignment {4096};
-    static const size_t SizeGranularity {4096};
+    static const size_t AddressAlignment{4096};
+    static const size_t SizeGranularity{4096};
 
     MemoryPoolInfo* _pMemoryPoolInfo;
 };
 static_assert(sizeof(MemoryPoolType) == 0x8);
-} // namespace nn::audio
+
+}  // namespace nn::audio

@@ -5,6 +5,7 @@
 #include <nn/atk/detail/atk_AdvancedWaveSoundPlayer.h>
 
 namespace nn::atk::detail {
+
 class AdvancedWaveSound;
 class AdvancedWaveSoundHandle;
 
@@ -25,7 +26,7 @@ public:
     void Prepare(const driver::AdvancedWaveSoundPlayer::PrepareParameter& parameter);
 
     void OnUpdatePlayerPriority() override;
-    
+
     bool IsAttachedTempSpecialHandle() override;
     void DetachTempSpecialHandle() override;
 
@@ -48,4 +49,5 @@ static_assert(sizeof(AdvancedWaveSound) == 0x980);
 #else
 static_assert(sizeof(AdvancedWaveSound) == 0x9b0);
 #endif
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

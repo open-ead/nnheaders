@@ -2,6 +2,7 @@
 
 #include <nn/util.h>
 #include <nn/util/util_IntrusiveList.h>
+
 #include <nn/audio/audio_AudioRendererTypes.h>
 #include <nn/audio/audio_FinalMixTypes.h>
 #include <nn/audio/audio_SubMixTypes.h>
@@ -9,6 +10,7 @@
 #include <nn/atk/atk_Global.h>
 
 namespace nn::atk {
+
 class OutputMixer;
 
 class EffectBase {
@@ -74,4 +76,5 @@ private:
     size_t m_EffectBufferSize;
 };
 static_assert(sizeof(EffectBase) == 0x30);
-} // namespace nn::atk
+
+}  // namespace nn::atk

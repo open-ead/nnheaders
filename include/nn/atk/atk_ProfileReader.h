@@ -2,11 +2,12 @@
 
 #include <atomic>
 
-#include <nn/os.h>
 #include <nn/audio/audio_Common.h>
+#include <nn/os.h>
 #include <nn/util/util_IntrusiveList.h>
 
 namespace nn::atk {
+
 struct TimeRange {
     os::Tick begin;
     os::Tick end;
@@ -71,9 +72,9 @@ static_assert(sizeof(ProfileReader) == 0x10318);
 static_assert(sizeof(ProfileReader) == 0x1f318);
 #endif
 
-using ProfileReaderList = util::IntrusiveList<ProfileReader, 
-                            util::IntrusiveListMemberNodeTraits<ProfileReader, 
-                                &ProfileReader::m_Link>>;
+using ProfileReaderList =
+    util::IntrusiveList<ProfileReader,
+                        util::IntrusiveListMemberNodeTraits<ProfileReader, &ProfileReader::m_Link>>;
 
 struct TaskProfile;
 
@@ -92,7 +93,9 @@ private:
 };
 
 using SoundThreadUpdateProfileReader = AtkProfileReader<SoundThreadUpdateProfile>;
-using SoundThreadUpdateProfileReaderList = util::IntrusiveList<SoundThreadUpdateProfileReader, 
-                                            util::IntrusiveListMemberNodeTraits<SoundThreadUpdateProfileReader, 
-                                                &SoundThreadUpdateProfileReader::m_List>>;
-} // namespace nn::atk
+using SoundThreadUpdateProfileReaderList = util::IntrusiveList<
+    SoundThreadUpdateProfileReader,
+    util::IntrusiveListMemberNodeTraits<SoundThreadUpdateProfileReader,
+                                        &SoundThreadUpdateProfileReader::m_List>>;
+
+}  // namespace nn::atk

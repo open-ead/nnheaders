@@ -1,30 +1,31 @@
 #pragma once
 
-#include <nn/os.h>
 #include <nn/audio/audio_PerformanceMetrics.h>
+#include <nn/os.h>
 #include <nn/os/os_MessageQueue.h>
 #include <nn/util/util_IntrusiveList.h>
 
-#include <nn/atk/atk_Global.h>
-#include <nn/atk/atk_ThreadInfoReader.h>
-#include <nn/atk/fnd/os/atkfnd_Thread.h>
-#include <nn/atk/fnd/os/atkfnd_CriticalSection.h>
 #include <nn/atk/atk_AudioRendererPerformanceReader.h>
+#include <nn/atk/atk_Global.h>
 #include <nn/atk/atk_ProfileReader.h>
+#include <nn/atk/atk_ThreadInfoReader.h>
+#include <nn/atk/fnd/os/atkfnd_CriticalSection.h>
+#include <nn/atk/fnd/os/atkfnd_Thread.h>
 
 namespace nn::atk::detail::driver {
+
 struct SoundThreadLock {};
 struct AtkStateAndParameterUpdateLock {};
 
 class SoundThread : fnd::Thread::Handler {
 public:
     enum Message {
-        Message_HwCallback  = 0x10000000,
-        Message_Shutdown    = 0x20000000,
+        Message_HwCallback = 0x10000000,
+        Message_Shutdown = 0x20000000,
         Message_ForceWakeup = 0x30000000,
     };
 
-    using ProfileFunc = void(*)(os::Tick*);
+    using ProfileFunc = void (*)(os::Tick*);
 
     constexpr static u32 ThreadMessageBuffferSize = 32;
 
@@ -43,9 +44,9 @@ public:
         util::IntrusiveListNode m_Link;
     };
 
-    using SoundFrameCallbackList = util::IntrusiveList<SoundFrameCallback, 
-                                util::IntrusiveListMemberNodeTraits<SoundFrameCallback, 
-                                    &SoundFrameCallback::m_Link>>;
+    using SoundFrameCallbackList = util::IntrusiveList<
+        SoundFrameCallback,
+        util::IntrusiveListMemberNodeTraits<SoundFrameCallback, &SoundFrameCallback::m_Link>>;
 
     class PlayerCallback {
     public:
@@ -61,30 +62,31 @@ public:
         util::IntrusiveListNode m_Link;
     };
 
-    using PlayerCallbackList = util::IntrusiveList<PlayerCallback, 
-                                util::IntrusiveListMemberNodeTraits<PlayerCallback, 
-                                    &PlayerCallback::m_Link>>;
+    using PlayerCallbackList = util::IntrusiveList<
+        PlayerCallback,
+        util::IntrusiveListMemberNodeTraits<PlayerCallback, &PlayerCallback::m_Link>>;
 
     ~SoundThread() override;
-    
-    bool CreateSoundThread(s32 threadPriority, void* stackBase, size_t stackSize, 
+
+    bool CreateSoundThread(s32 threadPriority, void* stackBase, size_t stackSize,
                            s32 idealCoreNumber, u32 affinityMask);
 
-    void Initialize(void* performanceFrameBuffer, size_t performanceFrameBufferSize, 
+    void Initialize(void* performanceFrameBuffer, size_t performanceFrameBufferSize,
                     bool isProfilingEnabled);
-    void Initialize(void* performanceFrameBuffer, size_t performanceFrameBufferSize, 
+    void Initialize(void* performanceFrameBuffer, size_t performanceFrameBufferSize,
                     bool isProfilingEnabled, bool isDetailSoundThreadProfilerEnabled,
                     bool isUserThreadRenderingEnabled);
 
     void Destroy();
-    
+
     void Finalize();
 
     void UpdateLowLevelVoices();
 
     void ForceWakeup();
 
-    void RegisterSoundFrameUserCallback(SoundFrameUserCallback callback, std::uintptr_t callbackArg);
+    void RegisterSoundFrameUserCallback(SoundFrameUserCallback callback,
+                                        std::uintptr_t callbackArg);
     void ClearSoundFrameUserCallback();
 
     void RegisterThreadBeginUserCallback(SoundThreadUserCallback, std::uintptr_t callbackArg);
@@ -103,7 +105,7 @@ public:
     void UnlockAtkStateAndParameterUpdate();
 
     void RegisterAudioRendererPerformanceReader(AudioRendererPerformanceReader& performanceReader);
-    
+
     void RegisterSoundThreadUpdateProfileReader(SoundThreadUpdateProfileReader& profileReader);
     void UnregisterSoundThreadUpdateProfileReader(SoundThreadUpdateProfileReader& profileReader);
 
@@ -112,8 +114,8 @@ public:
 
     void FrameProcess(UpdateType updateType);
 
-    void RecordPerformanceInfo(audio::PerformanceInfo* src, os::Tick beginTick, 
-                               os::Tick endTick, u32 nwVoiceCount);
+    void RecordPerformanceInfo(audio::PerformanceInfo* src, os::Tick beginTick, os::Tick endTick,
+                               u32 nwVoiceCount);
 
     void EffectFrameProcess();
 
@@ -165,4 +167,5 @@ static_assert(sizeof(SoundThread) == 0x4c8);
 #else
 static_assert(sizeof(SoundThread) == 0x508);
 #endif
-} // namespace nn::atk::detail::driver
+
+}  // namespace nn::atk::detail::driver

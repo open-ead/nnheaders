@@ -1,9 +1,8 @@
 #include <nn/atk/atk_Task.h>
 
 namespace nn::atk::detail {
-Task::Task() 
-    : m_Event(os::EventClearMode_ManualClear) {
-    
+
+Task::Task() : m_Event(os::EventClearMode_ManualClear) {
     InitializeStatus();
     SetId(0);
 
@@ -11,4 +10,5 @@ Task::Task()
 }
 
 Task::~Task() = default;
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

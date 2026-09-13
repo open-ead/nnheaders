@@ -5,6 +5,7 @@
 #include <nn/atk/fnd/io/atkfnd_FileStream.h>
 
 namespace nn::atk::detail::fnd {
+
 class FileStreamImpl : public FileStream {
     NN_NO_COPY(FileStreamImpl);
 
@@ -101,4 +102,5 @@ private:
     FsAccessLog* m_pAccessLog{nullptr};
 };
 static_assert(sizeof(FileStreamImpl) == 0x80);
+
 }  // namespace nn::atk::detail::fnd

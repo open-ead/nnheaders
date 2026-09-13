@@ -1,12 +1,13 @@
 #pragma once
 
-#include <nn/atk/atk_SoundDataManager.h>
 #include <nn/atk/atk_LoaderManager.h>
 #include <nn/atk/atk_PlayerHeap.h>
 #include <nn/atk/atk_PlayerHeapDataManager.h>
+#include <nn/atk/atk_SoundDataManager.h>
 #include <nn/atk/atk_Task.h>
 
 namespace nn::atk::detail::driver {
+
 class WaveSoundLoader;
 using WaveSoundLoaderManager = LoaderManager<WaveSoundLoader>;
 
@@ -38,7 +39,7 @@ public:
     class DataLoadTask : Task {
     public:
         ~DataLoadTask() override;
-        
+
         void Initialize();
 
         bool TryAllocPlayerHeap();
@@ -87,4 +88,5 @@ private:
     PlayerHeapDataManager m_PlayerHeapDataManager;
     util::IntrusiveListNode m_LinkForLoaderManager;
 };
-} // namespace nn::atk::detail::driver
+
+}  // namespace nn::atk::detail::driver

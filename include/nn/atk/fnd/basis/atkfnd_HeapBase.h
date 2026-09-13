@@ -4,6 +4,7 @@
 #include <nn/util/util_IntrusiveList.h>
 
 namespace nn::atk::detail::fnd {
+
 class HeapBase : public util::IntrusiveListBaseNode<HeapBase> {
 public:
     using HeapList = util::IntrusiveList<HeapBase, util::IntrusiveListBaseNodeTraits<HeapBase>>;
@@ -24,12 +25,12 @@ public:
 
     static const int DefaultAlignment = 4;
 
-    static const u32 ExpHeapSignature   = 0x45585048; // HPXE
-    static const u32 FrameHeapSignature = 0x46524D48; // HMRF
-    static const u32 UnitHeapSignature  = 0x554E5448; // HTNU
+    static const u32 ExpHeapSignature = 0x45585048;    // HPXE
+    static const u32 FrameHeapSignature = 0x46524D48;  // HMRF
+    static const u32 UnitHeapSignature = 0x554E5448;   // HTNU
 
-    static const int OptionZeroClear  = 1 << 0;
-    static const int OptionDebugFill  = 1 << 1;
+    static const int OptionZeroClear = 1 << 0;
+    static const int OptionDebugFill = 1 << 1;
     static const int OptionThreadSafe = 1 << 2;
 
     static const int ErrorPrint = 1;
@@ -38,7 +39,7 @@ public:
 
     static HeapBase* FindContainHeap(const void* memBlock);
     static HeapBase* FindParentHeap(const HeapBase* pChild);
-    
+
     void* GetHeapStartAddress();
     void* GetHeapEndAddress();
 
@@ -53,19 +54,13 @@ public:
 protected:
     void Initialize(u32 signature, void* heapStart, void* heapEnd, u16 optFlag);
     void Finalize();
-    
-    u32 GetSignature() const {
-        return m_Signature;
-    }
 
-    void* GetHeapStart() const {
-        return mHeapStart;
-    }
+    u32 GetSignature() const { return m_Signature; }
 
-    void* GetHeapEnd() const {
-        return mHeapEnd;
-    }
-    
+    void* GetHeapStart() const { return mHeapStart; }
+
+    void* GetHeapEnd() const { return mHeapEnd; }
+
     void LockHeap();
     void UnlockHeap();
 
@@ -87,4 +82,5 @@ private:
     u32 m_Attribute;
 };
 static_assert(sizeof(HeapBase) == 0x40);
-} // namespace nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd

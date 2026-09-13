@@ -1,13 +1,15 @@
 #pragma once
 
-#include <nn/atk/atk_InstancePool.h>
 #include <nn/atk/atk_Channel.h>
+#include <nn/atk/atk_InstancePool.h>
 
 namespace nn::atk::detail::driver {
+
 class ChannelManager {
 public:
     using ChannelPool = InstancePool<Channel>;
-    using ChannelList = util::IntrusiveList<Channel, 
+    using ChannelList =
+        util::IntrusiveList<Channel,
                             util::IntrusiveListMemberNodeTraits<Channel, &Channel::m_Link>>;
 
     ChannelManager();
@@ -44,4 +46,5 @@ static_assert(sizeof(ChannelManager) == 0x30);
 #else
 static_assert(sizeof(ChannelManager) == 0x50);
 #endif
-} // namespace nn::atk::detail::driver
+
+}  // namespace nn::atk::detail::driver

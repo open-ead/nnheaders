@@ -1,10 +1,11 @@
 #pragma once
 
-#include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/atk_DisposeCallback.h>
+#include <nn/atk/atk_SoundArchive.h>
 #include <nn/atk/atk_SoundArchiveLoader.h>
 
 namespace nn::atk::detail {
+
 class PlayerHeapDataManager : driver::DisposeCallback, SoundArchiveLoader {
 public:
     constexpr static u8 FileAddressCount = 9;
@@ -36,4 +37,5 @@ private:
     bool m_IsFinalized;
 };
 static_assert(sizeof(PlayerHeapDataManager) == 0x2c8);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

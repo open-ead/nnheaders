@@ -3,6 +3,7 @@
 #include <nn/atk/detail/atk_AdvancedWaveSoundFile.h>
 
 namespace nn::atk::detail {
+
 struct AdvancedWaveSoundClipInfo {
     u32 waveIndex;
     u32 position;
@@ -43,4 +44,5 @@ private:
     AdvancedWaveSoundFile::InfoBlockBody* m_pInfoBlockBody;
 };
 static_assert(sizeof(AdvancedWaveSoundFileReader) == 0x8);
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

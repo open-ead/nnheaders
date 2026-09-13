@@ -3,6 +3,7 @@
 #include <nn/atk/atk_Util.h>
 
 namespace nn::atk::detail {
+
 struct WaveFile {
     struct InfoBlock;
     struct DataBlock;
@@ -57,4 +58,5 @@ struct WaveFile {
         };
     };
 };
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

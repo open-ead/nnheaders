@@ -3,6 +3,7 @@
 #include <nn/atk/atk_BiquadFilterCallback.h>
 
 namespace nn::atk::detail {
+
 class BiquadFilterLpf : BiquadFilterCallback {
 public:
     constexpr static u32 CoefficientsTableSize = 112;
@@ -42,7 +43,7 @@ static_assert(sizeof(BiquadFilterBpf512) == 0x8);
 class BiquadFilterBpf1024 : BiquadFilterCallback {
 public:
     constexpr static u32 CoefficientsTableSize = 93;
-    
+
     static Coefficients CoefficientsTable32000[CoefficientsTableSize];
 
     ~BiquadFilterBpf1024() override;
@@ -114,15 +115,17 @@ public:
 static_assert(sizeof(BiquadFilterBpf2048Nw4fCompatible48k) == 0x8);
 
 namespace driver {
-static BiquadFilterLpf BiquadFilterInstanceLpf {};
-static BiquadFilterHpf BiquadFilterInstanceHpf {};
-static BiquadFilterBpf512 BiquadFilterInstanceBpf512 {};
-static BiquadFilterBpf1024 BiquadFilterInstanceBpf1024 {};
-static BiquadFilterBpf2048 BiquadFilterInstanceBpf2048 {};
-static BiquadFilterLpfNw4fCompatible48k BiquadFilterInstanceLpfNw4fCompatible48k {};
-static BiquadFilterHpfNw4fCompatible48k BiquadFilterInstanceHpfNw4fCompatible48k {};
-static BiquadFilterBpf512Nw4fCompatible48k BiquadFilterInstanceBpf512Nw4fCompatible48k {};
-static BiquadFilterBpf1024Nw4fCompatible48k BiquadFilterInstanceBpf1024Nw4fCompatible48k {};
-static BiquadFilterBpf2048Nw4fCompatible48k BiquadFilterInstanceBpf2048Nw4fCompatible48k {};
-};
-} // namespace nn::atk::detail
+
+static BiquadFilterLpf BiquadFilterInstanceLpf{};
+static BiquadFilterHpf BiquadFilterInstanceHpf{};
+static BiquadFilterBpf512 BiquadFilterInstanceBpf512{};
+static BiquadFilterBpf1024 BiquadFilterInstanceBpf1024{};
+static BiquadFilterBpf2048 BiquadFilterInstanceBpf2048{};
+static BiquadFilterLpfNw4fCompatible48k BiquadFilterInstanceLpfNw4fCompatible48k{};
+static BiquadFilterHpfNw4fCompatible48k BiquadFilterInstanceHpfNw4fCompatible48k{};
+static BiquadFilterBpf512Nw4fCompatible48k BiquadFilterInstanceBpf512Nw4fCompatible48k{};
+static BiquadFilterBpf1024Nw4fCompatible48k BiquadFilterInstanceBpf1024Nw4fCompatible48k{};
+static BiquadFilterBpf2048Nw4fCompatible48k BiquadFilterInstanceBpf2048Nw4fCompatible48k{};
+
+};  // namespace driver
+}  // namespace nn::atk::detail

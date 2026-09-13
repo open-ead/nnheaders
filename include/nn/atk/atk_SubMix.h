@@ -8,7 +8,9 @@
 
 namespace nn::atk {
 namespace detail::driver {
+
 class HardwareManager;
+
 };
 
 class SubMix : OutputMixer {
@@ -48,7 +50,7 @@ public:
         bool m_IsSoundSendClampEnabledArray[24];
     };
     static_assert(sizeof(SubMixParam) == 0x38);
-    
+
     class VolumeData {
     public:
         VolumeData();
@@ -64,39 +66,36 @@ public:
     static_assert(sizeof(VolumeData) == 0x14);
 
     SubMix();
-    
-    static size_t GetRequiredMemorySize(s32 srcBusCount, s32 srcChannelCount, 
-                                        s32 dstBusCount, s32 dstChannelCount);
-    static size_t GetRequiredMemorySize(s32 srcBusCount, s32 srcChannelCount, 
-                                        s32 dstBusCount, s32 dstChannelCount, 
-                                        bool isEffectEnabled);
-    static size_t GetRequiredMemorySize(s32 srcBusCount, s32 srcChannelCount, 
-                                        s32 dstBusCount, s32 dstChannelCount, 
-                                        bool isEffectEnabled, bool isInternalCall);
-    
+
+    static size_t GetRequiredMemorySize(s32 srcBusCount, s32 srcChannelCount, s32 dstBusCount,
+                                        s32 dstChannelCount);
+    static size_t GetRequiredMemorySize(s32 srcBusCount, s32 srcChannelCount, s32 dstBusCount,
+                                        s32 dstChannelCount, bool isEffectEnabled);
+    static size_t GetRequiredMemorySize(s32 srcBusCount, s32 srcChannelCount, s32 dstBusCount,
+                                        s32 dstChannelCount, bool isEffectEnabled,
+                                        bool isInternalCall);
+
     static size_t GetRequiredMemorySizeImpl(const SubMixParam& param);
 
-    static size_t GetRequiredMemorySize(s32 srcBusCount, s32 dstBusCount, 
-                                        const OutputReceiver* pReceiver, 
-                                        bool isEffectEnabled);
+    static size_t GetRequiredMemorySize(s32 srcBusCount, s32 dstBusCount,
+                                        const OutputReceiver* pReceiver, bool isEffectEnabled);
 
     static size_t GetRequiredMemorySize(const SubMixParam& param);
 
-    bool Initialize(s32 srcBusCount, s32 srcChannelCount, s32 dstBusCount, 
-                    s32 dstChannelCount, void* buffer, size_t bufferSize);
-    bool Initialize(s32 srcBusCount, s32 srcChannelCount, s32 dstBusCount, 
-                    s32 dstChannelCount, bool isEffectEnabled, void* buffer, 
-                    size_t bufferSize);
-    bool Initialize(s32 srcBusCount, s32 srcChannelCount, s32 dstBusCount, 
-                    s32 dstChannelCount, bool isEffectEnabled, bool isInternalCall,
+    bool Initialize(s32 srcBusCount, s32 srcChannelCount, s32 dstBusCount, s32 dstChannelCount,
                     void* buffer, size_t bufferSize);
-    
-    bool InitializeImpl(const SubMixParam& param, void* buffer, size_t bufferSize);
-    bool InitializeImpl(const SubMixParam& param, void* buffer, size_t bufferSize, bool isInternalCall);
+    bool Initialize(s32 srcBusCount, s32 srcChannelCount, s32 dstBusCount, s32 dstChannelCount,
+                    bool isEffectEnabled, void* buffer, size_t bufferSize);
+    bool Initialize(s32 srcBusCount, s32 srcChannelCount, s32 dstBusCount, s32 dstChannelCount,
+                    bool isEffectEnabled, bool isInternalCall, void* buffer, size_t bufferSize);
 
-    bool Initialize(s32 srcBusCount, s32 dstBusCount, const OutputReceiver* pReceiver, 
-                    void* buffer, size_t bufferSize);
-    bool Initialize(s32 srcBusCount, s32 dstBusCount, const OutputReceiver* pReceiver, 
+    bool InitializeImpl(const SubMixParam& param, void* buffer, size_t bufferSize);
+    bool InitializeImpl(const SubMixParam& param, void* buffer, size_t bufferSize,
+                        bool isInternalCall);
+
+    bool Initialize(s32 srcBusCount, s32 dstBusCount, const OutputReceiver* pReceiver, void* buffer,
+                    size_t bufferSize);
+    bool Initialize(s32 srcBusCount, s32 dstBusCount, const OutputReceiver* pReceiver,
                     bool isEffectEnabled, void* buffer, size_t bufferSize);
     bool Initialize(const SubMixParam& param, void* buffer, size_t bufferSize);
 
@@ -108,16 +107,16 @@ public:
 
     void UpdateBusMixVolume(s32 bus);
     void UpdateChannelMixVolume(s32 bus);
-    void UpdateMixVolume(s32 srcBus, s32 srcChannel,s32 dstBus,s32 dstChannel);
+    void UpdateMixVolume(s32 srcBus, s32 srcChannel, s32 dstBus, s32 dstChannel);
 
     void SetDestination(OutputReceiver* pReceiver);
     void ApplyDestination();
 
     f32 GetSend(s32 srcBus, s32 dstBus) const;
-    f32 GetSendImpl(s32 srcBus, s32 srcChannel,s32 dstBus,s32 dstChannel) const;
+    f32 GetSendImpl(s32 srcBus, s32 srcChannel, s32 dstBus, s32 dstChannel) const;
 
     void SetSend(s32 srcBus, s32 dstBus, f32 send);
-    void SetSendImpl(s32 srcBus, s32 srcChannel,s32 dstBus,s32 dstChannel, f32 send);
+    void SetSendImpl(s32 srcBus, s32 srcChannel, s32 dstBus, s32 dstChannel, f32 send);
 
     void SetBusVolume(s32 bus, f32 volume, s32 fadeFrame);
     f32 GetBusVolume(s32 bus) const;
@@ -185,4 +184,5 @@ private:
     bool m_IsAppliedOutputReceiver;
 };
 static_assert(sizeof(SubMix) == 0xf8);
-} // namespace nn::atk
+
+}  // namespace nn::atk

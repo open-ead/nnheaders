@@ -6,8 +6,10 @@
 
 namespace nn::atk {
 namespace detail {
+
 class WaveSound;
-} // namespace nn::atk::detail
+
+}  // namespace detail
 
 class WaveSoundHandle {
 public:
@@ -24,4 +26,5 @@ public:
 private:
     detail::WaveSound* m_pSound;
 };
-} // namespace nn::atk
+
+}  // namespace nn::atk

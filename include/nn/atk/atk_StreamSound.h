@@ -1,10 +1,11 @@
 #pragma once
 
-#include <nn/atk/atk_StreamSoundHandle.h>
 #include <nn/atk/atk_SoundInstanceManager.h>
+#include <nn/atk/atk_StreamSoundHandle.h>
 #include <nn/atk/atk_StreamSoundPlayer.h>
 
 namespace nn::atk::detail {
+
 class StreamSound;
 using StreamSoundInstanceManager = SoundInstanceManager<StreamSound>;
 
@@ -22,11 +23,11 @@ public:
     void Setup(const driver::StreamSoundPlayer::SetupArg& arg);
 
     void Prepare(const driver::StreamSoundPlayer::PrepareBaseArg& arg);
-    void PreparePrefetch(const void* strmPrefetchFile, 
+    void PreparePrefetch(const void* strmPrefetchFile,
                          const driver::StreamSoundPlayer::PrepareBaseArg& arg);
 
     void UpdateMoveValue() override;
-    
+
     void OnUpdateParam() override;
 
     void SetTrackVolume(u32 trackBitFlag, f32 volume, s32);
@@ -46,7 +47,7 @@ public:
 
     bool IsAttachedTempSpecialHandle() override;
     void DetachTempSpecialHandle() override;
-    
+
     bool ReadStreamDataInfo(StreamDataInfo*) const;
 
     s32 GetPlayLoopCount() const;
@@ -59,11 +60,11 @@ public:
     bool IsSuspendByLoadingDelay() const;
     bool IsLoadingDelayState() const;
 
-    driver::BasicSoundPlayer * GetBasicSoundPlayerHandle() override;
+    driver::BasicSoundPlayer* GetBasicSoundPlayerHandle() override;
 
 private:
     friend StreamSoundInstanceManager;
-    
+
     util::IntrusiveListNode m_PriorityLink;
     StreamSoundHandle* m_pTempSpecialHandle;
     StreamSoundInstanceManager* m_Manager;
@@ -81,4 +82,5 @@ static_assert(sizeof(StreamSound) == 0x11a00);
 #else
 static_assert(sizeof(StreamSound) == 0x11a40);
 #endif
-} // namespace nn::atk::detail
+
+}  // namespace nn::atk::detail

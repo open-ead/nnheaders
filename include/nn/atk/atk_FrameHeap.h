@@ -16,11 +16,10 @@ public:
 
     class Block {
     public:
-        Block(void* buffer, size_t size, DisposeCallback callback, 
-              void* callbackArg, HeapCallback heapCallback, void* heapCallbackArg)
-              : m_pBuffer{buffer}, m_Size{size}, 
-                m_Callback{callback}, m_pCallbackArg{callbackArg},
-                m_HeapCallback{heapCallback}, m_pHeapCallbackArg{heapCallbackArg} {}
+        Block(void* buffer, size_t size, DisposeCallback callback, void* callbackArg,
+              HeapCallback heapCallback, void* heapCallbackArg)
+            : m_pBuffer{buffer}, m_Size{size}, m_Callback{callback}, m_pCallbackArg{callbackArg},
+              m_HeapCallback{heapCallback}, m_pHeapCallbackArg{heapCallbackArg} {}
 
         ~Block() = default;
 
@@ -83,8 +82,8 @@ public:
     bool Create(void* startAddress, size_t size);
     void Destroy();
 
-    void* Alloc(size_t size, DisposeCallback callback, void* callbackArg, 
-                HeapCallback heapCallback, void* heapCallbackArg);
+    void* Alloc(size_t size, DisposeCallback callback, void* callbackArg, HeapCallback heapCallback,
+                void* heapCallbackArg);
 
     void Clear();
 

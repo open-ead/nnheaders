@@ -3,11 +3,12 @@
 #include <nn/atk/fnd/basis/atkfnd_HeapBase.h>
 
 namespace nn::atk::detail::fnd {
+
 class FrameHeapImpl : public HeapBase {
 public:
     static const int FreeHeadMode = 1;
     static const int FreeTailMode = 2;
-    static const int FreeAllMode  = 3;
+    static const int FreeAllMode = 3;
 
     struct HeapState {
         u32 tagName;
@@ -49,4 +50,5 @@ private:
     HeapState* m_pState;
 };
 static_assert(sizeof(FrameHeapImpl) == 0x58);
-} // namespace nn::atk::detail::fnd
+
+}  // namespace nn::atk::detail::fnd
