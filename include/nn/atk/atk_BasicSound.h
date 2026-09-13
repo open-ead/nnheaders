@@ -420,11 +420,16 @@ public:
     float GetOutputSurroundPan(OutputDevice device) const;
     float GetOutputMainSend(OutputDevice device) const;
     float GetOutputFxSend(OutputDevice device, AuxBus bus) const;
+
+#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     bool IsOutputBusMixVolumeEnabled(OutputDevice device, int subMixBus) const;
     ChannelMixVolume GetOutputBusMixVolume(OutputDevice device, int srcChNo, int subMixBus) const;
     float GetOutputAdditionalSend(OutputDevice device, int bus) const;
     u8 GetOutputVolumeThroughMode(OutputDevice device, int bus) const;
-    MixParameter GetOutputChannelMixParameter(OutputDevice, u32 srcChNo) const;
+#endif
+
+    MixParameter GetOutputChannelMixParameter(OutputDevice device, u32 srcChNo) const;
+
     int GetRemainingFadeFrames() const;
     int GetRemainingPauseFadeFrames() const;
     int GetRemainingMuteFadeFrames() const;
