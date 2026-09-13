@@ -435,7 +435,7 @@ public:
     int GetRemainingPauseFadeFrames() const;
     int GetRemainingMuteFadeFrames() const;
 
-    int GetPlayerPriority() const { return m_AmbientParam.GetPriority(); }
+    int GetPlayerPriority() const { return m_Priority + m_AmbientParam.GetPriority(); }
 
     void CalculateSoundParamCalculationValues(SoundParamCalculationValues* pOutValue) const;
 

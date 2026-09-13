@@ -634,6 +634,18 @@ void BasicSound::CalculateSoundParamCalculationValues(
         pOutValue->soundHandleParam.outputMixParameter[device][1] =
             m_OutputParam[device].mixParameter[1];
     }
+
+    pOutValue->resultParam.volume = CalculateVolume();
+    pOutValue->resultParam.pitch = CalculatePitch();
+    pOutValue->resultParam.lpf = CalculateLpfFrequency();
+    pOutValue->resultParam.outputLineFlag = CalculateOutLineFlag();
+    pOutValue->resultParam.playerPriority = fnd::Clamp(GetPlayerPriority(), 0, 127);
+    CalculateBiquadFilter(&pOutValue->resultParam.bqfType, &pOutValue->resultParam.bqfValue);
+    CalculateOutputParam(pOutValue->resultParam.outputParamResult, OutputDevice_Main);
+
+    pOutValue->fadeVolumeParam.stopFadeVolume = m_FadeVolume.GetValue();
+    pOutValue->fadeVolumeParam.pauseFadeVolume = m_PauseFadeVolume.GetValue();
+    pOutValue->fadeVolumeParam.muteFadeVolume = m_MuteFadeVolume.GetValue();
 }
 
 void BasicSound::SetId(u32 id) {
@@ -676,6 +688,10 @@ float BasicSound::CalculateVolume() const {
     volume *= m_ActorParam.volume;
 
     return volume;
+}
+
+float BasicSound::CalculatePitch() const {
+    return m_Pitch * m_AmbientParam.GetPitch() * m_ActorParam.pitch;
 }
 
 }  // namespace nn::atk::detail
