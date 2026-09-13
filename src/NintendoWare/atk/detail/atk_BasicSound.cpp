@@ -815,4 +815,13 @@ void BasicSound::SetAmbientInfo(const AmbientInfo& ambientArgInfo) {
     }
 }
 
+int BasicSound::GetAmbientPriority(const AmbientInfo& ambientInfo, u32 soundId) {
+    int priority{0};
+
+    if (ambientInfo.paramUpdateCallback != nullptr)
+        priority = ambientInfo.paramUpdateCallback->GetPriority(ambientInfo.arg, soundId);
+
+    return priority;
+}
+
 }  // namespace nn::atk::detail

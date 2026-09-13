@@ -284,8 +284,20 @@ class BasicSound {
     NN_ATK_RTTI_BASE(BasicSound);
 
 public:
-    struct AmbientParamUpdateCallback {};
-    struct AmbientArgUpdateCallback {};
+    struct AmbientParamUpdateCallback {
+        virtual void Impl1();
+        virtual void Impl2();
+        virtual void Impl3();
+        virtual int GetPriority(void* arg, u32 soundId);
+    };
+
+    struct AmbientArgUpdateCallback {
+        virtual void Impl1();
+        virtual void Impl2();
+        virtual void Impl3();
+        virtual void Impl4();
+    };
+
     struct AmbientArgAllocatorCallback {
         virtual void Impl1();
         virtual void Impl2();
@@ -471,9 +483,9 @@ public:
 
     void SetAmbientInfo(const AmbientInfo& ambientArgInfo);
 
-    void ClearAmbientArgUpdateCallback();
-    void ClearAmbientParamUpdateCallback();
-    void ClearAmbientArgAllocatorCallback();
+    void ClearAmbientArgUpdateCallback() { m_AmbientInfo.argUpdateCallback = nullptr; }
+    void ClearAmbientParamUpdateCallback() { m_AmbientInfo.paramUpdateCallback = nullptr; }
+    void ClearAmbientArgAllocatorCallback() { m_AmbientInfo.argAllocatorCallback = nullptr; }
 
     const SoundParam& GetAmbientParam() const { return m_AmbientParam; }
 
