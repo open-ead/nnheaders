@@ -369,6 +369,11 @@ float BasicSound::GetLpfFreq() const {
     return m_LpfFreq;
 }
 
+void BasicSound::SetBiquadFilter(int type, float value) {
+    m_BiquadFilterType = static_cast<s8>(type);
+    m_BiquadFilterValue = value;
+}
+
 void BasicSound::SetId(u32 id) {
     m_Id = id;
 }
