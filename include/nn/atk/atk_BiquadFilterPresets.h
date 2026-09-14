@@ -4,113 +4,135 @@
 
 namespace nn::atk::detail {
 
-class BiquadFilterLpf : BiquadFilterCallback {
+class BiquadFilterLpf : public BiquadFilterCallback {
 public:
-    constexpr static u32 CoefficientsTableSize = 112;
+    BiquadFilterLpf() = default;
+    ~BiquadFilterLpf() override = default;
 
-    static Coefficients CoefficientsTable32000[CoefficientsTableSize];
+    void GetCoefficients(Coefficients* pOutValue, int type, float value) const override;
 
-    ~BiquadFilterLpf() override;
-
-    void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
+private:
+    static const int CoefficientsTableSize{112};
+    static const Coefficients CoefficientsTable32000[CoefficientsTableSize];
 };
 static_assert(sizeof(BiquadFilterLpf) == 0x8);
 
-class BiquadFilterHpf : BiquadFilterCallback {
+class BiquadFilterHpf : public BiquadFilterCallback {
 public:
-    constexpr static u32 CoefficientsTableSize = 97;
+    BiquadFilterHpf() = default;
+    ~BiquadFilterHpf() override = default;
 
-    static Coefficients CoefficientsTable32000[CoefficientsTableSize];
+    void GetCoefficients(Coefficients* pOutValue, int type, float value) const override;
 
-    ~BiquadFilterHpf() override;
-
-    void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
+private:
+    static const int CoefficientsTableSize{97};
+    static const Coefficients CoefficientsTable32000[CoefficientsTableSize];
 };
 static_assert(sizeof(BiquadFilterHpf) == 0x8);
 
-class BiquadFilterBpf512 : BiquadFilterCallback {
+class BiquadFilterBpf512 : public BiquadFilterCallback {
 public:
-    constexpr static u32 CoefficientsTableSize = 122;
+    BiquadFilterBpf512() = default;
+    ~BiquadFilterBpf512() override = default;
 
-    static Coefficients CoefficientsTable32000[CoefficientsTableSize];
+    void GetCoefficients(Coefficients* pOutValue, int type, float value) const override;
 
-    ~BiquadFilterBpf512() override;
-
-    void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
+private:
+    static const int CoefficientsTableSize{122};
+    static const Coefficients CoefficientsTable32000[CoefficientsTableSize];
 };
 static_assert(sizeof(BiquadFilterBpf512) == 0x8);
 
-class BiquadFilterBpf1024 : BiquadFilterCallback {
+class BiquadFilterBpf1024 : public BiquadFilterCallback {
 public:
-    constexpr static u32 CoefficientsTableSize = 93;
+    BiquadFilterBpf1024() = default;
+    ~BiquadFilterBpf1024() override = default;
 
-    static Coefficients CoefficientsTable32000[CoefficientsTableSize];
+    void GetCoefficients(Coefficients* pOutValue, int type, float value) const override;
 
-    ~BiquadFilterBpf1024() override;
-
-    void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
+private:
+    static const int CoefficientsTableSize{93};
+    static const Coefficients CoefficientsTable32000[CoefficientsTableSize];
 };
 static_assert(sizeof(BiquadFilterBpf1024) == 0x8);
 
-class BiquadFilterBpf2048 : BiquadFilterCallback {
+class BiquadFilterBpf2048 : public BiquadFilterCallback {
 public:
-    constexpr static u32 CoefficientsTableSize = 93;
+    BiquadFilterBpf2048() = default;
+    ~BiquadFilterBpf2048() override = default;
 
-    static Coefficients CoefficientsTable32000[CoefficientsTableSize];
+    void GetCoefficients(Coefficients* pOutValue, int type, float value) const override;
 
-    ~BiquadFilterBpf2048() override;
-
-    void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
+private:
+    static const int CoefficientsTableSize{93};
+    static const Coefficients CoefficientsTable32000[CoefficientsTableSize];
 };
 static_assert(sizeof(BiquadFilterBpf2048) == 0x8);
 
-class BiquadFilterLpfNw4fCompatible48k : BiquadFilterCallback {
+class BiquadFilterLpfNw4fCompatible48k : public BiquadFilterCallback {
 public:
-    static Coefficients CoefficientsTable48000[BiquadFilterLpf::CoefficientsTableSize];
+    BiquadFilterLpfNw4fCompatible48k() = default;
+    ~BiquadFilterLpfNw4fCompatible48k() override = default;
 
-    ~BiquadFilterLpfNw4fCompatible48k() override;
+    void GetCoefficients(Coefficients* pOutValue, int type, float value) const override;
 
-    void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
+private:
+    static const int CoefficientsTableSize{112};
+    static const Coefficients CoefficientsTable48000[CoefficientsTableSize];
 };
 static_assert(sizeof(BiquadFilterLpfNw4fCompatible48k) == 0x8);
 
-class BiquadFilterHpfNw4fCompatible48k : BiquadFilterCallback {
+class BiquadFilterHpfNw4fCompatible48k : public BiquadFilterCallback {
 public:
-    static Coefficients CoefficientsTable48000[BiquadFilterHpf::CoefficientsTableSize];
+    BiquadFilterHpfNw4fCompatible48k() = default;
+    ~BiquadFilterHpfNw4fCompatible48k() override = default;
 
-    ~BiquadFilterHpfNw4fCompatible48k() override;
+    void GetCoefficients(Coefficients* pOutValue, int type, float value) const override;
 
-    void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
+private:
+    static const int CoefficientsTableSize{97};
+    static const Coefficients CoefficientsTable48000[CoefficientsTableSize];
+
 };
 static_assert(sizeof(BiquadFilterHpfNw4fCompatible48k) == 0x8);
 
-class BiquadFilterBpf512Nw4fCompatible48k : BiquadFilterCallback {
+class BiquadFilterBpf512Nw4fCompatible48k : public BiquadFilterCallback {
 public:
-    static Coefficients CoefficientsTable48000[BiquadFilterBpf512::CoefficientsTableSize];
+    BiquadFilterBpf512Nw4fCompatible48k() = default;
+    ~BiquadFilterBpf512Nw4fCompatible48k() override = default;
 
-    ~BiquadFilterBpf512Nw4fCompatible48k() override;
+    void GetCoefficients(Coefficients* pOutValue, int type, float value) const override;
 
-    void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
+private:
+    static const int CoefficientsTableSize{122};
+    static const Coefficients CoefficientsTable48000[CoefficientsTableSize];
 };
 static_assert(sizeof(BiquadFilterBpf512Nw4fCompatible48k) == 0x8);
 
-class BiquadFilterBpf1024Nw4fCompatible48k : BiquadFilterCallback {
+class BiquadFilterBpf1024Nw4fCompatible48k : public BiquadFilterCallback {
 public:
-    static Coefficients CoefficientsTable48000[BiquadFilterBpf1024::CoefficientsTableSize];
+    BiquadFilterBpf1024Nw4fCompatible48k() = default;
+    ~BiquadFilterBpf1024Nw4fCompatible48k() override = default;
 
-    ~BiquadFilterBpf1024Nw4fCompatible48k() override;
+    void GetCoefficients(Coefficients* pOutValue, int type, float value) const override;
 
-    void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
+private:
+    static const int CoefficientsTableSize{93};
+    static const Coefficients CoefficientsTable48000[CoefficientsTableSize];
+
 };
 static_assert(sizeof(BiquadFilterBpf1024Nw4fCompatible48k) == 0x8);
 
-class BiquadFilterBpf2048Nw4fCompatible48k : BiquadFilterCallback {
+class BiquadFilterBpf2048Nw4fCompatible48k : public BiquadFilterCallback {
 public:
-    static Coefficients CoefficientsTable48000[BiquadFilterBpf2048::CoefficientsTableSize];
+    BiquadFilterBpf2048Nw4fCompatible48k() = default;
+    ~BiquadFilterBpf2048Nw4fCompatible48k() override = default;
 
-    ~BiquadFilterBpf2048Nw4fCompatible48k() override;
+    void GetCoefficients(Coefficients* pOutValue, int type, float value) const override;
 
-    void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) override;
+private:
+    static const int CoefficientsTableSize{93};
+    static const Coefficients CoefficientsTable48000[CoefficientsTableSize];
 };
 static_assert(sizeof(BiquadFilterBpf2048Nw4fCompatible48k) == 0x8);
 

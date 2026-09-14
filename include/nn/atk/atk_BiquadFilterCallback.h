@@ -8,9 +8,9 @@ class BiquadFilterCallback {
 public:
     using Coefficients = BiquadFilterCoefficients;
 
-    virtual ~BiquadFilterCallback();
+    virtual ~BiquadFilterCallback() = default;
 
-    virtual void GetCoefficients(Coefficients* pOutValue, s32 type, f32 value) = 0;
+    virtual void GetCoefficients(Coefficients* pOutValue, int type, float value) const = 0;
 };
 static_assert(sizeof(BiquadFilterCallback) == 0x8);
 
