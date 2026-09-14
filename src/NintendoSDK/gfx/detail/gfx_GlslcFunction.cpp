@@ -1,5 +1,6 @@
 #include <nvnTool/nvnTool_GlslcInterface.h>
 
+extern "C" {
 bool glslcCompile(GLSLCcompileObject*);
 const GLSLCoutput* const* glslcCompilePreSpecialized(GLSLCcompileObject*,
                                                      const GLSLCspecializationBatch*);
@@ -9,6 +10,7 @@ uint8_t glslcGetDefaultOptions(GLSLCcompileObject*);
 GLSLCversion glslcGetVersion();
 void glslcInitialize(GLSLCallocateFunction, GLSLCfreeFunction, GLSLCreallocateFunction, void*);
 GLSLCoptions glslcSetAllocator();
+}
 
 namespace nn::gfx::detail {
 typedef bool (*GlslcCompilePreSpecializedType)(GLSLCcompileObject*);
