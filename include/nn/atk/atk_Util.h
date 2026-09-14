@@ -277,7 +277,10 @@ public:
         Singleton() = default;
 
     public:
-        static CHILD& GetInstance();
+        __attribute__((noinline)) static CHILD& GetInstance() {
+            static CHILD instance;
+            return instance;
+        }
 
         friend CHILD;
     };
@@ -291,7 +294,7 @@ public:
 
     class WarningLogger : public Singleton<WarningLogger> {
     public:
-        WarningLogger();
+        WarningLogger() = default;
 
         void Log(int logId, int arg0, int arg1);
         void Print();
@@ -306,7 +309,7 @@ public:
 
     private:
         struct LogBuffer {
-            static const int LogCount = 64;
+            static const int LogCount{64};
 
             struct Element {
                 int logId;
@@ -318,9 +321,9 @@ public:
             static_assert(sizeof(Element) == 0xc);
 
             Element element[LogCount];
-            int counter;
+            int counter{0};
 
-            LogBuffer();
+            LogBuffer() = default;
 
             void Log(int logId, int arg0, int arg1);
             void Print();
@@ -331,7 +334,7 @@ public:
 
         LogBuffer m_Buffer0;
         LogBuffer m_Buffer1;
-        LogBuffer* m_pCurrentBuffer;
+        LogBuffer* m_pCurrentBuffer{&m_Buffer0};
     };
     static_assert(sizeof(WarningLogger) == 0x610);
 };
