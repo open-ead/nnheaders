@@ -12,11 +12,6 @@ PlayerHeap::~PlayerHeap() {
     m_State = 0;
 }
 
-void PlayerHeap::Destroy() {
-    Clear();
-    m_pAllocAddress = nullptr;
-}
-
 bool PlayerHeap::Create(void* startAddress, size_t size) {
     Util::IsValidMemoryForDsp(startAddress, size);
 
@@ -31,6 +26,23 @@ bool PlayerHeap::Create(void* startAddress, size_t size) {
     }
 
     return false;
+}
+
+void PlayerHeap::Destroy() {
+    Clear();
+    m_pAllocAddress = nullptr;
+}
+
+void* PlayerHeap::Allocate(size_t size) {
+    void* endp{util::BytePtr(m_pAllocAddress, size).Get()};
+
+    if (endp > m_pEndAddress)
+        return nullptr;
+
+    void* allocAddress{m_pAllocAddress};
+    m_pAllocAddress = util::BytePtr(endp).AlignUp(fnd::Thread::StackAlignment).Get();
+
+    return allocAddress;
 }
 
 }  // namespace nn::atk::detail
