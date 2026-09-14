@@ -8,9 +8,7 @@
 #include <cstdarg>
 #include <nn/types.h>
 
-namespace nn {
-namespace util {
-
+namespace nn::util {
 enum CharacterEncodingResult { Success, BadLength, InvalidFormat };
 
 CharacterEncodingResult PickOutCharacterFromUtf8String(char*, char const** str);
@@ -18,12 +16,13 @@ CharacterEncodingResult ConvertCharacterUtf8ToUtf32(u32* dest, char const* src);
 CharacterEncodingResult ConvertStringUtf16NativeToUtf8(char*, s32, u16 const*, s32);
 CharacterEncodingResult ConvertStringUtf8ToUtf16Native(u16*, s32, char const*, s32);
 
-s32 SNPrintf(char* s, ulong n, const char* format, ...);
-s32 VSNPrintf(char* s, ulong n, const char* format, va_list arg);
+[[gnu::format(printf, 3, 4)]] s32 SNPrintf(char* s, size_t n, const char* format, ...);
+s32 VSNPrintf(char* s, size_t n, const char* format, va_list arg);
+[[gnu::format(printf, 3, 4)]] s32 TSNPrintf(char* s, size_t n, const char* format, ...);
+s32 TVSNPrintf(char* s, size_t n, const char* format, va_list arg);
 
 void ReferSymbol(const void*);
-}  // namespace util
-}  // namespace nn
+}  // namespace nn::util
 
 #define NN_MAKE_VER(major, minor, patch) (((major) << 16) | ((minor) << 8) | (patch))
 
@@ -68,9 +67,7 @@ void ReferSymbol(const void*);
     CLASS& operator=(CLASS&&) = delete
 
 namespace nn::detail {
-
-[[noreturn]] void UnexpectedDefaultImpl(const char*, const char*, int);
-
+[[noreturn]] void UnexpectedDefaultImpl(const char*, const char*, s32);
 }  // namespace nn::detail
 
 // todo: ifdef to support debug functionality?
