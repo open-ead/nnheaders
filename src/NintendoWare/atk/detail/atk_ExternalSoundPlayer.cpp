@@ -41,6 +41,23 @@ void ExternalSoundPlayer::SetPlayableSoundCount(int count) {
     }
 }
 
+bool ExternalSoundPlayer::CanPlaySound(int startPriority) {
+    if (GetPlayableSoundCount() == 0)
+        return false;
+
+    if (GetPlayingSoundCount() >= GetPlayableSoundCount()) {
+        BasicSound* dropSound{GetLowestPrioritySound()};
+
+        if (dropSound == nullptr)
+            return false;
+
+        if (startPriority < dropSound->CalcCurrentPlayerPriority())
+            return false;
+    }
+
+    return true;
+}
+
 BasicSound* ExternalSoundPlayer::GetLowestPrioritySound() {
     if (m_SoundList.empty())
         return nullptr;
