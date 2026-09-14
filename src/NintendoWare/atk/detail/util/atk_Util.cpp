@@ -876,4 +876,8 @@ const void* Util::GetWaveFileOfWaveSound(const void* wsdFile, u32 index, const S
     return waveFile;
 }
 
+void Util::WarningLogger::LogBuffer::Print() {
+    counter = 0;
+}
+
 }  // namespace nn::atk::detail
