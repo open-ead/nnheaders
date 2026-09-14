@@ -297,6 +297,13 @@ public:
         void Print();
         void SwapBuffer();
 
+        enum LogId {
+            LogId_ChannelAllocationFailed,
+            LogId_SoundthreadFailedWakeup,
+            LogId_LogbufferFull,
+            LogId_Max
+        };
+
     private:
         struct LogBuffer {
             static const int LogCount = 64;

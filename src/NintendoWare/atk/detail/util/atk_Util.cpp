@@ -893,8 +893,27 @@ void Util::WarningLogger::SwapBuffer() {
     }
 }
 
+void Util::WarningLogger::LogBuffer::Log(int logId, int arg0, int arg1) {
+    while (counter < LogCount) {
+        Element* rLog{element + counter};
+        rLog->logId = logId;
+        rLog->arg0 = arg0;
+        rLog->arg1 = arg1;
+        ++counter;
+
+        if (counter != LogCount - 1)
+            return;
+
+        logId = 2;
+        arg0 = -1;
+        arg1 = arg0;
+    }
+}
+
 void Util::WarningLogger::LogBuffer::Print() {
     counter = 0;
 }
+
+void Util::WarningLogger::LogBuffer::Element::Print() {}
 
 }  // namespace nn::atk::detail
