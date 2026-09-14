@@ -876,6 +876,11 @@ const void* Util::GetWaveFileOfWaveSound(const void* wsdFile, u32 index, const S
     return waveFile;
 }
 
+void Util::WarningLogger::Log(int logId, int arg0, int arg1) {
+    if (m_pCurrentBuffer != nullptr)
+        m_pCurrentBuffer->Log(logId, arg0, arg1);
+}
+
 void Util::WarningLogger::Print() {
     if (m_pCurrentBuffer == &m_Buffer0)
         m_Buffer1.Print();
