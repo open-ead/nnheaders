@@ -15,6 +15,7 @@
 #include <nn/os/os_MessageQueueTypes.h>
 #include <nn/os/os_Mutex.h>
 #include <nn/os/os_ThreadTypes.h>
+#include <nn/os/os_TickTypes.h>
 
 namespace nn {
 namespace os {
@@ -37,12 +38,6 @@ struct InterProcessEventType {
     u32 writableHandle;
 };
 }  // namespace detail
-
-struct Tick {
-    Tick(u64 val) : value(val) {}
-
-    u64 value;
-};
 
 struct LightEventType {
     std::aligned_storage_t<0xc, 4> storage;
@@ -145,8 +140,6 @@ void WaitLightEvent(LightEventType*);
 bool TimedWaitLightEvent(LightEventType*, nn::TimeSpan);
 void ClearLightEvent(LightEventType*);
 
-TimeSpan ConvertToTimeSpan(Tick ticks);
-
 // SEMAPHORES
 void InitializeSemaphore(SemaphoreType* semaphore, s32 initial_count, s32 max_count);
 void FinalizeSemaphore(SemaphoreType* semaphore);
@@ -193,8 +186,6 @@ void SetUserExceptionHandler(void (*)(UserExceptionInfo*), void*, ulong, UserExc
 
 // OTHER
 void GenerateRandomBytes(void*, u64);
-nn::os::Tick GetSystemTick();
-nn::os::Tick GetSystemTickFrequency();
 u64 GetThreadAvailableCoreMask();
 void SetMemoryHeapSize(u64 size);
 
