@@ -63,6 +63,16 @@ void ExternalSoundPlayer::RemoveSound(BasicSound* sound) {
     sound->DetachExternalSoundPlayer(this);
 }
 
+void ExternalSoundPlayer::Finalize(SoundActor* actor) {
+    for (auto itr{m_SoundList.begin()}; itr != m_SoundList.end();) {
+        auto curItr{itr++};
+        [[maybe_unused]] const SoundActor* pActor{curItr->GetSoundActor()};
+
+        curItr->DetachSoundActor(actor);
+        RemoveSound(&*curItr);
+    }
+}
+
 BasicSound* ExternalSoundPlayer::GetLowestPrioritySound() {
     if (m_SoundList.empty())
         return nullptr;
