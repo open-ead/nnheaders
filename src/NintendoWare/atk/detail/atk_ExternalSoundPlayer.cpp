@@ -58,6 +58,11 @@ bool ExternalSoundPlayer::CanPlaySound(int startPriority) {
     return true;
 }
 
+void ExternalSoundPlayer::RemoveSound(BasicSound* sound) {
+    m_SoundList.erase(m_SoundList.iterator_to(*sound));
+    sound->DetachExternalSoundPlayer(this);
+}
+
 BasicSound* ExternalSoundPlayer::GetLowestPrioritySound() {
     if (m_SoundList.empty())
         return nullptr;
