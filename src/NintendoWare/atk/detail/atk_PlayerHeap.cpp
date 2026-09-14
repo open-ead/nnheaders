@@ -63,4 +63,8 @@ void* PlayerHeap::Allocate(size_t size, DisposeCallback callback, void* callback
     return allocAddress;
 }
 
+size_t PlayerHeap::GetAllocateSize(size_t size, [[maybe_unused]] bool needMemoryPool) {
+    return size;
+}
+
 }  // namespace nn::atk::detail
