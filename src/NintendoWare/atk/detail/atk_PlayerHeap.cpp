@@ -89,4 +89,8 @@ void PlayerHeap::Clear() {
     m_CallbackList.clear();
 }
 
+size_t PlayerHeap::GetFreeSize() const {
+    return util::BytePtr(m_pAllocAddress).Distance(m_pEndAddress);
+}
+
 }  // namespace nn::atk::detail

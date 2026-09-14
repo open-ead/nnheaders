@@ -44,7 +44,7 @@ public:
 
     void Clear();
 
-    bool IsValid() const;
+    bool IsValid() const { return m_pPlayer != nullptr; }
 
     size_t GetFreeSize() const;
 
