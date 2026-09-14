@@ -509,20 +509,20 @@ struct VibrationValue {
 void InitializeNpad();
 void SetSupportedNpadIdType(const u32*, u64);
 void SetSupportedNpadStyleSet(NpadStyleSet);
-NpadStyleSet GetNpadStyleSet(const u32& port);
+NpadStyleSet GetNpadStyleSet(const u32& id);
 s32 ShowControllerSupport(ControllerSupportResultInfo*, const ControllerSupportArg&);
 
-void GetNpadState(NpadFullKeyState*, const u32& port);
-void GetNpadState(NpadHandheldState*, const u32& port);
-void GetNpadState(NpadJoyDualState*, const u32& port);
-void GetNpadState(NpadJoyLeftState*, const u32& port);
-void GetNpadState(NpadJoyRightState*, const u32& port);
+void GetNpadState(NpadFullKeyState* state, const u32& id);
+void GetNpadState(NpadHandheldState* state, const u32& id);
+void GetNpadState(NpadJoyDualState* state, const u32& id);
+void GetNpadState(NpadJoyLeftState* state, const u32& id);
+void GetNpadState(NpadJoyRightState* state, const u32& id);
 
-void GetNpadStates(NpadFullKeyState*, s32, const u32& port);
-void GetNpadStates(NpadHandheldState*, s32, const u32& port);
-void GetNpadStates(NpadJoyDualState*, s32, const u32& port);
-void GetNpadStates(NpadJoyLeftState*, s32, const u32& port);
-void GetNpadStates(NpadJoyRightState*, s32, const u32& port);
+s32 GetNpadStates(NpadFullKeyState* states, s32 count, const u32& id);
+s32 GetNpadStates(NpadHandheldState* states, s32 count, const u32& id);
+s32 GetNpadStates(NpadJoyDualState* states, s32 count, const u32& id);
+s32 GetNpadStates(NpadJoyLeftState* states, s32 count, const u32& id);
+s32 GetNpadStates(NpadJoyRightState* states, s32 count, const u32& id);
 
 void InitializeMouse();
 void InitializeKeyboard();
