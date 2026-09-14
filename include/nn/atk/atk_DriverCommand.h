@@ -520,15 +520,15 @@ static_assert(sizeof(DriverCommandVoiceAdpcmParam) == 0x30);
 
 class DriverCommand : public CommandManager {
 public:
-    static DriverCommand* GetInstance();
-
-    static void ProcessCommandList(Command* commandList);
-
-    DriverCommand();
+    static DriverCommand& GetInstance();
+    static DriverCommand& GetInstanceForTaskThread();
 
     void Initialize(void* commandBuffer, size_t commandBufferSize);
 
-    void RequestProcessCommand();
+    DriverCommand();
+
+    static void ProcessCommandList(Command* commandList);
+    static void RequestProcessCommand();
 };
 static_assert(sizeof(DriverCommand) == 0x310);
 

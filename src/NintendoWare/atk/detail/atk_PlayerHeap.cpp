@@ -1,5 +1,6 @@
 #include <nn/atk/atk_PlayerHeap.h>
 
+#include <nn/atk/atk_DriverCommand.h>
 #include <nn/atk/atk_Util.h>
 #include <nn/atk/fnd/os/atkfnd_Thread.h>
 
@@ -65,6 +66,27 @@ void* PlayerHeap::Allocate(size_t size, DisposeCallback callback, void* callback
 
 size_t PlayerHeap::GetAllocateSize(size_t size, [[maybe_unused]] bool needMemoryPool) {
     return size;
+}
+
+void PlayerHeap::Clear() {
+    DriverCommand& cmdmgr{DriverCommand::GetInstanceForTaskThread()};
+
+    auto* command{cmdmgr.AllocCommand<DriverCommandInvalidateData>(false)};
+    command->id = DriverCommandId_InvalidateData;
+    command->mem = m_pStartAddress;
+    command->size = util::BytePtr(m_pStartAddress).Distance(m_pAllocAddress);
+
+    cmdmgr.PushCommand(command);
+    cmdmgr.FlushCommand(false, false);
+
+    m_pAllocAddress = m_pStartAddress;
+
+    for (auto& node : m_CallbackList) {
+        if (node.GetCallback() != nullptr)
+            node.GetCallback()(node.GetCallbackArg());
+    }
+
+    m_CallbackList.clear();
 }
 
 }  // namespace nn::atk::detail

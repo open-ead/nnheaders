@@ -153,7 +153,7 @@ bool BasicSound::Initialize(OutputReceiver* pOutputReceiver)
     {
         driver::BasicSoundPlayer* basicPlayer{GetBasicSoundPlayerHandle()};
 
-        DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+        DriverCommand& cmdmgr{DriverCommand::GetInstance()};
 
         auto* command{cmdmgr.AllocCommand<DriverCommandPlayerInit>()};
         command->id = DriverCommandId_PlayerInit;
@@ -190,7 +190,7 @@ void BasicSound::GetPriority(int* priority, int* ambientPriority) const {
 }
 
 void BasicSound::ClearIsFinalizedForCannotAllocatedResourceFlag() {
-    DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+    DriverCommand& cmdmgr{DriverCommand::GetInstance()};
 
     auto* command{cmdmgr.AllocCommand<DriverCommandPlayerClearResourceFlag>()};
     if (command == nullptr)
@@ -229,7 +229,7 @@ void BasicSound::Finalize() {
 
     {
         if (m_StartedFlag) {
-            DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+            DriverCommand& cmdmgr{DriverCommand::GetInstance()};
 
             auto* command{cmdmgr.AllocCommand<DriverCommandPlayer>()};
             command->id = DriverCommandId_PlayerStop;
@@ -244,7 +244,7 @@ void BasicSound::Finalize() {
         m_PlayerAvailableFlag = false;
         m_PlayerState = PlayerState_Stop;
 
-        DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+        DriverCommand& cmdmgr{DriverCommand::GetInstance()};
 
         auto* command{cmdmgr.AllocCommand<DriverCommandPlayer>()};
         command->id = DriverCommandId_PlayerFinalize;
@@ -791,7 +791,7 @@ float BasicSound::GetOutputFxSend(OutputDevice device, AuxBus bus) const {
 
 void BasicSound::SetPanMode(PanMode mode) {
     {
-        DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+        DriverCommand& cmdmgr{DriverCommand::GetInstance()};
         auto* command{cmdmgr.AllocCommand<DriverCommandPlayerPanParam>()};
 
         command->id = DriverCommandId_PlayerPanmode;
@@ -804,7 +804,7 @@ void BasicSound::SetPanMode(PanMode mode) {
 
 void BasicSound::SetPanCurve(PanCurve curve) {
     {
-        DriverCommand& cmdmgr{*DriverCommand::GetInstance()};
+        DriverCommand& cmdmgr{DriverCommand::GetInstance()};
         auto* command{cmdmgr.AllocCommand<DriverCommandPlayerPanParam>()};
 
         command->id = DriverCommandId_PlayerPancurve;
