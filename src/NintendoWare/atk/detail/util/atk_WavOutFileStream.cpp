@@ -11,7 +11,6 @@ WavOutFileStream::WavOutFileStream() = default;
 
 WavOutFileStream::~WavOutFileStream() = default;
 
-// NON_MATCHING: requires WavOutFileStream::WriteHeader
 bool WavOutFileStream::Open(fnd::FileStream& stream, int channels, size_t samplesPerSec) {
     m_pFileStream = &stream;
 
@@ -21,7 +20,7 @@ bool WavOutFileStream::Open(fnd::FileStream& stream, int channels, size_t sample
         return true;
     }
 
-    // return false;
+    return false;
 }
 
 void WavOutFileStream::SetCacheBuffer(char* buf, size_t length) {
