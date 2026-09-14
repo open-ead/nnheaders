@@ -69,4 +69,17 @@ size_t WavOutFileStream::WriteDirect(const void* buf, size_t length, fnd::FndRes
     return writtenBytes;
 }
 
+size_t WavOutFileStream::FlushBuffer() {
+    size_t length{m_ValidBufferLength};
+    m_ValidBufferLength = 0;
+
+    if (length == 0)
+        return 0;
+
+    fnd::FndResult result;
+    length = WriteDirect(m_Buffer, length, &result);
+
+    return length;
+}
+
 }  // namespace nn::atk::detail

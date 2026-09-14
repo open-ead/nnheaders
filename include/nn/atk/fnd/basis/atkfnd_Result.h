@@ -57,7 +57,7 @@ public:
     explicit operator FndResultType() const { return FndResultType(value); }
 
 private:
-    u32 value;
+    u32 value{0};
 };
 static_assert(sizeof(FndResult) == 0x4);
 
