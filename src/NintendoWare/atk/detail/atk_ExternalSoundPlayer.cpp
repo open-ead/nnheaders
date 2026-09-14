@@ -58,6 +58,29 @@ bool ExternalSoundPlayer::CanPlaySound(int startPriority) {
     return true;
 }
 
+bool ExternalSoundPlayer::AppendSound(BasicSound* sound) {
+    int allocPriority{sound->CalcCurrentPlayerPriority()};
+
+    if (m_PlayableCount == 0)
+        return false;
+
+    while (GetPlayingSoundCount() >= GetPlayableSoundCount()) {
+        BasicSound* dropSound{GetLowestPrioritySound()};
+
+        if (dropSound == nullptr)
+            return false;
+
+        if (allocPriority < dropSound->CalcCurrentPlayerPriority())
+            return false;
+
+        dropSound->Finalize();
+    }
+
+    m_SoundList.push_back(*sound);
+    sound->AttachExternalSoundPlayer(this);
+    return true;
+}
+
 void ExternalSoundPlayer::RemoveSound(BasicSound* sound) {
     m_SoundList.erase(m_SoundList.iterator_to(*sound));
     sound->DetachExternalSoundPlayer(this);
