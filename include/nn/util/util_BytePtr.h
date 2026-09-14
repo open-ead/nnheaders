@@ -86,7 +86,7 @@ public:
         ptr = align_up(ptr, alignment);
         return *this;
     }
-    
+
     ConstBytePtr& AlignDown(size_t);
     ConstBytePtr& operator+=(ptrdiff_t);
     ConstBytePtr& operator-=(ptrdiff_t);

@@ -92,7 +92,6 @@ public:
 private:
     static const int CoefficientsTableSize{97};
     static const Coefficients CoefficientsTable48000[CoefficientsTableSize];
-
 };
 static_assert(sizeof(BiquadFilterHpfNw4fCompatible48k) == 0x8);
 
@@ -119,7 +118,6 @@ public:
 private:
     static const int CoefficientsTableSize{93};
     static const Coefficients CoefficientsTable48000[CoefficientsTableSize];
-
 };
 static_assert(sizeof(BiquadFilterBpf1024Nw4fCompatible48k) == 0x8);
 

@@ -35,7 +35,7 @@ void BasicSoundPlayer::Finalize() {
         m_pOutputReceiver = nullptr;
     }
 #endif
-    
+
     m_Event.Signal();
 }
 

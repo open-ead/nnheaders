@@ -38,11 +38,11 @@ public:
 
     s64 value;
 
-// TODO: DWARF shows value as private and named m_Tick.
-// It's being kept as it was for now to keep sead
-// from not compiling. Fix this before merging to master.
-// private:
-//     s64 m_Tick;
+    // TODO: DWARF shows value as private and named m_Tick.
+    // It's being kept as it was for now to keep sead
+    // from not compiling. Fix this before merging to master.
+    // private:
+    //     s64 m_Tick;
 };
 
 }  // namespace nn::os

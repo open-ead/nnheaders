@@ -18,9 +18,7 @@ struct PlayerParamSet {
     u32 outputLineFlag;
     OutputParam tvParam;
 
-    PlayerParamSet() {
-        Initialize();
-    }
+    PlayerParamSet() { Initialize(); }
 
     void Initialize() {
         volume = 1.0f;
@@ -56,6 +54,7 @@ public:
     bool IsStarted() const { return m_StartedFlag; }
     bool IsPause() const { return m_PauseFlag; }
     bool IsPlayFinished() const { return m_FinishFlag; }
+    
     bool IsFinalizedForCannotAllocateResource() const {
         return m_IsFinalizedForCannotAllocateResource;
     }
@@ -84,9 +83,7 @@ public:
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetTvAdditionalParamAddr(OutputAdditionalParam* pParam) { m_pTvAdditionalParam = pParam; }
 
-    const OutputAdditionalParam* GetTvAdditionalParamAddr() const {
-        return m_pTvAdditionalParam;
-    };
+    const OutputAdditionalParam* GetTvAdditionalParamAddr() const { return m_pTvAdditionalParam; };
 
     void SetTvAdditionalSend(int bus, float send);
     void SetTvBusMixVolumeUsed(bool isUsed);
@@ -125,7 +122,7 @@ protected:
     void SetStartedFlag(bool isStarted) { m_StartedFlag = isStarted; }
     void SetPauseFlag(bool isPauseEnabled) { m_PauseFlag = isPauseEnabled; }
     void SetFinishFlag(bool isPlayFinished) { m_FinishFlag = isPlayFinished; }
-    
+
     void SetFinalizedForCannotAllocateResourceFlag(bool flag) {
         m_IsFinalizedForCannotAllocateResource = flag;
     }

@@ -11,9 +11,8 @@ public:
     DisposeCallback() = default;
 
     virtual ~DisposeCallback() = default;
-    
-    virtual void InvalidateData(const void* start, const void* end) = 0;
 
+    virtual void InvalidateData(const void* start, const void* end) = 0;
 };
 static_assert(sizeof(DisposeCallback) == 0x18);
 

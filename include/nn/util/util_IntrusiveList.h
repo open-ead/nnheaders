@@ -102,8 +102,8 @@ public:
             return temporary;
         }
 
-        bool operator==(const const_iterator& ci) const { return m_Node == ci.m_Node; } 
-        
+        bool operator==(const const_iterator& ci) const { return m_Node == ci.m_Node; }
+
         bool operator!=(const const_iterator& ci) const { return m_Node != ci.m_Node; }
 
     private:
@@ -241,7 +241,7 @@ public:
 
         reference operator*() const;
         pointer operator->() const;
-        
+
         const_iterator& operator++() {
             ++m_Iterator;
             return *this;
@@ -252,7 +252,7 @@ public:
             ++m_Iterator;
             return temporary;
         }
-        
+
         const_iterator& operator--() {
             --m_Iterator;
             return *this;
@@ -338,7 +338,7 @@ public:
     void push_front(reference);
     void pop_back();
     void pop_front() { m_Implementation.pop_front(); }
-    
+
     reference front() { return ToReference(m_Implementation.front()); }
     const_reference front() const { return ToReference(m_Implementation.front()); }
     reference back() { return ToReference(m_Implementation.back()); }
@@ -389,9 +389,14 @@ public:
 
 private:
     IntrusiveListNode& ToNode(reference ref) const { return NodeTraits::GetNode(ref); }
+    
     const IntrusiveListNode& ToNode(const_reference ref) const { return NodeTraits::GetNode(ref); }
+    
     reference ToReference(IntrusiveListNode& node) const { return NodeTraits::GetItem(node); }
-    const_reference ToReference(const IntrusiveListNode& node) const { return NodeTraits::GetItem(node); }
+
+    const_reference ToReference(const IntrusiveListNode& node) const {
+        return NodeTraits::GetItem(node);
+    }
 
     detail::IntrusiveListImplementation m_Implementation;
 };
@@ -416,7 +421,7 @@ public:
     static const T& GetItem(const IntrusiveListNode& node) { return static_cast<const T&>(node); }
 };
 
-template <class HolderT, IntrusiveListNode HolderT::*Member, class T = HolderT>
+template <class HolderT, IntrusiveListNode HolderT::* Member, class T = HolderT>
 class IntrusiveListMemberNodeTraits {
     friend class IntrusiveList<T, IntrusiveListMemberNodeTraits>;
 
@@ -436,4 +441,5 @@ class IntrusiveListMemberNodeTraits {
         return reinterpret_cast<uintptr_t>(&(reinterpret_cast<T*>(0)->*Member));
     }
 };
+
 }  // namespace nn::util

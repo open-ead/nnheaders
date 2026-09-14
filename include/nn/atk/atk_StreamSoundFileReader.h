@@ -40,9 +40,7 @@ public:
         return m_pInfoBlockBody->GetChannelInfoTable()->GetChannelCount();
     }
 
-    u32 GetTrackCount() const {
-        return m_pInfoBlockBody->GetTrackInfoTable()->GetTrackCount();
-    }
+    u32 GetTrackCount() const { return m_pInfoBlockBody->GetTrackInfoTable()->GetTrackCount(); }
 
     u32 GetSeekBlockOffset() const {
         if (m_pHeader != nullptr && m_pHeader->HasSeekBlock())

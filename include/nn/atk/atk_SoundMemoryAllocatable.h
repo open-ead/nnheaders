@@ -9,7 +9,7 @@ public:
     using DisposeCallback = void (*)(void*);
 
     virtual ~SoundMemoryAllocatable() = default;
-    
+
     virtual void* Allocate(size_t size) = 0;
     virtual void* Allocate(size_t size, DisposeCallback callback, void* callbackArg) = 0;
     virtual size_t GetAllocateSize(size_t size, bool needMemoryPool) = 0;

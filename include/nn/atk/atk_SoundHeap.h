@@ -41,4 +41,4 @@ private:
 };
 static_assert(sizeof(SoundHeap) == 0x50);
 
-}  // namespace nn::atk::detail
+}  // namespace nn::atk

@@ -20,7 +20,9 @@ struct BankFile {
 
         u32 GetWaveIdCount() const { return GetWaveIdTable().table.count; }
 
-        s32 GetInstrumentCount() const { return static_cast<s32>(GetInstrumentReferenceTable().count); }
+        s32 GetInstrumentCount() const {
+            return static_cast<s32>(GetInstrumentReferenceTable().count);
+        }
 
         const Util::WaveId* GetWaveId(u32 index) const { return GetWaveIdTable().GetWaveId(index); }
 
