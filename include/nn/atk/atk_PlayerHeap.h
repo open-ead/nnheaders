@@ -14,7 +14,7 @@ class PlayerHeap;
 class CallbackNode {
 public:
     void SetCallback(SoundMemoryAllocatable::DisposeCallback callback) { m_Callback = callback; }
-    void SetCallbackArg(void* arg) { m_CallbackArg = arg; }
+    void SetCallbackArg(void* callbackArg) { m_CallbackArg = callbackArg; }
 
     SoundMemoryAllocatable::DisposeCallback GetCallback() { return m_Callback; }
     void* GetCallbackArg() { return m_CallbackArg; }

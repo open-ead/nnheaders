@@ -34,13 +34,31 @@ void PlayerHeap::Destroy() {
 }
 
 void* PlayerHeap::Allocate(size_t size) {
-    void* endp{util::BytePtr(m_pAllocAddress, size).Get()};
+    void* endp{util::BytePtr(m_pAllocAddress, static_cast<ptrdiff_t>(size)).Get()};
 
     if (endp > m_pEndAddress)
         return nullptr;
 
     void* allocAddress{m_pAllocAddress};
     m_pAllocAddress = util::BytePtr(endp).AlignUp(fnd::Thread::StackAlignment).Get();
+
+    return allocAddress;
+}
+
+void* PlayerHeap::Allocate(size_t size, DisposeCallback callback, void* callbackArg) {
+    void* callbackNodeBuffer{util::BytePtr(m_pAllocAddress, static_cast<ptrdiff_t>(size)).Get()};
+    void* endp{util::BytePtr(callbackNodeBuffer, sizeof(CallbackNode)).Get()};
+
+    if (endp > m_pEndAddress)
+        return nullptr;
+
+    void* allocAddress{m_pAllocAddress};
+    m_pAllocAddress = util::BytePtr(endp).AlignUp(fnd::Thread::StackAlignment).Get();
+
+    CallbackNode* node{new (callbackNodeBuffer) CallbackNode};
+    node->SetCallback(callback);
+    node->SetCallbackArg(callbackArg);
+    m_CallbackList.push_back(*node);
 
     return allocAddress;
 }
