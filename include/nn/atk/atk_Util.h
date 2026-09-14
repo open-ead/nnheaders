@@ -317,7 +317,8 @@ public:
 
             void Log(int logId, int arg0, int arg1);
             void Print();
-            void Reset();
+
+            void Reset() { counter = 0; }
         };
         static_assert(sizeof(LogBuffer) == 0x304);
 
