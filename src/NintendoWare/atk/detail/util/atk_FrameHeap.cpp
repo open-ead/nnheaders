@@ -125,4 +125,7 @@ void FrameHeap::Section::AppendBlock(Block* block) {
     m_BlockList.push_back(*block);
 }
 
+void FrameHeap::Section::Dump([[maybe_unused]] const SoundDataManager& mgr,
+                              [[maybe_unused]] const SoundArchive& arc) const {}
+
 }  // namespace nn::atk::detail
