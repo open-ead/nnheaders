@@ -30,7 +30,7 @@ public:
     bool ReadSeekBlockData(u16* yn1, u16* yn2, int blockIndex, int channelCount);
     bool ReadRegionInfo(StreamSoundFile::RegionInfo* pInfo, u32 regionIndex) const override;
 
-    ~StreamSoundFileLoader() override;
+    ~StreamSoundFileLoader() override = default;
 
 private:
     fnd::FileStream* m_pStream{};

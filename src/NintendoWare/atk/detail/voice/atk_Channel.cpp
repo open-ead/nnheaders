@@ -334,13 +334,13 @@ void Channel::InitParam(ChannelCallback callback, void* callbackData) {
 
     m_Velocity = 1.0f;
 }
-
-void Channel::AppendWaveBuffer(const WaveInfo& waveInfo, position_t startOffsetSamples
-#if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
-                               ,
-                               bool isContextCalculationSkipMode
+#if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+void Channel::AppendWaveBuffer(const WaveInfo& waveInfo, position_t startOffsetSamples)
+#else
+void Channel::AppendWaveBuffer(const WaveInfo& waveInfo, position_t startOffsetSamples,
+                               bool isContextCalculationSkipMode)
 #endif
-) {
+{
     m_LoopFlag = waveInfo.loopFlag;
     m_LoopStartFrame = waveInfo.loopStartFrame;
     m_OriginalLoopStartFrame = waveInfo.originalLoopStartFrame;

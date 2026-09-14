@@ -6,7 +6,7 @@ namespace nn::atk {
 
 class ChannelMixVolume {
 public:
-    static const int ChannelCountMax = 24;
+    static const int ChannelCountMax{24};
 
     ChannelMixVolume();
     explicit ChannelMixVolume(const MixVolume& mixVolume);

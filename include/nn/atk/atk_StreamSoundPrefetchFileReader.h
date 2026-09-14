@@ -40,8 +40,11 @@ public:
 
     bool ReadRegionInfo(StreamSoundFile::RegionInfo* pInfo, u32 regionIndex) const override;
 
-    u32 GetChannelCount() const;
-    u32 GetPrefetchDataCount() const;
+    u32 GetChannelCount() const {
+        return m_pInfoBlockBody->GetChannelInfoTable()->GetChannelCount();
+    }
+
+    u32 GetPrefetchDataCount() const { return m_pPrefetchDataBlockBody->GetPrefetchDataCount(); }
 
     u32 GetRegionDataOffset() const {
         u32 result{0};

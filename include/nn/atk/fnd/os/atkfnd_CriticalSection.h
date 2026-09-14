@@ -10,18 +10,11 @@ public:
 
     ~CriticalSection() = default;
 
-    void Enter() {
-        // TODO
-    }
+    void Enter() { m_Mutex.Lock(); }
 
-    bool TryEnter() {
-        // TODO
-        return true;
-    }
+    bool TryEnter() { return m_Mutex.TryLock(); }
 
-    void Leave() {
-        // TODO
-    }
+    void Leave() { m_Mutex.Unlock(); }
 
     void Lock() { m_Mutex.Lock(); }
 
@@ -30,6 +23,9 @@ public:
     void Unlock() { m_Mutex.Unlock(); }
 
 private:
+    static const u32 CriticalSectionSize{24};
+    static const u32 CriticalSectionAlign{4};
+
     os::Mutex m_Mutex;
 };
 static_assert(sizeof(CriticalSection) == 0x20);

@@ -84,7 +84,7 @@ public:
         u8 channelPriority;
         bool isReleasePriorityFix;
 
-        SequenceSoundInfo();
+        SequenceSoundInfo() = default;
     };
     static_assert(sizeof(SequenceSoundInfo) == 0x1c);
 
@@ -102,7 +102,7 @@ public:
         u8 channelCount;
         s8 globalChannelIndex[2];
 
-        StreamTrackInfo();
+        StreamTrackInfo() = default;
     };
     static_assert(sizeof(StreamTrackInfo) == 0xe);
 
@@ -118,7 +118,7 @@ public:
         FileId prefetchFileId;
         void* streamBufferPool;
 
-        StreamSoundInfo();
+        StreamSoundInfo() = default;
         void Setup();
     };
     static_assert(sizeof(StreamSoundInfo) == 0x90);
@@ -128,7 +128,7 @@ public:
         u32 loopStartFrame;
         u32 loopEndFrame;
 
-        StreamSoundInfo2();
+        StreamSoundInfo2() = default;
     };
     static_assert(sizeof(StreamSoundInfo2) == 0xc);
 
@@ -138,7 +138,7 @@ public:
         u8 channelPriority;
         bool isReleasePriorityFix;
 
-        WaveSoundInfo();
+        WaveSoundInfo() = default;
     };
     static_assert(sizeof(WaveSoundInfo) == 0xc);
 
@@ -150,7 +150,7 @@ public:
     struct BankInfo {
         FileId fileId;
 
-        BankInfo();
+        BankInfo() = default;
     };
     static_assert(sizeof(BankInfo) == 0x4);
 
@@ -168,7 +168,7 @@ public:
         int playableSoundMax;
         u32 playerHeapSize;
 
-        PlayerInfo();
+        PlayerInfo() = default;
     };
     static_assert(sizeof(PlayerInfo) == 0x8);
 
@@ -177,7 +177,7 @@ public:
         ItemId endId;
         detail::Util::Table<FileId> fileIdTable;
 
-        SoundGroupInfo();
+        SoundGroupInfo() = default;
     };
     static_assert(sizeof(SoundGroupInfo) == 0x10);
 
@@ -185,7 +185,7 @@ public:
         FileId fileId;
         u32 groupFileSize;
 
-        GroupInfo();
+        GroupInfo() = default;
     };
     static_assert(sizeof(GroupInfo) == 0x8);
 

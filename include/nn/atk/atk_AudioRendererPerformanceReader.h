@@ -8,7 +8,7 @@ namespace nn::atk {
 
 class AudioRendererPerformanceReader {
 public:
-    static const int PerformanceInfoCountMin = 2;
+    static const int PerformanceInfoCountMin{2};
 
     struct PerformanceInfo {
         void* performanceBuffer;

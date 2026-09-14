@@ -42,7 +42,7 @@ private:
 
     static const u8 SilenceVolumeMax{255};
     static const u8 SilenceVolumeMin{0};
-    static const float SilenceVolumeMaxR;  // = 1.0 / SilenceVolumeMax;
+    constexpr static const float SilenceVolumeMaxR{1.0f / SilenceVolumeMax};
 
 public:
     static Channel* AllocChannel(int voiceChannelCount, int priority, ChannelCallback callback,
@@ -146,6 +146,7 @@ public:
     OutputAdditionalParam* GetTvAdditionalParamAddr() { return m_pTvAdditionalParam; }
     void SetTvAdditionalParam(const OutputAdditionalParam& param);
 #endif
+
     void SetMainSend(float mainSend);
     void SetUserPan(float pan);
 

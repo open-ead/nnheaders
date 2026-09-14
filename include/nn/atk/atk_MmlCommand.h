@@ -5,21 +5,21 @@ namespace nn::atk::detail::driver {
 class MmlCommand {
 public:
     enum Mml {
-        Mml_Wait = 0x80,
+        Mml_Wait = 128,
         Mml_Prg,
 
-        Mml_OpenTrack = 0x88,
+        Mml_OpenTrack = 136,
         Mml_Jump,
         Mml_Call,
 
-        Mml_Random = 0xa0,
+        Mml_Random = 160,
         Mml_Variable,
         Mml_If,
         Mml_Time,
         Mml_TimeRandom,
         Mml_TimeVariable,
 
-        Mml_Timebase = 0xb0,
+        Mml_Timebase = 176,
         Mml_EnvHold,
         Mml_Monophonic,
         Mml_VelocityRange,
@@ -27,7 +27,7 @@ public:
         Mml_BiquadValue,
         Mml_BankSelect,
 
-        Mml_ModPhase = 0xbd,
+        Mml_ModPhase = 189,
         Mml_ModCurve,
         Mml_FrontBypass,
         Mml_Pan,
@@ -65,12 +65,12 @@ public:
         Mml_ModDelay,
         Mml_Tempo,
 
-        Mml_SweepPitch = 0xe3,
+        Mml_SweepPitch = 227,
         Mml_ModPeriod,
 
-        Mml_ExCommand = 0xf0,
+        Mml_ExCommand = 240,
 
-        Mml_EnvReset = 0xfb,
+        Mml_EnvReset = 251,
         Mml_LoopEnd,
         Mml_Ret,
         Mml_AllocTrack,

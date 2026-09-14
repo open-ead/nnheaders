@@ -7,12 +7,12 @@ namespace nn::atk::detail::driver {
 class SequenceSoundPlayer;
 
 struct NoteOnInfo {
-    s32 prgNo;
-    s32 key;
-    s32 velocity;
-    s32 length;
-    s32 initPan;
-    s32 priority;
+    int prgNo;
+    int key;
+    int velocity;
+    int length;
+    int initPan;
+    int priority;
     Channel::ChannelCallback channelCallback;
     void* channelCallbackData;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
@@ -28,7 +28,8 @@ static_assert(sizeof(NoteOnInfo) == 0x38);
 
 class NoteOnCallback {
 public:
-    virtual ~NoteOnCallback();
+    virtual ~NoteOnCallback() = default;
+
     virtual Channel* NoteOn(SequenceSoundPlayer* seqPlayer, u8 bankIndex,
                             const NoteOnInfo& noteOnInfo) = 0;
 };
