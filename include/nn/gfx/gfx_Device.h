@@ -27,6 +27,8 @@ class TDevice : public detail::DeviceImpl<TTarget>,
 public:
     typedef DeviceInfo InfoType;
 
+    using detail::DeviceImpl<TTarget>::DeviceImpl;
+
     static size_t GetRequiredMemorySize(const InfoType&);
 
     TDevice();
