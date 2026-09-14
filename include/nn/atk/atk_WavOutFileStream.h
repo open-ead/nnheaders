@@ -33,7 +33,7 @@ private:
     bool UpdateDataChunkSize();
     size_t CalcRiffChunkSize(size_t dataSize);
 
-    size_t WriteDirect(const void* buf, size_t length, fnd::FndResult* result);
+    size_t WriteDirect(const void* buf, size_t length, fnd::FndResult* pResult);
 
     size_t FlushBuffer();
 

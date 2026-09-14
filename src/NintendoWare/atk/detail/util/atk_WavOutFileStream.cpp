@@ -47,4 +47,26 @@ bool WavOutFileStream::WriteHeader(int channels, size_t samplesPerSec) {
     return result == sizeof(WaveBinaryHeader);
 }
 
+size_t WavOutFileStream::WriteDirect(const void* buf, size_t length, fnd::FndResult* pResult) {
+    if (!IsAvailable())
+        return 0;
+
+    const void* alignedBuffer{util::ConstBytePtr(buf).AlignUp(FileIoBufferAlignment).Get()};
+
+    [[maybe_unused]] ptrdiff_t unAlignedLength{util::ConstBytePtr(buf, length).Distance(buf)};
+    size_t alignedBufferLength{length};
+
+    size_t writtenBytes{m_pFileStream->Write(alignedBuffer, alignedBufferLength, pResult)};
+
+    if (pResult->IsFailed()) {
+        char bufferForAlignment[2];
+        [[maybe_unused]] char* alignedBufferForAlignment{
+            util::BytePtr(bufferForAlignment).AlignUp(FileIoBufferAlignment).Get<char>()};
+
+        return 0;
+    }
+
+    return writtenBytes;
+}
+
 }  // namespace nn::atk::detail

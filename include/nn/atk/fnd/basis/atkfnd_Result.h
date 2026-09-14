@@ -46,7 +46,7 @@ public:
 
     bool IsFalse() const { return value == FndResultType_False; }
 
-    bool IsFailed() const { return value == static_cast<u32>(FndResultType_Failed); }
+    bool IsFailed() const { return static_cast<FndResultType>(*this) < FndResultType_True; }
 
     const char* ToString();
 
