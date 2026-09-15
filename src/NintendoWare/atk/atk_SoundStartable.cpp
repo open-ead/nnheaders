@@ -2,14 +2,18 @@
 
 namespace nn::atk {
 
-SoundStartable::StartResult SoundStartable::StartSound(SoundHandle* handle, SoundArchive::ItemId soundId, const char* soundArchiveName, const StartInfo* startInfo) {
+SoundStartable::StartResult SoundStartable::StartSound(SoundHandle* handle,
+                                                       SoundArchive::ItemId soundId,
+                                                       const char* soundArchiveName,
+                                                       const StartInfo* startInfo) {
     StartResult result{detail_SetupSound(handle, soundId, false, soundArchiveName, startInfo)};
-    
-    if (!result.IsSuccess()) 
+
+    if (!result.IsSuccess() || !handle->IsAttachedSound())
         return result;
-    
-    // StartResult result2{handle->StartPrepared()};
-    // return result2;
+
+    handle->StartPrepared();
+    StartResult result2{StartResult::ResultCode_Success};
+    return result2;
 }
 
 }  // namespace nn::atk
