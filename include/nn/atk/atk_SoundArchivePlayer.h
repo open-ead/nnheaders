@@ -180,8 +180,8 @@ public:
     Result CheckStreamSoundFileExisting(const char*, const char*) const;
     Result CheckStreamSoundFileExisting(const SoundArchive*, u32) const;
 
-    SoundArchive::ItemId detail_GetItemId(char* pString) override;
-    SoundArchive::ItemId detail_GetItemId(char* pString, const char* soundArchiveName) override;
+    SoundArchive::ItemId detail_GetItemId(const char* pString) override;
+    SoundArchive::ItemId detail_GetItemId(const char* pString, const char* soundArchiveName) override;
 
 private:
     detail::SoundArchiveManager m_SoundArchiveManager;

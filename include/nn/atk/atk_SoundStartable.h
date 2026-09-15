@@ -186,8 +186,9 @@ protected:
                                           const char* soundArchiveName,
                                           const StartInfo* startInfo) = 0;
 
-    virtual SoundArchive::ItemId detail_GetItemId(char* pString) = 0;
-    virtual SoundArchive::ItemId detail_GetItemId(char* pString, const char* soundArchiveName) = 0;
+    virtual SoundArchive::ItemId detail_GetItemId(const char* soundName) = 0;
+    virtual SoundArchive::ItemId detail_GetItemId(const char* soundName,
+                                                  const char* soundArchiveName) = 0;
 };
 static_assert(sizeof(SoundStartable) == 0x8);
 

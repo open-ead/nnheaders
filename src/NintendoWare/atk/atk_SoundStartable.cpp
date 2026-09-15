@@ -16,8 +16,22 @@ SoundStartable::StartResult SoundStartable::StartSound(SoundHandle* handle,
     return result2;
 }
 
-SoundStartable::StartResult SoundStartable::StartSound(SoundHandle* handle, SoundArchive::ItemId soundId, const StartInfo* startInfo) {
+SoundStartable::StartResult SoundStartable::StartSound(SoundHandle* handle,
+                                                       SoundArchive::ItemId soundId,
+                                                       const StartInfo* startInfo) {
     return StartSound(handle, soundId, nullptr, startInfo);
+}
+
+SoundStartable::StartResult SoundStartable::StartSound(SoundHandle* handle, const char* soundName,
+                                                       const char* soundArchiveName,
+                                                       const StartInfo* startInfo) {
+    u32 soundId{detail_GetItemId(soundName, soundArchiveName)};
+
+    if (soundId == InvalidSoundId)
+        return StartResult{StartResult::ResultCode_ErrorInvalidLabelString};
+
+    StartResult result{StartSound(handle, soundId, soundArchiveName, startInfo)};
+    return result;
 }
 
 }  // namespace nn::atk
