@@ -12,7 +12,7 @@
 
 #include <nn/os/detail/os_InternalCriticalSection.h>
 #include <nn/os/os_Event.h>
-#include <nn/os/os_MessageQueueTypes.h>
+#include <nn/os/os_MessageQueue.h>
 #include <nn/os/os_Mutex.h>
 #include <nn/os/os_ThreadTypes.h>
 
@@ -85,26 +85,6 @@ Result AllocateMemoryPages(u64, u64);
 void AllocateMemoryBlock(u64*, u64);
 void FreeMemoryBlock(u64, u64);
 void SetMemoryHeapSize(u64);
-
-// QUEUE
-void InitializeMessageQueue(nn::os::MessageQueueType*, u64* buf, u64 queueCount);
-void FinalizeMessageQueue(nn::os::MessageQueueType*);
-
-bool TrySendMessageQueue(MessageQueueType*, u64);
-void SendMessageQueue(MessageQueueType*, u64);
-bool TimedSendMessageQueue(MessageQueueType*, u64, nn::TimeSpan);
-
-bool TryReceiveMessageQueue(u64* out, MessageQueueType*);
-void ReceiveMessageQueue(u64* out, MessageQueueType*);
-bool TimedReceiveMessageQueue(u64* out, MessageQueueType*, nn::TimeSpan);
-
-bool TryPeekMessageQueue(u64*, MessageQueueType const*);
-void PeekMessageQueue(u64*, MessageQueueType const*);
-bool TimedPeekMessageQueue(u64*, MessageQueueType const*);
-
-bool TryJamMessageQueue(nn::os::MessageQueueType*, u64);
-void JamMessageQueue(nn::os::MessageQueueType*, u64);
-bool TimedJamMessageQueue(nn::os::MessageQueueType*, u64, nn::TimeSpan);
 
 // CONDITION VARIABLE
 void InitializeConditionVariable(ConditionVariableType*);
