@@ -66,4 +66,9 @@ SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle,
     return result;
 }
 
+SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle, SoundArchive::ItemId soundId, const StartInfo* startInfo) {
+    StartResult result{HoldSound(handle, soundId, nullptr, startInfo)};
+    return result;
+}
+
 }  // namespace nn::atk
