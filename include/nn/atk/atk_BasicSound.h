@@ -538,6 +538,8 @@ protected:
     bool IsPlayerAvailable() const { return m_PlayerAvailableFlag; }
 
 private:
+    friend SoundHandle;
+
     void UpdateParam();
 
     void ClearIsFinalizedForCannotAllocatedResourceFlag();
