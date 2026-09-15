@@ -32,41 +32,42 @@ public:
     EffectBase();
 
     virtual ~EffectBase();
-    virtual void unk1() = 0;
-    virtual void unk2() = 0;
-    virtual void unk3() = 0;
-    virtual void unk4() = 0;
-    virtual void unk5() = 0;
-    virtual void unk6() = 0;
-    virtual void unk7() = 0;
-    virtual void UpdateBuffer(s32, void**, size_t, SampleFormat, s32, OutputMode);
-    virtual void GetChannelIndex(ChannelIndex* pChannel, s32 channelCount) const;
-    virtual s32 GetChannelSettingCountMax() const;
-    virtual void OnChangeOutputMode();
-    virtual void SetEffectBuffer(void* effectBuffer, size_t effectBufferSize);
-
+    virtual size_t GetRequiredMemSize() const = 0;
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    bool AddEffect(audio::AudioRendererConfig* pConfig, audio::FinalMixType* pFinalMixType);
-    bool AddEffect(audio::AudioRendererConfig* pConfig, audio::SubMixType* pFinalMixType);
+    virtual bool AddEffect(audio::AudioRendererConfig* pConfig,
+                           audio::FinalMixType* pFinalMixType) = 0;
+    virtual bool AddEffect(audio::AudioRendererConfig* pConfig,
+                           audio::SubMixType* pFinalMixType) = 0;
 #else
-    bool AddEffect(audio::AudioRendererConfig* pConfig, OutputMixer* pOutputMixer);
+    virtual bool AddEffect(audio::AudioRendererConfig* pConfig, OutputMixer* pOutputMixer) = 0;
 #endif
-
-    void SetEffectInputOutput(const s8* input, const s8* output, s32 inputCount, s32 outputCount);
-
+    virtual void SetEffectInputOutput(const s8* input, const s8* output, int inputCount,
+                                      int outputCount) = 0;
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
-    void RemoveEffect(audio::AudioRendererConfig* pConfig, audio::FinalMixType* pFinalMixType);
-    void RemoveEffect(audio::AudioRendererConfig* pConfig, audio::SubMixType* pSubMixType);
+    virtual void RemoveEffect(audio::AudioRendererConfig* pConfig,
+                              audio::FinalMixType* pFinalMixType) = 0;
+    virtual void RemoveEffect(audio::AudioRendererConfig* pConfig,
+                              audio::SubMixType* pSubMixType) = 0;
 #else
-    void RemoveEffect(audio::AudioRendererConfig* pConfig, OutputMixer* pOutputMixer);
+    virtual void RemoveEffect(audio::AudioRendererConfig* pConfig, OutputMixer* pOutputMixer) = 0;
 #endif
-
-    static s32 ConvertChannelModeToInt(ChannelMode channelMode);
+    virtual bool IsRemovable() const = 0;
+    virtual void UpdateBuffer(int, void**, size_t, SampleFormat, int, OutputMode);
 
     SampleRate GetSampleRate() const;
     bool SetSampleRate(SampleRate sampleRate);
 
+    virtual void GetChannelIndex(ChannelIndex* pChannel, int channelCount) const;
+    virtual int GetChannelSettingCountMax() const;
+    virtual void OnChangeOutputMode();
+    virtual void SetEffectBuffer(void* effectBuffer, size_t effectBufferSize);
+
+protected:
+    static int ConvertChannelModeToInt(ChannelMode channelMode);
+
 private:
+    NN_NO_COPY(EffectBase);
+
     friend OutputMixer;
 
     util::IntrusiveListNode m_Link;

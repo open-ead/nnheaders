@@ -10,13 +10,50 @@ namespace nn::atk {
 
 class SoundStartable {
 public:
-    struct StartInfo {
-        enum StartOffsetType {
-            StartOffsetType_MilliSeconds,
-            StartOffsetType_Tick,
-            StartOffsetType_Sample,
+    class StartResult {
+    public:
+        enum ResultCode {
+            ResultCode_Success,
+            ResultCode_ErrorLowPriority,
+            ResultCode_ErrorInvalidLabelString,
+            ResultCode_ErrorInvalidSoundId,
+            ResultCode_CanceledBySinglePlay,
+
+            ResultCode_ErrorCanceledForPrioritizingOldest = ResultCode_CanceledBySinglePlay,
+            ResultCode_ErrorNotDataLoaded,
+            ResultCode_ErrorNotSequenceLoaded,
+            ResultCode_ErrorNotBankLoaded,
+            ResultCode_ErrorNotWsdLoaded,
+            ResultCode_ErrorNotWarcLoaded,
+            ResultCode_ErrorNotEnoughPlayerHeap,
+            ResultCode_ErrorCannotOpenFile,
+            ResultCode_ErrorNotAvailable,
+            ResultCode_ErrorCannotAllocateTrack,
+            ResultCode_ErrorNotEnoughInstance,
+            ResultCode_ErrorInvalidParameter,
+            ResultCode_ErrorInvalidSequenceStartLocationLabel,
+            ResultCode_ErrorActorNotInitialized,
+            ResultCode_ErrorInvalidWarcId,
+            ResultCode_ErrorInvalidBankData,
+            ResultCode_ErrorInvalidStreamFileId,
+            ResultCode_ErrorInvalidStreamFilePath,
+
+            ResultCode_ErrorUser = 128,
+            ResultCode_ErrorUnknown = 255,
         };
 
+        StartResult() = default;
+        explicit StartResult(ResultCode code) : m_Code{code} {}
+
+        bool IsSuccess() const { return m_Code == ResultCode_Success; }
+
+        ResultCode GetCode() const { return m_Code; }
+
+    private:
+        ResultCode m_Code;
+    };
+
+    struct StartInfo {
         enum EnableFlagBit {
             EnableFlagBit_StartOffset = 1 << 0,
             EnableFlagBit_PlayerId = 1 << 1,
@@ -37,22 +74,32 @@ public:
             EnableFlagBit_OutputReceiver = 1 << 16,
         };
 
+        enum StartOffsetType {
+            StartOffsetType_MilliSeconds,
+            StartOffsetType_Tick,
+            StartOffsetType_Sample,
+        };
+
         struct SequenceSoundInfo {
-            void* sequenceDataAddress;
-            char* startLocationLabel;
+            const void* sequenceDataAddress;
+            const char* startLocationLabel;
             SoundArchive::ItemId bankIds[4];
+
+            SequenceSoundInfo() = default;
         };
         static_assert(sizeof(SequenceSoundInfo) == 0x20);
 
         struct StreamSoundInfo {
-            char* externalPath;
-            void* pExternalData;
+            const char* externalPath;
+            const void* pExternalData;
             size_t externalDataSize;
             StreamRegionCallback regionCallback;
             void* regionCallbackArg;
-            void* prefetchData;
+            const void* prefetchData;
             bool forcePlayPrefetchFlag;
             detail::driver::StreamBufferPool* pStreamBufferPool;
+
+            StreamSoundInfo() = default;
         };
         static_assert(sizeof(StreamSoundInfo) == 0x40);
 
@@ -62,102 +109,85 @@ public:
                 EnableParameterFlagBit_ContextCalculationSkipMode,
             };
 
-            void* waveAddress;
+            const void* waveAddress;
             s8 waveType;
             u8 m_Padding[3];
-            s32 enableParameterFlag;
-            s32 release;
+            int enableParameterFlag;
+            int release;
             bool isContextCalculationSkipMode;
+
+            WaveSoundInfo() = default;
         };
         static_assert(sizeof(WaveSoundInfo) == 0x18);
 
         u32 enableFlag;
         StartOffsetType startOffsetType;
-        s32 startOffset;
+        int startOffset;
         SoundArchive::ItemId playerId;
-        s32 playerPriority;
-        s32 actorPlayerId;
+        int playerPriority;
+        int actorPlayerId;
         SequenceSoundInfo sequenceSoundInfo;
         StreamSoundInfo streamSoundInfo;
         SoundArchive::StreamSoundInfo streamSoundMetaInfo;
         SoundArchive::StreamSoundInfo2 streamSoundMetaInfo2;
         WaveSoundInfo waveSoundInfo;
         u8 voiceRendererType;
-        s32 fadeFrame;
+        int fadeFrame;
         SoundStopCallback soundStopCallback;
-        s32 delayTime;
-        s32 delayCount;
+        int delayTime;
+        int delayCount;
         UpdateType updateType;
-        s32 subMixIndex;
+        int subMixIndex;
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
         OutputReceiver* pOutputReceiver;
 #endif
+
+        StartInfo() = default;
     };
 
-    struct StartResult {
-        enum ResultCode {
-            ResultCode_Success,
-            ResultCode_ErrorLowPriority,
-            ResultCode_ErrorInvalidLabelString,
-            ResultCode_ErrorInvalidSoundId,
-            ResultCode_CanceledBySinglePlay,
-            ResultCode_ErrorCanceledForPrioritizingOldest = ResultCode_CanceledBySinglePlay,
-            ResultCode_ErrorNotDataLoaded,
-            ResultCode_ErrorNotSequenceLoaded,
-            ResultCode_ErrorNotBankLoaded,
-            ResultCode_ErrorNotWsdLoaded,
-            ResultCode_ErrorNotWarcLoaded,
-            ResultCode_ErrorNotEnoughPlayerHeap,
-            ResultCode_ErrorCannotOpenFile,
-            ResultCode_ErrorNotAvailable,
-            ResultCode_ErrorCannotAllocateTrack,
-            ResultCode_ErrorNotEnoughInstance,
-            ResultCode_ErrorInvalidParameter,
-            ResultCode_ErrorInvalidSequenceStartLocationLabel,
-            ResultCode_ErrorActorNotInitialized,
-            ResultCode_ErrorInvalidWarcId,
-            ResultCode_ErrorInvalidBankData,
-            ResultCode_ErrorInvalidStreamFileId,
-            ResultCode_ErrorInvalidStreamFilePath,
+    virtual ~SoundStartable() = default;
 
-            ResultCode_ErrorUser = 0x80,
-            ResultCode_ErrorUnknown = 0xff,
-        };
+    StartResult StartSound(SoundHandle* handle, SoundArchive::ItemId soundId,
+                           const StartInfo* startInfo);
 
-        ResultCode m_Code;
-    };
+    StartResult StartSound(SoundHandle* handle, SoundArchive::ItemId soundId,
+                           const char* soundArchiveName, const StartInfo* startInfo);
 
-    virtual ~SoundStartable() = 0;
+    StartResult StartSound(SoundHandle* handle, const char* soundName, const StartInfo* startInfo);
 
+    StartResult StartSound(SoundHandle* handle, const char* soundName, const char* soundArchiveName,
+                           const StartInfo* startInfo);
+
+    StartResult HoldSound(SoundHandle* handle, SoundArchive::ItemId soundId,
+                          const StartInfo* startInfo);
+
+    StartResult HoldSound(SoundHandle* handle, SoundArchive::ItemId soundId,
+                          const char* soundArchiveName, const StartInfo* startInfo);
+
+    StartResult HoldSound(SoundHandle* handle, const char* soundLabel, const StartInfo* startInfo);
+
+    StartResult HoldSound(SoundHandle* handle, const char* soundLabel, const char* soundArchiveName,
+                          const StartInfo* startInfo);
+
+    StartResult PrepareSound(SoundHandle* handle, SoundArchive::ItemId soundId,
+                             const StartInfo* startInfo);
+
+    StartResult PrepareSound(SoundHandle* handle, SoundArchive::ItemId soundId,
+                             const char* soundArchiveName, const StartInfo* startInfo);
+
+    StartResult PrepareSound(SoundHandle* handle, const char* soundName,
+                             const StartInfo* startInfo);
+
+    StartResult PrepareSound(SoundHandle* handle, const char* soundName,
+                             const char* soundArchiveName, const StartInfo* startInfo);
+
+protected:
     virtual StartResult detail_SetupSound(SoundHandle* handle, u32 soundId, bool holdFlag,
                                           const char* soundArchiveName,
                                           const StartInfo* startInfo) = 0;
 
     virtual SoundArchive::ItemId detail_GetItemId(char* pString) = 0;
     virtual SoundArchive::ItemId detail_GetItemId(char* pString, const char* soundArchiveName) = 0;
-
-    StartResult StartSound(SoundHandle* handle, u32 soundId, const char* soundArchiveName,
-                           const StartInfo* startInfo);
-    StartResult StartSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo);
-    StartResult StartSound(SoundHandle* handle, const char* pString, const char* soundArchiveName,
-                           const StartInfo* startInfo);
-    StartResult StartSound(SoundHandle* handle, const char* soundArchiveName,
-                           const StartInfo* startInfo);
-
-    StartResult HoldSound(SoundHandle* handle, u32 soundId, const char* soundArchiveName,
-                          const StartInfo* startInfo);
-    StartResult HoldSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo);
-    StartResult HoldSound(SoundHandle* handle, const char* pString, const StartInfo* startInfo);
-    StartResult HoldSound(SoundHandle* handle, const char* pString, const char* soundArchiveName,
-                          const StartInfo* startInfo);
-
-    StartResult PrepareSound(SoundHandle* handle, u32 soundId, const char* soundArchiveName,
-                             const StartInfo* startInfo);
-    StartResult PrepareSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo);
-    StartResult PrepareSound(SoundHandle* handle, const char* pString, const char* soundArchiveName,
-                             const StartInfo* startInfo);
-    StartResult PrepareSound(SoundHandle* handle, const char* soundArchiveName,
-                             const StartInfo* startInfo);
 };
 static_assert(sizeof(SoundStartable) == 0x8);
 

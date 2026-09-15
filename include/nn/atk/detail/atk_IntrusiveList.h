@@ -6,11 +6,11 @@ namespace nn::atk::detail {
 
 using IntrusiveListNode = util::IntrusiveListNode;
 
-template <typename T>
+template <typename Element>
 class IntrusiveList {
 public:
     using ElementList =
-        util::IntrusiveList<T, util::IntrusiveListMemberNodeTraits<T, &T::m_ElementLink>>;
+        util::IntrusiveList<Element, util::IntrusiveListMemberNodeTraits<Element, &Element::m_ElementLink>>;
     using Iterator = typename ElementList::iterator;
     using ConstIterator = typename ElementList::const_iterator;
 

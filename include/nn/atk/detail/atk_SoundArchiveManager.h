@@ -13,11 +13,28 @@ public:
 
     class SnapShot {
     public:
+        SnapShot(const SoundArchive& mainSoundArchive, const SoundDataManager& mainSoundDataManager,
+                 const SoundArchive& currentSoundArchive,
+                 const SoundDataManager& currentSoundDataManager)
+            : m_MainSoundArchive{mainSoundArchive}, m_MainSoundDataManager{mainSoundDataManager},
+              m_CurrentSoundArchive{currentSoundArchive},
+              m_CurrentSoundDataManager{currentSoundDataManager} {}
+
+        const SoundArchive& GetMainSoundArchive() const { return m_MainSoundArchive; }
+
+        const SoundDataManager& GetMainSoundDataManager() const { return m_MainSoundDataManager; }
+
+        const SoundArchive& GetCurrentSoundArchive() const { return m_CurrentSoundArchive; }
+
+        const SoundDataManager& GetCurrentSoundDataManager() const {
+            return m_CurrentSoundDataManager;
+        }
+
     private:
-        SoundArchive* m_MainSoundArchive;
-        SoundDataManager* m_MainSoundDataManager;
-        SoundArchive* m_CurrentSoundArchive;
-        SoundDataManager* m_CurrentSoundDataManager;
+        const SoundArchive& m_MainSoundArchive;
+        const SoundDataManager& m_MainSoundDataManager;
+        const SoundArchive& m_CurrentSoundArchive;
+        const SoundDataManager& m_CurrentSoundDataManager;
     };
 
     SoundArchiveManager();

@@ -6,21 +6,27 @@
 namespace nn::atk::detail {
 
 struct BinaryTypes {
-    NN_NO_COPY(BinaryTypes);
-    NN_NO_MOVE(BinaryTypes);
-
-    template <typename T, typename CountType = u32>
-    struct Table {
-        CountType count;
-        T item[1];
-    };
+    static const u32 InvalidOffset{0xffffffff};
+    static const u32 InvalidSize{0xffffffff};
 
     struct Reference {
         u32 offset;
+
+        static const u32 InvalidOffset{BinaryTypes::InvalidOffset};
+
+        bool IsValidOffset() const { return offset != InvalidOffset; }
     };
     static_assert(sizeof(Reference) == 0x4);
 
-    struct ReferenceTable : Table<Reference> {};
+    template <typename ItemType, typename CountType = int>
+    struct Table {
+        CountType count;
+        ItemType item[1];
+    };
+
+    struct ReferenceTable : Table<Reference> {
+        const void* GetReferedItem(int index) const;
+    };
 };
 
 };  // namespace nn::atk::detail

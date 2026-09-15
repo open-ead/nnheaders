@@ -57,7 +57,7 @@ public:
     constexpr static f32 SendMin = 0.0;
     constexpr static f32 SendMax = 1.0;
 
-    explicit MultiVoice();
+    MultiVoice();
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     explicit MultiVoice(OutputAdditionalParam* pAdditionalParam);
 #endif

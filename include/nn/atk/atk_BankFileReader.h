@@ -16,7 +16,7 @@ struct VelocityRegionInfo {
     u8 keyGroup;
     u8 interpolationType;
 
-    VelocityRegionInfo() : adshrCurve(0, 0, 0, 0, 0){};
+    VelocityRegionInfo() : adshrCurve(0, 0, 0, 0, 0) {};
 };
 static_assert(sizeof(VelocityRegionInfo) == 0x18);
 

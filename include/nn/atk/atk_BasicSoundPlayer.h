@@ -54,7 +54,7 @@ public:
     bool IsStarted() const { return m_StartedFlag; }
     bool IsPause() const { return m_PauseFlag; }
     bool IsPlayFinished() const { return m_FinishFlag; }
-    
+
     bool IsFinalizedForCannotAllocateResource() const {
         return m_IsFinalizedForCannotAllocateResource;
     }

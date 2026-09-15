@@ -6,16 +6,18 @@ namespace nn::atk {
 
 class OutputReceiver {
 public:
-    enum ReceiverType {
+    enum class ReceiverType : int {
         ReceiverType_SubMix,
         ReceiverType_FinalMix,
     };
 
+    static const int BusCountMax{24};
+
     virtual ReceiverType GetReceiverType() const = 0;
-    virtual s32 GetChannelCount() const = 0;
-    virtual s32 GetBusCount() const = 0;
-    virtual void AddReferenceCount(s32 value) = 0;
-    virtual bool IsSoundSendClampEnabled(s32 bus) const = 0;
+    virtual int GetChannelCount() const = 0;
+    virtual int GetBusCount() const = 0;
+    virtual void AddReferenceCount(int value) = 0;
+    virtual bool IsSoundSendClampEnabled(int bus) const = 0;
 };
 static_assert(sizeof(OutputReceiver) == 0x8);
 

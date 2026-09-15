@@ -12,13 +12,13 @@ public:
 
     SequenceTrack* AllocTrack(SequenceSoundPlayer* player) override;
 
-    void FreeTrack(SequenceTrack* track);
+    void FreeTrack(SequenceTrack* track) override;
 
     s32 Create(void* buffer, size_t size);
 
     void Destroy();
 
-    s32 GetAllocatableTrackCount();
+    s32 GetAllocatableTrackCount() const override;
 
 private:
     MmlParser* m_pParser;
