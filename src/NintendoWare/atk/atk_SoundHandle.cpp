@@ -45,4 +45,13 @@ void SoundHandle::DetachSound() {
     }
 }
 
+bool SoundHandle::CalculateSoundParamCalculationValues(
+    SoundParamCalculationValues* pOutValue) const {
+    if (!IsAttachedSound())
+        return false;
+
+    m_pSound->CalculateSoundParamCalculationValues(pOutValue);
+    return true;
+}
+
 }  // namespace nn::atk
