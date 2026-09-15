@@ -174,6 +174,7 @@ add_library(NintendoSDK OBJECT
   include/nn/os/os_Event.h
   include/nn/os/os_EventCommon.h
   include/nn/os/os_EventTypes.h
+  include/nn/os/os_MessageQueue.h
   include/nn/util/AccessorBase.h
   include/nn/util/MathTypes.h
   include/nn/util/util_Arithmetic.h
