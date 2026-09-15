@@ -12,6 +12,15 @@ void SoundHandle::detail_DuplicateHandle(SoundHandle* handle) {
     //     handle->detail_AttachSoundAsTempHandle(sound);
 }
 
+void SoundHandle::detail_AttachSoundAsTempHandle(detail::BasicSound* sound) {
+    m_pSound = sound;
+
+    if (m_pSound->IsAttachedTempGeneralHandle())
+        m_pSound->DetachTempGeneralHandle();
+
+    m_pSound->m_pTempGeneralHandle = this;
+}
+
 void SoundHandle::DetachSound() {
     if (IsAttachedSound()) {
         if (m_pSound->m_pGeneralHandle == this)
