@@ -89,4 +89,33 @@ SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle, const
     return HoldSound(handle, soundId, soundArchiveName, startInfo);
 }
 
+SoundStartable::StartResult SoundStartable::PrepareSound(SoundHandle* handle,
+                                                         SoundArchive::ItemId soundId,
+                                                         const char* soundArchiveName,
+                                                         const StartInfo* startInfo) {
+    return detail_SetupSound(handle, soundId, false, soundArchiveName, startInfo);
+}
+
+SoundStartable::StartResult SoundStartable::PrepareSound(SoundHandle* handle,
+                                                         SoundArchive::ItemId soundId,
+                                                         const StartInfo* startInfo) {
+    return detail_SetupSound(handle, soundId, false, nullptr, startInfo);
+}
+
+SoundStartable::StartResult SoundStartable::PrepareSound(SoundHandle* handle, const char* soundName,
+                                                         const char* soundArchiveName,
+                                                         const StartInfo* startInfo) {
+    u32 soundId{detail_GetItemId(soundName, soundArchiveName)};
+
+    if (soundId == InvalidSoundId)
+        return StartResult{StartResult::ResultCode_ErrorInvalidLabelString};
+
+    return PrepareSound(handle, soundId, soundArchiveName, startInfo);
+}
+
+SoundStartable::StartResult SoundStartable::PrepareSound(SoundHandle* handle, const char* soundName,
+                                                         const StartInfo* startInfo) {
+    return PrepareSound(handle, soundName, nullptr, startInfo);
+}
+
 }  // namespace nn::atk
