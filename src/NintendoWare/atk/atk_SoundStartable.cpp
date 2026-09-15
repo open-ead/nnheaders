@@ -34,4 +34,9 @@ SoundStartable::StartResult SoundStartable::StartSound(SoundHandle* handle, cons
     return result;
 }
 
+SoundStartable::StartResult SoundStartable::StartSound(SoundHandle* handle, const char* soundName,
+                                                       const StartInfo* startInfo) {
+    return StartSound(handle, soundName, nullptr, startInfo);
+}
+
 }  // namespace nn::atk
