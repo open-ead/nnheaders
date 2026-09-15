@@ -3,13 +3,15 @@
 namespace nn::atk {
 
 void SoundHandle::detail_DuplicateHandle(SoundHandle* handle) {
-
-    detail::BasicSound* sound{m_pSound};
-
     DetachSound();
 
-    // if (handle != nullptr)
-    //     handle->detail_AttachSoundAsTempHandle(sound);
+    if (handle == nullptr)
+        return;
+
+    detail::BasicSound* sound{handle->m_pSound};
+
+    if (handle->IsAttachedSound())
+        detail_AttachSoundAsTempHandle(sound);
 }
 
 void SoundHandle::detail_AttachSoundAsTempHandle(detail::BasicSound* sound) {
