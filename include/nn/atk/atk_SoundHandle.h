@@ -255,10 +255,10 @@ public:
     void DetachSound();
 
     u32 GetId() const {
-        if (IsAttachedSound())
-            return m_pSound->GetId();
-
-        return InvalidSoundId;
+        if (!IsAttachedSound())
+            return InvalidSoundId;
+        
+        return m_pSound->GetId();
     }
 
     const SoundParam* GetAmbientParam() const {

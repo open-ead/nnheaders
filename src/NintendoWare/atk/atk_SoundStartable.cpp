@@ -39,4 +39,31 @@ SoundStartable::StartResult SoundStartable::StartSound(SoundHandle* handle, cons
     return StartSound(handle, soundName, nullptr, startInfo);
 }
 
+SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle,
+                                                      SoundArchive::ItemId soundId,
+                                                      const char* soundArchiveName,
+                                                      const StartInfo* startInfo) {
+    if (handle->IsAttachedSound() && handle->GetId() == soundId) {
+        handle->detail_GetAttachedSound()->SetAutoStopCounter(1);
+    } else {
+        StartResult result{detail_SetupSound(handle, soundId, true, soundArchiveName, startInfo)};
+
+        if (!result.IsSuccess())
+            return result;
+
+        handle->StartPrepared();
+        handle->detail_GetAttachedSound()->SetAutoStopCounter(1);
+    }
+
+    StartResult result{StartResult::ResultCode_Success};
+
+    if (startInfo != nullptr && (startInfo->enableFlag & StartInfo::EnableFlagBit_FadeFrame) != 0) {
+        handle->Stop(startInfo->fadeFrame);
+        StartResult result2{StartResult::ResultCode_Success};
+        return result2;
+    }
+
+    return result;
+}
+
 }  // namespace nn::atk
