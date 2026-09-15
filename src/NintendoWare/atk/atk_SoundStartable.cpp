@@ -71,4 +71,13 @@ SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle, Sound
     return result;
 }
 
+SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle, const char* soundLabel, const char* soundArchiveName, const StartInfo* startInfo) {
+    u32 soundId{detail_GetItemId(soundLabel, soundArchiveName)};
+    
+    if (soundId == InvalidSoundId)
+        return StartResult{StartResult::ResultCode_ErrorInvalidLabelString};
+
+    return HoldSound(handle, soundId, soundArchiveName, startInfo);
+}
+
 }  // namespace nn::atk
