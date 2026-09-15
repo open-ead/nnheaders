@@ -66,14 +66,23 @@ SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle,
     return result;
 }
 
-SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle, SoundArchive::ItemId soundId, const StartInfo* startInfo) {
+SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle,
+                                                      SoundArchive::ItemId soundId,
+                                                      const StartInfo* startInfo) {
     StartResult result{HoldSound(handle, soundId, nullptr, startInfo)};
     return result;
 }
 
-SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle, const char* soundLabel, const char* soundArchiveName, const StartInfo* startInfo) {
+SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle, const char* soundLabel,
+                                                      const StartInfo* startInfo) {
+    return HoldSound(handle, soundLabel, nullptr, startInfo);
+}
+
+SoundStartable::StartResult SoundStartable::HoldSound(SoundHandle* handle, const char* soundLabel,
+                                                      const char* soundArchiveName,
+                                                      const StartInfo* startInfo) {
     u32 soundId{detail_GetItemId(soundLabel, soundArchiveName)};
-    
+
     if (soundId == InvalidSoundId)
         return StartResult{StartResult::ResultCode_ErrorInvalidLabelString};
 
