@@ -23,6 +23,15 @@ void SoundHandle::detail_AttachSoundAsTempHandle(detail::BasicSound* sound) {
     m_pSound->m_pTempGeneralHandle = this;
 }
 
+void SoundHandle::detail_AttachSound(detail::BasicSound* sound) {
+    m_pSound = sound;
+
+    if (m_pSound->IsAttachedGeneralHandle())
+        m_pSound->DetachGeneralHandle();
+
+    m_pSound->m_pGeneralHandle = this;
+}
+
 void SoundHandle::DetachSound() {
     if (IsAttachedSound()) {
         if (m_pSound->m_pGeneralHandle == this)
