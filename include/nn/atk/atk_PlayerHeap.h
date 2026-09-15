@@ -62,7 +62,7 @@ private:
     void* m_pEndAddress{};
     void* m_pAllocAddress{};
     u8 m_State{State_Constructed};
-    u8 m_Padding[3];
+    [[maybe_unused]] u8 m_Padding[3];
 
 public:
     util::IntrusiveListNode m_Link;

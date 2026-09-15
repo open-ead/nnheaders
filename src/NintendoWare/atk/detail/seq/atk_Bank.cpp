@@ -63,6 +63,7 @@ Channel* Bank::NoteOn(const BankFileReader& bankReader, const WaveArchiveFileRea
     pChannel->SetInterpolationType(regionInfo.interpolationType);
     pChannel->SetUpdateType(noteOnInfo.updateType);
 #if NN_SDK_VER < NN_MAKE_VER(4, 0, 0)
+    pChannel->SetSubMixIndex(noteOnInfo.subMixIndex);
     pChannel->Start(waveInfo, noteOnInfo.length, 0);
 #else
     pChannel->SetOutputReceiver(noteOnInfo.pOutputReceiver);

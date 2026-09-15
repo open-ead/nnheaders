@@ -166,6 +166,9 @@ public:
 
     void SetUpdateType(UpdateType updateType) { m_pVoice->SetUpdateType(updateType); }
     UpdateType GetUpdateType() const { return m_pVoice->GetUpdateType(); }
+
+    void SetSubMixIndex(int index) { m_pVoice->SetSubMixIndex(index); }
+
 #if NN_SDK_VER >= NN_MAKE_VER(4, 0, 0)
     void SetOutputReceiver(OutputReceiver* pOutputReceiver) {
         m_pVoice->SetOutputReceiver(pOutputReceiver);
