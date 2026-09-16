@@ -8,4 +8,8 @@ SoundArchiveLoader::~SoundArchiveLoader() {
     m_pSoundArchive = nullptr;
 };
 
+void SoundArchiveLoader::SetSoundArchive(const SoundArchive* arc) {
+    m_pSoundArchive = arc;
+}
+
 }  // namespace nn::atk::detail
