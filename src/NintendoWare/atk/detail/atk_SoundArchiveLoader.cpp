@@ -314,6 +314,20 @@ bool SoundArchiveLoader::LoadData(const char* pItemName, SoundMemoryAllocatable*
     return LoadData(itemId, pAllocator, loadFlag, loadBlockSize);
 }
 
+const void* SoundArchiveLoader::LoadImpl(SoundArchive::FileId fileId,
+                                         SoundMemoryAllocatable* pAllocator, size_t loadBlockSize,
+                                         bool needMemoryPool) {
+    const void* fileAddress{GetFileAddressImpl(fileId)};
+
+    if (fileAddress == nullptr) {
+        fileAddress = LoadFile(fileId, pAllocator, loadBlockSize, needMemoryPool);
+        if (fileAddress != nullptr)
+            SetFileAddressToTable(fileId, fileAddress);
+    }
+
+    return fileAddress;
+}
+
 void* SoundArchiveLoader::LoadFile(SoundArchive::FileId fileId, SoundMemoryAllocatable* allocator,
                                    size_t loadBlockSize, bool needMemoryPool) {
     SoundArchive::FileInfo fileInfo;
