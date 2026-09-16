@@ -78,13 +78,16 @@ public:
 
     static const u32 SequenceBankMax{4};
     struct SequenceSoundInfo {
-        u32 startOffset;
+        u32 startOffset{0};
         u32 bankIds[SequenceBankMax];
-        u32 allocateTrackFlags;
-        u8 channelPriority;
-        bool isReleasePriorityFix;
+        u32 allocateTrackFlags{0};
+        u8 channelPriority{0};
+        bool isReleasePriorityFix{false};
 
-        SequenceSoundInfo() = default;
+        SequenceSoundInfo() {
+            for (int i{0}; i < SequenceBankMax; ++i)
+                bankIds[i] = InvalidId;
+        };
     };
     static_assert(sizeof(SequenceSoundInfo) == 0x1c);
 
