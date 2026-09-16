@@ -262,6 +262,17 @@ bool SoundArchiveLoader::LoadWaveArchive(SoundArchive::ItemId warcId,
     return true;
 }
 
+bool SoundArchiveLoader::LoadGroup(SoundArchive::ItemId groupId, SoundMemoryAllocatable* pAllocator,
+                                   size_t loadBlockSize) {
+    const void* pGroupFile{
+        LoadImpl(m_pSoundArchive->GetItemFileId(groupId), pAllocator, loadBlockSize, true)};
+    if (pGroupFile == nullptr)
+        return false;
+
+    u32 fileId{PostProcessForLoadedGroupFile(pGroupFile, pAllocator, loadBlockSize)};
+    return fileId;
+}
+
 bool SoundArchiveLoader::LoadWaveArchiveImpl(SoundArchive::ItemId warcId, u32 waveIndex,
                                              SoundMemoryAllocatable* pAllocator, u32 loadFlag,
                                              size_t loadBlockSize) {
