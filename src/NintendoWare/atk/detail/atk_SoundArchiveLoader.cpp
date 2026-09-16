@@ -1,6 +1,7 @@
 #include <nn/atk/atk_SoundArchiveLoader.h>
 
 #include <nn/atk/atk_BankFileReader.h>
+#include <nn/atk/atk_HardwareManager.h>
 #include <nn/atk/atk_WaveSoundFileReader.h>
 
 namespace nn::atk::detail {
@@ -311,6 +312,30 @@ bool SoundArchiveLoader::LoadData(const char* pItemName, SoundMemoryAllocatable*
                                   u32 loadFlag, size_t loadBlockSize) {
     SoundArchive::ItemId itemId{m_pSoundArchive->GetItemId(pItemName)};
     return LoadData(itemId, pAllocator, loadFlag, loadBlockSize);
+}
+
+void* SoundArchiveLoader::LoadFile(SoundArchive::FileId fileId, SoundMemoryAllocatable* allocator,
+                                   size_t loadBlockSize, bool needMemoryPool) {
+    SoundArchive::FileInfo fileInfo;
+    if (!m_pSoundArchive->detail_ReadFileInfo(fileId, &fileInfo))
+        return nullptr;
+
+    u32 fileSize{fileInfo.fileSize};
+
+    if (fileSize + 1 <= 1)
+        return nullptr;
+
+    void* buffer{allocator->Allocate(allocator->GetAllocateSize(fileSize, needMemoryPool))};
+
+    if (buffer == nullptr)
+        return nullptr;
+
+    if (ReadFile(fileId, buffer, static_cast<int>(fileSize), 0, loadBlockSize) !=
+        static_cast<size_t>(static_cast<int>(fileSize)))
+        return nullptr;
+
+    driver::HardwareManager::FlushDataCache(buffer, fileSize);
+    return buffer;
 }
 
 bool SoundArchiveLoader::LoadWaveArchiveImpl(SoundArchive::ItemId warcId, u32 waveIndex,
