@@ -109,4 +109,18 @@ bool SoundArchiveLoader::LoadSequenceSound(SoundArchive::ItemId soundId,
     return true;
 }
 
+bool SoundArchiveLoader::LoadWaveArchive(SoundArchive::ItemId warcId,
+                                         SoundMemoryAllocatable* pAllocator, u32 loadFlag,
+                                         size_t loadBlockSize) {
+    if ((loadFlag & LoadFlag_Warc) != 0) {
+        u32 fileId{m_pSoundArchive->GetItemFileId(warcId)};
+
+        const void* pFile{LoadImpl(fileId, pAllocator, loadBlockSize, true)};
+        if (pFile == nullptr)
+            return false;
+    }
+
+    return true;
+}
+
 }  // namespace nn::atk::detail
