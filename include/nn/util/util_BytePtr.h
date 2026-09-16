@@ -80,7 +80,13 @@ public:
     }
 
     bool IsAligned(size_t) const;
-    ConstBytePtr& AlignUp(size_t);
+
+    ConstBytePtr& AlignUp(size_t alignment) {
+        uintptr_t& ptr = reinterpret_cast<uintptr_t&>(m_Ptr);
+        ptr = align_up(ptr, alignment);
+        return *this;
+    }
+
     ConstBytePtr& AlignDown(size_t);
     ConstBytePtr& operator+=(ptrdiff_t);
     ConstBytePtr& operator-=(ptrdiff_t);
