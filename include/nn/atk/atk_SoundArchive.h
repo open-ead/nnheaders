@@ -137,9 +137,9 @@ public:
 
     struct WaveSoundInfo {
         u32 index;
-        u32 allocateTrackCount;
-        u8 channelPriority;
-        bool isReleasePriorityFix;
+        u32 allocateTrackCount{0};
+        u8 channelPriority{0};
+        bool isReleasePriorityFix{false};
 
         WaveSoundInfo() = default;
     };

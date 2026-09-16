@@ -1,5 +1,7 @@
 #include <nn/atk/atk_SoundArchiveLoader.h>
 
+#include <nn/atk/atk_WaveSoundFileReader.h>
+
 namespace nn::atk::detail {
 
 SoundArchiveLoader::SoundArchiveLoader() = default;
@@ -132,6 +134,61 @@ bool SoundArchiveLoader::LoadAdvancedWaveSound(SoundArchive::ItemId soundId,
 
         if (!LoadWaveArchive(info.waveArchiveId, pAllocator, loadFlag, loadBlockSize))
             return false;
+    }
+
+    return true;
+}
+
+bool SoundArchiveLoader::LoadWaveSound(SoundArchive::ItemId soundId,
+                                       SoundMemoryAllocatable* pAllocator, u32 loadFlag,
+                                       size_t loadBlockSize, SoundArchive::ItemId waveSoundSetId) {
+    u32 wsdFileId{m_pSoundArchive->GetItemFileId(soundId)};
+
+    if ((loadFlag & LoadFlag_Wsd) != 0) {
+        const void* pFile{LoadImpl(wsdFileId, pAllocator, loadBlockSize, false)};
+
+        if (pFile == nullptr)
+            return false;
+    }
+
+    if ((loadFlag & LoadFlag_Warc) != 0) {
+        const void* pWsdFile{GetFileAddressImpl(wsdFileId)};
+        if (pWsdFile != nullptr) {
+            u32 index;
+            {
+                SoundArchive::WaveSoundInfo info;
+                if (!m_pSoundArchive->detail_ReadWaveSoundInfo(soundId, &info))
+                    return false;
+                index = info.index;
+            }
+
+            u32 warcId{SoundArchive::InvalidId};
+            u32 waveIndex;
+            {
+                WaveSoundFileReader reader{pWsdFile};
+                WaveSoundNoteInfo info;
+
+                if (!reader.ReadNoteInfo(&info, index, 0))
+                    return false;
+
+                warcId = info.waveArchiveId;
+                waveIndex = info.waveIndex;
+            }
+
+            if (!LoadWaveArchiveImpl(warcId, waveIndex, pAllocator, loadFlag, loadBlockSize))
+                return false;
+        } else {
+            SoundArchive::ItemId itemId{waveSoundSetId != SoundArchive::InvalidId ? waveSoundSetId :
+                                                                                    soundId};
+
+            const Util::Table<u32>* pWarcIdTable{
+                m_pSoundArchive->detail_GetWaveArchiveIdTable(itemId)};
+
+            for (u32 i{0}; i < pWarcIdTable->count; ++i) {
+                if (!LoadWaveArchive(pWarcIdTable->item[i], pAllocator, loadFlag, loadBlockSize))
+                    return false;
+            }
+        }
     }
 
     return true;
