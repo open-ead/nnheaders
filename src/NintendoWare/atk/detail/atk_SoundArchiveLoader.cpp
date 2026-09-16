@@ -1,5 +1,6 @@
 #include <nn/atk/atk_SoundArchiveLoader.h>
 
+#include <nn/atk/atk_BankFileReader.h>
 #include <nn/atk/atk_WaveSoundFileReader.h>
 
 namespace nn::atk::detail {
@@ -177,6 +178,7 @@ bool SoundArchiveLoader::LoadWaveSound(SoundArchive::ItemId soundId,
 
             if (!LoadWaveArchiveImpl(warcId, waveIndex, pAllocator, loadFlag, loadBlockSize))
                 return false;
+
         } else {
             SoundArchive::ItemId itemId{waveSoundSetId != SoundArchive::InvalidId ? waveSoundSetId :
                                                                                     soundId};
@@ -194,10 +196,56 @@ bool SoundArchiveLoader::LoadWaveSound(SoundArchive::ItemId soundId,
     return true;
 }
 
-bool SoundArchiveLoader::LoadStreamSoundPrefetch(SoundArchive::ItemId soundId, SoundMemoryAllocatable* pAllocator, size_t loadBlockSize) {
+bool SoundArchiveLoader::LoadStreamSoundPrefetch(SoundArchive::ItemId soundId,
+                                                 SoundMemoryAllocatable* pAllocator,
+                                                 size_t loadBlockSize) {
     u32 prefetchFileId{m_pSoundArchive->GetItemPrefetchFileId(soundId)};
     const void* pFile{LoadImpl(prefetchFileId, pAllocator, loadBlockSize, true)};
     return pFile != nullptr;
+}
+
+bool SoundArchiveLoader::LoadBank(SoundArchive::ItemId bankId, SoundMemoryAllocatable* pAllocator,
+                                  u32 loadFlag, size_t loadBlockSize) {
+    u32 bankFileId{m_pSoundArchive->GetItemFileId(bankId)};
+
+    if ((loadFlag & LoadFlag_Bank) != 0) {
+        const void* pFile{LoadImpl(bankFileId, pAllocator, loadBlockSize, false)};
+
+        if (pFile == nullptr)
+            return false;
+    }
+
+    if ((loadFlag & LoadFlag_Warc) != 0) {
+        const void* pFile{GetFileAddressImpl(bankFileId)};
+        if (pFile != nullptr) {
+            BankFileReader reader{pFile};
+            const Util::WaveIdTable* table{reader.GetWaveIdTable()};
+
+            if (table == nullptr)
+                return false;
+
+            for (u32 i{0}; i < table->GetCount(); ++i) {
+                const Util::WaveId* pWaveId{table->GetWaveId(i)};
+                if (pWaveId == nullptr)
+                    return false;
+
+                if (!LoadWaveArchiveImpl(pWaveId->waveArchiveId, pWaveId->waveIndex, pAllocator,
+                                         loadFlag, loadBlockSize))
+                    return false;
+            }
+
+        } else {
+            const Util::Table<u32>* pWarcIdTable{
+                m_pSoundArchive->detail_GetWaveArchiveIdTable(bankId)};
+
+            for (u32 i{0}; i < pWarcIdTable->count; ++i) {
+                if (!LoadWaveArchive(pWarcIdTable->item[i], pAllocator, loadFlag, loadBlockSize))
+                    return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 bool SoundArchiveLoader::LoadWaveArchive(SoundArchive::ItemId warcId,
