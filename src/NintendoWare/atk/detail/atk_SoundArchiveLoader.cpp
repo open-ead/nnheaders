@@ -194,6 +194,12 @@ bool SoundArchiveLoader::LoadWaveSound(SoundArchive::ItemId soundId,
     return true;
 }
 
+bool SoundArchiveLoader::LoadStreamSoundPrefetch(SoundArchive::ItemId soundId, SoundMemoryAllocatable* pAllocator, size_t loadBlockSize) {
+    u32 prefetchFileId{m_pSoundArchive->GetItemPrefetchFileId(soundId)};
+    const void* pFile{LoadImpl(prefetchFileId, pAllocator, loadBlockSize, true)};
+    return pFile != nullptr;
+}
+
 bool SoundArchiveLoader::LoadWaveArchive(SoundArchive::ItemId warcId,
                                          SoundMemoryAllocatable* pAllocator, u32 loadFlag,
                                          size_t loadBlockSize) {
