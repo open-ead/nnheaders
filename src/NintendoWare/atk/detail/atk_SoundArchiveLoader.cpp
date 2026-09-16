@@ -43,6 +43,14 @@ bool SoundArchiveLoader::LoadData(SoundArchive::ItemId itemId, SoundMemoryAlloca
     switch (Util::GetItemType(itemId)) {
     case ItemType_Sound:
         switch (m_pSoundArchive->GetSoundType(itemId)) {
+        case SoundArchive::SoundType_Sequence:
+            result = LoadSequenceSound(itemId, pAllocator, loadFlag, loadBlockSize);
+            break;
+
+        case SoundArchive::SoundType_Stream:
+            result = LoadStreamSoundPrefetch(itemId, pAllocator, loadBlockSize);
+            break;
+
         case SoundArchive::SoundType_Wave:
             if (soundArchivePlayerInfo.isAdvancedWaveSoundEnabled)
                 result = LoadAdvancedWaveSound(itemId, pAllocator, loadFlag, loadBlockSize);
@@ -50,12 +58,7 @@ bool SoundArchiveLoader::LoadData(SoundArchive::ItemId itemId, SoundMemoryAlloca
                 result = LoadWaveSound(itemId, pAllocator, loadFlag, loadBlockSize,
                                        SoundArchive::InvalidId);
             break;
-        case SoundArchive::SoundType_Stream:
-            result = LoadStreamSoundPrefetch(itemId, pAllocator, loadBlockSize);
-            break;
-        case SoundArchive::SoundType_Sequence:
-            result = LoadSequenceSound(itemId, pAllocator, loadFlag, loadBlockSize);
-            break;
+
         default:
             result = false;
             break;
@@ -80,6 +83,8 @@ bool SoundArchiveLoader::LoadData(SoundArchive::ItemId itemId, SoundMemoryAlloca
         result = false;
         break;
     }
+
+    m_pSoundArchive->FileAccessEnd();
 
     return result;
 }
@@ -300,6 +305,12 @@ bool SoundArchiveLoader::LoadSoundGroup(SoundArchive::ItemId soundGroupId,
     }
 
     return true;
+}
+
+bool SoundArchiveLoader::LoadData(const char* pItemName, SoundMemoryAllocatable* pAllocator,
+                                  u32 loadFlag, size_t loadBlockSize) {
+    SoundArchive::ItemId itemId{m_pSoundArchive->GetItemId(pItemName)};
+    return LoadData(itemId, pAllocator, loadFlag, loadBlockSize);
 }
 
 bool SoundArchiveLoader::LoadWaveArchiveImpl(SoundArchive::ItemId warcId, u32 waveIndex,
