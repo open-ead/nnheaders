@@ -12,7 +12,7 @@ class SoundFileManager;
 
 }  // namespace detail
 
-class SoundDataManager : detail::driver::DisposeCallback, detail::SoundArchiveLoader {
+class SoundDataManager : public detail::driver::DisposeCallback, public detail::SoundArchiveLoader {
 public:
     struct FileAddress {
         void* address;
@@ -20,7 +20,7 @@ public:
 
     using FileTable = detail::Util::Table<FileAddress>;
 
-    constexpr static u32 BufferAlignSize = 8;
+    static const u32 BufferAlignSize{8};
 
     SoundDataManager();
     ~SoundDataManager() override;
@@ -36,10 +36,10 @@ public:
     void InvalidateData(const void* start, const void* end) override;
 
     void* detail_GetFileAddress(SoundArchive::FileId fileId) const;
-    void* GetFileAddressImpl(SoundArchive::FileId fileId) const override;
+    const void* GetFileAddressImpl(SoundArchive::FileId fileId) const override;
 
-    void* SetFileAddressToTable(SoundArchive::FileId fileId, const void* address) override;
-    void* GetFileAddressFromTable(SoundArchive::FileId fileId) const override;
+    const void* SetFileAddressToTable(SoundArchive::FileId fileId, const void* address) override;
+    const void* GetFileAddressFromTable(SoundArchive::FileId fileId) const override;
 
     void* SetFileAddress(SoundArchive::FileId fileId, const void* address);
 

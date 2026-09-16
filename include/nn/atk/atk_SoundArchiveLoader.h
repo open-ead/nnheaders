@@ -8,80 +8,122 @@ namespace nn::atk::detail {
 struct LoadItemInfo {
     SoundArchive::ItemId itemId;
     const void* address;
+
+    LoadItemInfo() = default;
 };
 static_assert(sizeof(LoadItemInfo) == 0x10);
 
 class SoundArchiveLoader {
 public:
-    enum LoadFlag {
-        LoadFlag_All = -1,
-        LoadFlag_Seq = 1,
-        LoadFlag_Wsd = 2,
-        LoadFlag_Bank = 4,
-        LoadFlag_Warc = 8,
-    };
-
-    constexpr static s32 SignatureIndividualWave = 0x56574946;  // FWIV
-    constexpr static u8 WaveBufferAlignSize = 64;
+    static const u32 SignatureIndividualWave{0x56574946};  // FWIV
+    static const int WaveBufferAlignSize{64};
 
     struct IndividualWaveInfo {
-        u32 signature;
+        u32 signature{SignatureIndividualWave};
         u32 fileId;
         u32 waveIndex;
         u32 padding[5];
         u32 padding2[8];
+
+        IndividualWaveInfo(u32 _fileId, u32 _waveIndex) : fileId{_fileId}, waveIndex{_waveIndex} {};
     };
     static_assert(sizeof(IndividualWaveInfo) == 0x40);
 
+    enum LoadFlag {
+        LoadFlag_Seq = 1 << 0,
+        LoadFlag_Wsd = 1 << 1,
+        LoadFlag_Bank = 1 << 2,
+        LoadFlag_Warc = 1 << 3,
+        LoadFlag_All = -1,
+    };
+
     SoundArchiveLoader();
     virtual ~SoundArchiveLoader();
-
-    virtual void* SetFileAddressToTable(SoundArchive::FileId fileId, const void* address) = 0;
-    virtual void* GetFileAddressFromTable(SoundArchive::FileId fileId) const = 0;
-    virtual void* GetFileAddressImpl(SoundArchive::FileId fileId) const = 0;
-
-    void SetSoundArchive(const SoundArchive* arc);
 
     bool IsAvailable() const;
 
     bool LoadData(SoundArchive::ItemId itemId, SoundMemoryAllocatable* pAllocator, u32 loadFlag,
                   size_t loadBlockSize);
+
+    bool LoadData(const char* pItemName, SoundMemoryAllocatable* pAllocator, u32 loadFlag,
+                  size_t loadBlockSize);
+
+    bool IsDataLoaded(SoundArchive::ItemId itemId, u32 loadFlag) const;
+
+    bool IsDataLoaded(const char* pItemName, u32 loadFlag) const;
+
+    bool CancelLoading() { return m_IsCancelLoading; }
+
+    const void* detail_GetFileAddressByItemId(SoundArchive::ItemId itemId) const;
+
+    bool detail_LoadWaveArchiveByBankFile(const void* bankFile, SoundMemoryAllocatable* pAllocator);
+
+    bool detail_LoadWaveArchiveByWaveSoundFile(const void* wsdFile, int wsdIndex,
+                                               SoundMemoryAllocatable* pAllocator);
+
+protected:
+    void SetSoundArchive(const SoundArchive* arc);
+    const SoundArchive* GetSoundArchive() const { return m_pSoundArchive; }
+
+    const void* GetFileAddressFromSoundArchive(SoundArchive::FileId fileId) const;
+
+    virtual const void* SetFileAddressToTable(SoundArchive::FileId fileId, const void* address) = 0;
+    virtual const void* GetFileAddressFromTable(SoundArchive::FileId fileId) const = 0;
+    virtual const void* GetFileAddressImpl(SoundArchive::FileId fileId) const = 0;
+
+private:
     bool LoadSequenceSound(SoundArchive::ItemId soundId, SoundMemoryAllocatable* pAllocator,
                            u32 loadFlag, size_t loadBlockSize);
-    bool LoadAdvancedWaveSound(SoundArchive::ItemId soundId, SoundMemoryAllocatable* pAllocator,
-                               u32 loadFlag, size_t loadBlockSize);
+
     bool LoadWaveSound(SoundArchive::ItemId soundId, SoundMemoryAllocatable* pAllocator,
                        u32 loadFlag, size_t loadBlockSize, SoundArchive::ItemId waveSoundSetId);
+
+    bool LoadAdvancedWaveSound(SoundArchive::ItemId soundId, SoundMemoryAllocatable* pAllocator,
+                               u32 loadFlag, size_t loadBlockSize);
+
     bool LoadStreamSoundPrefetch(SoundArchive::ItemId soundId, SoundMemoryAllocatable* pAllocator,
                                  size_t loadBlockSize);
+
     bool LoadBank(SoundArchive::ItemId bankId, SoundMemoryAllocatable* pAllocator, u32 loadFlag,
                   size_t loadBlockSize);
-    bool LoadWaveArchive(SoundArchive::ItemId bankId, SoundMemoryAllocatable* pAllocator,
+
+    bool LoadWaveArchive(SoundArchive::ItemId warcId, SoundMemoryAllocatable* pAllocator,
                          u32 loadFlag, size_t loadBlockSize);
-    bool LoadGroup(SoundArchive::ItemId soundGroupId, SoundMemoryAllocatable* pAllocator,
+
+    const void* LoadWaveArchiveTable(SoundArchive::ItemId warcId,
+                                     SoundMemoryAllocatable* pAllocator, size_t loadBlockSize);
+
+    bool LoadIndividualWave(SoundArchive::ItemId warcId, u32 waveIndex,
+                            SoundMemoryAllocatable* pAllocator, size_t loadBlockSize);
+
+    bool LoadGroup(SoundArchive::ItemId groupId, SoundMemoryAllocatable* pAllocator,
                    size_t loadBlockSize);
+
     bool LoadSoundGroup(SoundArchive::ItemId soundGroupId, SoundMemoryAllocatable* pAllocator,
                         u32 loadFlag, size_t loadBlockSize);
 
-    bool LoadData(char* pItemName, SoundMemoryAllocatable* pAllocator, u32 loadFlag,
-                  size_t loadBlockSize);
-    void* LoadImpl(SoundArchive::FileId fileId, SoundMemoryAllocatable* pAllocator,
-                   size_t loadBlockSize, bool needMemoryPool);
-    void* LoadFile(SoundArchive::FileId fileId, SoundMemoryAllocatable* pAllocator,
-                   size_t loadBlockSize, bool needMemoryPool);
+    const void* LoadImpl(SoundArchive::FileId fileId, SoundMemoryAllocatable* pAllocator,
+                         size_t loadBlockSize, bool needMemoryPool);
 
-    void* LoadWaveArchiveImpl(SoundArchive::ItemId warcId, SoundMemoryAllocatable* pAllocator,
-                              size_t loadBlockSize, bool needMemoryPool);
-    bool LoadIndividualWave(SoundArchive::ItemId warcId, u32 waveIndex,
-                            SoundMemoryAllocatable* pAllocator, size_t loadBlockSize);
-    void* LoadWaveArchiveTable(SoundArchive::ItemId warcId, SoundMemoryAllocatable* pAllocator,
-                               size_t loadBlockSize);
+    void* LoadWaveArchiveImpl(SoundArchive::ItemId warcId, u32 waveIndex,
+                              SoundMemoryAllocatable* pAllocator, u32 loadFlag,
+                              size_t loadBlockSize);
 
-    size_t ReadFile(SoundArchive::FileId fileId, void* buffer, size_t size, s32 offset,
-                    size_t loadBlockSize);
-
-    bool PostProcessForLoadedGroupFile(void* pGroupFile, SoundMemoryAllocatable* pAllocator,
+    bool PostProcessForLoadedGroupFile(const void* pGroupFile, SoundMemoryAllocatable* pAllocator,
                                        size_t loadBlockSize);
+
+    bool IsSequenceSoundDataLoaded(SoundArchive::ItemId itemId, u32 loadFlag) const;
+    bool IsWaveSoundDataLoaded(SoundArchive::ItemId itemId, u32 loadFlag) const;
+    bool IsBankDataLoaded(SoundArchive::ItemId itemId, u32 loadFlag) const;
+    bool IsWaveArchiveDataLoaded(SoundArchive::ItemId itemId, u32 waveIndex) const;
+    bool IsGroupDataLoaded(SoundArchive::ItemId itemId) const;
+    bool IsSoundGroupDataLoaded(SoundArchive::ItemId itemId, u32 loadFlag) const;
+
+    void* LoadFile(SoundArchive::FileId fileId, SoundMemoryAllocatable* allocator,
+                   size_t loadBlockSize, bool needMemoryPool);
+
+    size_t ReadFile(SoundArchive::FileId fileId, void* buffer, size_t size, int offset,
+                    size_t loadBlockSize);
 
     void SetWaveArchiveTableWithSeqInEmbeddedGroup(SoundArchive::ItemId seqId,
                                                    SoundMemoryAllocatable* pAllocator);
@@ -92,26 +134,7 @@ public:
     void SetWaveArchiveTableInEmbeddedGroupImpl(SoundArchive::ItemId warcId,
                                                 SoundMemoryAllocatable* pAllocator);
 
-    bool IsDataLoaded(const char*, u32) const;
-    bool IsDataLoaded(u32, u32) const;
-
-    bool IsSequenceSoundDataLoaded(u32, u32) const;
-    bool IsWaveSoundDataLoaded(u32, u32) const;
-    bool IsBankDataLoaded(u32, u32) const;
-    bool IsWaveArchiveDataLoaded(u32, u32) const;
-    bool IsGroupDataLoaded(u32) const;
-    bool IsSoundGroupDataLoaded(u32, u32) const;
-
-    void* GetFileAddressFromSoundArchive(SoundArchive::FileId fileId) const;
-
-    void* detail_GetFileAddressByItemId(SoundArchive::ItemId itemId) const;
-
-    bool detail_LoadWaveArchiveByBankFile(void* bankFile, SoundMemoryAllocatable* pAllocator);
-    bool detail_LoadWaveArchiveByWaveSoundFile(void* wsdFile, s32 wsdIndex,
-                                               SoundMemoryAllocatable* pAllocator);
-
-private:
-    SoundArchive* m_pSoundArchive;
+    const SoundArchive* m_pSoundArchive{};
     u32 m_StreamArea[128];
     u16 m_LoadDataCallCount;
     bool m_IsCancelLoading;
