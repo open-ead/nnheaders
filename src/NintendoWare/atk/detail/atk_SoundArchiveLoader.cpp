@@ -99,11 +99,39 @@ bool SoundArchiveLoader::LoadSequenceSound(SoundArchive::ItemId soundId,
         if (!m_pSoundArchive->ReadSequenceSoundInfo(&info, soundId))
             return false;
 
-        for (int i{0}; i < SoundArchive::SequenceBankMax; ++i) {
+        for (int i{0}; i < static_cast<int>(SoundArchive::SequenceBankMax); ++i) {
             if (info.bankIds[i] != SoundArchive::InvalidId &&
                 !LoadBank(info.bankIds[i], pAllocator, loadFlag, loadBlockSize))
                 return false;
         }
+    }
+
+    return true;
+}
+
+bool SoundArchiveLoader::LoadAdvancedWaveSound(SoundArchive::ItemId soundId,
+                                               SoundMemoryAllocatable* pAllocator, u32 loadFlag,
+                                               size_t loadBlockSize) {
+    u32 awsdFileId{m_pSoundArchive->GetItemFileId(soundId)};
+
+    if ((loadFlag & LoadFlag_Wsd) != 0) {
+        const void* pFile{LoadImpl(awsdFileId, pAllocator, loadBlockSize, false)};
+
+        if (pFile == nullptr)
+            return false;
+    }
+
+    if ((loadFlag & LoadFlag_Warc) != 0) {
+        const void* pAwsdFile{GetFileAddressImpl(awsdFileId)};
+        if (pAwsdFile == nullptr)
+            return false;
+
+        SoundArchive::AdvancedWaveSoundInfo info;
+        if (!m_pSoundArchive->detail_ReadAdvancedWaveSoundInfo(soundId, &info))
+            return false;
+
+        if (!LoadWaveArchive(info.waveArchiveId, pAllocator, loadFlag, loadBlockSize))
+            return false;
     }
 
     return true;

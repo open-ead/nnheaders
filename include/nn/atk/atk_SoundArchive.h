@@ -85,7 +85,7 @@ public:
         bool isReleasePriorityFix{false};
 
         SequenceSoundInfo() {
-            for (int i{0}; i < SequenceBankMax; ++i)
+            for (int i{0}; i < static_cast<int>(SequenceBankMax); ++i)
                 bankIds[i] = InvalidId;
         };
     };

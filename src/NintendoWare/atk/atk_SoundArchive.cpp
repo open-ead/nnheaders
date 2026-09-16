@@ -283,7 +283,8 @@ void SoundArchive::SetExternalFileRoot(const char* extFileRoot) {
     size_t len{std::strlen(extFileRoot)};
     size_t nullPos{len + 1};
 
-    util::Strlcpy(m_ExtFileRoot, extFileRoot, std::min<int>(sizeof(m_ExtFileRoot), nullPos));
+    util::Strlcpy(m_ExtFileRoot, extFileRoot,
+                  std::min<int>(sizeof(m_ExtFileRoot), static_cast<int>(nullPos)));
 
     if (extFileRoot[len - 1] != '/') {
         m_ExtFileRoot[len] = '/';
@@ -329,7 +330,7 @@ const char* SoundArchive::detail_GetExternalFileFullPath(const char* externalFil
             if (bufSize > fileLen + 1)
                 bufSize += 1;
 
-            util::Strlcpy(pathBuffer, externalFilePath, bufSize);
+            util::Strlcpy(pathBuffer, externalFilePath, static_cast<int>(bufSize));
             detail::fnd::strncat(pathBuffer, bufSize, m_ExtFileRoot, fileLen);
             pathBuffer[bufSize - 1] = '\0';
             externalFilePath = pathBuffer;
