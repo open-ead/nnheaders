@@ -273,6 +273,35 @@ bool SoundArchiveLoader::LoadGroup(SoundArchive::ItemId groupId, SoundMemoryAllo
     return fileId;
 }
 
+bool SoundArchiveLoader::LoadSoundGroup(SoundArchive::ItemId soundGroupId,
+                                        SoundMemoryAllocatable* pAllocator, u32 loadFlag,
+                                        size_t loadBlockSize) {
+    SoundArchive::SoundGroupInfo info;
+    if (!m_pSoundArchive->detail_ReadSoundGroupInfo(soundGroupId, &info))
+        return false;
+
+    if (info.startId != SoundArchive::InvalidId) {
+        switch (m_pSoundArchive->GetSoundType(info.startId)) {
+        case SoundArchive::SoundType_Sequence:
+            for (u32 id{info.startId}; id <= info.endId; ++id) {
+                if (!LoadSequenceSound(id, pAllocator, loadFlag, loadBlockSize))
+                    return false;
+            }
+            break;
+        case SoundArchive::SoundType_Wave: {
+            for (u32 id{info.startId}; id <= info.endId; ++id) {
+                if (!LoadWaveSound(id, pAllocator, loadFlag, loadBlockSize, soundGroupId))
+                    return false;
+            }
+        }
+        default:
+            break;
+        }
+    }
+
+    return true;
+}
+
 bool SoundArchiveLoader::LoadWaveArchiveImpl(SoundArchive::ItemId warcId, u32 waveIndex,
                                              SoundMemoryAllocatable* pAllocator, u32 loadFlag,
                                              size_t loadBlockSize) {

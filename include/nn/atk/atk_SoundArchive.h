@@ -176,9 +176,9 @@ public:
     static_assert(sizeof(PlayerInfo) == 0x8);
 
     struct SoundGroupInfo {
-        ItemId startId;
-        ItemId endId;
-        detail::Util::Table<FileId> fileIdTable;
+        ItemId startId{InvalidId};
+        ItemId endId{InvalidId};
+        detail::Util::Table<FileId>* fileIdTable{};
 
         SoundGroupInfo() = default;
     };
