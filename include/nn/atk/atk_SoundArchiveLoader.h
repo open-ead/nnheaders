@@ -105,9 +105,9 @@ private:
     const void* LoadImpl(SoundArchive::FileId fileId, SoundMemoryAllocatable* pAllocator,
                          size_t loadBlockSize, bool needMemoryPool);
 
-    void* LoadWaveArchiveImpl(SoundArchive::ItemId warcId, u32 waveIndex,
-                              SoundMemoryAllocatable* pAllocator, u32 loadFlag,
-                              size_t loadBlockSize);
+    bool LoadWaveArchiveImpl(SoundArchive::ItemId warcId, u32 waveIndex,
+                             SoundMemoryAllocatable* pAllocator, u32 loadFlag,
+                             size_t loadBlockSize);
 
     bool PostProcessForLoadedGroupFile(const void* pGroupFile, SoundMemoryAllocatable* pAllocator,
                                        size_t loadBlockSize);

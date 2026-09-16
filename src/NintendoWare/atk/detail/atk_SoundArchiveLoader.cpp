@@ -151,4 +151,22 @@ bool SoundArchiveLoader::LoadWaveArchive(SoundArchive::ItemId warcId,
     return true;
 }
 
+bool SoundArchiveLoader::LoadWaveArchiveImpl(SoundArchive::ItemId warcId, u32 waveIndex,
+                                             SoundMemoryAllocatable* pAllocator, u32 loadFlag,
+                                             size_t loadBlockSize) {
+    SoundArchive::WaveArchiveInfo info;
+    if (!m_pSoundArchive->ReadWaveArchiveInfo(warcId, &info))
+        return false;
+
+    if (info.isLoadIndividual) {
+        if (!LoadIndividualWave(warcId, waveIndex, pAllocator, loadBlockSize))
+            return false;
+    } else {
+        if (!LoadWaveArchive(warcId, pAllocator, loadFlag, loadBlockSize))
+            return false;
+    }
+
+    return true;
+}
+
 }  // namespace nn::atk::detail
