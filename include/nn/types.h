@@ -14,11 +14,16 @@ using s8 = std::int8_t;
 using s16 = std::int16_t;
 using s32 = std::int32_t;
 using s64 = std::int64_t;
+using s128 = __int128_t;
 
 using f32 = float;
 using f64 = double;
+using f128 = long double;
 
 using char16 = char16_t;
-using size_t = std::size_t;
-using ulong = u64;
-using ptrdiff_t = std::ptrdiff_t;
+using char32 = char32_t;
+
+using ptrdiff = std::ptrdiff_t;
+using uintptr = std::uintptr_t;
+using intptr = std::intptr_t;
+using size = std::size_t;

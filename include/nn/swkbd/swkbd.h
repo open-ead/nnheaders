@@ -159,8 +159,8 @@ private:
 
 struct UserWord;  // TODO contents missing
 
-ulong GetRequiredWorkBufferSize(bool);
-ulong GetRequiredStringBufferSize();
+u64 GetRequiredWorkBufferSize(bool);
+u64 GetRequiredStringBufferSize();
 nn::applet::ExitReason GetExitReason();
 void MakePreset(KeyboardConfig*, Preset);
 void SetHeaderText(KeyboardConfig*, const char16_t*);
