@@ -1,4 +1,7 @@
 # nnheaders
+
+**We are undergoing migration to split the SDK and NintendoWare, please do not create new PRs here during the migration. See [Migration Guide](./MIGRATE.md) for what this means for your project that depends on nnheaders**
+
 Repository of user created nnsdk headers.
 
 The header files contained herewithin are entirely user created via Reverse Engineering or publicly available sources (non stripped binaries containing symbols and/or debug info), such as *Splatoon 2* and *Pokémon Sword and Shield*.
