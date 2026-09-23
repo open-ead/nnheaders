@@ -3,9 +3,9 @@
 Timeline:
 | What | When |
 | ---- | ---- |
-| Port current `nnsdk` files | ETA 2026-09-23 |
-| Port current `nnware` files | ETA 2026-09-23 |
-| Port all `nnheaders` PRs | ETA 2026-09-24 |
+| Port current `nnsdk` files | ✅ Done |
+| Port current `nnware` files | ✅ Done |
+| Port all `nnheaders` PRs | ETA 2026-09-28 |
 | `sead` compatibility update | Before 2026-10 |
 | other repos compatibility update | Before 2027 |
 | Downstream projects update | Before 2027 |
@@ -219,7 +219,7 @@ cmake -B build -S . -DSEAD_USE_OLD_NNHEADERS_REPO
 ```
 Or directly in CMakeLists:
 ```cmake
-set(SEAD_USE_OLD_NNHEADERS_REPO)
+option(SEAD_USE_OLD_NNHEADERS_REPO ON CACHE BOOL)
 ```
 
 Note this is only a temporary escape hatch during the migration. These
