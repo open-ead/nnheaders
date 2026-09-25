@@ -81,6 +81,8 @@ if(NN_GFX_TARGET)
     src/NintendoSDK/gfx/detail/gfx_CommonHelper.h
     src/NintendoSDK/gfx/util/gfx_PrimitiveShape.cpp
 
+    src/NintendoWare/g3d/ResMaterial.cpp
+
     src/NintendoSDK/gfx/gfx_BufferInfo.cpp
     src/NintendoSDK/gfx/gfx_CommandBufferInfo.cpp
     src/NintendoSDK/gfx/gfx_DescriptorPoolInfo.cpp

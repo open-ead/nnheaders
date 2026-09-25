@@ -22,7 +22,7 @@ class ResModel;
 class ResMaterialAnim;
 class ResShapeAnim;
 class ResSceneAnim;
-typedef void* TextureRef;
+struct TextureRef;
 
 class ResFile : public nn::util::BinaryFileHeader {
 public:

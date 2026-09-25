@@ -12,7 +12,7 @@ namespace nn {
 namespace g3d {
 class ResMaterial;
 
-typedef void* TextureRef;
+struct TextureRef;
 
 class ResModel {
 public:

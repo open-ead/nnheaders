@@ -2,6 +2,7 @@
 
 #include <nn/gfx/detail/gfx_Sampler-api.nvn.8.h>
 #include <nn/gfx/gfx_Common.h>
+#include <nn/gfx/gfx_Device.h>
 
 namespace nn::gfx {
 
@@ -12,9 +13,11 @@ class TSampler : public detail::SamplerImpl<TTarget> {
 public:
     typedef SamplerInfo InfoType;
 
-    TSampler();
-    void Initialize(TDevice<TTarget>*, const InfoType&);
-    void Finalize(TDevice<TTarget>*);
+    TSampler() = default;
+    void Initialize(TDevice<TTarget>* pDevice, const InfoType& info) {
+        detail::SamplerImpl<TTarget>::Initialize(pDevice, info);
+    }
+    void Finalize(TDevice<TTarget>* pDevice) { detail::SamplerImpl<TTarget>::Finalize(pDevice); }
     void SetUserPtr(void*);
     void* GetUserPtr();
     const void* GetUserPtr() const;

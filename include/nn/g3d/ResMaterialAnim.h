@@ -9,7 +9,7 @@
 
 namespace nn {
 namespace g3d {
-typedef void* TextureRef;
+struct TextureRef;
 
 class ResMaterialAnim {
 public:
