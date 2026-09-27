@@ -13,10 +13,12 @@ for each phase.
 | Phase 1.5 Port `nnheaders` PRs | 2026-10 |
 | Phase 2: `sead` compatibility gate (default on) | 2026-11 |
 | Phase 2: `NintendoSDK-NEX` compatibility gate (default on) | 2026-11 |
+| Phase 2: `eui` compatibility gate (default on) | 2026-11 |
 | Phase 3: BOTW update | Before 2027 |
 | Phase 3: SMO update | Before 2027 |
 | Phase 3: `sead` gate default off | Before 2027 |
 | Phase 3: `NintendoSDK-NEX` gate default off | Before 2027 |
+| Phase 3: `eui` gate default off | Before 2027 |
 | Phase 4: Migration complete | Before 2027 |
 
 ## What
@@ -308,11 +310,11 @@ The new repos are already in good shape, so please direct future contributions t
 
 ### Phase 2: Compatibility gate of `open-ead` libraries: `sead` and `NintendoSDK-NEX`
 
-`sead` and `NintendoSDK-NEX` are the only 2 repos that currently have a dependency
+`sead`, `eui`, and `NintendoSDK-NEX` are the only 3 repos that currently have a dependency
 on the SDK. If your project uses either of these libraries, it's likely that you
 also already have a dependency on the SDK.
 
-During this phase, these libraries will introduce compatibility gates: `SEAD_USE_OLD_NNHEADERS_REPO`
+During this phase, these libraries will introduce compatibility gates: `SEAD_USE_OLD_NNHEADERS_REPO`, `EUI_USE_OLD_NNHEADERS_REPO`,
 and `NEX_USE_OLD_NNHEADERS_REPO`. These are CMake options and in-source macros
 that gate changes required in the headers and sources to work with the new repos.
 
