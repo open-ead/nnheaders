@@ -323,8 +323,8 @@ so you can report any issues to us.
 
 To enable the option, put something like this in your `CMakeLists.txt`:
 ```cmake
-option(SEAD_USE_OLD_NNHEADERS_REPO OFF CACHE BOOL "Enable new nnsdk repo")
-option(NEX_USE_OLD_NNHEADERS_REPO OFF CACHE BOOL "Enable new nnsdk repo")
+set(SEAD_USE_OLD_NNHEADERS_REPO OFF CACHE BOOL "Enable new nnsdk repo")
+set(NEX_USE_OLD_NNHEADERS_REPO OFF CACHE BOOL "Enable new nnsdk repo")
 ```
 Or define them in `cmake` command line invocation:
 ```bash
