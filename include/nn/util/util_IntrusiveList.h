@@ -37,8 +37,9 @@ private:
         m_Prev = node;
     }
 
-    void LinkNext(IntrusiveListNode*);
-    void LinkNext(IntrusiveListNode*, IntrusiveListNode*);
+    void LinkNext(IntrusiveListNode* node) { LinkNext(node, node); }
+
+    void LinkNext(IntrusiveListNode* first, IntrusiveListNode* last);
 
     void Unlink() { Unlink(m_Next); }
 
@@ -78,12 +79,32 @@ public:
 
         reference operator*() const { return *m_Node; }
 
-        pointer operator->() const;
-        const_iterator& operator++();
-        const_iterator operator++(int);
-        const_iterator& operator--();
-        const_iterator operator--(int);
-        bool operator==(const const_iterator&) const;
+        pointer operator->() const { return m_Node; }
+
+        const_iterator& operator++() {
+            m_Node = m_Node->GetNext();
+            return *this;
+        }
+
+        const_iterator operator++(int) {
+            const_iterator temporary(*this);
+            ++(*this);
+            return temporary;
+        }
+
+        const_iterator& operator--() {
+            m_Node = m_Node->GetPrev();
+            return *this;
+        }
+
+        const_iterator operator--(int) {
+            const_iterator temporary(*this);
+            --(*this);
+            return temporary;
+        }
+
+        bool operator==(const const_iterator& ci) const { return m_Node == ci.m_Node; }
+
         bool operator!=(const const_iterator& ci) const { return m_Node != ci.m_Node; }
 
     private:
@@ -116,9 +137,18 @@ public:
             return temporary;
         }
 
-        iterator& operator--();
-        iterator operator--(int);
-        bool operator==(const iterator&) const;
+        iterator& operator--() {
+            m_Node = m_Node->GetPrev();
+            return *this;
+        }
+
+        iterator operator--(int) {
+            iterator temporary(*this);
+            --(*this);
+            return temporary;
+        }
+
+        bool operator==(const iterator& i) const { return m_Node == i.m_Node; }
 
         bool operator!=(const iterator& i) const { return m_Node != i.m_Node; }
 
@@ -130,15 +160,15 @@ public:
 
     void push_back(reference node) { m_Root.LinkPrev(&node); }
 
-    void push_front(reference);
-    void pop_back();
+    void push_front(reference node) { m_Root.LinkNext(&node); }
 
+    void pop_back() { m_Root.GetPrev()->Unlink(); }
     void pop_front() { m_Root.GetNext()->Unlink(); }
 
-    reference back();
-    reference back() const;
-    reference front();
-    reference front() const;
+    reference back() { return *m_Root.GetPrev(); }
+    const_reference back() const { return *m_Root.GetPrev(); }
+    reference front() { return *m_Root.GetNext(); }
+    const_reference front() const { return *m_Root.GetNext(); }
 
     iterator begin() { return m_Root.GetNext(); }
     const_iterator begin() const { return m_Root.GetNext(); }
@@ -149,7 +179,7 @@ public:
     iterator iterator_to(reference value) { return iterator(&value); }
     const_iterator iterator_to(reference value) const { return iterator(&value); }
 
-    size_type size() const;
+    size_type size() const { return std::distance(begin(), end()); }
 
     bool empty() const { return !m_Root.IsLinked(); }
 
@@ -204,20 +234,39 @@ public:
 
     class const_iterator {
     public:
-        typedef T value_type;
+        typedef const T value_type;
         typedef difference_type difference_type;
         typedef value_type* pointer;
         typedef value_type& reference;
         typedef std::bidirectional_iterator_tag iterator_category;
 
-        reference operator*() const;
-        pointer operator->() const;
-        const_iterator& operator++();
-        const_iterator operator++(int);
-        const_iterator& operator--();
-        const_iterator operator--(int);
-        bool operator==(const const_iterator&) const;
-        bool operator!=(const const_iterator&) const;
+        reference operator*() const { return NodeTraits::GetItem(*m_Iterator); }
+        pointer operator->() const { return &NodeTraits::GetItem(*m_Iterator); }
+
+        const_iterator& operator++() {
+            ++m_Iterator;
+            return *this;
+        }
+
+        const_iterator operator++(int) {
+            iterator temporary(*this);
+            ++m_Iterator;
+            return temporary;
+        }
+
+        const_iterator& operator--() {
+            --m_Iterator;
+            return *this;
+        }
+
+        const_iterator operator--(int) {
+            iterator temporary(*this);
+            --m_Iterator;
+            return temporary;
+        }
+
+        bool operator==(const const_iterator& ci) const { return m_Iterator == ci.m_Iterator; }
+        bool operator!=(const const_iterator& ci) const { return !(*this == ci); }
 
     private:
         friend class IntrusiveList;
@@ -258,9 +307,18 @@ public:
             return temporary;
         }
 
-        iterator& operator--();
-        iterator operator--(int);
-        bool operator==(const iterator&) const;
+        iterator& operator--() {
+            --m_Iterator;
+            return *this;
+        }
+
+        iterator operator--(int) {
+            iterator temporary(*this);
+            --m_Iterator;
+            return temporary;
+        }
+
+        bool operator==(const iterator& i) const { return m_Iterator == i.m_Iterator; }
 
         bool operator!=(const iterator& i) const { return m_Iterator != i.m_Iterator; }
 
@@ -277,24 +335,25 @@ public:
     IntrusiveList() : m_Implementation() {}
 
     void push_back(reference value) { m_Implementation.push_back(ToNode(value)); }
+    void push_front(reference value) { m_Implementation.push_front(ToNode(value)); }
 
-    void push_front(reference);
-    void pop_back();
-    void pop_front();
-    reference front();
-    reference front() const;
-    reference back();
-    reference back() const;
+    void pop_back() { m_Implementation.pop_back(); }
+    void pop_front() { m_Implementation.pop_front(); }
+
+    reference front() { return ToReference(m_Implementation.front()); }
+    const_reference front() const { return ToReference(m_Implementation.front()); }
+
+    reference back() { return ToReference(m_Implementation.back()); }
+    const_reference back() const { return ToReference(m_Implementation.back()); }
 
     iterator begin() { return m_Implementation.begin(); }
     const_iterator begin() const { return m_Implementation.begin(); }
-
-    const_iterator cbegin() const;
+    const_iterator cbegin() const { return const_iterator(m_Implementation.begin()); }
 
     iterator end() { return m_Implementation.end(); }
     const_iterator end() const { return m_Implementation.end(); }
+    const_iterator cend() const { return const_iterator(m_Implementation.begin()); }
 
-    const_iterator cend() const;
     reverse_iterator rbegin();
     const_reverse_iterator rbegin() const;
     const_reverse_iterator crbegin() const;
@@ -307,8 +366,9 @@ public:
         return m_Implementation.iterator_to(ToNode(value));
     }
 
-    size_type size() const;
-    bool empty() const;
+    size_type size() const { return m_Implementation.size(); }
+
+    bool empty() const { return m_Implementation.empty(); }
 
     iterator erase(const_iterator position) {
         detail::IntrusiveListImplementation::iterator result =
@@ -331,9 +391,13 @@ public:
 private:
     IntrusiveListNode& ToNode(reference ref) const { return NodeTraits::GetNode(ref); }
 
-    const IntrusiveListNode& ToNode(const_reference) const;
-    reference ToReference(IntrusiveListNode&) const;
-    const_reference ToReference(const IntrusiveListNode&) const;
+    const IntrusiveListNode& ToNode(const_reference ref) const { return NodeTraits::GetNode(ref); }
+
+    reference ToReference(IntrusiveListNode& node) const { return NodeTraits::GetItem(node); }
+
+    const_reference ToReference(const IntrusiveListNode& node) const {
+        return NodeTraits::GetItem(node);
+    }
 
     detail::IntrusiveListImplementation m_Implementation;
 };
@@ -358,7 +422,7 @@ public:
     static const T& GetItem(const IntrusiveListNode& node) { return static_cast<const T&>(node); }
 };
 
-template <class HolderT, IntrusiveListNode HolderT::*Member, class T = HolderT>
+template <class HolderT, IntrusiveListNode HolderT::* Member, class T = HolderT>
 class IntrusiveListMemberNodeTraits {
     friend class IntrusiveList<T, IntrusiveListMemberNodeTraits>;
 

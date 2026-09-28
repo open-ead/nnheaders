@@ -7,7 +7,9 @@
 namespace nn::os {
 
 namespace detail {
+
 class MultiWaitObjectList;
+
 }
 
 struct MessageQueueType {
