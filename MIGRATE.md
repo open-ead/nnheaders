@@ -10,16 +10,16 @@ for each phase.
 | ---- | ---- |
 | Phase 1: Port current `nnsdk` files | ✅ Done |
 | Phase 1: Port current `nnware` files | ✅ Done |
-| Phase 1.5 Port `nnheaders` PRs | 2026-10 |
+| Phase 1.5 Port `nnheaders` PRs | In Review |
 | Phase 2: `sead` compatibility gate (default on) |✅ Done |
-| Phase 2: `NintendoSDK-NEX` compatibility gate (default on) | 2026-11 |
-| Phase 2: `eui` compatibility gate (default on) | 2026-11 |
+| Phase 2: `NintendoSDK-NEX` compatibility gate (default on) | ✅ Done |
+| Phase 2: `eui` compatibility gate (default on) | ✅ Done |
 | Phase 3: BOTW update | ✅ Done |
-| Phase 3: SMO update | Before 2027 |
-| Phase 3: `sead` gate default off | Before 2027 |
-| Phase 3: `NintendoSDK-NEX` gate default off | Before 2027 |
-| Phase 3: `eui` gate default off | Before 2027 |
-| Phase 4: Migration complete | Before 2027 |
+| Phase 3: SMO update | https://github.com/MonsterDruide1/OdysseyDecomp/pull/1391 |
+| Phase 3: `sead` gate default off | 2027 |
+| Phase 3: `NintendoSDK-NEX` gate default off | 2027 |
+| Phase 3: `eui` gate default off | 2027 |
+| Phase 4: Migration complete | 2027 |
 
 ## What
 We have decided to split this repo into 2 and detached it as a fork
